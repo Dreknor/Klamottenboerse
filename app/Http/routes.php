@@ -82,7 +82,17 @@ Route::group(['middleware' => 'web'], function () {
      * Routen für die Klamottenbpoerse
     */
 
-    Route::get('/Grunddaten', 'KlamottenboersenController@index');
+    Route::get('Grunddaten', 'KlamottenboersenController@index');
+    Route::get('Grunddaten/abschliessen', 'KlamottenboersenController@neueKlamottenboerse');
+
+    Route::put('/edit-Klamottenboerse', 'KlamottenboersenController@update');
+
+    Route::post('Grunddaten/Anlegen', 'KlamottenboersenController@store');
+    Route::post('Grunddaten/Helfer/store', 'KlamottenboersenController@store_Helfer');
+
+
+    Route::delete('Grunddaten/{HelferID}/delete', 'KlamottenboersenController@destroy');
+
 
     /*
      * Routen zur Dateienverwaltung
