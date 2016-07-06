@@ -21,8 +21,32 @@ class NummernController extends Controller
 
     public function index(){
 
+        $Daten=$this->NummernRepository->all();
+        $Count=array(
+            "gesamt" => 0,
+            "reserviert" => 0,
+            "vergeben" => 0
+        );
+
+        foreach ($Daten AS $Nummer) {
+
+            $Count['gesamt']++;
+
+            if ($Nummer->reserviert_fuer !=""){
+                $Count['reserviert']++;
+            }
+
+            if ($Nummer->vergeben_an !=""){
+                $Count['vergeben']++;
+            }
+
+        }
+
+
+
         return view('vknummern.uebersicht', [
-            'Nummern' => $this->NummernRepository->all()
+            'Nummern' => $Daten,
+            'Count' => $Count
         ]);
     }
 }

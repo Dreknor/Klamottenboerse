@@ -22,4 +22,11 @@ class KlamottenboersenRepository
 
         return $Klamottenboerse;
     }
+
+    public function getId(){
+        $Klamottenboerse= Klamottenboerse::query()
+            ->orderBy('id', 'desc')
+            ->first();
+        return $Klamottenboerse->id;
+    }
 }

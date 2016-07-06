@@ -17,11 +17,18 @@ class NummernRepository
 {
     public function all(){
 
-        $Klamottenboerse=KlamottenboersenRepository::class;
-        $Latest=$Klamottenboerse;
+        $Klamottenboerse=new KlamottenboersenRepository;
+        $Klamottenboerse_id=$Klamottenboerse->getId();
+        
+           $Nummern = Vknummern::query()
+                 ->where('klamottenboersen_id', '=', $Klamottenboerse_id)
+                    ->leftjoin('interessenten', 'interessenten.id', '=', 'vknummern.reserviert_fuer')
+                    ->select ('vknummern.*', 'interessenten.vorname', 'interessenten.nachname')
+                 ->get();
+            
+        return $Nummern;
 
-        return Vknummern::query()
-            ->where('klamottenboerse_id', '=', $Latest)
-            ->first();
     }
+    
+    
 }
