@@ -79,7 +79,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/mail', 'NachrichtenController@mailGruppe');
 
     /*
-     * Routen für die Klamottenbpoerse
+     * Routen für die Klamottenboerse
     */
 
     Route::get('Grunddaten', 'KlamottenboersenController@index');
@@ -102,4 +102,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::put('Dateien/add', 'DateienController@uploadFiles');
     Route::delete('Dateien/{DateiID}', 'DateienController@destroy');
 
+    /*
+     * Routen zur Nummernvergabe
+     */
+    Route::get('/Nummern', 'NummernController@index');
 });

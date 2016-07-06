@@ -15,18 +15,31 @@ class CreateVerkaeuferNummernTable extends Migration
         Schema::create('vknummern', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('vknummer');
-            $table->integer('reserviert_fuer');
+            $table->integer('klamottenboersen_id')->index()->unsigned();
+            $table->integer('reserviert_fuer')->index()->unsigned();
+            $table->integer('vergeben_an')->index()->unsigned();
+
             $table->softDeletes();
             $table->timestamps();
 
+
+            $table->foreign('vergeben_an')
+                ->references('id')
+                ->on('interessenten');
+
             $table->foreign('reserviert_fuer')
                 ->references('id')
-                ->on('interessenten')
+                ->on('interessenten');
+            
+            $table->foreign('klamottenboersen_id')
+                ->references('id')
+                ->on('klamottenboerse')
                 ->onDelete('CASCADE');
         });
 
 
     }
+
 
     /**
      * Reverse the migrations.

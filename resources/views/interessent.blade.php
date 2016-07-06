@@ -147,6 +147,47 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <p>aktuelle Klamottenbörse</p>
+                                    </div>
+
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                Reservierte Verkäufernummer:
+                                            </div>
+                                            <div class="col-md-4">
+                                                @if(isset($Interessent->vknummern_reserviert->vknummer))
+                                                    {{ $Interessent->vknummern_reserviert->vknummer }}
+                                                @else
+                                                    keine Nummer reserviert
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                            zugeteilte Verkäufernummer:
+                                            </div>
+                                            <div class="col-md-4">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-footer">
+                                            @if(isset($Interessent->vknummern_reserviert->vknummer))
+                                                <a href="" class="btn btn-sm btn-danger">Reservierung aufheben</a>
+                                            @else
+                                                <a href="" class="btn btn-sm btn-success">Nummer reservieren</a>
+                                            @endif
+                                        </div>
+
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="panel panel-default">

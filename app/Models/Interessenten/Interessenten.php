@@ -9,6 +9,7 @@
 namespace App\Models\Interessenten;
 
 
+use App\Models\Klamottenboerse\Vknummern;
 use Illuminate\Database\Eloquent\Model;
 
 class Interessenten extends Model
@@ -20,6 +21,12 @@ class Interessenten extends Model
     public function nachrichten(){
         return $this->hasMany(Nachrichten::class, 'interessent_id')
             ->orderBy('created_at', 'desc');
+
+    }
+
+    public function vknummern_reserviert(){
+        return $this->hasOne(Vknummern::class, 'reserviert_fuer')
+            ->orderBy('klamottenboersen_id', 'desc');
 
     }
 
