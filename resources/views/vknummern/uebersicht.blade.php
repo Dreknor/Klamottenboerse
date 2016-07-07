@@ -16,13 +16,14 @@
 
                              @foreach($Nummern AS $Nummer)
 
+
                                  @if($Nummer->vergeben_an != "")
                                     <a href="#" class="list-group-item list-group-item-info clearfix">
                                         {{ $Nummer->vknummer }}
                                         <span class="pull-right">
-                                            <button class="btn btn-xs btn-info">Vergabe aufheben</button>
-                                            <button class="btn btn-xs btn-warning">
-                                                <span class="glyphicon glyphicon-trash"></span>
+                                            <button class="btn btn-xs btn-warning">Vergabe aufheben</button>
+                                            <button class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="left" title="Löscht die Verkäufernummer und alle Vergaben endgültig">
+                                                <span class="glyphicon glyphicon-trash" ></span>
                                             </button>
                                           </span>
 
@@ -34,7 +35,7 @@
                                         {{ $Nummer->vknummer }}
                                         <span class="pull-right">
 
-                                            <button class="btn btn-xs btn-warning">
+                                            <button class="btn btn-xs btn-danger"  data-toggle="tooltip" data-placement="left" title="Löscht die Verkäufernummer und alle Vergaben endgültig">
                                                 <span class="glyphicon glyphicon-trash"></span>
                                             </button>
                                           </span>
@@ -43,13 +44,10 @@
                                             <span class="badge"> {{$Nummer->vorname}} {{$Nummer->nachname}}</span>
                                         @endif
                                  @endif
-
-
-
-
                                  </a>
+
                              @endforeach
-                         </ul>
+
                      @else
                          Keine Nummern angelegt
                      @endif
