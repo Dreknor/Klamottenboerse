@@ -11,17 +11,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Klamottenboerse\Helfer;
 use App\Models\Klamottenboerse\Klamottenboerse;
+use App\Models\Klamottenboerse\Vknummern;
 use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
+use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Http\Request;
 
 
 
 class KlamottenboersenController extends Controller
 {
-    public function __construct(KlamottenboersenRepository $klamottenboersenRepository)
+    public function __construct(KlamottenboersenRepository $klamottenboersenRepository, NummernRepository $nummernRepository)
     {
         $this->middleware('auth');
         $this->klamottenboersenRepository = $klamottenboersenRepository;
+        $this->nummernRepository = $nummernRepository;
     }
 
     public function index(){
@@ -51,7 +54,16 @@ class KlamottenboersenController extends Controller
     
     public function store(Request $request){
 
-        Klamottenboerse::create($request->all());
+        $alleNummern=$this->nummernRepository->all();
+        $id=Klamottenboerse::create($request->all())->id;
+
+        $data=array();
+        foreach ($alleNummern as $Nummer) {
+            $data[] = array('vknummer' => $Nummer->vknummer, 'klamottenboersen_id'=>$id, 'reserviert_fuer' => $Nummer->reserviert_fuer );
+        }
+
+        Vknummern::insert($data);
+
         return redirect('Grunddaten');
     }
 

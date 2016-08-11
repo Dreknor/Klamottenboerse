@@ -106,4 +106,14 @@ Route::group(['middleware' => 'web'], function () {
      * Routen zur Nummernvergabe
      */
     Route::get('/Nummern', 'NummernController@index');
+    Route::get('/Nummern/new', 'NummernController@newNummer');
+    Route::post('/Nummern/new', 'NummernController@store');
+    Route::get('/Nummern/{InteressentenID}/aufheben', 'NummernController@deleteReservierung');
+    Route::get('/Nummern/{InteressentenID}/reservieren', 'NummernController@createReservierung');
+    Route::post('/Nummern/{InteressentenID}/reservieren', 'NummernController@storeReservierung');
+    Route::post('Nummern/vergeben', 'NummernController@storeVergabe');
+
+
+
+
 });

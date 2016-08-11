@@ -2,6 +2,19 @@
 
 @section('content')
     <div class="container">
+
+        @if(session('Meldung'))
+            <div class="row">
+                <div class="col-md-10" >
+                    <div class="alert alert-{{session('type')}} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        {{session('Meldung')}}
+
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-md-10">
                 <div class="row">
@@ -172,16 +185,32 @@
                                             zugeteilte Verkäufernummer:
                                             </div>
                                             <div class="col-md-4">
-
+                                                @if(isset($Interessent->vknummern_vergeben->vknummer))
+                                                    {{ $Interessent->vknummern_vergeben->vknummer }}
+                                                @else
+                                                    keine Nummer reserviert
+                                                @endif
                                             </div>
                                         </div>
 
                                         <div class="panel-footer">
                                             @if(isset($Interessent->vknummern_reserviert->vknummer))
-                                                <a href="" class="btn btn-sm btn-danger">Reservierung aufheben</a>
+                                                <a href="{{url('Nummern/'.$Interessent->id.'/aufheben')}}" class="btn btn-sm btn-danger">Reservierung aufheben</a>
+
+                                                    @if(!isset($Interessent->vknummern_vergeben->vknummer))
+                                                        <button type="button" class="btn  btn-sm  btn-warning"
+                                                                data-toggle="modal"
+                                                                data-target="#VergabeBestaetigung"
+                                                                data-title="Nummer vergeben"
+                                                                data-inhalt="Soll die Verkäufernummer {{ $Interessent->vknummern_reserviert->vknummer }} verbindlich an {{$Interessent->vorname }} {{$Interessent->nachname}} vergeben werden?">
+                                                            Nummer <b>{{ $Interessent->vknummern_reserviert->vknummer }}</b> vergeben
+                                                        </button>
+                                                    @endif
                                             @else
-                                                <a href="" class="btn btn-sm btn-success">Nummer reservieren</a>
+                                                <a href="{{url('Nummern/'.$Interessent->id.'/reservieren')}}" class="btn btn-sm btn-success">Nummer reservieren</a>
                                             @endif
+
+
                                         </div>
 
                                     </div>
@@ -298,6 +327,28 @@
         </div>
     </div>
 
+    <div class="modal fade" id="VergabeBestaetigung" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p id="modal-inhalt"></p>
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" id="vergabe" action="{{ url('Nummern/vergeben')}}">
+                        {{csrf_field()}}
+                        <input type="hidden" name="NummernID" value="{{$Interessent->vknummern_reserviert->id}}">
+                        <input type="hidden" name="InteressentenID" value="{{$Interessent->id}}">
+                    </form>
+                    <button type="submit" form="vergabe" class="btn btn-success">vergeben</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <script type="text/javascript">
 
@@ -325,6 +376,20 @@
         modal.find('.modal-title').text(betreff)
         modal.find('.modal-body pre').text(nachricht)
         modal.find('.modal-body span').text(anhang)
+    })
+
+    $('#VergabeBestaetigung').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var betreff = button.data('betreff') // Extract info from data-* attributes
+        var title = button.data('title')
+        var inhalt = button.data('inhalt')
+
+
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-title').text(title)
+        modal.find('#modal-inhalt').text(inhalt)
     })
 
     $(function() {

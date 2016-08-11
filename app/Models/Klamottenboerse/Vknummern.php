@@ -16,13 +16,13 @@ class Vknummern extends Model
 {
     public $table = "vknummern";
 
-    protected $fillable = array("vknummer","klamottenboersen_id", "reserviert_fuer");
+    protected $fillable = array("vknummer","klamottenboersen_id", "reserviert_fuer", "vergeben_an");
 
-    public function reserviert_fuer () {
+    public function reserviert_fuer_Interessent() {
         return $this->belongsTo(Interessenten::class, 'reserviert_fuer');
     }
 
-    public function vergeben_an () {
+    public function vergeben_an_Interessent() {
         return $this->belongsTo(Interessenten::class, 'vergeben_an');
     }
 

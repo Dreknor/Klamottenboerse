@@ -55,7 +55,7 @@ use App\Models\Interessenten\Interessenten;
                 ->get();
         }
 
-        public function findInteressent($id){
+        static public function findInteressent($id){
             $Interessent= Interessenten::query()->findOrFail($id);
             $Interessent->nachrichten=$Interessent->nachrichten()->paginate(10);
             return $Interessent;
