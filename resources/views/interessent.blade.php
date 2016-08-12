@@ -327,28 +327,31 @@
         </div>
     </div>
 
-    <div class="modal fade" id="VergabeBestaetigung" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-                    <p id="modal-inhalt"></p>
-                </div>
-                <div class="modal-footer">
-                    <form method="POST" id="vergabe" action="{{ url('Nummern/vergeben')}}">
-                        {{csrf_field()}}
-                        <input type="hidden" name="NummernID" value="{{$Interessent->vknummern_reserviert->id}}">
-                        <input type="hidden" name="InteressentenID" value="{{$Interessent->id}}">
-                    </form>
-                    <button type="submit" form="vergabe" class="btn btn-success">vergeben</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    @if(isset($Interessent->vknummern_reserviert->vknummer))
+        <div class="modal fade" id="VergabeBestaetigung" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modal-inhalt"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="POST" id="vergabe" action="{{ url('Nummern/vergeben')}}">
+                            {{csrf_field()}}
+                            <input type="hidden" name="NummernID" value="{{$Interessent->vknummern_reserviert->id}}">
+                            <input type="hidden" name="InteressentenID" value="{{$Interessent->id}}">
+                        </form>
+                        <button type="submit" form="vergabe" class="btn btn-success">vergeben</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
+
 
 <script type="text/javascript">
 
@@ -378,7 +381,8 @@
         modal.find('.modal-body span').text(anhang)
     })
 
-    $('#VergabeBestaetigung').on('show.bs.modal', function (event) {
+
+   $('#VergabeBestaetigung').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var betreff = button.data('betreff') // Extract info from data-* attributes
         var title = button.data('title')

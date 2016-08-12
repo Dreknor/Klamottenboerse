@@ -29,18 +29,17 @@ class NachrichtenController extends Controller
     /*
      * Versendet Nachrichten und speichert diese in der DB
      */
-    public function send($id, Request $request, $return="true"){
+    public function send($InteressentenID, Request $request, $return="true"){
 
-        $Interessent=Interessenten::query()->findOrFail($id);
+        $Interessent=Interessenten::query()->findOrFail($InteressentenID);
 
         if ($Interessent->mail !=''){
             $this->senden($request, $Interessent);
-            $this->store($id, $request->betreff, $request->nachricht, $request->anhang);
+            $this->store($InteressentenID, $request->betreff, $request->nachricht, $request->anhang);
         }
 
-        //return view('Interessent', ['Interessent' => $Interessent]);
        if ($return='true'){
-           return redirect(url('/Interessent'.'/'.$id));
+           return redirect(url('/Interessent'.'/'.$InteressentenID));
        }
     }
 

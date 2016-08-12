@@ -13,6 +13,7 @@ use App\Models\Klamottenboerse\Klamottenboerse;
 use App\Models\Klamottenboerse\Vknummern;
 use App\Repositories\Interessenten\InteressentenRepository;
 use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
+use App\Repositories\Nachrichten\NachrichtenRepository;
 use Illuminate\Support\Facades\DB;
 
 class NummernRepository
@@ -66,6 +67,25 @@ class NummernRepository
             ->get();
 
         return $Nummmern;
+    }
+
+    public function storeNummer($InteressentenID, $NummernID){
+
+
+        $Nummer=Vknummern::query()
+            ->Where('id',$NummernID)
+            ->Where('vergeben_an', NULL)
+            ->update(['vergeben_an' => $InteressentenID]);
+
+        if ($Nummer==1){
+            $NachrichtenRepository=new NachrichtenRepository();
+            
+            $Nachricht=[
+                'betreff' => 'Verkäufernummer zur Klamottenbörse',
+                'text' => 'Sehr geehrte ',
+            ];
+        }
+        return $Nummer;
     }
 
 

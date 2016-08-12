@@ -12,9 +12,10 @@ namespace App\Http\Controllers;
 use App\Models\Klamottenboerse\Vknummern;
 use App\Repositories\Interessenten\InteressentenRepository;
 use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
+use app\Repositories\Nachrichten\NachrichtenRepository;
 use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Http\Request;
-use phpDocumentor\Reflection\Types\Null_;
+use Illuminate\Support\Facades\View;
 
 class NummernController extends Controller
 {
@@ -113,14 +114,37 @@ class NummernController extends Controller
     }
     
     public function storeVergabe(Request $request){
-        $Nummer=$this->NummernRepository->getVKNummer($request->input('NummernID'));
-        
-        if ($Nummer->vergeben_an == "" and ($Nummer->reserviert_fuer == "" OR $Nummer->reserviert_fuer == $request->input('InteressentenID'))){
 
-            return redirect()->back()->with(['Meldung' => 'Nummer wurde vergeben', 'type' => 'success']);
-            
+        $Nummer=$this->NummernRepository->storeNummer($request->input('InteressentenID'), $request->input('NummernID'));
+
+       if ($Nummer==1){
+
+           $Interessent= InteressentenRepository::findInteressent($request->input('InteressentenID'));
+           $VKnummer=$this->NummernRepository->getVKNummer($request->input('NummernID'));
+
+           $text = View::make('emails.vergabeVKNummer', [
+               'Interessent'=> $Interessent,
+               'VKNummer' => $VKnummer
+           ]);
+           
+           $Nachricht=[
+               'betreff' => 'Verkäufernummer Klamottenbörse',
+               'text'   => $text,
+               'anhang' => '',
+               'view'   => 'emails.blank'
+           ];
+
+           $Nachrichten=new NachrichtenRepository;
+           $Email = $Nachrichten->send($Interessent, $Nachricht);
+
+           return redirect()->back()->with(['Meldung' => 'Nummer wurde vergeben', 'type' => 'success']);
+
+
+
+
+
         } else {
-            return redirect()->back()->with(['Meldung'=> 'Nummer konnte nicht vergeben werden', 'type' => 'danger']);
+           return redirect()->back()->with(['Meldung'=> 'Nummer konnte nicht vergeben werden', 'type' => 'danger']);
         }
 
     }
