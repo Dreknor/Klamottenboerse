@@ -112,8 +112,18 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/Nummern/{InteressentenID}/reservieren', 'NummernController@createReservierung');
     Route::post('/Nummern/{InteressentenID}/reservieren', 'NummernController@storeReservierung');
     Route::post('Nummern/vergeben', 'NummernController@storeVergabe');
+    Route::post('Nummern/vergabeLoeschen', 'NummernController@vergabeLoeschen');
+    Route::delete('Nummern/NummerLoeschen', 'NummernController@NummerLoeschen');
+    Route::get('/Nummern/{InteressentenID}/vergeben', 'NummernController@Nummernvergabe');
 
 
+    /*
+     * Routen zur Listenerstellung
+     */
+
+    Route::get('/Listen', 'ListenController@index');
+    Route::get('Listen/vknummern', 'ListenController@vknummern');
+    Route::get('Listen/belehrung', 'ListenController@belehrung');
 
 
 });

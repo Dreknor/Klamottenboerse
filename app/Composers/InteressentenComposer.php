@@ -10,13 +10,15 @@ namespace App\Composers;
 
 
 use App\Repositories\Interessenten\InteressentenRepository;
+use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Contracts\View\View;
 
 class InteressentenComposer
 {
-    public function __construct(InteressentenRepository $interessentenRepository)
+    public function __construct(InteressentenRepository $interessentenRepository, NummernRepository $nummernRepository)
     {
         $this->interessentenRepository = $interessentenRepository;
+        $this->nummernRepository = $nummernRepository;
     }
 
     public function compose(View $view) {
@@ -24,5 +26,6 @@ class InteressentenComposer
         $view->with('InteressentenCount', $this->interessentenRepository->countAll());
         $view->with('MitarbeiterCount', $this->interessentenRepository->countMitarbeiter());
         $view->with('KinderhausCount', $this->interessentenRepository->countKinderhaus());
+        $view->with('VerkaeuferCount', $this->nummernRepository->countVerkaeufer());
     }
 }

@@ -23,9 +23,9 @@
                             Kinderhaus
                             <span class="badge">{{ $KinderhausCount }}</span>
                         </a>
-                        <a href="#" class="btn btn-default">
+                        <a href="{{ url('/Ueberblick/Verkaeufer') }}" class="btn btn-default">
                             Verkäufer
-                            <span class="badge"></span>
+                            <span class="badge">{{ $VerkaeuferCount }}</span>
                         </a>
                         <a href="#" class="btn btn-default">
                             Warteliste

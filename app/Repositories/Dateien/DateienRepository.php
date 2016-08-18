@@ -22,4 +22,12 @@ class DateienRepository
         $Datei=Dateien::query()->findOrFail($id);
         return $Datei;
     }
+
+    public function findDateiName($Dateiname){
+        $Datei=Dateien::query()
+            ->where('dateiname', 'LIKE', '%'.$Dateiname.'%')
+            ->first();
+
+        return $Datei;
+    }
 }

@@ -11,16 +11,18 @@ use App\Http\Requests\InteressentenAnlegenRequest;
 use App\Models\Dateien\Dateien;
 use App\Models\Interessenten\Interessenten;
 use App\Repositories\Interessenten\InteressentenRepository;
+use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Http\Request;
 use Excel;
 use Illuminate\Support\Facades\Mail;
 
 class InteressentenController extends Controller
 {
-    public function __construct(InteressentenRepository $interessentenRepository)
+    public function __construct(InteressentenRepository $interessentenRepository, NummernRepository $nummernRepository)
     {
         $this->middleware('auth');
         $this->interessentenRepository = $interessentenRepository;
+        $this->nummernRepository = $nummernRepository;
     }
 
     /**
@@ -31,8 +33,16 @@ class InteressentenController extends Controller
      */
     public function index($Gruppe="")
     {
+        
 
         switch ($Gruppe) {
+            case "Verkaeufer":
+                return view('interessenten', [
+                    "entries" => $this->nummernRepository->getVerkaeufer(),
+                    "Gruppe"  => $Gruppe
+                ]);
+                exit;
+                
             case "Kinderhaus":
                 return view('interessenten', [
                     "entries" => $this->interessentenRepository->Kinderhaus(),
@@ -68,10 +78,30 @@ class InteressentenController extends Controller
         $Interessent=$this->interessentenRepository->findInteressent($id);
         $Dateien=Dateien::query()->get();
 
+        $letzteNummer = $this->nummernRepository->letzteVKNummer($id);
+        if (is_object($letzteNummer)) {
+            $letzteNummer = $this->nummernRepository->NummerPruefen($letzteNummer->vknummer);
+        }
+
+        $haeufigsteNummern=$this->nummernRepository->haeufigsteNummer($id);
+        $Nummern=array();
+        if (count($haeufigsteNummern) > 0){
+            foreach ($haeufigsteNummern AS $Nummer){
+                $Nummer=$this->nummernRepository->NummerPruefen($Nummer->vknummer);
+                if (is_object($Nummer)){
+                    $Nummern[]=$Nummer;
+                }
+            }
+        }
+
+
         return view('Interessent', [
            'Interessent' => $Interessent,
-            'Dateien'   => $Dateien
+            'Dateien'   => $Dateien,
+            'haeufigsteNummer' => $Nummern,
+            'letzteNummer' => $letzteNummer
         ]);
+
     }
 
     public function warningDelete ($id) {
@@ -121,6 +151,14 @@ class InteressentenController extends Controller
 
                 })->export('xls');
                 exit;
+            case "Verkaeufer":
+                Excel::create('Verkaeufer', function($excel) {
+
+                    $excel->sheet('Verkaeufer', function($sheet) {
+                        $sheet->fromModel($this->nummernRepository->getVerkaeufer2());
+                    });
+
+                })->export('xls');
 
             case "Kinderhaus":
                 Excel::create('Kinderhauseltern', function($excel) {
@@ -136,6 +174,16 @@ class InteressentenController extends Controller
 
                     $excel->sheet('Mitarbeiter', function($sheet) {
                         $sheet->fromModel($this->interessentenRepository->Mitarbeiter());
+                    });
+
+                })->export('xls');
+                exit;
+
+            case "Verkaeufer":
+                Excel::create('Verkaeufer', function($excel) {
+
+                    $excel->sheet('Verkaeufer', function($sheet) {
+                        $sheet->fromModel($this->nummernRepository->getVerkaeufer2());
                     });
 
                 })->export('xls');

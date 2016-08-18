@@ -56,6 +56,16 @@ class NummernRepository
 
     }
 
+    public function deleteVergabe ($NummernID) {
+
+        $Nummer=Vknummern::query()
+            ->Where('id',$NummernID)
+            ->update(['vergeben_an' => NULL]);
+
+        return $Nummer;
+
+    }
+
     public function nichtreservierteNummern()
     {
 
@@ -88,6 +98,101 @@ class NummernRepository
         return $Nummer;
     }
 
+    public function countVerkaeufer(){
 
-    
+        return Vknummern::query()
+                    ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+                    ->whereNotNull('vergeben_an')
+                    ->count();
+    }
+
+    public function getVerkaeufer(){
+
+        $Interessenten =new InteressentenRepository();
+
+        $vergebeneNummern = Vknummern::query()
+                                ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+                                ->whereNotNull('vergeben_an')
+                                ->get();
+
+        foreach ($vergebeneNummern AS $Nummer){
+            $Interessent[]=$Interessenten->findInteressent($Nummer->vergeben_an);
+        }
+
+        return $Interessent;
+    }
+
+    public function getVerkaeufer2(){
+
+
+        $vergebeneNummern = Vknummern::query()
+            ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+            ->whereNotNull('vergeben_an')
+            ->leftJoin('interessenten', 'vknummern.vergeben_an', '=', 'interessenten.id')
+            ->select('interessenten.*', 'vknummern.vknummer')
+
+            ->get();
+
+
+        return $vergebeneNummern;
+    }
+
+    public function haeufigsteNummer($InteressentenID){
+
+        return $HaeufigsteNummer=Vknummern::query()
+                            ->where('vergeben_an', $InteressentenID)
+                            ->select(DB::raw('*, count(vknummer) as Anzahl'))
+                            ->groupBy('vknummer')
+                            ->orderBy('Anzahl', 'DESC')
+                            ->take(2)
+                            ->get();
+
+
+
+    }
+
+    public function letzteVKNummer($InteressentenID) {
+        return Vknummern::query()
+                    ->where('vergeben_an', $InteressentenID)
+                    ->orderBY('klamottenboersen_id', 'DESC')
+                    ->take(1)
+                    ->first();
+    }
+
+    public function getVKNummer_vknummer($vknummer){
+        $Nummer= Vknummern::query()
+            ->where('vknummer', $vknummer)
+            ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+            ->first();
+
+        return $Nummer;
+    }
+
+    public function NummerPruefen($vknummer){
+        $Nummer= Vknummern::query()
+            ->where('vknummer', $vknummer)
+            ->Where('reserviert_fuer', NULL)
+            ->Where('vergeben_an', NULL)
+            ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+            ->first();
+
+        return $Nummer;
+    }
+
+    public function getNummernMitInteressenten(){
+
+
+        $Nummern = Vknummern::query()
+            ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+
+            ->leftJoin('interessenten', 'vknummern.vergeben_an', '=', 'interessenten.id')
+            ->select('interessenten.*', 'vknummern.vknummer')
+            ->orderBy('vknummer')
+            ->get();
+
+
+        return $Nummern;
+    }
+
+   
 }
