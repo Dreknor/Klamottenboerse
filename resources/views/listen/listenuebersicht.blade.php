@@ -10,6 +10,9 @@
                     <div class="list-group">
                             <a href="{{ url('Listen/vknummern') }}" target="_new" class="list-group-item">Verkäufernummern</a>
                             <a href="{{ url('Listen/belehrung') }}" target="_new" class="list-group-item">Verkäufer-Belehrung</a>
+                            <a href="{{ url('Listen/helfer') }}" target="_new" class="list-group-item">Helferliste</a>
+                            <a href="{{ url('Listen/nummern') }}" target="_new" class="list-group-item">Abstreichliste</a>
+
                     </div>
                 </div>
             </div>

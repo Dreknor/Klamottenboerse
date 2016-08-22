@@ -45,11 +45,49 @@ class ListenController extends Controller
     
     public function belehrung(){
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('listen.pdf.vknummern',[
+        $pdf->loadView('listen.pdf.belehrung',[
             "Klamottenboerse" => $this->klamottenboersenRepository->latest(),
-            "Nummern"   => $this->nummernRepository->getNummernMitInteressenten(),
-            "alteNummer" => 100
+            "Nummern"   => $this->nummernRepository->getNummernMitInteressenten()
+
         ]);
-        return $pdf->download('vknummern.pdf');
+        return $pdf->download('belehrung.pdf');
+    }
+
+    public function helfer(){
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('listen.pdf.helfer',[
+            "Klamottenboerse" => $this->klamottenboersenRepository->latest()
+
+        ]);
+        return $pdf->download('Helferliste.pdf');
+    }
+
+    public function nummern (){
+        $Nummern=$this->nummernRepository->getNummernMitInteressenten();
+        $Spalten=array(
+            "1" => "",
+            "2" => ""
+            );
+        $Anzahl=1;
+
+        foreach ($Nummern AS $Nummer){
+            if (isset($Nummer->vorname)){
+                if ( $Anzahl<=40){
+                    $Spalten[1].=$Nummer->vknummer."<br>";
+
+                } else {
+                    $Spalten[2].=$Nummer->vknummer."<br>";
+                }
+                $Anzahl++;
+            }
+        }
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('listen.pdf.abstreichliste',[
+            "Spalten"   => $Spalten
+        ]);
+        return $pdf->download('Abstreichliste.pdf');
+
+
     }
 }

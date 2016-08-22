@@ -16,8 +16,8 @@ class CreateVerkaeuferNummernTable extends Migration
             $table->increments('id');
             $table->integer('vknummer');
             $table->integer('klamottenboersen_id')->index()->unsigned();
-            $table->integer('reserviert_fuer')->index()->unsigned();
-            $table->integer('vergeben_an')->index()->unsigned();
+            $table->integer('reserviert_fuer')->index()->unsigned()->nullable();
+            $table->integer('vergeben_an')->index()->unsigned()->nullable();
 
             $table->softDeletes();
             $table->timestamps();
@@ -25,11 +25,13 @@ class CreateVerkaeuferNummernTable extends Migration
 
             $table->foreign('vergeben_an')
                 ->references('id')
-                ->on('interessenten');
+                ->on('interessenten')
+                ->onDelete('set null');
 
             $table->foreign('reserviert_fuer')
                 ->references('id')
-                ->on('interessenten');
+                ->on('interessenten')
+                ->onDelete('set null');
             
             $table->foreign('klamottenboersen_id')
                 ->references('id')

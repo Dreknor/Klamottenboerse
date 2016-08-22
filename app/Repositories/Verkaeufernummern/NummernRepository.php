@@ -9,6 +9,7 @@
 namespace App\Repositories\Verkaeufernummern;
 
 
+use App\Models\Interessenten\Interessenten;
 use App\Models\Klamottenboerse\Klamottenboerse;
 use App\Models\Klamottenboerse\Vknummern;
 use App\Repositories\Interessenten\InteressentenRepository;
@@ -194,5 +195,18 @@ class NummernRepository
         return $Nummern;
     }
 
-   
+   public function InteressentenOhneNummer(){
+
+       $Nummern=Interessenten::query()
+           ->whereNotExists(function ($query){
+               $query->select(DB::raw(1))
+                   ->from('vknummern')
+                   ->whereRaw('vknummern.vergeben_an = interessenten.id')
+                   ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"));
+           } )
+           ->orderBy('nachname')
+            ->get();
+
+       return $Nummern;
+   }
 }

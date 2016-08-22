@@ -30,4 +30,8 @@ class Vknummern extends Model
         return $this->belongsTo(Interessenten::class, 'klamottenboersen_id');
     }
 
+    public function Kommentar () {
+        return $this->hasOne(Vknummern_Kommentar::class, 'vknummer');
+    }
+
 }

@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Klamottenboerse\Vknummern;
+use App\Models\Klamottenboerse\Vknummern_Kommentar;
 use App\Repositories\Dateien\DateienRepository;
 use App\Repositories\Interessenten\InteressentenRepository;
 use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
@@ -78,10 +79,10 @@ class NummernController extends Controller
 
     public function store (Request $request) {
         $Nummer=Vknummern::query()->firstOrCreate(['vknummer' => $request->vknummer, 'klamottenboersen_id' => $request->klamottenboersen_id]);
-        return view('VKnummern.neueNummer', [
+        /*return view('VKnummern.neueNummer', [
             'Klamottenboerse' => $this->Klamottenboerse
-        ]);
-        //return redirect()->action('NummernController@index');
+        ]);*/
+        return redirect()->back()->with(['Meldung'=> 'Nummer '.$request->vknummer.' angelegt', 'type' => 'success']);
     }
     
     public function deleteReservierung ($InteressentenID){
@@ -224,7 +225,31 @@ class NummernController extends Controller
         ]);
     }
 
-   
+   public function storeKommentar (Request $request){
+       $Kommentar = Vknummern_Kommentar::firstOrNew(['vknummer' => $request->input('vknummer')]);
+       $Kommentar->kommentar = $request->input('kommentar');
+       $Kommentar->save();
 
+
+       return redirect()->back()->with(['Meldung' => 'Kommentar gespeichert.', 'type' => 'success']);
+   }
+
+    public function KommentarLoeschen (Request $request) {
+
+        $Kommentar = Vknummern_Kommentar::find($request->input('id'));
+        $Kommentar->delete();
+
+        return redirect() -> back() -> with(['Meldung' => 'Der Kommentar wurde gelöscht.', 'type' => 'success']);
+    }
+
+    public function Vergabe($NummernID){
+
+        $Interessenten=$this->NummernRepository->InteressentenOhneNummer();
+
+        return view('VKnummern.Vergabe', [
+            'Interessenten' => $Interessenten,
+            'Nummer' => $this->NummernRepository->getVKNummer($NummernID)
+        ]);    
+    }
 
 }

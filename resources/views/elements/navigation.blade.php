@@ -69,11 +69,7 @@
                                  Verkäufernummern
                              </a>
                          </li>
-                         <li>
-                             <a href="{{ url('/Nummernvergabe') }}">
-                                 Nummernvergabe
-                             </a>
-                         </li>
+
                          <li>
                              <a href="{{ url('/Dateien') }}">
                                  Dateien

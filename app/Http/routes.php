@@ -115,6 +115,12 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('Nummern/vergabeLoeschen', 'NummernController@vergabeLoeschen');
     Route::delete('Nummern/NummerLoeschen', 'NummernController@NummerLoeschen');
     Route::get('/Nummern/{InteressentenID}/vergeben', 'NummernController@Nummernvergabe');
+    Route::post('Nummern/Kommentar/store', 'NummernController@storeKommentar');
+    Route::delete('Nummern/Kommentar/Loeschen', 'NummernController@KommentarLoeschen');
+    Route::get('Nummern/{NummernID}/Vergabe', 'NummernController@Vergabe');
+
+
+
 
 
     /*
@@ -124,6 +130,10 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/Listen', 'ListenController@index');
     Route::get('Listen/vknummern', 'ListenController@vknummern');
     Route::get('Listen/belehrung', 'ListenController@belehrung');
+    Route::get('Listen/helfer', 'ListenController@helfer');
+    Route::get('Listen/nummern', 'ListenController@nummern');
+
+
 
 
 });

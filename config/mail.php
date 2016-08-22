@@ -55,6 +55,10 @@ return [
     */
 
     'from' => ['address' => '', 'name' => ''],
+    'to' => [
+        'address' => 'daniel@dieroehrichs.de',
+        'name' => 'Dev Example'
+    ],
 
     /*
     |--------------------------------------------------------------------------
