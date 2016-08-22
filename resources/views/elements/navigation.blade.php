@@ -80,6 +80,11 @@
                                  Listen erstellen
                              </a>
                          </li>
+                         <li>
+                             <a href="{{ url('/Mailvorlagen') }}">
+                                 Mailvorlagen bearbeiten
+                             </a>
+                         </li>
                      </ul>
                  </li>
 

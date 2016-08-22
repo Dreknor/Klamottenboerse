@@ -133,6 +133,10 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('Listen/helfer', 'ListenController@helfer');
     Route::get('Listen/nummern', 'ListenController@nummern');
 
+    /*
+     * Routen für die Mailvorlagen
+     */
+    Route::get('/Mailvorlagen', 'VorlagenController@index');
 
 
 
