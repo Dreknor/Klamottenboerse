@@ -6,11 +6,11 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-7">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="col-lg-11">
+                            <div class="col-md-11">
                                 Verkäufernummern
                             </div>
                             <div class="col-lg-1">
@@ -29,14 +29,16 @@
                                  @if($Nummer->vergeben_an == "")
 
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-default">{{ $Nummer->vknummer }}</button>
+
                                                 @if($Nummer->reserviert_fuer != "")
-                                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                       {{ $Nummer->vknummer }}
                                                         <span class="caret"></span>
                                                         <span class="sr-only">Toggle Dropdown</span>
                                                     </button>
                                                 @else
                                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                         {{ $Nummer->vknummer }}
                                                         <span class="caret"></span>
                                                         <span class="sr-only">Toggle Dropdown</span>
                                                      </button>
@@ -84,8 +86,9 @@
                                         @else
 
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-success">{{ $Nummer->vknummer }}</button>
+
                                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    {{ $Nummer->vknummer }}
                                                     <span class="caret"></span>
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>

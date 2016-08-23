@@ -137,6 +137,13 @@ Route::group(['middleware' => 'web'], function () {
      * Routen für die Mailvorlagen
      */
     Route::get('/Mailvorlagen', 'VorlagenController@index');
+    Route::delete('Mailvorlagen/loeschen', 'VorlagenController@deleteVorlage');
+    Route::post('Mailvorlagen/new', 'VorlagenController@storeVorlage');
+    Route::get('Mailvorlagen/new', function () {
+        return view('mailvorlagen.neueMailvorlagen');
+    });
+
+
 
 
 

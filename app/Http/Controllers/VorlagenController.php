@@ -9,7 +9,10 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\MailvorlagenAnlegenRequest;
 use App\Repositories\Mailvorlagen\VorlagenRepository;
+use Illuminate\Http\Request;
+use App\Models\Mailvorlagen\Mailvorlagen;
 
 class VorlagenController extends Controller
 {
@@ -21,5 +24,19 @@ class VorlagenController extends Controller
         return view('mailvorlagen.mailvorlagen',[
           "Vorlagen" => $this->VorlagenRepository->alle()
         ]);
+    }
+
+    public function deleteVorlage(Request $request){
+
+        $Vorlage=$this->VorlagenRepository->find($request->input('VorlagenID'));
+        $Vorlage->delete();
+        return redirect()->back()->with(["Message" => "Vorlage erfolgreich gelöscht", "Type" => "success"]);
+    }
+
+    public function storeVorlage(MailvorlagenAnlegenRequest $request){
+
+        Mailvorlagen::create($request->all());
+        return redirect(url('/Mailvorlagen'))->with(["Message"=> "Vorlage erstellt", "type" => "success"]);
+
     }
 }

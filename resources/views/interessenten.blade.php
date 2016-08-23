@@ -85,6 +85,7 @@
                     </div>
 
                     <div class="panel-body">
+                        <div class="table-responsive">
                         <table class="table .table-hover">
                             <thead>
                                 <tr>
@@ -124,7 +125,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-
+                        </div>
                     </div>
                 </div>
             </div>

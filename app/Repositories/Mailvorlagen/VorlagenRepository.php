@@ -16,4 +16,8 @@ class VorlagenRepository
     public function alle (){
         return Mailvorlagen::query()->get();
     }
+
+    public function find($id){
+        return Mailvorlagen::query()->findOrFail($id);
+    }
 }

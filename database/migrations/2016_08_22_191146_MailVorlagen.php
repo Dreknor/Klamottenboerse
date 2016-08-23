@@ -18,6 +18,7 @@ class MailVorlagen extends Migration
             $table->text('name');
             $table->longText('betreff');
             $table->longText('text');
+            $table->timestamps();
         });
     }
 
