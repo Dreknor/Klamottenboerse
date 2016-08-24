@@ -39,4 +39,17 @@ class VorlagenController extends Controller
         return redirect(url('/Mailvorlagen'))->with(["Message"=> "Vorlage erstellt", "type" => "success"]);
 
     }
+
+    public function edit(MailvorlagenAnlegenRequest $request){
+        $Mailvorlage=$this->VorlagenRepository->find($request->VorlagenID);
+        $Mailvorlage->name=$request->name;
+        $Mailvorlage->betreff=$request->betreff;
+        $Mailvorlage->text=$request->text;
+
+        $Mailvorlage->save();
+
+        return redirect(url('/Mailvorlagen'))->with(["Message"=> "Vorlage gespeichert.", "type" => "success"]);
+
+
+    }
 }

@@ -22,7 +22,13 @@
                                     <a href="#" class="list-group-item clearfix">
                                             {{ $Vorlage->name }}
                                             <span class="pull-right">
-                                                <button class="btn btn-xs btn-default">
+                                                <button class="btn btn-xs btn-default"type="button"
+                                                        data-toggle="modal"
+                                                        data-target="#BearbeiteVorlage"
+                                                        data-name="{{$Vorlage->name}}"
+                                                        data-vorlage = "{{$Vorlage->id}}"
+                                                        data-betreff = "{{$Vorlage->betreff}}"
+                                                        data-text = "{{$Vorlage->text}}">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 </button>
 
@@ -46,6 +52,41 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="BearbeiteVorlage" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-title">Vorlage bearbeiten</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="bearbeiten" action="{{ url('Mailvorlagen/edit')}}">
+                        {{csrf_field()}}
+                        <input type="hidden" name="VorlagenID" id="FormVorlagenID" value="">
+                        <div class="form-group">
+                            <label for="Name">Name der Vorlage</label>
+                            <input type="text" class="form-control" id="VorlagenName" placeholder="Name" name="name" value="" >
+                        </div>
+                        <div class="form-group">
+                            <label for="Betreff">Betreff</label>
+                            <input type="text" class="form-control" id="VorlagenBetreff" placeholder="Betreff" name="betreff" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="Betreff">Nachrichtentext</label>
+                            <textarea type="text" class="form-control" id="VorlagenText" placeholder="Hier kommt der Mailtext hin" name="text" rows="8"></textarea>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="submit" form="bearbeiten" class="btn btn-success">Vorlage speichern</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="LoescheVorlage" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -76,6 +117,26 @@
 
 
 
+        $('#BearbeiteVorlage').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var VorlageID = button.data('vorlage')
+            var VorlageName = button.data('name')
+            var VorlageBetreff = button.data('betreff')
+            var VorlageText = button.data('text')
+
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('#FormVorlagenID').val(VorlageID)
+            modal.find('#VorlagenName').val(VorlageName)
+            modal.find('#VorlagenBetreff').val(VorlageBetreff)
+            modal.find('#VorlagenText').val(VorlageText)
+
+
+
+
+        })
+
         $('#LoescheVorlage').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var VorlageID = button.data('vorlage')
@@ -89,8 +150,6 @@
 
 
         })
-
-
 
 
 

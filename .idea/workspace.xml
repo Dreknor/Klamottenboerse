@@ -35,18 +35,18 @@
       <file leaf-file-name="routes.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="605">
-              <caret line="140" column="71" selection-start-line="140" selection-start-column="71" selection-end-line="140" selection-end-column="71" />
+            <state relative-caret-position="775">
+              <caret line="144" column="56" selection-start-line="144" selection-start-column="56" selection-end-line="144" selection-end-column="56" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VorlagenController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="VorlagenController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/VorlagenController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+            <state relative-caret-position="544">
+              <caret line="37" column="46" selection-start-line="37" selection-start-column="46" selection-end-line="37" selection-end-column="46" />
               <folding>
                 <element signature="e#121#170#0#PHP" expanded="true" />
               </folding>
@@ -67,7 +67,7 @@
       <file leaf-file-name="InteressentenController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/InteressentenController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="447">
+            <state relative-caret-position="2125">
               <caret line="137" column="57" selection-start-line="137" selection-start-column="57" selection-end-line="137" selection-end-column="57" />
               <folding>
                 <element signature="e#119#169#0#PHP" expanded="true" />
@@ -79,38 +79,8 @@
       <file leaf-file-name="mailvorlagen.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/mailvorlagen/mailvorlagen.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="690">
-              <caret line="80" column="42" selection-start-line="80" selection-start-column="42" selection-end-line="80" selection-end-column="42" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="InteressentenAnlegenRequest.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Requests/InteressentenAnlegenRequest.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MailvorlagenAnlegenRequest.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Requests/MailvorlagenAnlegenRequest.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="16" column="35" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="neueMailvorlagen.blade.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/mailvorlagen/neueMailvorlagen.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" column="172" selection-start-line="24" selection-start-column="172" selection-end-line="24" selection-end-column="172" />
+            <state relative-caret-position="588">
+              <caret line="84" column="67" selection-start-line="84" selection-start-column="67" selection-end-line="84" selection-end-column="67" />
               <folding />
             </state>
           </provider>
@@ -119,7 +89,7 @@
       <file leaf-file-name="2016_08_22_191146_MailVorlagen.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/database/migrations/2016_08_22_191146_MailVorlagen.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
+            <state relative-caret-position="527">
               <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
               <folding>
                 <element signature="e#7#48#0#PHP" expanded="true" />
@@ -133,6 +103,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="102">
               <caret line="11" column="3" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="neueMailvorlagen.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/mailvorlagen/neueMailvorlagen.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="22" column="43" selection-start-line="14" selection-start-column="28" selection-end-line="25" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -190,14 +170,14 @@
         <option value="$PROJECT_DIR$/resources/views/elements/navigation.blade.php" />
         <option value="$PROJECT_DIR$/app/Models/Mailvorlagen/Mailvorlagen.php" />
         <option value="$PROJECT_DIR$/app/Repositories/Mailvorlagen/VorlagenRepository.php" />
-        <option value="$PROJECT_DIR$/resources/views/mailvorlagen/mailvorlagen.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/interessenten.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/vknummern/uebersicht.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/routes.php" />
         <option value="$PROJECT_DIR$/database/migrations/2016_08_22_191146_MailVorlagen.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/VorlagenController.php" />
         <option value="$PROJECT_DIR$/app/Http/Requests/MailvorlagenAnlegenRequest.php" />
         <option value="$PROJECT_DIR$/resources/views/mailvorlagen/neueMailvorlagen.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/routes.php" />
+        <option value="$PROJECT_DIR$/resources/views/mailvorlagen/mailvorlagen.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/VorlagenController.php" />
       </list>
     </option>
   </component>
@@ -266,7 +246,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -657,6 +636,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -803,11 +783,14 @@
       <workItem from="1471876408954" duration="604000" />
       <workItem from="1471892452075" duration="3276000" />
       <workItem from="1471927439076" duration="8166000" />
+      <workItem from="1471974664417" duration="202000" />
+      <workItem from="1471982310372" duration="1101000" />
+      <workItem from="1472014710992" duration="1603000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="351185000" />
+    <option name="totallyTimeSpent" value="354091000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -823,7 +806,7 @@
     <editor active="false" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1389485" sideWeight="0.84290355" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14377682" sideWeight="0.84290355" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32932165" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1033,7 +1016,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="27" column="33" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1062,9 +1044,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3417">
           <caret line="206" column="30" selection-start-line="206" selection-start-column="30" selection-end-line="206" selection-end-column="30" />
-          <folding>
-            <element signature="e#135#178#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1128,7 +1107,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-432">
           <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1136,7 +1114,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="30" column="27" selection-start-line="30" selection-start-column="26" selection-end-line="30" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1144,7 +1121,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="501" column="48" selection-start-line="501" selection-start-column="48" selection-end-line="501" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1152,7 +1128,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-272">
           <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1168,14 +1143,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Repositories/Mailvorlagen/VorlagenRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="11" column="3" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Models/Mailvorlagen/Mailvorlagen.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -1184,38 +1151,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2016_08_22_191146_MailVorlagen.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/InteressentenController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
+        <state relative-caret-position="2125">
+          <caret line="137" column="57" selection-start-line="137" selection-start-column="57" selection-end-line="137" selection-end-column="57" />
           <folding>
-            <element signature="e#7#48#0#PHP" expanded="true" />
+            <element signature="e#119#169#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
+    <entry file="file://$PROJECT_DIR$/database/migrations/2016_08_22_191146_MailVorlagen.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="605">
-          <caret line="140" column="71" selection-start-line="140" selection-start-column="71" selection-end-line="140" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/InteressentenAnlegenRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/VorlagenController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        <state relative-caret-position="527">
+          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
           <folding>
-            <element signature="e#121#170#0#PHP" expanded="true" />
+            <element signature="e#7#48#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1228,29 +1179,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/InteressentenController.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Requests/InteressentenAnlegenRequest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="447">
-          <caret line="137" column="57" selection-start-line="137" selection-start-column="57" selection-end-line="137" selection-end-column="57" />
-          <folding>
-            <element signature="e#119#169#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/mailvorlagen/mailvorlagen.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="80" column="42" selection-start-line="80" selection-start-column="42" selection-end-line="80" selection-end-column="42" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/mailvorlagen/neueMailvorlagen.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="172" selection-start-line="24" selection-start-column="172" selection-end-line="24" selection-end-column="172" />
+        <state relative-caret-position="374">
+          <caret line="22" column="43" selection-start-line="14" selection-start-column="28" selection-end-line="25" selection-end-column="34" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Repositories/Mailvorlagen/VorlagenRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="11" column="3" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="775">
+          <caret line="144" column="56" selection-start-line="144" selection-start-column="56" selection-end-line="144" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/mailvorlagen/mailvorlagen.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="84" column="67" selection-start-line="84" selection-start-column="67" selection-end-line="84" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/VorlagenController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="37" column="46" selection-start-line="37" selection-start-column="46" selection-end-line="37" selection-end-column="46" />
+          <folding>
+            <element signature="e#121#170#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

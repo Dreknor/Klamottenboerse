@@ -142,6 +142,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('Mailvorlagen/new', function () {
         return view('mailvorlagen.neueMailvorlagen');
     });
+    Route::post('Mailvorlagen/edit', 'VorlagenController@edit');
+
 
 
 
