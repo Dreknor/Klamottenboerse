@@ -24,13 +24,22 @@
                                 <label for="Betreff">Nachrichtentext</label>
                                 <textarea type="text" class="form-control" id="Nachricht" placeholder="Hier kommt der Mailtext hin" name="text" rows="8">{!! old('text') !!}</textarea>
                             </div>
-
-
                         </form>
-
                     </div>
                     <div class="panel-footer">
                         <button type="submit" class="btn btn-success" form="neueVorlage">Erstellen</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Text-Individualisierungen
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            @include('elements.individualisierung')
+                        </ul>
                     </div>
                 </div>
             </div>

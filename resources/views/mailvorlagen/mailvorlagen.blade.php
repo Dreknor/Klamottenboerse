@@ -54,31 +54,45 @@
 
 
     <div class="modal fade" id="BearbeiteVorlage" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="modal-title">Vorlage bearbeiten</h4>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" id="bearbeiten" action="{{ url('Mailvorlagen/edit')}}">
-                        {{csrf_field()}}
-                        <input type="hidden" name="VorlagenID" id="FormVorlagenID" value="">
-                        <div class="form-group">
-                            <label for="Name">Name der Vorlage</label>
-                            <input type="text" class="form-control" id="VorlagenName" placeholder="Name" name="name" value="" >
+                    <div class="row">
+                        <div class="col-md-8">
+                            <form method="POST" id="bearbeiten" action="{{ url('Mailvorlagen/edit')}}">
+                                {{csrf_field()}}
+                                <input type="hidden" name="VorlagenID" id="FormVorlagenID" value="">
+                                <div class="form-group">
+                                    <label for="Name">Name der Vorlage</label>
+                                    <input type="text" class="form-control" id="VorlagenName" placeholder="Name" name="name" value="" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="Betreff">Betreff</label>
+                                    <input type="text" class="form-control" id="VorlagenBetreff" placeholder="Betreff" name="betreff" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="Betreff">Nachrichtentext</label>
+                                    <textarea type="text" class="form-control" id="VorlagenText" placeholder="Hier kommt der Mailtext hin" name="text" rows="8"></textarea>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label for="Betreff">Betreff</label>
-                            <input type="text" class="form-control" id="VorlagenBetreff" placeholder="Betreff" name="betreff" value="">
+                        <div class="col-md-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Text-Individualisierungen
+                                </div>
+                                <div class="panel-body">
+                                    <ul class="list-group">
+                                        @include('elements.individualisierung')
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="Betreff">Nachrichtentext</label>
-                            <textarea type="text" class="form-control" id="VorlagenText" placeholder="Hier kommt der Mailtext hin" name="text" rows="8"></textarea>
-                        </div>
-                    </form>
-
-                </div>
+                    </div>
                 <div class="modal-footer">
 
                     <button type="submit" form="bearbeiten" class="btn btn-success">Vorlage speichern</button>

@@ -10,6 +10,7 @@ namespace App\Repositories\Nachrichten;
 
 
 use App\Models\Interessenten\Nachrichten;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
 
@@ -32,9 +33,13 @@ class NachrichtenRepository
         $name=$Interessent->vorname.' '.$Interessent->nachname;
         $anhang=$Nachricht['anhang'];
 
+        if (!isset($Nachricht['view']) OR $Nachricht['view'] == ""){
+            $Nachricht['view'] = "emails.email";
+        }
+
         Mail::send(array('text' => $Nachricht['view']), [
             'Interessent'        => $Interessent,
-            'msg'           => $Nachricht['text']
+            'msg'           => $Nachricht['nachricht']
 
         ], function($message) use ($subject, $empfaenger, $name, $anhang) {
             // note: if you don't set this, it will use the defaults from config/mail.php
@@ -51,11 +56,31 @@ class NachrichtenRepository
     public function send ($Interessent, $Nachricht) {
         
         if ($Interessent->mail != "") {
+            $Nachricht= $this->replaceString($Nachricht, $Interessent);
 
-            $this->store($Interessent->id, $Nachricht['betreff'], $Nachricht['text'], $Nachricht['anhang']);
+            
+            $this->store($Interessent->id, $Nachricht['betreff'], $Nachricht['nachricht'], $Nachricht['anhang']);
             $this->senden($Nachricht, $Interessent);
         }
         
+    }
+
+    public function replaceString ($Nachricht, $Interessent ) {
+
+            $Absender=Auth::user()->name;
+
+        if (isset($Interessent->vknummern_vergeben->vknummer)){
+            $vknummer=$Interessent->vknummern_vergeben->vknummer;
+        } else {
+            $vknummer="Bisher keine Verkäufernummer vergeben.";
+        }
+
+        $SearchStrings =["VORNAME", "NACHNAME", "ANREDE", "ABSENDER", "EMAIL", "VKNUMMER"];
+        $ReplaceStrings =[$Interessent->vorname, $Interessent->nachname, $Interessent->anrede, $Absender, $Interessent->mail, $vknummer];
+
+        $Nachricht=str_replace($SearchStrings, $ReplaceStrings, $Nachricht);
+
+        return $Nachricht;
     }
         
 

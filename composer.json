@@ -6,7 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.2.*",
+        "laravel/framework": "5.3.*",
 		"doctrine/dbal": "v2.4.2",
         "barryvdh/laravel-debugbar": "^2.2",
         "anahkiasen/former": "^4.0",

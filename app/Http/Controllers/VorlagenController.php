@@ -49,7 +49,5 @@ class VorlagenController extends Controller
         $Mailvorlage->save();
 
         return redirect(url('/Mailvorlagen'))->with(["Message"=> "Vorlage gespeichert.", "type" => "success"]);
-
-
     }
 }

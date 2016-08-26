@@ -2,8 +2,6 @@
 
 @section('content')
     <div class="container">
-
-
         <div class="row">
             <div class="col-md-10">
                 <div class="row">
@@ -293,12 +291,37 @@
 
                                 </div>
                                 <div class="panel-footer">
-                                    <button type="button" class="btn btn-primary"
-                                            data-toggle="modal"
-                                            data-target="#neueNachricht"
-                                            data-title="Neue Nachricht für {{$Interessent->vorname }} {{$Interessent->nachname}}">
-                                        neue Nachricht
-                                    </button>
+                                    @if(count($Vorlagen)>0)
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary"
+                                                    data-toggle="modal"
+                                                    data-target="#neueNachricht"
+                                                    data-title="Neue Nachricht für {{$Interessent->vorname }} {{$Interessent->nachname}}">
+                                                neue Nachricht
+                                            </button>                                            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="caret"></span>
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                               @foreach($Vorlagen AS $Vorlage)
+                                                   <li><a href="#"
+                                                          data-toggle="modal"
+                                                          data-target="#neueNachricht"
+                                                          data-title="Neue Nachricht für {{$Interessent->vorname }} {{$Interessent->nachname}}"
+                                                          data-betreff="{{$Vorlage->betreff}}"
+                                                          data-text="{{$Vorlage->text}}"
+                                                       >{{$Vorlage->name}}</a> </li>
+                                                   @endforeach
+                                            </ul>
+                                        </div>
+                                    @else
+                                        <button type="button" class="btn btn-primary"
+                                                         data-toggle="modal"
+                                                         data-target="#neueNachricht"
+                                                         data-title="Neue Nachricht für {{$Interessent->vorname }} {{$Interessent->nachname}}">
+                                            neue Nachricht
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -309,40 +332,50 @@
 
 
 
-        <div class="modal fade" id="neueNachricht" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
+        <div class="modal fade " id="neueNachricht" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="modal-title"></h4>
                     </div>
                     <div class="modal-body">
-                        <form class="form-horizontal" role="form" method="POST" id="Nachrichtenform" action="{{ url('/Nachricht')}}{{ "/".$Interessent->id}}">
-                            {!! csrf_field() !!}
-                            <input type="hidden" form="Nachrichtenform" class="form-control" name="interessent_id" value="{{ $Interessent->id}}">
-                            <div class="form-group">
-                                <label for="Betreff">Betreff</label>
-                                <input type="input" form="Nachrichtenform" class="form-control" name="betreff" placeholder="Betreff">
-                            </div>
-                            <div class="form-group">
-                                <label for="nachricht">Nachricht</label>
-                                <textarea type="textarea" rows="10" class="form-control" name="nachricht" placeholder="Nachricht für {{$Interessent->vorname }} {{$Interessent->nachname}}"></textarea>
-                            </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <form class="form-horizontal" role="form" method="POST" id="Nachrichtenform" action="{{ url('/Nachricht')}}{{ "/".$Interessent->id}}">
+                                    {!! csrf_field() !!}
+                                    <input type="hidden" form="Nachrichtenform" class="form-control" name="interessent_id" value="{{ $Interessent->id}}">
+                                    <div class="form-group">
+                                        <label for="Betreff">Betreff</label>
+                                        <input type="input" form="Nachrichtenform" class="form-control" name="betreff" placeholder="Betreff" id="modal-betreff">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nachricht">Nachricht</label>
+                                        <textarea type="textarea" rows="10" class="form-control" name="nachricht" placeholder="Nachricht für {{$Interessent->vorname }} {{$Interessent->nachname}}" id="modal-text"></textarea>
+                                    </div>
 
-                            @if($Dateien ->count() > 0)
-                            <div class="form-group">
-                                <label for="nachricht">Datei anhängen</label>
-                                <select class="form-control" name="anhang">
-                                    <option value=""></option>
-                                    @foreach($Dateien AS $Datei)
-                                        <option value="{{ $Datei->pfad }}">{{ $Datei->dateiname }}</option>
-                                    @endforeach
-                                </select>
+                                    @if($Dateien ->count() > 0)
+                                        <div class="form-group">
+                                            <label for="nachricht">Datei anhängen</label>
+                                            <select class="form-control" name="anhang">
+                                                <option value=""></option>
+                                                @foreach($Dateien AS $Datei)
+                                                    <option value="{{ $Datei->pfad }}">{{ $Datei->dateiname }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                    @endif
+
+                                </form>
                             </div>
+                            <div class="col-md-4">
+                                <b>Individualisierung</b>
+                                @include('elements.individualisierung')
+                            </div>
+                        </div>
 
-                           @endif
 
-                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" form="Nachrichtenform" class="btn btn-primary" >Nachricht senden</button>
@@ -448,12 +481,15 @@
         $('#neueNachricht').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var title = button.data('title') // Extract info from data-* attributes
-            var nachricht = button.data('inhalt') // Extract info from data-* attributes
+            var nachricht = button.data('text')
+            var betreff = button.data('betreff')
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var modal = $(this)
-            modal.find('.modal-title').text(title);
-            modal.find('.modal-body pre').text(nachricht)
+            modal.find('.modal-title').text(title)
+            modal.find('#modal-text').val(nachricht)
+            modal.find('#modal-betreff').val(betreff)
+
         })
 
         $('#Nachricht').on('show.bs.modal', function (event) {

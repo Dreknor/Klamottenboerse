@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Interessenten\Interessenten;
 use App\Models\Interessenten\Nachrichten;
+use App\Repositories\Nachrichten\NachrichtenRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Repositories\Interessenten\InteressentenRepository;
@@ -20,33 +21,43 @@ use App\Repositories\Interessenten\InteressentenRepository;
 
 class NachrichtenController extends Controller
 {
-    public function __construct(InteressentenRepository $interessentenRepository)
+    public function __construct(InteressentenRepository $interessentenRepository, NachrichtenRepository $nachrichtenRepository)
     {
         $this->middleware('auth');
         $this->interessentenRepository = $interessentenRepository;
+        $this->nachrichtenRepository =$nachrichtenRepository;
 
     }
     /*
      * Versendet Nachrichten und speichert diese in der DB
      */
-    public function send($InteressentenID, Request $request, $return="true"){
+    public function send($Interessent, Request $request, $return="true"){
 
-        $Interessent=Interessenten::query()->findOrFail($InteressentenID);
-
-        if ($Interessent->mail !=''){
-            $this->senden($request, $Interessent);
-            $this->store($InteressentenID, $request->betreff, $request->nachricht, $request->anhang);
+        if (!is_object($Interessent)) {
+            $Interessent = Interessenten::query()->findOrFail($Interessent);
         }
 
-       if ($return='true'){
-           return redirect(url('/Interessent'.'/'.$InteressentenID));
+
+
+
+        if ($Interessent->mail !=''){
+            $Nachricht['betreff'] = $request->input('betreff');
+            $Nachricht['nachricht'] = $request->input('nachricht');
+            $Nachricht['anhang'] = $request->input('anhang');
+
+            $this->nachrichtenRepository->send($Interessent, $Nachricht );
+           /* $this->senden($request, $Interessent);
+            $this->store($InteressentenID, $request->betreff, $request->nachricht, $request->anhang);*/
+        }
+
+       if ($return=='true'){
+           return redirect(url('/Interessent'.'/'.$Interessent->id));
        }
     }
 
     /*
      * speichert Nachrichten
-     */
-    
+     
     public function store($id, $betreff, $text, $anhang='') {
         Nachrichten::create([
             'interessent_id' => $id,
@@ -76,7 +87,8 @@ class NachrichtenController extends Controller
 
             if ($anhang!=""){ $message->attach(storage_path('app\anhaenge\\'.$anhang));}
         });
-    }
+    }*/
+
 
     /*
      * sendet E-Mails an eine ganze Gruppe
@@ -90,8 +102,9 @@ class NachrichtenController extends Controller
                 $Interssenten= $this->interessentenRepository->all();
                     foreach ($Interssenten AS $Interessent) {
                         if ($Interessent->mail !=''){
-                            $this->store($Interessent->id, $request->betreff, $request->nachricht);
-                            $this->senden($request, $Interessent);
+                            //$this->store($Interessent->id, $request->betreff, $request->nachricht);
+                            //$this->senden($request, $Interessent);
+                            $this->send($Interessent, $request, "false");
                         }
                     }
                 return redirect(url("/Ueberblick/$gruppe"));
@@ -101,8 +114,9 @@ class NachrichtenController extends Controller
                 $Interssenten= $this->interessentenRepository->Kinderhaus();
                 foreach ($Interssenten AS $Interessent) {
                     if ($Interessent->mail !=''){
-                        $this->store($Interessent->id, $request->betreff, $request->nachricht);
-                        $this->senden($request, $Interessent);
+                        //$this->store($Interessent->id, $request->betreff, $request->nachricht);
+                        //$this->senden($request, $Interessent);
+                        $this->send($Interessent, $request, "false");
                     }
                 }
                 return redirect(url("/Ueberblick/$gruppe"));
@@ -112,11 +126,12 @@ class NachrichtenController extends Controller
             case "Mitarbeiter":
                 $Interssenten= $this->interessentenRepository->Mitarbeiter();
                     foreach ($Interssenten AS $Interessent) {
-                        if ($Interessent->mail !=''){
-                            $this->store($Interessent->id, $request->betreff, $request->nachricht);
-                            $this->senden($request, $Interessent);
-                        }
-                    }
+                if ($Interessent->mail !=''){
+                    //$this->store($Interessent->id, $request->betreff, $request->nachricht);
+                    //$this->senden($request, $Interessent);
+                    $this->send($Interessent, $request, "false");
+                }
+            }
                 return redirect(url("/Ueberblick/$gruppe"));
                 exit;
         }

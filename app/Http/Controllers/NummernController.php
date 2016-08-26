@@ -134,7 +134,7 @@ class NummernController extends Controller
            
            $Nachricht=[
                'betreff' => 'Verkäufernummer Klamottenbörse',
-               'text'   => $text,
+               'nachricht'   => $text,
                'anhang' => $VerkaeuferInfos->pfad,
                'view'   => 'emails.blank'
            ];
@@ -169,7 +169,7 @@ class NummernController extends Controller
 
             $Nachricht=[
                 'betreff' => 'Verkäufernummer Klamottenbörse',
-                'text'   => $text,
+                'nachricht'   => $text,
                 'anhang' => '',
                 'view'   => 'emails.blank'
             ];
@@ -200,7 +200,7 @@ class NummernController extends Controller
 
             $Nachricht=[
                 'betreff' => 'Verkäufernummer Klamottenbörse',
-                'text'   => $text,
+                'nachricht'   => $text,
                 'anhang' => '',
                 'view'   => 'emails.blank'
             ];

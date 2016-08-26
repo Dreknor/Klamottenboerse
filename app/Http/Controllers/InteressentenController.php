@@ -11,6 +11,7 @@ use App\Http\Requests\InteressentenAnlegenRequest;
 use App\Models\Dateien\Dateien;
 use App\Models\Interessenten\Interessenten;
 use App\Repositories\Interessenten\InteressentenRepository;
+use App\Repositories\Mailvorlagen\VorlagenRepository;
 use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Http\Request;
 use Excel;
@@ -23,6 +24,7 @@ class InteressentenController extends Controller
         $this->middleware('auth');
         $this->interessentenRepository = $interessentenRepository;
         $this->nummernRepository = $nummernRepository;
+
     }
 
     /**
@@ -75,6 +77,9 @@ class InteressentenController extends Controller
     }
 
     public function show ($id) {
+        $VorlagenRepository = new VorlagenRepository();
+        $Vorlagen = $VorlagenRepository -> alle();
+
         $Interessent=$this->interessentenRepository->findInteressent($id);
         $Dateien=Dateien::query()->get();
 
@@ -99,7 +104,8 @@ class InteressentenController extends Controller
            'Interessent' => $Interessent,
             'Dateien'   => $Dateien,
             'haeufigsteNummer' => $Nummern,
-            'letzteNummer' => $letzteNummer
+            'letzteNummer' => $letzteNummer,
+            'Vorlagen'  => $Vorlagen
         ]);
 
     }
