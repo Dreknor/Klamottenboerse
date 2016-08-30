@@ -15,8 +15,9 @@ class Klamottenboerse extends Model
 {
     public $table = "klamottenboerse";
 
-    protected $fillable = array('datum', 'anmeldung', 'anmeldungKinderhaus');
+    protected $fillable = array('datum', 'anmeldung', 'anmeldungKinderhaus', 'anlieferung_von', 'anlieferung_bis', 'abholung_von', 'abholung_bis','maxTeile');
     protected $dates = ['created_at', 'updated_at', 'datum', 'anmeldung', 'anmeldungKinderhaus'];
+    protected $times = ['anlieferung_von', 'anlieferung_bis', 'abholung_von', 'abholung_bis'];
 
     public function helfer(){
         return $this->hasMany(Helfer::class, 'klamottenboerse_id')

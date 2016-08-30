@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('content')
     <div id="_token" class="hidden" data-token="{{ csrf_token() }}"></div>
     <div class="container">
@@ -36,7 +37,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <p>
-                                            <a href="x" id="anmeldung" data-type="date" data-value="{{ $Klamottenboerse->anmeldung }}" data-pk="{{ $Klamottenboerse->id }} data-title="Anmeldedatum bearbeiten">
+                                            <a href="x" id="anmeldung" data-type="date" data-value="{{ $Klamottenboerse->anmeldung }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Anmeldedatum bearbeiten">
                                                 @if($Klamottenboerse->anmeldung != null and $Klamottenboerse->anmeldung->year > 1990)
                                                     {{ $Klamottenboerse->anmeldung->format('d.m.Y') }}
                                                 @else
@@ -53,16 +54,98 @@
                                     </div>
                                     <div class="col-md-4">
                                         <p>
-                                            <a href="x" id="anmeldungKinderhaus" data-type="date" data-value="{{ $Klamottenboerse->anmeldungKinderhaus }}" data-pk="{{ $Klamottenboerse->id }} data-title="Datum der Anmeldung für das Kinderhaus bearbeiten">
-                                                @if($Klamottenboerse->anmeldungKinderhaus != null and $Klamottenboerse->anmeldungKinderhaus->year > 1990 )
-                                                    {{ $Klamottenboerse->anmeldungKinderhaus->format('d.m.Y') }}
+                                            <a href="x" id="anmeldungKinderhaus" data-type="date" data-value="{{ $Klamottenboerse->anmeldungKinderhaus }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Datum der Anmeldung für das Kinderhaus bearbeiten">
+                                            @if($Klamottenboerse->anmeldungKinderhaus != null and $Klamottenboerse->anmeldungKinderhaus->year > 1990 )
+                                                {{ $Klamottenboerse->anmeldungKinderhaus->format('d.m.Y') }}
+                                            @else
+                                                Noch kein Datum angegeben
+                                                @endif
+                                                </a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        Anlieferung ab:
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>
+                                            <a href="x" id="anlieferung_von" data-type="time" data-value="{{ $Klamottenboerse->anlieferung_von }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Anlieferung ab ... Uhr">
+                                                @if($Klamottenboerse->anlieferung_von != null )
+                                                    {{ $Klamottenboerse->anlieferung_von }} Uhr
                                                 @else
-                                                        Noch kein Datum angegeben
+                                                    Kein Zeitpunkt angegeben
                                                 @endif
                                             </a>
                                         </p>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        Anlieferung bis:
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>
+                                            <a href="x" id="anlieferung_bis" data-type="time" data-value="{{ $Klamottenboerse->anlieferung_bis }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Anlieferung bis ... Uhr">
+                                                @if($Klamottenboerse->anlieferung_bis != null )
+                                                    {{ $Klamottenboerse->anlieferung_bis }} Uhr
+                                                @else
+                                                    Kein Zeitpunkt angegeben
+                                                @endif
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        Abholung ab:
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>
+                                            <a href="x" id="abholung_von" data-type="time" data-value="{{ $Klamottenboerse->abholung_von }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Anlieferung bis ... Uhr">
+                                                @if($Klamottenboerse->abholung_von != null )
+                                                    {{ $Klamottenboerse->abholung_von }} Uhr
+                                                @else
+                                                    Kein Zeitpunkt angegeben
+                                                @endif
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        Abholung bis:
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>
+                                            <a href="x" id="abholung_bis" data-type="time" data-value="{{ $Klamottenboerse->abholung_bis }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Anlieferung bis ... Uhr">
+                                                @if($Klamottenboerse->abholung_bis != null )
+                                                    {{ $Klamottenboerse->abholung_bis }} Uhr
+                                                @else
+                                                    Kein Zeitpunkt angegeben
+                                                @endif
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        maximale Teile pro Verkäufer:
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>
+                                            <a href="x" id="maxTeile" data-type="number" data-value="{{ $Klamottenboerse->maxTeile }}" data-pk="{{ $Klamottenboerse->id }}" data-title="maximale Teile pro Verkäufer">
+                                                @if($Klamottenboerse->maxTeile != null )
+                                                    {{ $Klamottenboerse->maxTeile }}
+                                                @else
+                                                   Keine Anzahl angegeben
+                                                @endif
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="panel-footer">
                                 <a href="{{ url('Grunddaten/abschliessen') }}" class="btn btn-danger">Klamottenbörse abschließen</a>
@@ -255,9 +338,68 @@
                     type: 'put'}
             });
 
+            $('#anlieferung_von').editable({
+                url: '{{URL::to("/")}}/edit-Klamottenboerse',
+                title: 'Bearbeiten',
+                viewformat: 'hh:ii',
+                format: 'hh:ii',
+                placement: 'down',
+                send: 'always',
+                ajaxOptions: {
+                    dataType: 'json',
+                    type: 'put'}
+            });
+
+            $('#anlieferung_bis').editable({
+                url: '{{URL::to("/")}}/edit-Klamottenboerse',
+                title: 'Bearbeiten',
+                format: 'hh:ii',
+                viewformat: 'hh:ii',
+                placement: 'down',
+                send: 'always',
+                ajaxOptions: {
+                    dataType: 'json',
+                    type: 'put'}
+            });
+
+
+            $('#abholung_bis').editable({
+                url: '{{URL::to("/")}}/edit-Klamottenboerse',
+                title: 'Bearbeiten',
+                format: 'yhh:ii',
+                viewformat: 'hh:ii',
+                placement: 'down',
+                send: 'always',
+                ajaxOptions: {
+                    dataType: 'json',
+                    type: 'put'}
+            });
+
+            $('#abholung_von').editable({
+                url: '{{URL::to("/")}}/edit-Klamottenboerse',
+                title: 'Bearbeiten',
+                format: 'hh:ii',
+                viewformat: 'hh:ii',
+                placement: 'down',
+                send: 'always',
+                ajaxOptions: {
+                    dataType: 'json',
+                    type: 'put'}
+            });
+
+            $('#maxTeile').editable({
+                url: '{{URL::to("/")}}/edit-Klamottenboerse',
+                title: 'Bearbeiten',
+                placement: 'down',
+                send: 'always',
+                ajaxOptions: {
+                    dataType: 'json',
+                    type: 'put'}
+            });
 
         })
     </script>
+
 
 @endsection
 

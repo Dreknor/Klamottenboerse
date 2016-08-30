@@ -17,6 +17,7 @@ use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
 use App\Repositories\Nachrichten\NachrichtenRepository;
 use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 
 class NummernController extends Controller
@@ -25,6 +26,7 @@ class NummernController extends Controller
     {
         $this->middleware('auth');
         $this->NummernRepository = $nummernRepository;
+        $this->klamottenboersenRepository = $klamottenboersenRepository;
         $this->Klamottenboerse=$klamottenboersenRepository->getId();
     }
 
@@ -124,8 +126,14 @@ class NummernController extends Controller
 
            $Interessent= InteressentenRepository::findInteressent($request->input('InteressentenID'));
            $VKnummer=$this->NummernRepository->getVKNummer($request->input('NummernID'));
-           $DateienRepository = new DateienRepository();
-           $VerkaeuferInfos=$DateienRepository->findDateiName('Verkäuferinfos');
+
+           //Erstelle VerkäuferInfos
+           $pdf = App::make('dompdf.wrapper');
+           $pdf->loadView('listen.pdf.verkaeuferinfos',[
+               "Klamottenboerse" => $this->klamottenboersenRepository->latest()
+           ]);
+           $pdf->save(storage_path().'\app\anhaenge\VerkaeuferInfos.pdf');
+
 
            $text = View::make('emails.vergabeVKNummer', [
                'Interessent'=> $Interessent,
@@ -135,7 +143,7 @@ class NummernController extends Controller
            $Nachricht=[
                'betreff' => 'Verkäufernummer Klamottenbörse',
                'nachricht'   => $text,
-               'anhang' => $VerkaeuferInfos->pfad,
+               'anhang' => 'VerkaeuferInfos.pdf',
                'view'   => 'emails.blank'
            ];
 

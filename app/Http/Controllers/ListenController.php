@@ -87,7 +87,13 @@ class ListenController extends Controller
             "Spalten"   => $Spalten
         ]);
         return $pdf->download('Abstreichliste.pdf');
+    }
 
-
+    public function Infos(){
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('listen.pdf.verkaeuferinfos',[
+            "Klamottenboerse" => $this->klamottenboersenRepository->latest()
+        ]);
+        return $pdf->download('VerkäuferInfos.pdf');
     }
 }

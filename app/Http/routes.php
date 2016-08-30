@@ -132,6 +132,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('Listen/belehrung', 'ListenController@belehrung');
     Route::get('Listen/helfer', 'ListenController@helfer');
     Route::get('Listen/nummern', 'ListenController@nummern');
+    Route::get('Listen/Infos', 'ListenController@Infos');
+
 
     /*
      * Routen für die Mailvorlagen

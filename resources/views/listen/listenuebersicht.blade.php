@@ -8,6 +8,7 @@
                 <div class="panel-heading">Welche Liste soll erstellt werden?</div>
                 <div class="panel-body">
                     <div class="list-group">
+                            <a href="{{ url('Listen/Infos') }}" target="_new" class="list-group-item"><b>VerkäuferInfos</b></a>
                             <a href="{{ url('Listen/vknummern') }}" target="_new" class="list-group-item">Verkäufernummern</a>
                             <a href="{{ url('Listen/belehrung') }}" target="_new" class="list-group-item">Verkäufer-Belehrung</a>
                             <a href="{{ url('Listen/helfer') }}" target="_new" class="list-group-item">Helferliste</a>

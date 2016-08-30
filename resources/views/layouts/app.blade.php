@@ -19,6 +19,8 @@
     <!-- x-editable -->
      <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
 
+    <link href="{{asset('css/datetimepicker.css')}}" rel="stylesheet" type="text/css">
+    <script src="{{asset('js/bootstrap-datetimepicker.js')}}"></script>
 
     {{--<link href="css/bootstrap.css" rel="stylesheet">--}}
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
