@@ -10,6 +10,7 @@ namespace App\Models\Interessenten;
 
 
 use App\Models\Klamottenboerse\Vknummern;
+use App\Models\Klamottenboerse\Warteliste;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -29,7 +30,6 @@ class Interessenten extends Model
         return $this->hasOne(Vknummern::class, 'reserviert_fuer')
             ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
             ->orderBy('klamottenboersen_id', 'desc');
-
     }
 
     public function vknummern_vergeben(){
@@ -37,6 +37,10 @@ class Interessenten extends Model
             ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
             ->orderBy('klamottenboersen_id', 'desc');
 
+    }
+
+    public function Warteliste(){
+        return $this->hasOne(Warteliste::class, 'Interessenten_id');
     }
 
     public function nachrichtenPagination(){

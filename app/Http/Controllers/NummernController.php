@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Klamottenboerse\Vknummern;
 use App\Models\Klamottenboerse\Vknummern_Kommentar;
+use App\Models\Klamottenboerse\Warteliste;
 use App\Repositories\Dateien\DateienRepository;
 use App\Repositories\Interessenten\InteressentenRepository;
 use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
@@ -123,6 +124,9 @@ class NummernController extends Controller
         $Nummer=$this->NummernRepository->storeNummer($request->input('InteressentenID'), $request->input('NummernID'));
         $Interessent= InteressentenRepository::findInteressent($request->input('InteressentenID'));
        if ($Nummer==1){
+           
+           $Warteliste= Warteliste::where('interessenten_id', $Interessent->id)->first();
+           $Warteliste->delete();
 
            $Interessent= InteressentenRepository::findInteressent($request->input('InteressentenID'));
            $VKnummer=$this->NummernRepository->getVKNummer($request->input('NummernID'));

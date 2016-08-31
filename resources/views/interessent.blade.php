@@ -252,6 +252,21 @@
                                                     </button>
                                             @endif
 
+                                            @if(!isset($Interessent->vknummern_vergeben->vknummer))
+                                                    @if(!isset($Interessent->Warteliste))
+                                                        <a href="{{url("Warteliste/$Interessent->id")}}" class="btn  btn-sm  btn-info">
+                                                            Auf Warteliste
+                                                        </a>
+                                                    @else
+                                                        <form action="{{url("/Warteliste")}}" method="POST">
+                                                            {{csrf_field()}}
+                                                            {{method_field('delete')}}
+                                                            <input type="hidden" name="id" value="{{$Interessent->Warteliste->id}}">
+                                                            <button type="submit" class="btn  btn-sm  btn-info">Warteliste aufheben</button>
+                                                        </form>
+                                                    @endif
+                                             @endif
+
                                             </div>
 
                                         </div>

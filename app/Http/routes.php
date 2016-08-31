@@ -146,6 +146,10 @@ Route::group(['middleware' => 'web'], function () {
     });
     Route::post('Mailvorlagen/edit', 'VorlagenController@edit');
 
+    //Warteliste
+    Route::get('/Warteliste/{InteressentenID}', 'WartelistenController@set');
+    Route::delete('/Warteliste', 'WartelistenController@drop');
+
 
 
 
