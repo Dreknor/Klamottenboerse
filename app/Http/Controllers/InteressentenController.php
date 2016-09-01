@@ -59,6 +59,13 @@ class InteressentenController extends Controller
                 ]);
                 exit;
 
+            case "Warteliste":
+                return view('interessenten', [
+                    "entries" => $this->interessentenRepository->Warteliste(),
+                    "Gruppe"  => $Gruppe
+                ]);
+                exit;
+
             default:
                 return view('interessenten', [
                     "entries" => $this->interessentenRepository->all(),
@@ -165,6 +172,7 @@ class InteressentenController extends Controller
                     });
 
                 })->export('xls');
+                exit;
 
             case "Kinderhaus":
                 Excel::create('Kinderhauseltern', function($excel) {
@@ -174,6 +182,7 @@ class InteressentenController extends Controller
                     });
 
                 })->export('xls');
+                exit;
 
             case "Mitarbeiter":
                 Excel::create('Mitarbeiter', function($excel) {
@@ -190,6 +199,16 @@ class InteressentenController extends Controller
 
                     $excel->sheet('Verkaeufer', function($sheet) {
                         $sheet->fromModel($this->nummernRepository->getVerkaeufer2());
+                    });
+
+                })->export('xls');
+                exit;
+
+            case "Warteliste":
+                Excel::create('Verkaeufer', function($excel) {
+
+                    $excel->sheet('Verkaeufer', function($sheet) {
+                        $sheet->fromModel($this->interessentenRepository->Warteliste());
                     });
 
                 })->export('xls');

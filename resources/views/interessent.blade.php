@@ -89,6 +89,19 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
+                                        Handy:
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="_token" class="hidden" data-token="{{ csrf_token() }}"></div>
+                                        <p>
+                                            <a href="x" class="pUpdate" id="handy"  data-type="text" data-pk="{{ $Interessent->id }}" data-title="Handy bearbeiten">
+                                                {{ $Interessent->handy }}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
                                         Anschrift:
                                     </div>
                                     <div class="col-md-6">
@@ -251,6 +264,21 @@
                                                         Nummer <b>{{ $Interessent->vknummern_vergeben->vknummer }}</b> freigeben
                                                     </button>
                                             @endif
+
+                                            @if(!isset($Interessent->vknummern_vergeben->vknummer))
+                                                    @if(!isset($Interessent->Warteliste))
+                                                        <a href="{{url("Warteliste/$Interessent->id")}}" class="btn  btn-sm  btn-info">
+                                                            Auf Warteliste
+                                                        </a>
+                                                    @else
+                                                        <form action="{{url("/Warteliste")}}" method="POST">
+                                                            {{csrf_field()}}
+                                                            {{method_field('delete')}}
+                                                            <input type="hidden" name="id" value="{{$Interessent->Warteliste->id}}">
+                                                            <button type="submit" class="btn  btn-sm  btn-info">Warteliste aufheben</button>
+                                                        </form>
+                                                    @endif
+                                             @endif
 
                                             </div>
 

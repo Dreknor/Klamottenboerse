@@ -24,6 +24,17 @@ use App\Models\Interessenten\Interessenten;
             return \App\Models\Interessenten\Interessenten::query()->where('kinderhaus', 1)->get();
         }
 
+        public function Warteliste(){
+            $Interessenten = Interessenten::query()
+
+                ->rightJoin('warteliste', 'warteliste.interessenten_id', '=', 'interessenten.id')
+                ->select('interessenten.*')
+                ->orderBy('interessenten.nachname')
+                ->get();
+
+            return $Interessenten;
+        }
+
         /*
          * @return int
          */

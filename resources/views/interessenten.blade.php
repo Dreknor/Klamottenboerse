@@ -27,9 +27,9 @@
                             Verkäufer
                             <span class="badge">{{ $VerkaeuferCount }}</span>
                         </a>
-                        <a href="#" class="btn btn-default">
+                        <a href="{{ url('/Ueberblick/Warteliste') }}" class="btn btn-default">
                             Warteliste
-                            <span class="badge"></span>
+                            <span class="badge">{{$WartelisteCount}}</span>
                         </a>
                     </div>
               </div>
@@ -92,8 +92,8 @@
                                     <th>Nachname</th>
                                     <th>Vorname</th>
                                     <th>Telefon</th>
+                                    <th>Handy</th>
                                     <th>E-Mail</th>
-                                    <th>Anschrift</th>
                                     <th>Kinderhaus</th>
                                     <th></th>
                                 </tr>
@@ -104,9 +104,9 @@
                                         <td>{{ $Interessent->nachname }}</td>
                                         <td>{{ $Interessent->vorname }}</td>
                                         <td>{{ $Interessent->telefon }}</td>
+                                        <td>{{ $Interessent->handy }}</td>
                                         <td>{{ $Interessent->mail }}</td>
-                                        <td>{{ $Interessent->straße }} {{ $Interessent->hausnummer }} <br />
-                                            {{ $Interessent->plz }}{{ $Interessent->ort }}</td>
+
 
                                         @if($Interessent->kinderhaus == 1)
                                             <td>ja</td>

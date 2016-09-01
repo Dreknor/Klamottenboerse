@@ -12,6 +12,7 @@ namespace App\Composers;
 use App\Repositories\Interessenten\InteressentenRepository;
 use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 
 class InteressentenComposer
 {
@@ -27,5 +28,6 @@ class InteressentenComposer
         $view->with('MitarbeiterCount', $this->interessentenRepository->countMitarbeiter());
         $view->with('KinderhausCount', $this->interessentenRepository->countKinderhaus());
         $view->with('VerkaeuferCount', $this->nummernRepository->countVerkaeufer());
+        $view->with('WartelisteCount', DB::table('warteliste')->count());
     }
 }

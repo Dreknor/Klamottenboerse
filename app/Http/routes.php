@@ -31,6 +31,10 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
+    Route::get('logout', function(){
+        Auth::logout(); // logout user
+        return Redirect::to('/');
+    });
     Route::get('/', function () {
         return view('welcome');
     });
@@ -145,6 +149,17 @@ Route::group(['middleware' => 'web'], function () {
         return view('mailvorlagen.neueMailvorlagen');
     });
     Route::post('Mailvorlagen/edit', 'VorlagenController@edit');
+
+	
+    //Warteliste
+    Route::get('/Warteliste/{InteressentenID}', 'WartelistenController@set');
+    Route::delete('/Warteliste', 'WartelistenController@drop');
+
+
+    //Import
+    Route::get('/Import', 'ImportController@Import');
+
+
 
 
 
