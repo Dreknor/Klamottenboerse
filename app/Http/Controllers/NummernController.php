@@ -19,6 +19,7 @@ use App\Repositories\Nachrichten\NachrichtenRepository;
 use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
 class NummernController extends Controller
@@ -126,26 +127,35 @@ class NummernController extends Controller
        if ($Nummer==1){
            
            $Warteliste= Warteliste::where('interessenten_id', $Interessent->id)->first();
-           $Warteliste->delete();
+
+           if (isset($Warteliste->interessenten_id)){
+               $Warteliste->delete();
+           }
 
            $Interessent= InteressentenRepository::findInteressent($request->input('InteressentenID'));
            $VKnummer=$this->NummernRepository->getVKNummer($request->input('NummernID'));
 
+           //Uhrzeiten formatieren
+           $Klamottenboerse=$this->klamottenboersenRepository->latest();
+           $Klamottenboerse->abholung_von = date('G.i', strtotime($Klamottenboerse->abholung_von));
+
            //Erstelle VerkäuferInfos
            $pdf = App::make('dompdf.wrapper');
            $pdf->loadView('listen.pdf.verkaeuferinfos',[
-               "Klamottenboerse" => $this->klamottenboersenRepository->latest()
+               "Klamottenboerse" => $Klamottenboerse
            ]);
            $pdf->save(storage_path().'\app\anhaenge\VerkaeuferInfos.pdf');
 
 
            $text = View::make('emails.vergabeVKNummer', [
                'Interessent'=> $Interessent,
-               'VKNummer' => $VKnummer
+               'VKNummer' => $VKnummer,
+               'Klamottenboerse' => $this->klamottenboersenRepository->latest(),
+               'Absender'   => Auth::user()->name
            ]);
            
            $Nachricht=[
-               'betreff' => 'Verkäufernummer Klamottenbörse',
+               'betreff' => 'Nummernvergabe Klamottenbörse',
                'nachricht'   => $text,
                'anhang' => 'VerkaeuferInfos.pdf',
                'view'   => 'emails.blank'
@@ -229,7 +239,7 @@ class NummernController extends Controller
     
     public function Nummernvergabe ($InteressentenID){
         $Interessent = InteressentenRepository::findInteressent($InteressentenID);
-        $Nummern=$this->NummernRepository->nichtreservierteNummern();
+        $Nummern=$this->NummernRepository->nichtreservierteUndNichtVergebeneNummern();
 
         return view('vknummern.nummernvergabe', [
             'Interessent' => $Interessent,

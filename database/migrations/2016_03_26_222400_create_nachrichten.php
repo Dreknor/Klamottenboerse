@@ -20,6 +20,7 @@ class CreateNachrichten
             $table->mediumText('betreff');
             $table->longText('nachricht');
             $table->timestamps();
+
             $table->foreign('interessent_id')
                 ->references('id')
                 ->on('interessenten')

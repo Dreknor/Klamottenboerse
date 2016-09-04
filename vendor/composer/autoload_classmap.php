@@ -159,6 +159,7 @@ return array(
     'Inline_Frame_Reflower' => $vendorDir . '/dompdf/dompdf/include/inline_frame_reflower.cls.php',
     'Inline_Positioner' => $vendorDir . '/dompdf/dompdf/include/inline_positioner.cls.php',
     'Inline_Renderer' => $vendorDir . '/dompdf/dompdf/include/inline_renderer.cls.php',
+    'InteressentenHandy' => $baseDir . '/database/migrations/2016_09_01_181954_Interessenten_Handy.php',
     'Javascript_Embedder' => $vendorDir . '/dompdf/dompdf/include/javascript_embedder.cls.php',
     'Line_Box' => $vendorDir . '/dompdf/dompdf/include/line_box.cls.php',
     'List_Bullet_Frame_Decorator' => $vendorDir . '/dompdf/dompdf/include/list_bullet_frame_decorator.cls.php',

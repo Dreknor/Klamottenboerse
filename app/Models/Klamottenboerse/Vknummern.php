@@ -27,7 +27,7 @@ class Vknummern extends Model
     }
 
     public function Klamottenboerse () {
-        return $this->belongsTo(Interessenten::class, 'klamottenboersen_id');
+        return $this->belongsTo(Klamottenboerse::class, 'klamottenboersen_id');
     }
 
     public function Kommentar () {

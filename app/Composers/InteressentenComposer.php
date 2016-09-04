@@ -29,5 +29,6 @@ class InteressentenComposer
         $view->with('KinderhausCount', $this->interessentenRepository->countKinderhaus());
         $view->with('VerkaeuferCount', $this->nummernRepository->countVerkaeufer());
         $view->with('WartelisteCount', DB::table('warteliste')->count());
+        $view->with('OhneNummer', $this->nummernRepository->InteressentenOhneNummer()->count());
     }
 }

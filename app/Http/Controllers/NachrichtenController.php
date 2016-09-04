@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 use App\Models\Interessenten\Interessenten;
 use App\Models\Interessenten\Nachrichten;
 use App\Repositories\Nachrichten\NachrichtenRepository;
+use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Repositories\Interessenten\InteressentenRepository;
@@ -105,6 +106,7 @@ class NachrichtenController extends Controller
                             //$this->store($Interessent->id, $request->betreff, $request->nachricht);
                             //$this->senden($request, $Interessent);
                             $this->send($Interessent, $request, "false");
+                            set_time_limit ( 20 );
                         }
                     }
                 return redirect(url("/Ueberblick/$gruppe"));
@@ -117,6 +119,7 @@ class NachrichtenController extends Controller
                         //$this->store($Interessent->id, $request->betreff, $request->nachricht);
                         //$this->senden($request, $Interessent);
                         $this->send($Interessent, $request, "false");
+                        set_time_limit ( 20 );
                     }
                 }
                 return redirect(url("/Ueberblick/$gruppe"));
@@ -130,8 +133,52 @@ class NachrichtenController extends Controller
                     //$this->store($Interessent->id, $request->betreff, $request->nachricht);
                     //$this->senden($request, $Interessent);
                     $this->send($Interessent, $request, "false");
+                    set_time_limit ( 20 );
                 }
             }
+                return redirect(url("/Ueberblick/$gruppe"));
+                exit;
+
+            case "Nichtverkaeufer":
+                $NummernRepository= new NummernRepository();
+                $Interssenten= $NummernRepository->InteressentenOhneNummer();
+
+                foreach ($Interssenten AS $Interessent) {
+                    if ($Interessent->mail !=''){
+                        //$this->store($Interessent->id, $request->betreff, $request->nachricht);
+                        //$this->senden($request, $Interessent);
+                        $this->send($Interessent, $request, "false");
+                        set_time_limit ( 20 );
+                    }
+                }
+                return redirect(url("/Ueberblick/$gruppe"));
+                exit;
+
+            case "Verkaeufer":
+                $NummernRepository= new NummernRepository();
+                $Interssenten= $NummernRepository->getVerkaeufer();
+
+                foreach ($Interssenten AS $Interessent) {
+                    if ($Interessent->mail !=''){
+                        //$this->store($Interessent->id, $request->betreff, $request->nachricht);
+                        //$this->senden($request, $Interessent);
+                        $this->send($Interessent, $request, "false");
+                        set_time_limit ( 20 );
+                    }
+                }
+                return redirect(url("/Ueberblick/$gruppe"));
+                exit;
+
+            case "Warteliste":
+                $Interssenten= $this->interessentenRepository->Warteliste();
+                foreach ($Interssenten AS $Interessent) {
+                    if ($Interessent->mail !=''){
+                        //$this->store($Interessent->id, $request->betreff, $request->nachricht);
+                        //$this->senden($request, $Interessent);
+                        $this->send($Interessent, $request, "false");
+                        set_time_limit ( 20 );
+                    }
+                }
                 return redirect(url("/Ueberblick/$gruppe"));
                 exit;
         }

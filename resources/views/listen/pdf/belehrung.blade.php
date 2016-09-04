@@ -21,7 +21,7 @@
                 <tr>
                     <td style="width: 70%; align: left; vertical-align: top">
                         <p style="font-size: large;"><b>Name:</b> {{ $Nummer->vorname }} {{ $Nummer->nachname }} </p>
-                        <p style="font-size: large;"><b>Telefon:</b> {{ $Nummer->telefon }}</p>
+                        <p style="font-size: large;"><b>Telefon:</b> {{ $Nummer->telefon }} {{ $Nummer->handy }}</p>
                     </td>
                     <td style="width: 30%;  height: 80px; border: 1px solid black; vertical-align: top;">
                         <p>Verkäufernummer:</p>
@@ -33,7 +33,13 @@
             <p><br>
                 Ich bin darüber informiert, dass die Elternvertretung des Evangelischen Kinderhauses der Friedenskirchgemeinde als Veranstalter der Klamottenbörse keine Haftung für abhanden gekommende Waren übernimmt, wenn gleich sorgfältig darauf geachtet wird, dass dies nicht passiert.
             </p>
-            <p>Die nicht verkaufte Ware muss am Tag der Klamottenbörse zwischen 19 und 20 Uhr im Lutherhaus abgeholt werden.</p>
+            <p>Die nicht verkaufte Ware muss am Tag der Klamottenbörse zwischen {{$Klamottenboerse->datum->format('d.m.Y')}} von  @php
+                    echo date('G.i', strtotime($Klamottenboerse->abholung_von));
+                @endphp
+                und
+                @php
+                    echo date('G.i', strtotime($Klamottenboerse->abholung_bis));
+                @endphp Uhr  im Lutherhaus abgeholt werden.</p>
             <p> 25% des Verkaufserlöses ist für das Kinderhaus bestimmt.</p>
 
 
@@ -41,7 +47,10 @@
             <table style="width: 100%;">
                 <tr>
                     <td style="width: 50%; align: left; vertical-align: top">
-                        <p><br>Radebeul, den {{ $Klamottenboerse->datum->format('d.m.Y')  }}</p>
+                        <p><br>Radebeul, den
+                            @php
+                                echo date('d.m.Y', strtotime($Klamottenboerse->datum."-1 day"));
+                            @endphp  </p>
                     </td>
                     <td style="width: 50%; align: left; vertical-align: top">
                         <p><br>Unterschrift: _______________________________</p>

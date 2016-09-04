@@ -59,9 +59,18 @@ class InteressentenController extends Controller
                 ]);
                 exit;
 
+           
+
             case "Warteliste":
                 return view('interessenten', [
                     "entries" => $this->interessentenRepository->Warteliste(),
+                    "Gruppe"  => $Gruppe
+                ]);
+                exit;
+
+            case "Nichtverkaeufer":
+                return view('interessenten', [
+                    "entries" => $this->nummernRepository->InteressentenOhneNummer(),
                     "Gruppe"  => $Gruppe
                 ]);
                 exit;
@@ -112,7 +121,8 @@ class InteressentenController extends Controller
             'Dateien'   => $Dateien,
             'haeufigsteNummer' => $Nummern,
             'letzteNummer' => $letzteNummer,
-            'Vorlagen'  => $Vorlagen
+            'Vorlagen'  => $Vorlagen,
+            'alleNummern' => $this->nummernRepository->alleNummernEinesInteressenten($Interessent->id)
         ]);
 
     }
@@ -194,11 +204,11 @@ class InteressentenController extends Controller
                 })->export('xls');
                 exit;
 
-            case "Verkaeufer":
+            case "Nichtverkaeufer":
                 Excel::create('Verkaeufer', function($excel) {
 
                     $excel->sheet('Verkaeufer', function($sheet) {
-                        $sheet->fromModel($this->nummernRepository->getVerkaeufer2());
+                        $sheet->fromModel($this->nummernRepository->InteressentenOhneNummer());
                     });
 
                 })->export('xls');

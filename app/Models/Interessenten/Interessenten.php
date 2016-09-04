@@ -18,7 +18,7 @@ class Interessenten extends Model
 {
     public $table = "interessenten";
 
-    protected $fillable = array('vorname', 'nachname', 'mail', 'telefon', 'plz', 'ort', 'straße', 'hausnummer', 'anrede', 'mitarbeiter', 'kinderhaus' );
+    protected $fillable = array('vorname', 'nachname', 'mail', 'telefon', 'plz', 'ort', 'straße', 'hausnummer', 'anrede', 'mitarbeiter', 'kinderhaus', 'handy' );
 
     public function nachrichten(){
         return $this->hasMany(Nachrichten::class, 'interessent_id')

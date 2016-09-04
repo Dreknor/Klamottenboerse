@@ -158,6 +158,7 @@ Route::group(['middleware' => 'web'], function () {
 
     //Import
     Route::get('/Import', 'ImportController@Import');
+    Route::get('/Import_csv', 'ImportController@Import_csv');
 
 
 

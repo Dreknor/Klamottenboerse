@@ -13,15 +13,15 @@ use App\Models\Interessenten\Interessenten;
     class InteressentenRepository
     {
         public function all() {
-            return \App\Models\Interessenten\Interessenten::query()->get();
+            return \App\Models\Interessenten\Interessenten::query()->orderBy('nachname')->get();
         }
 
         public function Mitarbeiter() {
-            return \App\Models\Interessenten\Interessenten::query()->where('mitarbeiter', 1)->get();
+            return \App\Models\Interessenten\Interessenten::query()->where('mitarbeiter', 1)->orderBy('nachname')->get();
         }
 
         public function Kinderhaus() {
-            return \App\Models\Interessenten\Interessenten::query()->where('kinderhaus', 1)->get();
+            return \App\Models\Interessenten\Interessenten::query()->where('kinderhaus', 1)->orderBy('nachname')->get();
         }
 
         public function Warteliste(){

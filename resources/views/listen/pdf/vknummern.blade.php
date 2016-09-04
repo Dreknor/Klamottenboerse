@@ -85,7 +85,11 @@
                     </td>
                     <td width="35%" height="40px">
                         @if(isset($Nummer->telefon))
-                            {{$Nummer->telefon}}
+                            <p>{{$Nummer->telefon}} </p>
+                        @endif
+
+                        @if(isset($Nummer->handy))
+                            <p>{{$Nummer->handy}}</p>
                         @endif
                     </td>
                 </tr>

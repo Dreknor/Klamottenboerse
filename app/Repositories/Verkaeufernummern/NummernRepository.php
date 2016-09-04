@@ -67,13 +67,26 @@ class NummernRepository
 
     }
 
-    public function nichtreservierteNummern()
+    public function nichtreservierteUndNichtVergebeneNummern()
     {
 
         $Nummmern = Vknummern::query()
             ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
             ->whereNull('reserviert_fuer')
             ->whereNull('vergeben_an')
+            ->orderBy('vknummer')
+            ->get();
+
+        return $Nummmern;
+    }
+
+    public function nichtreservierteNummern()
+    {
+
+        $Nummmern = Vknummern::query()
+            ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+            ->whereNull('reserviert_fuer')
+
             ->orderBy('vknummer')
             ->get();
 
@@ -120,6 +133,9 @@ class NummernRepository
             $Interessent[]=$Interessenten->findInteressent($Nummer->vergeben_an);
         }
 
+        if (!isset($Interessent)){
+            $Interessent=[];
+        }
         return $Interessent;
     }
 
@@ -209,4 +225,13 @@ class NummernRepository
 
        return $Nummern;
    }
+
+    public function alleNummernEinesInteressenten($InteressentenID){
+        $Nummern = Vknummern::query()
+            ->Where('vergeben_an', $InteressentenID)
+            ->orderBy('klamottenboersen_id')
+        ->get();
+
+        return $Nummern;
+    }
 }

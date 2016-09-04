@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        Vorame:
+                                        Vorname:
                                     </div>
                                     <div class="col-md-6">
                                         <p>
@@ -100,29 +100,7 @@
                                         </p>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        Anschrift:
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div id="_token" class="hidden" data-token="{{ csrf_token() }}"></div>
-                                            <p>
-                                                <a href="x" class="pUpdate" id="straße"  data-type="text" data-pk="{{ $Interessent->id }}" data-title="Straße bearbeiten">
-                                                    {{ $Interessent->straße }}
-                                                </a>
-                                                <a href="x" class="pUpdate" id="hausnummer"  data-type="text" data-pk="{{ $Interessent->id }}" data-title="Hausnummer bearbeiten">
-                                                    {{ $Interessent->hausnummer }}
-                                                </a>
-                                                <br />
-                                                <a href="x" class="pUpdate" id="plz"  data-type="text" data-pk="{{ $Interessent->id }}" data-title="Postleitzahl bearbeiten">
-                                                    {{ $Interessent->plz }}
-                                                </a>
-                                                <a href="x" class="pUpdate" id="ort"  data-type="text" data-pk="{{ $Interessent->id }}" data-title="Ort bearbeiten">
-                                                    {{ $Interessent->ort }}
-                                                </a>
-                                            </p>
-                                    </div>
-                                </div>
+
                                 <div class="row">
                                     <div class="col-md-4">
                                         Mitarbeiter:
@@ -209,9 +187,7 @@
                                                         </button>
                                                     @endif
                                             @else
-                                                @if(!isset($Interessent->vknummern_vergeben->vknummer))
                                                     <a href="{{url('Nummern/'.$Interessent->id.'/reservieren')}}" class="btn btn-sm btn-success">Nummer reservieren</a>
-                                                @endif
                                             @endif
 
                                             @if(!isset($Interessent->vknummern_vergeben->vknummer) and !isset($Interessent->vknummern_reserviert->vknummer))
@@ -285,12 +261,13 @@
                                         </div>
                                     </div>
                                  </div>
+
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <p>Historie</p>
+                                    <p>Versendete Nachrichten</p>
                                 </div>
                                 <div class="panel-body">
                                     @if(count($Interessent->nachrichten) != 0)
@@ -350,6 +327,25 @@
                                             neue Nachricht
                                         </button>
                                     @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Übersicht Verkäufernummern
+                                </div>
+                                <div class="panel-body">
+                                    <ul class="list-group">
+                                        @if(count($alleNummern) > 0)
+                                            @foreach($alleNummern AS $Nummer)
+                                                <li class="list-group-item">{{ $Nummer->Klamottenboerse->datum->format('d.m.Y') }} - <b>{{ $Nummer->vknummer }}</b></li>
+                                            @endforeach
+                                        @else
+                                            Bisher wurde nichts verkauft
+                                        @endif
+                                    </ul>
+
                                 </div>
                             </div>
                         </div>

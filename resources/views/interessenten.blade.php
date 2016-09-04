@@ -8,7 +8,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-11 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="btn-group btn-group-justified" role="group" aria-label="...">
                         <a href="{{ url('/Ueberblick/All') }}" class="btn btn-default">
@@ -27,6 +27,10 @@
                             Verkäufer
                             <span class="badge">{{ $VerkaeuferCount }}</span>
                         </a>
+                        <a href="{{ url('/Ueberblick/Nichtverkaeufer') }}" class="btn btn-default">
+                            ohne Nummer
+                            <span class="badge">{{ $OhneNummer }}</span>
+                        </a>
                         <a href="{{ url('/Ueberblick/Warteliste') }}" class="btn btn-default">
                             Warteliste
                             <span class="badge">{{$WartelisteCount}}</span>
@@ -36,7 +40,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-11 col-md-offset-1">
                 <div class="panel-body">
                     <div class="col-md-8">
                         <p>Aktuelle Gruppe: {{ $Gruppe }}</p>
@@ -62,7 +66,7 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-11 col-md-offset-1">
                <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
@@ -89,6 +93,7 @@
                         <table class="table .table-hover">
                             <thead>
                                 <tr>
+                                    <th>Anrede</th>
                                     <th>Nachname</th>
                                     <th>Vorname</th>
                                     <th>Telefon</th>
@@ -101,6 +106,7 @@
                             <tbody>
                                 @foreach($entries AS $Interessent)
                                     <tr>
+                                        <td>{{ $Interessent->anrede }}</td>
                                         <td>{{ $Interessent->nachname }}</td>
                                         <td>{{ $Interessent->vorname }}</td>
                                         <td>{{ $Interessent->telefon }}</td>

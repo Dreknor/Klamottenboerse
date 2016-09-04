@@ -40,40 +40,19 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-md-3">Straße</label>
-
-                            <div class="col-md-6">
-                                <input name="straße" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3">Hausnummer</label>
-
-                            <div class="col-md-6">
-                                <input name="hausnummer" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3">Postleitzahl</label>
-
-                            <div class="col-md-6">
-                                <input name="plz" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3">Ort</label>
-
-                            <div class="col-md-6">
-                                <input name="ort" class="form-control">
-                            </div>
-                        </div>
 
                         <div class="form-group">
                             <label class="col-md-3">Telefon</label>
 
                             <div class="col-md-6">
                                 <input name="telefon" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3">Handy</label>
+
+                            <div class="col-md-6">
+                                <input name="handy" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
