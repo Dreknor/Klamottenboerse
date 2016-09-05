@@ -11,37 +11,58 @@
 </head>
 
 <body>
-<h2>Wichtige Infos für Verkäufer</h2>
+<h3>Wichtige Infos für Verkäufer</h3>
 <p>
-    <h3>Annahme:</h3>
+    <h4>Annahme:</h4>
 
             Freitag,
                 @php
                    echo date('d.m.Y', strtotime($Klamottenboerse->datum."-1 day"));
                 @endphp
-            von {{$Klamottenboerse->anlieferung_von}} bis {{$Klamottenboerse->anlieferung_bis}} Uhr im Lutherhaus der Friedenskirchgemeinde Radebeul.
+            von
+                @php
+                    echo date('G.i', strtotime($Klamottenboerse->anlieferung_von));
+                @endphp
+                bis
+                @php
+                    echo date('G.i', strtotime($Klamottenboerse->anlieferung_bis));
+               @endphp
+ Uhr im Lutherhaus der Friedenskirchgemeinde Radebeul.
             (Altkötzschenbroda 40)
-<br><br><br>
 </p>
+<br><br>
 <p>
-    <h3>Abholung:</h3>
-        SAMSTAG, {{$Klamottenboerse->datum->format('d.m.Y')}} von {{$Klamottenboerse->anbholung_von}} bis {{$Klamottenboerse->abholung_bis}} Uhr im Lutherhaus
-        (Bei Nichtabholung müssen die Kisten unbeaufsichtigt im Luthersaal verbleiben) Die Barauszahlung ihres Verkaufserlöses erfolgt ausschließlich bei Abholung der Kisten.
+    <h4>Abholung:</h4>
+        SAMSTAG, {{$Klamottenboerse->datum->format('d.m.Y')}} von
+                @php
+                   echo date('G.i', strtotime($Klamottenboerse->abholung_von));
+                @endphp
+                    bis
+                @php
+                    echo date('G.i', strtotime($Klamottenboerse->abholung_bis));
+                @endphp
+ Uhr im Lutherhaus.<br>
+        Bei Nichtabholung müssen die Kisten unbeaufsichtigt im Luthersaal verbleiben!<br> Die Barauszahlung ihres Verkaufserlöses erfolgt ausschließlich bei Abholung der Kisten.
 </p>
+<br><br>
+<p>
 
-<p>
-    <br><br>
-    <h3>Hinweise:</h3>
+    <h4>Hinweise:</h4>
     <ul>
-        <li>saisonabhängige Kinderbekleidung, Schuhe, Gummistiefel, Matschkleidung, Kinderwagen,
-            Auto- und Fahrradsitze, Laufgitter, Kinderbetten, Spielzeug, Bücher, Fahrzeuge, Tragehilfen, ...</li>
-        <li>max. {{$Klamottenboerse->maxTeile}} Teile pro Verkäufer (so können wir mehr Verkäufer zulassen)</li>
-        <li>keine Erwachsenenkleidung (ausgenommen Umstandskleidung), keine Plüschtiere, nur neuwertige Schuhe und ACHTUNG! bei Schuhen nur maximal 4 Paar (natürlich mit Gummistiefeln)!</li>
-        <li>Kleidungsstücke müssen außen gut sichtbar gekennzeichnet werden (bitte nicht innen ans
-            Etikett kleben!). Das erleichtert uns das Ein- und Aussortieren und den Käufern das Suchen. (Kleiner Tipp: Malerkrepp hält gut und lässt sich gut beschriften)</li>
-        <li>bitte nicht unter 0,50 € auspreisen und ausschließlich in 0,50 €-Schritten (erleichtert das
+        <li>Verkauft werden saisonabhängige Kinderbekleidung, Schuhe, Gummistiefel, Matschkleidung, Kinderwagen,
+           Kindersitze, Laufgitter, Kinderbetten, Spielzeug, Bücher, Fahrzeuge, Tragehilfen, ...</li>
+        <li>Es werden maximal {{$Klamottenboerse->maxTeile}} Teile pro Verkäufer zugelassen
+             (so können wir mehr Verkäufern die Chance bieten, mitzumachen)</li>
+        <li>Bitte packen Sie KEINE Erwachsenenkleidung (ausgenommen Umstandskleidung) oder Plüschtiere ein,
+            außerdem nur neuwertige Schuhe und ACHTUNG! bei Schuhen nur maximal 4 Paar (natürlich mit Gummistiefeln)!</li>
+        <li>Die Kleidungsstücke müssen außen gut sichtbar gekennzeichnet werden.
+            Bei Hängeware, wie z.B. Jacken, Regensachen und Kleidern, bitte unbedingt ZWEI Kleber,
+            einen innen und einen außen, da diese leider viel zu schnell beim Durchschauen abgehen.
+            Das erleichtert uns das Ein- und Aussortieren und den Käufern das Suchen.
+            (Kleiner Tipp: Malerkrepp hält gut und lässt sich gut beschriften)</li>
+        <li>Bitte nicht unter 0,50 € auspreisen und ausschließlich in 0,50 €-Schritten (erleichtert das
             Abkassieren und den Geldwechsel)</li>
-        <li>die zu verkaufenden Artikel müssen in stapelbare, stabile Kisten verpackt und außen gut
+        <li>Die zu verkaufenden Artikel müssen in stapelbare, stabile Kisten verpackt und außen gut
             sichtbar mit der Verkäufernummer gekennzeichnet werden. (keine Plastiktüten, Reisetaschen, Wäschekörbe)</li>
         <li>Wir behalten uns vor, Artikel, die wir als schwer verkäuflich erachten, in den
             Verkäuferkisten zu belassen.</li>
@@ -54,7 +75,7 @@
 
 <p><b><i>25% des Erlöses gehen an das ev. Kinderhaus Radebeul</i></b></p>
 
-<p>Beschriftung des Etiketts folgendermaßen:
+<p>Die Beschriftung des Etiketts erfolgt folgendermaßen:
 <table style="width: 80%; border: solid black 1px; text-align: center;">
     <tr>
         <td width="33%">Verkäufernummer</td>
@@ -63,7 +84,7 @@
     </tr>
     <tr>
         <td width="33%"></td>
-        <td width="33%"><br><br></td>
+        <td width="33%"><br></td>
         <td width="33%"></td>
     </tr>
     <tr>
@@ -78,18 +99,13 @@
     </tr>
     <tr>
         <td width="33%"></td>
-        <td width="33%"><br><br></td>
+        <td width="33%"><br></td>
         <td width="33%"></td>
     </tr>
 </table>
-
-
-
-
 </p>
 <p>
-    <br><br>
-    Rückfragen per Mail an <b>anmeldung@klamottenboerse.de</b>
+   <br> Rückfragen bitte per Mail an <b>anmeldung@klamottenboerse.de</b> oder in dringenderen Fällen unter der Nummer 0176/26953673
 </p>
 
 

@@ -234,4 +234,18 @@ class NummernRepository
 
         return $Nummern;
     }
+
+    public function VerkaeuferNummer($vknummer){
+
+
+        $Nummern = Vknummern::query()
+            ->where('vknummer', $vknummer)
+            ->leftJoin('interessenten', 'vknummern.vergeben_an', '=', 'interessenten.id')
+            ->select('interessenten.*', 'vknummern.vknummer')
+            ->orderBy('klamottenboersen_id', 'DESC')
+            ->get();
+
+
+        return $Nummern;
+    }
 }

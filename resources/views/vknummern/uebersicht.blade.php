@@ -45,6 +45,7 @@
                                                 @endif
 
                                                 <ul class="dropdown-menu">
+                                                     <li><a href="{{ url("Nummern/$Nummer->vknummer/anzeigen") }}">bisherige Verkäufer anzeigen</a></li>
 
                                                     <li role="separator" class="divider"></li>
                                                     @if($Nummer->reserviert_fuer != "")

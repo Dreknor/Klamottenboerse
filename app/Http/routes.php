@@ -122,6 +122,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('Nummern/Kommentar/store', 'NummernController@storeKommentar');
     Route::delete('Nummern/Kommentar/Loeschen', 'NummernController@KommentarLoeschen');
     Route::get('Nummern/{NummernID}/Vergabe', 'NummernController@Vergabe');
+    Route::get('Nummern/{Vknummer}/anzeigen', 'NummernController@VerkaeuferAnzeigen');
+
 
 
 

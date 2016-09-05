@@ -339,7 +339,14 @@
                                     <ul class="list-group">
                                         @if(count($alleNummern) > 0)
                                             @foreach($alleNummern AS $Nummer)
-                                                <li class="list-group-item">{{ $Nummer->Klamottenboerse->datum->format('d.m.Y') }} - <b>{{ $Nummer->vknummer }}</b></li>
+                                                <li class="list-group-item">
+                                                    {{ $Nummer->Klamottenboerse->datum->format('d.m.Y') }} -
+                                                    <a href="{{url("/Nummern/$Nummer->vknummer/anzeigen")}}">
+                                                        <b>
+                                                            {{ $Nummer->vknummer }}
+                                                        </b>
+                                                    </a>
+                                                </li>
                                             @endforeach
                                         @else
                                             Bisher wurde nichts verkauft

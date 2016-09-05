@@ -45,6 +45,7 @@ class NachrichtenRepository
             // note: if you don't set this, it will use the defaults from config/mail.php
 
             $message->from('anmeldung@klamottenboerse.de', 'Klamottenbörse');
+            $message->bcc('anmeldung@klamottenboerse.de', 'Klamottenbörse');
             $message->to($empfaenger, $name)
                 ->subject($subject);
 
@@ -75,8 +76,16 @@ class NachrichtenRepository
             $vknummer="Bisher keine Verkäufernummer vergeben.";
         }
 
+        if ($Interessent->anrede == "Herr"){
+            $Anrede = "Sehr geehrter Herr";
+        } elseif ($Interessent->anrede == "Frau"){
+            $Anrede = "Sehr geehrte Frau";
+        } else {
+            $Anrede = "Liebe Familie";
+        }
+
         $SearchStrings =["VORNAME", "NACHNAME", "ANREDE", "ABSENDER", "EMAIL", "VKNUMMER"];
-        $ReplaceStrings =[$Interessent->vorname, $Interessent->nachname, $Interessent->anrede, $Absender, $Interessent->mail, $vknummer];
+        $ReplaceStrings =[$Interessent->vorname, $Interessent->nachname, $Anrede, $Absender, $Interessent->mail, $vknummer];
 
         $Nachricht=str_replace($SearchStrings, $ReplaceStrings, $Nachricht);
 

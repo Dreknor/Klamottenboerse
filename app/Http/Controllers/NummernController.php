@@ -273,5 +273,14 @@ class NummernController extends Controller
             'Nummer' => $this->NummernRepository->getVKNummer($NummernID)
         ]);    
     }
+    
+    public function VerkaeuferAnzeigen ($Vknummer){
+        
+        
+        return view('vknummern.VerkaeuferAnzeigen',[
+            'VerkaeuferArray' => $this->NummernRepository->VerkaeuferNummer($Vknummer),
+            'Nummer' => $Vknummer
+        ]);
+    }
 
 }

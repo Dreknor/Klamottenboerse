@@ -13,7 +13,7 @@ class InteressentenAnlegenRequest extends Request
 {
     public function rules() {
         return [
-            'nachname' => 'required|alpha|min:3',
+            'nachname' => 'required|min:3',
             'mail' => 'required|email|unique:interessenten,mail'
         ];
     }
