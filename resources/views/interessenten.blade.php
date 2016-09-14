@@ -93,6 +93,7 @@
                         <table class="table .table-hover">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Anrede</th>
                                     <th>Nachname</th>
                                     <th>Vorname</th>
@@ -100,12 +101,19 @@
                                     <th>Handy</th>
                                     <th>E-Mail</th>
                                     <th>Kinderhaus</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($entries AS $Interessent)
                                     <tr>
+                                        <td>
+                                            <a href="{{url("/Interessent/$Interessent->id")}}">
+                                                <span class="glyphicon glyphicon-eye-open"
+                                                      data-toggle="tooltip"  data-placement="right" title="Profil von {{ $Interessent->vorname }} {{ $Interessent->nachname }}">
+
+                                                </span>
+                                            </a>
+                                        </td>
                                         <td>{{ $Interessent->anrede }}</td>
                                         <td>{{ $Interessent->nachname }}</td>
                                         <td>{{ $Interessent->vorname }}</td>
@@ -119,14 +127,7 @@
                                         @else
                                             <td>nein</td>
                                         @endif
-                                        <td>
-                                            <a href="{{url("/Interessent/$Interessent->id")}}">
-                                                <span class="glyphicon glyphicon-eye-open"
-                                                      data-toggle="tooltip"  data-placement="right" title="Profil von {{ $Interessent->vorname }} {{ $Interessent->nachname }}">
 
-                                                </span>
-                                            </a>
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
