@@ -35,7 +35,7 @@
     <script type="text/javascript" src="{{asset('js/AutoFill-2.1.2/js/dataTables.autoFill.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/AutoFill-2.1.2/js/autoFill.bootstrap.js')}}"></script>
 
-    -->
+    
 
 
 </head>

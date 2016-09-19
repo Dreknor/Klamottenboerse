@@ -7,37 +7,16 @@
 
     <title>Klamottenbörse</title>
 
-    <!-- Styles
+    <!-- Styles -->
     <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.css')}}"/>
-    -->
-    <style rel="stylesheet" type="text/css">
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-        }
-        td,
-        th {
-            padding: 0;
-        }
 
-        .table {
-            border-collapse: collapse !important;
-        }
-        .table td,
-        .table th {
-            background-color: #fff !important;
-        }
-        .table-bordered th,
-        .table-bordered td {
-            border: 1px solid black !important;
-        }
-
-
-    </style>
 
 </head>
 
 <body>
+
+
+
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -53,14 +32,14 @@
         <div class="panel-body">
             <table class="table-bordered" width="100%">
                 <tr>
-                    <th style="width: 10%;"></th>
-                    <th style="width: 20%;"></th>
-                    <th style="width: 70%;"></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 <tr>
-                    <th height="40px" style="width: 10%;">Verkäufernummer</th>
-                    <th height="40px" style="width: 20%;">Verkäufer</th>
-                    <th height="40px" style="width: 70%;">Telefon</th>
+                    <th height="40px">Verkäufernummer</th>
+                    <th height="40px">Verkäufer</th>
+                    <th height="40px">Telefon</th>
                 </tr>
 
             @foreach($Nummern AS $Nummer)
@@ -89,9 +68,9 @@
                                 <th></th>
                             </tr>
                             <tr>
-                                <th height="40px" >Verkäufernummer</th>
+                                <th height="40px">Verkäufernummer</th>
                                 <th height="40px">Verkäufer</th>
-                                <th height="40px" >Telefon</th>
+                                <th height="40px">Telefon</th>
                             </tr>
                     @endif
 
@@ -99,18 +78,18 @@
                     <th width="25%" height="40px">
                         {{ $Nummer->vknummer }}
                     </th>
-                    <td width="40%" height="40px" style="text-align: center;">
+                    <td width="40%" height="40px">
                         @if(isset($Nummer->vorname))
                             {{$Nummer->vorname}} {{$Nummer->nachname}}
                         @endif
                     </td>
-                    <td width="35%" height="40px" style="text-align: center;">
+                    <td width="35%" height="40px">
                         @if(isset($Nummer->telefon))
-                             {{$Nummer->telefon}}
+                            <p>{{$Nummer->telefon}} </p>
                         @endif
-<br>
+
                         @if(isset($Nummer->handy))
-                            {{$Nummer->handy}}
+                            <p>{{$Nummer->handy}}</p>
                         @endif
                     </td>
                 </tr>
