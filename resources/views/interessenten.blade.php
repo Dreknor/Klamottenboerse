@@ -8,7 +8,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-11 col-md-offset-1">
+            <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="btn-group btn-group-justified" role="group" aria-label="...">
                         <a href="{{ url('/Ueberblick/All') }}" class="btn btn-default">
@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-11 col-md-offset-1">
+            <div class="col-md-12">
                 <div class="panel-body">
                     <div class="col-md-8">
                         <p>Aktuelle Gruppe: {{ $Gruppe }}</p>
@@ -66,7 +66,7 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-md-11 col-md-offset-1">
+            <div class="col-md-12">
                <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
@@ -89,8 +89,8 @@
                     </div>
 
                     <div class="panel-body">
-                        <div class="table-responsive">
-                        <table class="table .table-hover">
+                        <div class=" table-responsive">
+                        <table id="InterressentenTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -169,7 +169,7 @@
     </div>
 
 
-    <script type="text/javascript">
+
         <script type="text/javascript">
 
                 $('#neueNachricht').on('show.bs.modal', function (event) {
@@ -182,6 +182,12 @@
                     modal.find('.modal-title').text(title);
                     modal.find('.modal-body pre').text(nachricht)
                 })
+
+                $(document).ready(function(){
+                    $('#InterressentenTable').DataTable({
+                        paging: false
+                    });
+                });
 
 
     </script>

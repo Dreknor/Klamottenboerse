@@ -33,7 +33,7 @@
                 <li class="dropdown">
 
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        
                         Interessenten
                         <span class="caret"></span>
                     </a>
