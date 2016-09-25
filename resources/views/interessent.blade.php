@@ -176,7 +176,7 @@
 
                                         <div class="panel-footer">
                                             @if(isset($Interessent->vknummern_reserviert->vknummer))
-                                                    @if(!isset($Interessent->vknummern_vergeben->vknummer))
+                                                    @if(!isset($Interessent->vknummern_vergeben->vknummer) and $Interessent->vknummern_reserviert->vergeben_an == NULL)
                                                         <a href="{{url('Nummern/'.$Interessent->id.'/aufheben')}}" class="btn btn-sm btn-danger">Reservierung aufheben</a>
                                                         <button type="button" class="btn  btn-sm  btn-warning"
                                                                 data-toggle="modal"
@@ -186,11 +186,13 @@
                                                             Nummer <b>{{ $Interessent->vknummern_reserviert->vknummer }}</b> vergeben
                                                         </button>
                                                     @endif
+
+
                                             @else
                                                     <a href="{{url('Nummern/'.$Interessent->id.'/reservieren')}}" class="btn btn-sm btn-success">Nummer reservieren</a>
                                             @endif
 
-                                            @if(!isset($Interessent->vknummern_vergeben->vknummer) and !isset($Interessent->vknummern_reserviert->vknummer))
+                                            @if((!isset($Interessent->vknummern_vergeben->vknummer) and !isset($Interessent->vknummern_reserviert->vknummer))  or  ($Interessent->vknummern_reserviert->vergeben_an != $Interessent->id AND $Interessent->vknummern_reserviert->vergeben_an != NULL))
                                                     <div class="btn-group btn-group-sm">
                                                         <button class="btn btn-success">Nummer vergeben</button>
                                                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

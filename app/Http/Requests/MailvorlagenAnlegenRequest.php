@@ -13,9 +13,9 @@ class MailvorlagenAnlegenRequest extends Request
 {
     public function rules() {
         return [
-            'name' => 'required|min:5',
-            'betreff' => 'required|min:15',
-            'text'  => 'required|min:15'
+            'name' => 'required',
+            'betreff' => 'required',
+            'text'  => 'required'
         ];
     }
 

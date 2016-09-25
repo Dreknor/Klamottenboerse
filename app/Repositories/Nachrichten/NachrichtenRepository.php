@@ -84,8 +84,16 @@ class NachrichtenRepository
             $Anrede = "Liebe Familie";
         }
 
-        $SearchStrings =["VORNAME", "NACHNAME", "ANREDE", "ABSENDER", "EMAIL", "VKNUMMER"];
-        $ReplaceStrings =[$Interessent->vorname, $Interessent->nachname, $Anrede, $Absender, $Interessent->mail, $vknummer];
+        if ($Interessent->anrede == "Herr"){
+            $Liebe = "Lieber";
+        } elseif ($Interessent->anrede == "Frau"){
+            $Liebe = "Liebe";
+        } else {
+            $Liebe = "Liebe Familie";
+        }
+
+        $SearchStrings =["VORNAME", "NACHNAME", "ANREDE","LIEBE", "ABSENDER", "EMAIL", "VKNUMMER"];
+        $ReplaceStrings =[$Interessent->vorname, $Interessent->nachname, $Anrede, $Liebe, $Absender, $Interessent->mail, $vknummer];
 
         $Nachricht=str_replace($SearchStrings, $ReplaceStrings, $Nachricht);
 
