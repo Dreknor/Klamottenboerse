@@ -192,7 +192,7 @@
                                                     <a href="{{url('Nummern/'.$Interessent->id.'/reservieren')}}" class="btn btn-sm btn-success">Nummer reservieren</a>
                                             @endif
 
-                                            @if((!isset($Interessent->vknummern_vergeben->vknummer) and !isset($Interessent->vknummern_reserviert->vknummer))  or  ($Interessent->vknummern_reserviert->vergeben_an != $Interessent->id AND $Interessent->vknummern_reserviert->vergeben_an != NULL))
+                                            @if((!isset($Interessent->vknummern_vergeben->vknummer) and !isset($Interessent->vknummern_reserviert->vknummer))  or  ( isset($Interessent->vknummern_reserviert->vergeben_an) AND $Interessent->vknummern_reserviert->vergeben_an != $Interessent->id))
                                                     <div class="btn-group btn-group-sm">
                                                         <button class="btn btn-success">Nummer vergeben</button>
                                                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
