@@ -1,4 +1,3 @@
-.idea
 vendor/
 node_modules/
 
@@ -11,7 +10,6 @@ bootstrap/cache/
 .env.*.php
 .env.php
 .env
-
+.idea
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
-config/mail.php
