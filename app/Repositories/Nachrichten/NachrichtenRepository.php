@@ -59,9 +59,9 @@ class NachrichtenRepository
         if ($Interessent->mail != "") {
             $Nachricht= $this->replaceString($Nachricht, $Interessent);
 
-            
-            $this->store($Interessent->id, $Nachricht['betreff'], $Nachricht['nachricht'], $Nachricht['anhang']);
             $this->senden($Nachricht, $Interessent);
+            $this->store($Interessent->id, $Nachricht['betreff'], $Nachricht['nachricht'], $Nachricht['anhang']);
+
         }
         
     }
