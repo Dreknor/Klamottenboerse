@@ -16,7 +16,7 @@ class InteressentenHandy extends Migration
         //
         Schema::table('interessenten', function($table)
         {
-            $table->string('handy')->after('telefon');
+            $table->string('handy')->after('telefon')->nullable();
         });
     }
 

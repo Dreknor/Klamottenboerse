@@ -17,14 +17,10 @@ class CreateInteressentenTable extends Migration
             $table->string('anrede');
             $table->string('vorname')->index();
             $table->string('nachname')->index();
-            $table->string('straße');
-            $table->string('hausnummer');
-            $table->char('plz');
-            $table->string('ort');
-            $table->char('telefon', 30);
+            $table->char('telefon', 30) ->nullable();
             $table->string('mail');
-            $table->boolean('mitarbeiter');
-            $table->boolean('kinderhaus');
+            $table->boolean('mitarbeiter')->nullable();
+            $table->boolean('kinderhaus')->nullable();
             $table->timestamps();
         });
     }

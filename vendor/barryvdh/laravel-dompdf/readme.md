@@ -4,7 +4,7 @@
 
 Require this package in your composer.json and update composer. This will download the package and the dompdf + fontlib libraries also.
 
-    "barryvdh/laravel-dompdf": "0.6.*"
+    composer require barryvdh/laravel-dompdf
 
 ## Installation
 
@@ -51,7 +51,7 @@ You can chain the methods:
 
 You can change the orientation and paper size, and hide or show errors (by default, errors are shown when debug is on)
 
-    PDF::loadHTML($html)->setPaper('a4')->setOrientation('landscape')->setWarnings(false)->save('myfile.pdf')
+    PDF::loadHTML($html)->setPaper('a4', 'landscape')->setWarnings(false)->save('myfile.pdf')
 
 If you need the output as a string, you can get the rendered PDF with the output() function, so you can save/output it yourself.
 

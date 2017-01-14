@@ -10,7 +10,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateNachrichten
+class CreateNachrichten extends Migration
 {
     public function up()
     {
@@ -35,6 +35,5 @@ class CreateNachrichten
      */
     public function down()
     {
-        Schema::drop('nachrichten');
     }
 }

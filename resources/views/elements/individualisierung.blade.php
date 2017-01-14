@@ -7,3 +7,7 @@
     <li class="list-group-item">VKNUMMER</li>
     <li class="list-group-item">ABSENDER</li>
 </ul>
+<ul class="list-group">
+    <li class="list-group-item">DATUM</li>
+    <li class="list-group-item">ANMELDUNG</li>
+</ul>

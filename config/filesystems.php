@@ -48,15 +48,15 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'anhaenge' => [
+            'driver' => 'local',
+            'root' => storage_path('app/anhaenge'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'visibility' => 'public',
-        ],
-
-        'anhang' => [
-            'driver' => 'local',
-            'root' => storage_path('app/anhaenge'),
         ],
 
         's3' => [

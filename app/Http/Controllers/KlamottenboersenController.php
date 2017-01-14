@@ -12,10 +12,11 @@ namespace App\Http\Controllers;
 use App\Models\Klamottenboerse\Helfer;
 use App\Models\Klamottenboerse\Klamottenboerse;
 use App\Models\Klamottenboerse\Vknummern;
+use App\Models\Klamottenboerse\Warteliste;
 use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
 use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 
 
 class KlamottenboersenController extends Controller
@@ -54,17 +55,29 @@ class KlamottenboersenController extends Controller
     
     public function store(Request $request){
 
+
         $alleNummern=$this->nummernRepository->all();
         $id=Klamottenboerse::create($request->all())->id;
 
-        $data=array();
-        foreach ($alleNummern as $Nummer) {
-            $data[] = array('vknummer' => $Nummer->vknummer, 'klamottenboersen_id'=>$id, 'reserviert_fuer' => $Nummer->reserviert_fuer );
+        if ($alleNummern != ""){
+            $data=array();
+            foreach ($alleNummern as $Nummer) {
+                $data[] = array('vknummer' => $Nummer->vknummer, 'klamottenboersen_id'=>$id, 'reserviert_fuer' => $Nummer->reserviert_fuer );
+            }
+
+            Vknummern::insert($data);
+            DB::table('Warteliste')->truncate();
+
+
+            return redirect('Grunddaten');
+
+        } else {
+
+            return redirect('Nummern/new');
         }
 
-        Vknummern::insert($data);
 
-        return redirect('Grunddaten');
+
     }
 
     public function destroy ($id) {

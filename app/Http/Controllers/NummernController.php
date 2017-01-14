@@ -36,43 +36,54 @@ class NummernController extends Controller
 
 
         $Daten=$this->NummernRepository->all();
-        $Interessenten= new InteressentenRepository();
-        $Count=array(
-            "gesamt" => 0,
-            "reserviert" => 0,
-            "vergeben" => 0
-        );
-        $Nummern=array();
-        
-        foreach ($Daten AS $Nummer) {
 
-            $Count['gesamt']++;
+        if (count($Daten)>0){
+            $Interessenten= new InteressentenRepository();
+            $Count=array(
+                "gesamt" => 0,
+                "reserviert" => 0,
+                "vergeben" => 0
+            );
+            $Nummern=array();
 
-            if ( is_integer($Nummer->reserviert_fuer)){
-                $Count['reserviert']++;
+            foreach ($Daten AS $Nummer) {
 
-                $Nummer->reserviert = $Interessenten->findInteressent($Nummer->reserviert_fuer);
-                
-                
+                $Count['gesamt']++;
+
+                if ( is_integer($Nummer->reserviert_fuer)){
+                    $Count['reserviert']++;
+
+                    $Nummer->reserviert = $Interessenten->findInteressent($Nummer->reserviert_fuer);
+
+
+                }
+
+                if (is_integer($Nummer->vergeben_an) ){
+                    $Count['vergeben']++;
+
+                    $Nummer->vergeben = $Interessenten->findInteressent($Nummer->vergeben_an);
+                }
+
+                $Nummern[]=$Nummer;
+
             }
 
-            if (is_integer($Nummer->vergeben_an) ){
-                $Count['vergeben']++;
+            $meisteNummer=$this->NummernRepository->haeufigsteNummer('1');
 
-                $Nummer->vergeben = $Interessenten->findInteressent($Nummer->vergeben_an);
-            }
+            return view('vknummern.uebersicht', [
+                'Nummern' => $Nummern,
+                'Count' => $Count,
+                'meisteNummer' => $meisteNummer
+            ]);
+        } else {
 
-            $Nummern[]=$Nummer;
+            return redirect('Nummern/new')->with([
+                "Meldung" => "Es müssen Verkäufernummern angelegt werden",
+                "type"      => "warning"
+            ]);
 
         }
 
-        $meisteNummer=$this->NummernRepository->haeufigsteNummer('1');
-
-        return view('vknummern.uebersicht', [
-            'Nummern' => $Nummern,
-            'Count' => $Count,
-            'meisteNummer' => $meisteNummer
-        ]);
     }
     
     public function newNummer () {
@@ -145,6 +156,7 @@ class NummernController extends Controller
                "Klamottenboerse" => $Klamottenboerse
            ]);
            $pdf->save(storage_path().'\app\anhaenge\VerkaeuferInfos.pdf');
+
 
 
            $text = View::make('emails.vergabeVKNummer', [

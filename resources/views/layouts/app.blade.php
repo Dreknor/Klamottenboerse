@@ -19,15 +19,17 @@
     <!-- x-editable -->
      <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
 
-    <link href="{{asset('css/datetimepicker.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{asset('css/bootstrap-datetimepicker.css')}}" rel="stylesheet" type="text/css">
     <script src="{{asset('js/bootstrap-datetimepicker.js')}}"></script>
 
     {{--<link href="css/bootstrap.css" rel="stylesheet">--}}
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
 
     <!-- DataTable -->
-    <link rel="stylesheet" type="text/css" href="{{asset('css/DataTables-1.10.12/css/dataTables.bootstrap.css')}}"/>
+    <!--
+    <link rel="stylesheet" type="text/css" href="{{asset('/css/DataTables-1.10.12/css/dataTables.bootstrap.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{asset('css/AutoFill-2.1.2/css/autoFill.bootstrap.min.css')}}"/>
+    -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
 
     <script type="text/javascript" src="{{asset('js/DataTables-1.10.12/js/jquery.dataTables.js')}}"></script>

@@ -348,10 +348,12 @@ class ErrorHandler
     /**
      * Handles errors by filtering then logging them according to the configured bit fields.
      *
-     * @param int    $type    One of the E_* constants
+     * @param int    $type      One of the E_* constants
+     * @param string $message
      * @param string $file
      * @param int    $line
      * @param array  $context
+     * @param array  $backtrace
      *
      * @return bool Returns false when no handling happens so that the PHP engine can handle the error itself
      *
@@ -368,6 +370,10 @@ class ErrorHandler
 
         if (!$type || (!$log && !$throw)) {
             return $type && $log;
+        }
+
+        if (isset($context['GLOBALS']) && ($this->scopedErrors & $type)) {
+            unset($context['GLOBALS']);
         }
 
         if (null !== $backtrace && $type & E_ERROR) {
@@ -523,7 +529,11 @@ class ErrorHandler
             }
         }
         if ($this->loggedErrors & $type) {
-            $this->loggers[$type][0]->log($this->loggers[$type][1], $message, $e);
+            try {
+                $this->loggers[$type][0]->log($this->loggers[$type][1], $message, $e);
+            } catch (\Exception $handlerException) {
+            } catch (\Throwable $handlerException) {
+            }
         }
         if ($exception instanceof FatalErrorException && !$exception instanceof OutOfMemoryException && $error) {
             foreach ($this->getFatalErrorHandlers() as $handler) {

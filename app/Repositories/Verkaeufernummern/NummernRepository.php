@@ -156,9 +156,11 @@ class NummernRepository
 
     public function haeufigsteNummer($InteressentenID){
 
+
+
         return $HaeufigsteNummer=Vknummern::query()
                             ->where('vergeben_an', $InteressentenID)
-                            ->select(DB::raw('*, count(vknummer) as Anzahl'))
+                            ->select(DB::raw('count(vknummer) as Anzahl'))
                             ->groupBy('vknummer')
                             ->orderBy('Anzahl', 'DESC')
                             ->take(2)

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Models\Interessenten\Interessenten;
+use App\Models\Klamottenboerse\Klamottenboerse;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -25,8 +24,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('interessenten',[
-            "entries" => Interessenten::query()->get()
-        ]);
+        $Klamottenboerse= Klamottenboerse::query()
+                            ->where('id', ">=", 1 )
+                            ->first();
+        if (!isset($Klamottenboerse->id)){
+                return view('klamottenboerse.setupKlamottenboerse');
+        } else {
+
+                return view('home');
+        }
+
     }
 }

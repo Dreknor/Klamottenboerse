@@ -39,7 +39,13 @@ use App\Models\Interessenten\Interessenten;
          * @return int
          */
         public function countAll() {
-            return \App\Models\Interessenten\Interessenten::query()->count();
+            $Anzahl = \App\Models\Interessenten\Interessenten::query()->count();
+
+            if (!isset($Anzahl)){
+                return "0";
+            } else {
+                return $Anzahl;
+            }
         }
 
         /*

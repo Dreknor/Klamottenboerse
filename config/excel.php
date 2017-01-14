@@ -58,15 +58,15 @@ return array(
     ),
 
     'properties' => array(
-        'creator'        => 'KlamottenbörsenVerwaltung',
-        'lastModifiedBy' => 'KlamottenbörsenVerwaltung',
+        'creator'        => 'Maatwebsite',
+        'lastModifiedBy' => 'Maatwebsite',
         'title'          => 'Spreadsheet',
         'description'    => 'Default spreadsheet export',
         'subject'        => 'Spreadsheet export',
-        'keywords'       => 'KlamottenbörsenVerwaltung, excel, export',
+        'keywords'       => 'maatwebsite, excel, export',
         'category'       => 'Excel',
-        'manager'        => 'KlamottenbörsenVerwaltung',
-        'company'        => 'KlamottenbörsenVerwaltung',
+        'manager'        => 'Maatwebsite',
+        'company'        => 'Maatwebsite',
     ),
 
     /*
@@ -106,7 +106,7 @@ return array(
     |
     */
 
-    'creator'    => 'KlamottenbörsenVerwaltung',
+    'creator'    => 'Maatwebsite',
 
     'csv'        => array(
         /*
@@ -134,7 +134,15 @@ return array(
         |--------------------------------------------------------------------------
         */
 
-        'line_ending' => "\r\n"
+        'line_ending' => "\r\n",
+
+        /*
+        |--------------------------------------------------------------------------
+        | setUseBom
+        |--------------------------------------------------------------------------
+        */
+
+        'use_bom' => false
     ),
 
     'export'     => array(
