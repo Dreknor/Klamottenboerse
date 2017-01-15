@@ -87,10 +87,19 @@ class KlamottenboersenController extends Controller
     }
     
     public function store_Helfer (Request $request){
-        
-        Helfer::create($request->all());
-        return redirect('Grunddaten');
-        
+
+        $Klamottenboerse = $this->klamottenboersenRepository->latest();
+
+        Helfer::updateOrCreate(
+            ["klamottenboerse_id" => $Klamottenboerse->id, "name" => $request->input('name')],
+            ["telefon" => $request->input('telefon'),
+            "mail" => $request->input('mail'),
+            "bereich" => $request->input('bereich')
+        ]);
+
+
+        //return view('klamottenboerse.grunddaten');
+        return back();
     }
 
 }

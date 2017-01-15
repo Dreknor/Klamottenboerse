@@ -204,9 +204,31 @@
                     <h4 class="modal-title" id="modal-title"></h4>
                 </div>
                 <div class="modal-body">
-                    <strong>E-Mail:</strong> <p id="mail"></p> <br>
-                    <strong>Telefon:</strong> <p id="telefon"></p><br>
-                    <strong>Bereich:</strong> <p id="bereich"></p><br>
+
+                    <form class="form-horizontal" role="form" method="POST" id="Helfer" action="{{ url('Grunddaten/Helfer/store')}}">
+                        {!! csrf_field() !!}
+                        <input type="hidden" name="klamottenboerse_id" value="{{$Klamottenboerse->id}}">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="input"  class="form-control" name="name" id="name_edit"  readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="mail">E-Mail</label>
+                            <input type="input" class="form-control" name="mail" id="mail_edit" placeholder="E-Mail des Helfer">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefon">Telefon</label>
+                            <input type="input" class="form-control" name="telefon" id="telefon_edit" placeholder="Telefon des Helfer">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bereich">Bereich</label>
+                            <input type="input" class="form-control" name="bereich" id="bereich_edit" placeholder="Bereich wo geholfen wird">
+                        </div>
+                        <button type="submit"  class="btn btn-success" >Änderungen speichern</button>
+
+                    </form>
 
                 </div>
                 <div class="modal-footer">
@@ -239,7 +261,7 @@
                         <input type="hidden" name="klamottenboerse_id" value="{{$Klamottenboerse->id}}">
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="input" form="Helferform" class="form-control" name="name" placeholder="Name des Helfer">
+                            <input type="input" form="Helferform" class="form-control" name="name"  placeholder="Name des Helfer">
                         </div>
                         <div class="form-group">
                             <label for="mail">E-Mail</label>
@@ -289,11 +311,12 @@
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var modal = $(this)
-            modal.find('.modal-title').text(name)
-            modal.find('.modal-body #mail').text(mail)
-            modal.find('.modal-body #telefon').text(telefon)
-            modal.find('.modal-body #bereich').text(bereich)
 
+            modal.find('.modal-body #name_edit').val(name)
+            modal.find('.modal-body #mail_edit').val(mail)
+            modal.find('.modal-body #telefon_edit').val(telefon)
+            modal.find('.modal-body #bereich_edit').val(bereich)
+            modal.find('.modal-title').text(name)
         })
 
         $(function() {

@@ -258,6 +258,20 @@
                                                     @endif
                                              @endif
 
+                                                @if(!isset($Interessent->helfer))
+                                                    <form class="form-horizontal" role="form" method="POST" id="Helferform" action="{{ url('Grunddaten/Helfer/store')}}">
+                                                        {!! csrf_field() !!}
+                                                        <input type="hidden" form="Helferform" class="form-control" name="name" value="{{$Interessent->nachname}}">
+                                                        <input type="hidden" form="Helferform" class="form-control" name="mail" value="{{$Interessent->mail}}">
+                                                        <input type="hidden" form="Helferform" class="form-control" name="telefon" value="{{$Interessent->handy}}">
+                                                        <input type="hidden" form="Helferform" class="form-control" name="bereich" value=" ">
+                                                        <button type="submit" form="Helferform" class="btn btn-success" >hilft mit</button>
+                                                    </form>
+
+                                                @else
+                                                    <button class="btn btn-sm">Ist Helfer</button>
+                                                @endif
+
                                             </div>
 
                                         </div>

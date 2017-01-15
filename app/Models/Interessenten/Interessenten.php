@@ -9,6 +9,7 @@
 namespace App\Models\Interessenten;
 
 
+use App\Models\Klamottenboerse\Helfer;
 use App\Models\Klamottenboerse\Vknummern;
 use App\Models\Klamottenboerse\Warteliste;
 use Illuminate\Database\Eloquent\Model;
@@ -45,6 +46,12 @@ class Interessenten extends Model
 
     public function nachrichtenPagination(){
             return $this->nachrichten()->paginate(10);
+    }
+
+    public function helfer(){
+        return $this->hasOne(Helfer::class, 'name', 'nachname')
+            ->where('klamottenboerse_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+            ->orderBy('klamottenboerse_id', 'desc');
     }
 }
 
