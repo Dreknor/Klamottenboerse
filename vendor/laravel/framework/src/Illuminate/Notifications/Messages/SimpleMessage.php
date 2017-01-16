@@ -23,9 +23,9 @@ class SimpleMessage
     /**
      * The notification's greeting.
      *
-     * @var string
+     * @var string|null
      */
-    public $greeting;
+    public $greeting = null;
 
     /**
      * The "intro" lines of the notification.
@@ -160,7 +160,7 @@ class SimpleMessage
             return implode(' ', array_map('trim', $line));
         }
 
-        return trim(implode(' ', array_map('trim', preg_split('/\\r\\n|\\r|\\n/', $line))));
+        return trim(implode(' ', array_map('trim', explode(PHP_EOL, $line))));
     }
 
     /**

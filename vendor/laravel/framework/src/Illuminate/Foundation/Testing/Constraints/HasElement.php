@@ -68,7 +68,7 @@ class HasElement extends PageConstraint
     {
         foreach ($this->attributes as $name => $value) {
             if (is_numeric($name)) {
-                if (is_null($element->attr($value))) {
+                if ($element->attr($value) === null) {
                     return false;
                 }
             } else {

@@ -7,8 +7,8 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\Container\Container;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Validation\ValidatesWhenResolvedTrait;
 use Illuminate\Contracts\Validation\ValidatesWhenResolved;
@@ -77,19 +77,12 @@ class FormRequest extends Request implements ValidatesWhenResolved
         $factory = $this->container->make(ValidationFactory::class);
 
         if (method_exists($this, 'validator')) {
-            $validator = $this->container->call([$this, 'validator'], compact('factory'));
-        } else {
-            $validator = $factory->make(
-                $this->validationData(), $this->container->call([$this, 'rules']),
-                $this->messages(), $this->attributes()
-            );
+            return $this->container->call([$this, 'validator'], compact('factory'));
         }
 
-        if (method_exists($this, 'withValidator')) {
-            $this->withValidator($validator);
-        }
-
-        return $validator;
+        return $factory->make(
+            $this->validationData(), $this->container->call([$this, 'rules']), $this->messages(), $this->attributes()
+        );
     }
 
     /**

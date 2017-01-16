@@ -27,6 +27,12 @@ class KlamottenboersenRepository
         $Klamottenboerse= Klamottenboerse::query()
             ->orderBy('id', 'desc')
             ->first();
-        return $Klamottenboerse->id;
+
+        if (is_object($Klamottenboerse)){
+            return $Klamottenboerse->id;
+        } else {
+            return false;
+        }
+
     }
 }

@@ -8,8 +8,8 @@ use Illuminate\Http\UploadedFile;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Foundation\Testing\HttpException;
-use Illuminate\Foundation\Testing\Constraints\HasLink;
 use Illuminate\Foundation\Testing\Constraints\HasText;
+use Illuminate\Foundation\Testing\Constraints\HasLink;
 use Illuminate\Foundation\Testing\Constraints\HasValue;
 use Illuminate\Foundation\Testing\Constraints\HasSource;
 use Illuminate\Foundation\Testing\Constraints\IsChecked;
@@ -101,15 +101,13 @@ trait InteractsWithPages
     /**
      * Clean the crawler and the subcrawlers values to reset the page context.
      *
-     * @return $this
+     * @return void
      */
     protected function resetPageContext()
     {
         $this->crawler = null;
 
         $this->subCrawlers = [];
-
-        return $this;
     }
 
     /**
@@ -203,7 +201,7 @@ trait InteractsWithPages
      *
      * @param  string  $uri
      * @param  string|null  $message
-     * @return $this
+     * @return void
      *
      * @throws \Illuminate\Foundation\Testing\HttpException
      */
@@ -221,8 +219,6 @@ trait InteractsWithPages
 
             throw new HttpException($message, null, $responseException);
         }
-
-        return $this;
     }
 
     /**
@@ -638,7 +634,7 @@ trait InteractsWithPages
     {
         $this->assertFilterProducesResults($element);
 
-        $element = str_replace(['#', '[]'], '', $element);
+        $element = str_replace('#', '', $element);
 
         $this->inputs[$element] = $text;
 
@@ -649,7 +645,7 @@ trait InteractsWithPages
      * Assert that a filtered Crawler returns nodes.
      *
      * @param  string  $filter
-     * @return $this
+     * @return void
      *
      * @throws \InvalidArgumentException
      */
@@ -662,8 +658,6 @@ trait InteractsWithPages
                 "Nothing matched the filter [{$filter}] CSS query provided for [{$this->currentUri}]."
             );
         }
-
-        return $this;
     }
 
     /**
@@ -707,39 +701,7 @@ trait InteractsWithPages
                         : $file;
         }, $files, $names);
 
-        $uploads = array_combine($names, $files);
-
-        foreach ($uploads as $key => $file) {
-            if (preg_match('/.*?(?:\[.*?\])+/', $key)) {
-                $this->prepareArrayBasedFileInput($uploads, $key, $file);
-            }
-        }
-
-        return $uploads;
-    }
-
-    /**
-     * Store an array based file upload with the proper nested array structure.
-     *
-     * @param  array  $uploads
-     * @param  string  $key
-     * @param  mixed  $file
-     */
-    protected function prepareArrayBasedFileInput(&$uploads, $key, $file)
-    {
-        preg_match_all('/([^\[\]]+)/', $key, $segments);
-
-        $segments = array_reverse($segments[1]);
-
-        $newKey = array_pop($segments);
-
-        foreach ($segments as $segment) {
-            $file = [$segment => $file];
-        }
-
-        $uploads[$newKey] = $file;
-
-        unset($uploads[$key]);
+        return array_combine($names, $files);
     }
 
     /**

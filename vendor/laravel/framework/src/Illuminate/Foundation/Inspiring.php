@@ -26,7 +26,6 @@ class Inspiring
             'Well begun is half done. - Aristotle',
             'He who is contented is rich. - Laozi',
             'Very little is needed to make a happy life. - Marcus Antoninus',
-            'It is quality rather than quantity that matters. - Lucius Annaeus Seneca',
 
         ])->random();
     }

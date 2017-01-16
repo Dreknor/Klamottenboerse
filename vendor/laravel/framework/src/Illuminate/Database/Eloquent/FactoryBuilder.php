@@ -37,20 +37,6 @@ class FactoryBuilder
     protected $amount = 1;
 
     /**
-     * The model states.
-     *
-     * @var array
-     */
-    protected $states;
-
-    /**
-     * The states to apply.
-     *
-     * @var array
-     */
-    protected $activeStates = [];
-
-    /**
      * The Faker instance for the builder.
      *
      * @var \Faker\Generator
@@ -63,16 +49,14 @@ class FactoryBuilder
      * @param  string  $class
      * @param  string  $name
      * @param  array  $definitions
-     * @param  array  $states
      * @param  \Faker\Generator  $faker
      * @return void
      */
-    public function __construct($class, $name, array $definitions, array $states, Faker $faker)
+    public function __construct($class, $name, array $definitions, Faker $faker)
     {
         $this->name = $name;
         $this->class = $class;
         $this->faker = $faker;
-        $this->states = $states;
         $this->definitions = $definitions;
     }
 
@@ -85,19 +69,6 @@ class FactoryBuilder
     public function times($amount)
     {
         $this->amount = $amount;
-
-        return $this;
-    }
-
-    /**
-     * Set the states to be applied to the model.
-     *
-     * @param  array|dynamic  $states
-     * @return $this
-     */
-    public function states($states)
-    {
-        $this->activeStates = is_array($states) ? $states : func_get_args();
 
         return $this;
     }
@@ -131,15 +102,11 @@ class FactoryBuilder
      */
     public function make(array $attributes = [])
     {
-        if ($this->amount < 1) {
-            return (new $this->class)->newCollection();
-        }
-
         if ($this->amount === 1) {
             return $this->makeInstance($attributes);
         }
 
-        return (new $this->class)->newCollection(array_map(function () use ($attributes) {
+        return new Collection(array_map(function () use ($attributes) {
             return $this->makeInstance($attributes);
         }, range(1, $this->amount)));
     }
@@ -164,33 +131,12 @@ class FactoryBuilder
                 $this->faker, $attributes
             );
 
-            return new $this->class($this->callClosureAttributes(
-                array_merge($this->applyStates($definition, $attributes), $attributes)
-            ));
+            $evaluated = $this->callClosureAttributes(
+                array_merge($definition, $attributes)
+            );
+
+            return new $this->class($evaluated);
         });
-    }
-
-    /**
-     * Apply the active states to the model definition array.
-     *
-     * @param  array  $definition
-     * @param  array  $attributes
-     * @return array
-     */
-    protected function applyStates(array $definition, array $attributes = [])
-    {
-        foreach ($this->activeStates as $state) {
-            if (! isset($this->states[$this->class][$state])) {
-                throw new InvalidArgumentException("Unable to locate [{$state}] state for [{$this->class}].");
-            }
-
-            $definition = array_merge($definition, call_user_func(
-                $this->states[$this->class][$state],
-                $this->faker, $attributes
-            ));
-        }
-
-        return $definition;
     }
 
     /**

@@ -25,23 +25,14 @@ class SendQueuedNotifications implements ShouldQueue
     protected $notification;
 
     /**
-     * All of the channels to send the notification too.
-     *
-     * @var array
-     */
-    protected $channels;
-
-    /**
      * Create a new job instance.
      *
      * @param  \Illuminate\Support\Collection  $notifiables
      * @param  \Illuminate\Notifications\Notification  $notification
-     * @param  array  $channels
      * @return void
      */
-    public function __construct($notifiables, $notification, array $channels = null)
+    public function __construct($notifiables, $notification)
     {
-        $this->channels = $channels;
         $this->notifiables = $notifiables;
         $this->notification = $notification;
     }
@@ -54,6 +45,6 @@ class SendQueuedNotifications implements ShouldQueue
      */
     public function handle(ChannelManager $manager)
     {
-        $manager->sendNow($this->notifiables, $this->notification, $this->channels);
+        $manager->sendNow($this->notifiables, $this->notification);
     }
 }

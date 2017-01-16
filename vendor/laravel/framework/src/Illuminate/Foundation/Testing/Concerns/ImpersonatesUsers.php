@@ -15,7 +15,9 @@ trait ImpersonatesUsers
      */
     public function actingAs(UserContract $user, $driver = null)
     {
-        return $this->be($user, $driver);
+        $this->be($user, $driver);
+
+        return $this;
     }
 
     /**
@@ -23,12 +25,10 @@ trait ImpersonatesUsers
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  string|null  $driver
-     * @return $this
+     * @return void
      */
     public function be(UserContract $user, $driver = null)
     {
         $this->app['auth']->guard($driver)->setUser($user);
-
-        return $this;
     }
 }

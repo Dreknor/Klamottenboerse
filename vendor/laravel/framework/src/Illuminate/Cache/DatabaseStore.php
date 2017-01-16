@@ -4,7 +4,6 @@ namespace Illuminate\Cache;
 
 use Closure;
 use Exception;
-use Carbon\Carbon;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -78,7 +77,7 @@ class DatabaseStore implements Store
                 $cache = (object) $cache;
             }
 
-            if (Carbon::now()->getTimestamp() >= $cache->expiration) {
+            if (time() >= $cache->expiration) {
                 $this->forget($key);
 
                 return;
@@ -187,7 +186,7 @@ class DatabaseStore implements Store
      */
     protected function getTime()
     {
-        return Carbon::now()->getTimestamp();
+        return time();
     }
 
     /**

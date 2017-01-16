@@ -345,17 +345,6 @@ class Event
     }
 
     /**
-     * Schedule the event to run hourly at a given offset in the hour.
-     *
-     * @param  int  $offset
-     * @return $this
-     */
-    public function hourlyAt($offset)
-    {
-        return $this->spliceIntoPosition(1, $offset);
-    }
-
-    /**
      * Schedule the event to run daily.
      *
      * @return $this
@@ -651,7 +640,7 @@ class Event
     private function inTimeInterval($startTime, $endTime)
     {
         return function () use ($startTime, $endTime) {
-            $now = Carbon::now()->getTimestamp();
+            $now = Carbon::now()->timestamp;
 
             return $now >= strtotime($startTime) && $now <= strtotime($endTime);
         };
@@ -855,7 +844,7 @@ class Event
     protected function getEmailSubject()
     {
         if ($this->description) {
-            return $this->description;
+            return 'Scheduled Job Output ('.$this->description.')';
         }
 
         return 'Scheduled Job Output';

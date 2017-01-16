@@ -80,12 +80,10 @@ trait InteractsWithDatabase
      * Seed a given database connection.
      *
      * @param  string  $class
-     * @return $this
+     * @return void
      */
     public function seed($class = 'DatabaseSeeder')
     {
         $this->artisan('db:seed', ['--class' => $class]);
-
-        return $this;
     }
 }

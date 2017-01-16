@@ -42,16 +42,6 @@ class ResourceRegistrar
     protected static $singularParameters = true;
 
     /**
-     * The verbs used in the resource URIs.
-     *
-     * @var array
-     */
-    protected static $verbs = [
-        'create' => 'create',
-        'edit' => 'edit',
-    ];
-
-    /**
      * Create a new resource registrar instance.
      *
      * @param  \Illuminate\Routing\Router  $router
@@ -219,12 +209,8 @@ class ResourceRegistrar
      */
     protected function getResourceName($resource, $method, $options)
     {
-        if (isset($options['names'])) {
-            if (is_string($options['names'])) {
-                $resource = $options['names'];
-            } elseif (isset($options['names'][$method])) {
-                return $options['names'][$method];
-            }
+        if (isset($options['names'][$method])) {
+            return $options['names'][$method];
         }
 
         // If a global prefix has been assigned to all names for this resource, we will
@@ -300,7 +286,7 @@ class ResourceRegistrar
      */
     protected function addResourceCreate($name, $base, $controller, $options)
     {
-        $uri = $this->getResourceUri($name).'/'.static::$verbs['create'];
+        $uri = $this->getResourceUri($name).'/create';
 
         $action = $this->getResourceAction($name, $controller, 'create', $options);
 
@@ -354,7 +340,7 @@ class ResourceRegistrar
      */
     protected function addResourceEdit($name, $base, $controller, $options)
     {
-        $uri = $this->getResourceUri($name).'/{'.$base.'}/'.static::$verbs['edit'];
+        $uri = $this->getResourceUri($name).'/{'.$base.'}/edit';
 
         $action = $this->getResourceAction($name, $controller, 'edit', $options);
 
@@ -427,20 +413,5 @@ class ResourceRegistrar
     public static function setParameters(array $parameters = [])
     {
         static::$parameterMap = $parameters;
-    }
-
-    /**
-     * Get or set the action verbs used in the resource URIs.
-     *
-     * @param  array  $verbs
-     * @return array
-     */
-    public static function verbs(array $verbs = [])
-    {
-        if (empty($verbs)) {
-            return static::$verbs;
-        } else {
-            static::$verbs = array_merge(static::$verbs, $verbs);
-        }
     }
 }

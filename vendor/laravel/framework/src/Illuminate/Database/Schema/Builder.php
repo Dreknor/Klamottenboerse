@@ -123,7 +123,7 @@ class Builder
      *
      * @param  string    $table
      * @param  \Closure  $callback
-     * @return void
+     * @return \Illuminate\Database\Schema\Blueprint
      */
     public function table($table, Closure $callback)
     {
@@ -135,7 +135,7 @@ class Builder
      *
      * @param  string    $table
      * @param  \Closure  $callback
-     * @return void
+     * @return \Illuminate\Database\Schema\Blueprint
      */
     public function create($table, Closure $callback)
     {
@@ -152,7 +152,7 @@ class Builder
      * Drop a table from the schema.
      *
      * @param  string  $table
-     * @return void
+     * @return \Illuminate\Database\Schema\Blueprint
      */
     public function drop($table)
     {
@@ -167,7 +167,7 @@ class Builder
      * Drop a table from the schema if it exists.
      *
      * @param  string  $table
-     * @return void
+     * @return \Illuminate\Database\Schema\Blueprint
      */
     public function dropIfExists($table)
     {
@@ -183,7 +183,7 @@ class Builder
      *
      * @param  string  $from
      * @param  string  $to
-     * @return void
+     * @return \Illuminate\Database\Schema\Blueprint
      */
     public function rename($from, $to)
     {

@@ -7,12 +7,13 @@ use Closure;
 use Exception;
 use Throwable;
 use LogicException;
+use RuntimeException;
 use DateTimeInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Contracts\Events\Dispatcher;
-use Doctrine\DBAL\Connection as DoctrineConnection;
 use Illuminate\Database\Query\Processors\Processor;
+use Doctrine\DBAL\Connection as DoctrineConnection;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
 use Illuminate\Database\Query\Grammars\Grammar as QueryGrammar;
@@ -290,12 +291,11 @@ class Connection implements ConnectionInterface
      *
      * @param  string  $query
      * @param  array   $bindings
-     * @param  bool  $useReadPdo
      * @return mixed
      */
-    public function selectOne($query, $bindings = [], $useReadPdo = true)
+    public function selectOne($query, $bindings = [])
     {
-        $records = $this->select($query, $bindings, $useReadPdo);
+        $records = $this->select($query, $bindings);
 
         return count($records) > 0 ? reset($records) : null;
     }
@@ -351,7 +351,7 @@ class Connection implements ConnectionInterface
         });
     }
 
-    /**
+    /*
      * Run a select statement against the database and returns a generator.
      *
      * @param  string  $query
@@ -576,12 +576,6 @@ class Connection implements ConnectionInterface
             // up in the database. Then we'll re-throw the exception so it can
             // be handled how the developer sees fit for their applications.
             catch (Exception $e) {
-                if ($this->causedByDeadlock($e) && $this->transactions > 1) {
-                    --$this->transactions;
-
-                    throw $e;
-                }
-
                 $this->rollBack();
 
                 if ($this->causedByDeadlock($e) && $a < $attempts) {
@@ -607,24 +601,21 @@ class Connection implements ConnectionInterface
      */
     public function beginTransaction()
     {
-        if ($this->transactions == 0) {
+        ++$this->transactions;
+
+        if ($this->transactions == 1) {
             try {
                 $this->getPdo()->beginTransaction();
             } catch (Exception $e) {
-                if ($this->causedByLostConnection($e)) {
-                    $this->reconnect();
-                    $this->pdo->beginTransaction();
-                } else {
-                    throw $e;
-                }
+                --$this->transactions;
+
+                throw $e;
             }
-        } elseif ($this->transactions >= 1 && $this->queryGrammar->supportsSavepoints()) {
+        } elseif ($this->transactions > 1 && $this->queryGrammar->supportsSavepoints()) {
             $this->getPdo()->exec(
-                $this->queryGrammar->compileSavepoint('trans'.($this->transactions + 1))
+                $this->queryGrammar->compileSavepoint('trans'.$this->transactions)
             );
         }
-
-        ++$this->transactions;
 
         $this->fireConnectionEvent('beganTransaction');
     }
@@ -830,7 +821,7 @@ class Connection implements ConnectionInterface
      */
     protected function reconnectIfMissingConnection()
     {
-        if (is_null($this->pdo)) {
+        if (is_null($this->getPdo()) || is_null($this->getReadPdo())) {
             $this->reconnect();
         }
     }
@@ -991,10 +982,14 @@ class Connection implements ConnectionInterface
      *
      * @param  \PDO|null  $pdo
      * @return $this
+     *
+     * @throws \RuntimeException
      */
     public function setPdo($pdo)
     {
-        $this->transactions = 0;
+        if ($this->transactions >= 1) {
+            throw new RuntimeException("Can't swap PDO instance while within transaction.");
+        }
 
         $this->pdo = $pdo;
 

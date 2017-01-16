@@ -2,15 +2,12 @@
 
 namespace Illuminate\Foundation\Testing\Concerns;
 
-use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Contracts\View\View;
 use PHPUnit_Framework_Assert as PHPUnit;
 use PHPUnit_Framework_ExpectationFailedException;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 
 trait MakesHttpRequests
@@ -116,18 +113,6 @@ trait MakesHttpRequests
     }
 
     /**
-     * Visit the given URI with a GET request, expecting a JSON response.
-     *
-     * @param  string  $uri
-     * @param  array  $headers
-     * @return $this
-     */
-    public function getJson($uri, array $headers = [])
-    {
-        return $this->json('GET', $uri, [], $headers);
-    }
-
-    /**
      * Visit the given URI with a POST request.
      *
      * @param  string  $uri
@@ -142,19 +127,6 @@ trait MakesHttpRequests
         $this->call('POST', $uri, $data, [], [], $server);
 
         return $this;
-    }
-
-    /**
-     * Visit the given URI with a POST request, expecting a JSON response.
-     *
-     * @param  string  $uri
-     * @param  array  $data
-     * @param  array  $headers
-     * @return $this
-     */
-    public function postJson($uri, array $data = [], array $headers = [])
-    {
-        return $this->json('POST', $uri, $data, $headers);
     }
 
     /**
@@ -175,19 +147,6 @@ trait MakesHttpRequests
     }
 
     /**
-     * Visit the given URI with a PUT request, expecting a JSON response.
-     *
-     * @param  string  $uri
-     * @param  array  $data
-     * @param  array  $headers
-     * @return $this
-     */
-    public function putJson($uri, array $data = [], array $headers = [])
-    {
-        return $this->json('PUT', $uri, $data, $headers);
-    }
-
-    /**
      * Visit the given URI with a PATCH request.
      *
      * @param  string  $uri
@@ -205,19 +164,6 @@ trait MakesHttpRequests
     }
 
     /**
-     * Visit the given URI with a PATCH request, expecting a JSON response.
-     *
-     * @param  string  $uri
-     * @param  array  $data
-     * @param  array  $headers
-     * @return $this
-     */
-    public function patchJson($uri, array $data = [], array $headers = [])
-    {
-        return $this->json('PATCH', $uri, $data, $headers);
-    }
-
-    /**
      * Visit the given URI with a DELETE request.
      *
      * @param  string  $uri
@@ -232,19 +178,6 @@ trait MakesHttpRequests
         $this->call('DELETE', $uri, $data, [], [], $server);
 
         return $this;
-    }
-
-    /**
-     * Visit the given URI with a DELETE request, expecting a JSON response.
-     *
-     * @param  string  $uri
-     * @param  array  $data
-     * @param  array  $headers
-     * @return $this
-     */
-    public function deleteJson($uri, array $data = [], array $headers = [])
-    {
-        return $this->json('DELETE', $uri, $data, $headers);
     }
 
     /**
@@ -281,7 +214,7 @@ trait MakesHttpRequests
      * @param  array|null  $data
      * @return $this|null
      */
-    protected function receiveJson(array $data = null)
+    protected function receiveJson($data = null)
     {
         return $this->seeJson($data);
     }
@@ -295,7 +228,7 @@ trait MakesHttpRequests
     public function seeJsonEquals(array $data)
     {
         $actual = json_encode(Arr::sortRecursive(
-            (array) $this->decodeResponseJson()
+            json_decode($this->response->getContent(), true)
         ));
 
         $this->assertEquals(json_encode(Arr::sortRecursive($data)), $actual);
@@ -321,7 +254,9 @@ trait MakesHttpRequests
         }
 
         try {
-            return $this->seeJsonEquals($data);
+            $this->seeJsonEquals($data);
+
+            return $this;
         } catch (PHPUnit_Framework_ExpectationFailedException $e) {
             return $this->seeJsonContains($data, $negate);
         }
@@ -351,8 +286,8 @@ trait MakesHttpRequests
             return $this->seeJson();
         }
 
-        if (is_null($responseData)) {
-            $responseData = $this->decodeResponseJson();
+        if (! $responseData) {
+            $responseData = json_decode($this->response->getContent(), true);
         }
 
         foreach ($structure as $key => $value) {
@@ -557,10 +492,10 @@ trait MakesHttpRequests
      *
      * @param  string  $method
      * @param  string  $uri
-     * @param  array  $parameters
-     * @param  array  $cookies
-     * @param  array  $files
-     * @param  array  $server
+     * @param  array   $parameters
+     * @param  array   $cookies
+     * @param  array   $files
+     * @param  array   $server
      * @param  string  $content
      * @return \Illuminate\Http\Response
      */
@@ -572,12 +507,10 @@ trait MakesHttpRequests
 
         $this->resetPageContext();
 
-        $symfonyRequest = SymfonyRequest::create(
+        $request = Request::create(
             $this->currentUri, $method, $parameters,
-            $cookies, $this->filterFiles($files), array_replace($this->serverVariables, $server), $content
+            $cookies, $files, array_replace($this->serverVariables, $server), $content
         );
-
-        $request = Request::createFromBase($symfonyRequest);
 
         $response = $kernel->handle($request);
 
@@ -591,10 +524,10 @@ trait MakesHttpRequests
      *
      * @param  string  $method
      * @param  string  $uri
-     * @param  array  $parameters
-     * @param  array  $cookies
-     * @param  array  $files
-     * @param  array  $server
+     * @param  array   $parameters
+     * @param  array   $cookies
+     * @param  array   $files
+     * @param  array   $server
      * @param  string  $content
      * @return \Illuminate\Http\Response
      */
@@ -610,11 +543,11 @@ trait MakesHttpRequests
      *
      * @param  string  $method
      * @param  string  $action
-     * @param  array  $wildcards
-     * @param  array  $parameters
-     * @param  array  $cookies
-     * @param  array  $files
-     * @param  array  $server
+     * @param  array   $wildcards
+     * @param  array   $parameters
+     * @param  array   $cookies
+     * @param  array   $files
+     * @param  array   $server
      * @param  string  $content
      * @return \Illuminate\Http\Response
      */
@@ -630,11 +563,11 @@ trait MakesHttpRequests
      *
      * @param  string  $method
      * @param  string  $name
-     * @param  array  $routeParameters
-     * @param  array  $parameters
-     * @param  array  $cookies
-     * @param  array  $files
-     * @param  array  $server
+     * @param  array   $routeParameters
+     * @param  array   $parameters
+     * @param  array   $cookies
+     * @param  array   $files
+     * @param  array   $server
      * @param  string  $content
      * @return \Illuminate\Http\Response
      */
@@ -689,35 +622,6 @@ trait MakesHttpRequests
     }
 
     /**
-     * Filter the given array of files, removing any empty values.
-     *
-     * @param  array  $files
-     * @return mixed
-     */
-    protected function filterFiles($files)
-    {
-        foreach ($files as $key => $file) {
-            if ($file instanceof UploadedFile) {
-                continue;
-            }
-
-            if (is_array($file)) {
-                if (! isset($file['name'])) {
-                    $files[$key] = $this->filterFiles($files[$key]);
-                } elseif (isset($files[$key]['error']) && $files[$key]['error'] !== 0) {
-                    unset($files[$key]);
-                }
-
-                continue;
-            }
-
-            unset($files[$key]);
-        }
-
-        return $files;
-    }
-
-    /**
      * Assert that the client response has an OK status code.
      *
      * @return $this
@@ -765,7 +669,7 @@ trait MakesHttpRequests
 
         if (is_null($value)) {
             PHPUnit::assertArrayHasKey($key, $this->response->original->getData());
-        } elseif ($value instanceof Closure) {
+        } elseif ($value instanceof \Closure) {
             PHPUnit::assertTrue($value($this->response->original->$key));
         } else {
             PHPUnit::assertEquals($value, $this->response->original->$key);
@@ -814,7 +718,7 @@ trait MakesHttpRequests
      * Assert whether the client was redirected to a given URI.
      *
      * @param  string  $uri
-     * @param  array  $with
+     * @param  array   $with
      * @return $this
      */
     public function assertRedirectedTo($uri, $with = [])
@@ -832,8 +736,8 @@ trait MakesHttpRequests
      * Assert whether the client was redirected to a given route.
      *
      * @param  string  $name
-     * @param  array  $parameters
-     * @param  array  $with
+     * @param  array   $parameters
+     * @param  array   $with
      * @return $this
      */
     public function assertRedirectedToRoute($name, $parameters = [], $with = [])
@@ -845,8 +749,8 @@ trait MakesHttpRequests
      * Assert whether the client was redirected to a given action.
      *
      * @param  string  $name
-     * @param  array  $parameters
-     * @param  array  $with
+     * @param  array   $parameters
+     * @param  array   $with
      * @return $this
      */
     public function assertRedirectedToAction($name, $parameters = [], $with = [])

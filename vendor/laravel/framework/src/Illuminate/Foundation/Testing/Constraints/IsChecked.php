@@ -35,7 +35,7 @@ class IsChecked extends FormFieldConstraint
     {
         $crawler = $this->crawler($crawler);
 
-        return ! is_null($this->field($crawler)->attr('checked'));
+        return $this->field($crawler)->attr('checked') !== null;
     }
 
     /**

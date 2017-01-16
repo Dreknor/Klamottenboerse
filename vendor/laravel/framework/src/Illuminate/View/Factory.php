@@ -7,9 +7,9 @@ use Countable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\View\Engines\EngineResolver;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Contracts\View\Factory as FactoryContract;
@@ -344,13 +344,13 @@ class Factory implements FactoryContract
      */
     public function share($key, $value = null)
     {
-        $keys = is_array($key) ? $key : [$key => $value];
-
-        foreach ($keys as $key => $value) {
-            $this->shared[$key] = $value;
+        if (! is_array($key)) {
+            return $this->shared[$key] = $value;
         }
 
-        return $value;
+        foreach ($key as $innerKey => $innerValue) {
+            $this->share($innerKey, $innerValue);
+        }
     }
 
     /**
@@ -516,7 +516,7 @@ class Factory implements FactoryContract
      */
     public function callComposer(ViewContract $view)
     {
-        $this->events->fire('composing: '.$view->name(), [$view]);
+        $this->events->fire('composing: '.$view->getName(), [$view]);
     }
 
     /**
@@ -527,7 +527,7 @@ class Factory implements FactoryContract
      */
     public function callCreator(ViewContract $view)
     {
-        $this->events->fire('creating: '.$view->name(), [$view]);
+        $this->events->fire('creating: '.$view->getName(), [$view]);
     }
 
     /**

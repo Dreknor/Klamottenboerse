@@ -18,13 +18,6 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager as SchemaManager;
 abstract class Grammar extends BaseGrammar
 {
     /**
-     * If this Grammar supports schema changes wrapped in a transaction.
-     *
-     * @var bool
-     */
-    protected $transactions = false;
-
-    /**
      * Compile a rename column command.
      *
      * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
@@ -462,15 +455,5 @@ abstract class Grammar extends BaseGrammar
     protected function mapFluentValueToDoctrine($option, $value)
     {
         return $option == 'notnull' ? ! $value : $value;
-    }
-
-    /**
-     * Check if this Grammar supports schema changes wrapped in a transaction.
-     *
-     * @return bool
-     */
-    public function supportsSchemaTransactions()
-    {
-        return $this->transactions;
     }
 }
