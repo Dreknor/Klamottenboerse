@@ -140,8 +140,10 @@ Route::group(['middleware' => 'web'], function () {
 
 
     //Import
-    Route::get('/Import', 'ImportController@Import');
-    Route::get('/Import_csv', 'ImportController@Import_csv');
+    Route::get('/import', 'ImportController@index');
+    //Route::get('/Import_csv', 'ImportController@Import_csv');
+    Route::post('/import', 'ImportController@importExcel');
+
 
 
 

@@ -11,11 +11,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Interessenten\Interessenten;
 use App\Models\Klamottenboerse\Vknummern;
-use Illuminate\Support\Facades\DB;
+use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ImportController extends Controller
 {
+
+
+    public function __construct(KlamottenboersenRepository $klamottenboersenRepository)
+    {
+        $this->middleware('auth');
+        $this->klamottenboersenRepository = $klamottenboersenRepository;
+    }
 
     public function Import() {
         $Daten=Excel::load('storage\app\import\Daten.xlsx', function($reader) {
@@ -82,6 +90,53 @@ class ImportController extends Controller
         });
 
         
+    }
+
+    public function index()
+    {
+        return view('klamottenboerse.importExport');
+    }
+
+    public function importExcel(Request $request)
+    {
+
+        $Klamottenboerse = $this->klamottenboersenRepository->latest();
+
+
+        if($request->hasFile('import_file')){
+
+            $path = $request->import_file->path();
+            $data = Excel::selectSheets('Nummern')->load($path, function($reader) {
+            })->get();
+
+
+
+
+            if(!empty($data) && $data->count()){
+
+                foreach ($data as $key => $value) {
+                    if ($value->vknummer > 0) {
+                        $VKNummer=Vknummern::query()
+                            ->where('vknummer', '=', $value->vknummer)
+                            ->where('klamottenboersen_id', '=', $Klamottenboerse->id)
+                            ->first();
+                        $VKNummer->umsatz = $value->sum;
+                        $VKNummer->save();
+                    }
+
+
+                }
+
+
+
+
+
+
+
+            }
+        }
+
+        return redirect(url('Ueberblick'));
     }
 
 }

@@ -1,4 +1,4 @@
-@if($errors->count() != 0)
+@if($errors && $errors->count() != 0)
     <div class="container">
         <div class="row">
             <div class="col-md-10" >

@@ -362,6 +362,9 @@
                                                             {{ $Nummer->vknummer }}
                                                         </b>
                                                     </a>
+                                                    @if($Nummer->umsatz != NULL) <span class="badge">{{$Nummer->umsatz}} €</span> @endif
+
+
                                                 </li>
                                             @endforeach
                                         @else

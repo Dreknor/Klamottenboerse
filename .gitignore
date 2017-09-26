@@ -22,4 +22,6 @@ Homestead.yaml
 .rocketeer/
 config/mail.php
 .idea/workspace.xml
+resources/layouts/
 .idea/workspace.xml
+.idea/misc.xml

@@ -16,7 +16,7 @@ class Vknummern extends Model
 {
     public $table = "vknummern";
 
-    protected $fillable = array("vknummer","klamottenboersen_id", "reserviert_fuer", "vergeben_an");
+    protected $fillable = array("vknummer","klamottenboersen_id", "reserviert_fuer", "vergeben_an", 'umsatz');
 
     public function reserviert_fuer_Interessent() {
         return $this->belongsTo(Interessenten::class, 'reserviert_fuer');
@@ -33,5 +33,6 @@ class Vknummern extends Model
     public function Kommentar () {
         return $this->hasOne(Vknummern_Kommentar::class, 'vknummer');
     }
+
 
 }

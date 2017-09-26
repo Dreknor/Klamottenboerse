@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="63ad67d9-ae67-4d67-a54c-f7ae20354709" name="Default" comment="" />
+    <list default="true" id="63ad67d9-ae67-4d67-a54c-f7ae20354709" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/klamottenboerse/importExport.blade.php" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/views/vendor/.gitkeep" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/ImportController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/ImportController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/Klamottenboerse/Vknummern.php" afterPath="$PROJECT_DIR$/app/Models/Klamottenboerse/Vknummern.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/app.php" afterPath="$PROJECT_DIR$/config/app.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/elements/error.blade.php" afterPath="$PROJECT_DIR$/resources/views/elements/error.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/interessent.blade.php" afterPath="$PROJECT_DIR$/resources/views/interessent.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/vknummern/uebersicht.blade.php" afterPath="$PROJECT_DIR$/resources/views/vknummern/uebersicht.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/web.php" afterPath="$PROJECT_DIR$/routes/web.php" />
+    </list>
     <ignored path=".idea/dataSources.local.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -10,27 +24,32 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings">
-    <pharPath>C:\ProgramData\ComposerSetup\bin\composer.phar</pharPath>
-  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="blog" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Interessenten.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Models/Interessenten/Interessenten.php">
+      <file leaf-file-name="ImportController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ImportController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+            <state relative-caret-position="1989">
+              <caret line="126" column="0" lean-forward="false" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
               <folding>
-                <marker date="1484552652441" expanded="false" signature="9:83" ph=" Created by PhpStorm. ..." />
-                <marker date="1484552652441" expanded="true" signature="1700:1707" ph="..." />
+                <element signature="e#121#164#0#PHP" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="InteressentenController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/InteressentenController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -38,48 +57,28 @@
       <file leaf-file-name="interessent.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/interessent.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5117">
-              <caret line="316" column="62" selection-start-line="316" selection-start-column="62" selection-end-line="316" selection-end-column="62" />
+            <state relative-caret-position="646">
+              <caret line="371" column="46" lean-forward="false" selection-start-line="371" selection-start-column="46" selection-end-line="371" selection-end-column="46" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Helfer.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Models/Klamottenboerse/Helfer.php">
+      <file leaf-file-name="uebersicht.blade.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/views/vknummern/uebersicht.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="714">
+              <caret line="96" column="52" lean-forward="false" selection-start-line="96" selection-start-column="52" selection-end-line="96" selection-end-column="52" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KlamottenboersenController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php">
+      <file leaf-file-name="Vknummern.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Models/Klamottenboerse/Vknummern.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="61" column="32" selection-start-line="61" selection-start-column="32" selection-end-line="61" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NummernRepository.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Repositories/Verkaeufernummern/NummernRepository.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="29" column="8" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="KlamottenboersenRepository.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Repositories/Klamottenboerse/KlamottenboersenRepository.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="37" column="1" selection-start-line="37" selection-start-column="1" selection-end-line="37" selection-end-column="1" />
+            <state relative-caret-position="493">
+              <caret line="35" column="0" lean-forward="true" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -88,112 +87,9 @@
       <file leaf-file-name="web.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="74" column="57" selection-start-line="74" selection-start-column="57" selection-end-line="74" selection-end-column="57" />
+            <state relative-caret-position="2278">
+              <caret line="143" column="54" lean-forward="false" selection-start-line="141" selection-start-column="4" selection-end-line="144" selection-end-column="59" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="neueKlamottenboerse.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/neueKlamottenboerse.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="grunddaten.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/grunddaten.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4250">
-              <caret line="250" column="10" selection-start-line="250" selection-start-column="10" selection-end-line="250" selection-end-column="10" />
-              <folding>
-                <marker date="1484552656041" expanded="true" signature="147:11864" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="173:11853" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="209:11838" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="243:11819" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="286:9600" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="344:9573" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="400:708" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="450:673" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="509:634" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="761:9318" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="811:1571" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="870:979" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="1038:1532" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="1082:1489" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="1298:1443" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="1622:2688" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="1681:1775" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="1834:2649" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="1878:2606" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="2088:2561" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="2739:3889" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="2798:2911" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="2970:3850" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="3014:3807" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="3270:3762" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="3939:4975" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="3998:4097" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="4156:4936" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="4200:4893" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="4421:4848" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="5025:6063" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="5084:5184" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="6113:7135" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="6172:6268" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="6327:7096" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="6371:7053" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="6587:7008" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="7185:8208" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="7244:7341" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="7400:8169" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="7444:8126" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="7660:8081" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="8259:9282" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="8318:8431" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="8490:9243" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="8534:9200" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="8749:9155" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="9373:9541" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="9643:11796" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="9701:11769" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="9757:9838" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="9891:11277" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="10026:11093" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="10203:10915" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="11332:11738" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="11411:11703" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="11934:12346" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="11985:12346" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="12025:12346" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="12068:12303" ph="..." />
-                <marker date="1484552656041" expanded="false" signature="12191:12198" ph="×" />
-                <marker date="1484552656041" expanded="true" signature="12344:12346" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="18460:18470" ph="{...}" />
-                <marker date="1484552656041" expanded="true" signature="18460:21813" ph="..." />
-                <marker date="1484552656041" expanded="true" signature="18494:21799" ph="{...}" />
-                <marker date="1484552656041" expanded="true" signature="18658:18764" ph="{...}" />
-                <marker date="1484552656041" expanded="true" signature="18800:19125" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-                <marker date="1484552656041" expanded="true" signature="19039:19111" ph="{&quot;dataType&quot;: 'json'...}" />
-                <marker date="1484552656041" expanded="true" signature="19166:19491" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-                <marker date="1484552656041" expanded="true" signature="19405:19477" ph="{&quot;dataType&quot;: 'json'...}" />
-                <marker date="1484552656041" expanded="true" signature="19542:19867" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-                <marker date="1484552656041" expanded="true" signature="19781:19853" ph="{&quot;dataType&quot;: 'json'...}" />
-                <marker date="1484552656041" expanded="true" signature="19914:20267" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-                <marker date="1484552656041" expanded="true" signature="20181:20253" ph="{&quot;dataType&quot;: 'json'...}" />
-                <marker date="1484552656041" expanded="true" signature="20314:20667" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-                <marker date="1484552656041" expanded="true" signature="20581:20653" ph="{&quot;dataType&quot;: 'json'...}" />
-                <marker date="1484552656041" expanded="true" signature="20712:21066" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-                <marker date="1484552656041" expanded="true" signature="20980:21052" ph="{&quot;dataType&quot;: 'json'...}" />
-                <marker date="1484552656041" expanded="true" signature="21110:21463" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-                <marker date="1484552656041" expanded="true" signature="21377:21449" ph="{&quot;dataType&quot;: 'json'...}" />
-                <marker date="1484552656041" expanded="true" signature="21503:21786" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-                <marker date="1484552656041" expanded="true" signature="21700:21772" ph="{&quot;dataType&quot;: 'json'...}" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -216,10 +112,20 @@
         <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/resources/views/elements/individualisierung.blade.php" />
         <option value="$PROJECT_DIR$/app/Models/Interessenten/Interessenten.php" />
-        <option value="$PROJECT_DIR$/resources/views/interessent.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/klamottenboerse/grunddaten.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php" />
         <option value="$PROJECT_DIR$/app/Repositories/Klamottenboerse/KlamottenboersenRepository.php" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/resources/views/klamottenboerse/importExport.blade.php" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/config/app.php" />
+        <option value="$PROJECT_DIR$/resources/views/interessent.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/elements/error.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/layouts/app.blade.php" />
+        <option value="F:/Users/DDR/Desktop/routes.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/ImportController.php" />
+        <option value="$PROJECT_DIR$/app/Models/Klamottenboerse/Vknummern.php" />
+        <option value="$PROJECT_DIR$/resources/views/vknummern/uebersicht.blade.php" />
       </list>
     </option>
   </component>
@@ -234,16 +140,6 @@
     <option name="x" value="-8" />
     <option name="width" value="1924" />
     <option name="height" value="1056" />
-  </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
-    <OptionsSetting value="true" id="Add" />
-    <OptionsSetting value="true" id="Remove" />
-    <OptionsSetting value="true" id="Checkout" />
-    <OptionsSetting value="true" id="Update" />
-    <OptionsSetting value="true" id="Status" />
-    <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="0" id="Add" />
-    <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -260,211 +156,93 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="routes" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Repositories" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Verkaeufernummern" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Repositories" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Repositories" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Http" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blog" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Klamottenboerse" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Http" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Controllers" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
+          <expand>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Http" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Http" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Controllers" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Models" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Models" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Klamottenboerse" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="resources" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="resources" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="resources" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="elements" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="resources" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="errors" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="resources" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="layouts" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="resources" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="vknummern" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="blog" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blog" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="routes" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+          </expand>
+          <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -472,8 +250,34 @@
     <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php.composer" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js.eslint.eslintPackage" value="" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../verwaltung" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\www\blog\resources\views\klamottenboerse" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+    </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
       <method />
     </configuration>
@@ -489,15 +293,6 @@
       <method />
     </configuration>
     <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
-      <method />
-    </configuration>
-    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
-      <node-interpreter>project</node-interpreter>
-      <node-options />
-      <gulpfile />
-      <tasks />
-      <arguments />
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -538,39 +333,46 @@
       <workItem from="1484418188487" duration="1618000" />
       <workItem from="1484496434977" duration="4107000" />
       <workItem from="1484557063224" duration="1696000" />
+      <workItem from="1504288946163" duration="112000" />
+      <workItem from="1504289071797" duration="1252000" />
+      <workItem from="1504290684918" duration="2899000" />
+      <workItem from="1504513742582" duration="613000" />
+      <workItem from="1504975992365" duration="233000" />
+      <workItem from="1505037328178" duration="23000" />
+      <workItem from="1505120401665" duration="388000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12002000" />
+    <option name="totallyTimeSpent" value="17522000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="0" width="1924" height="1056" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26310274" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="processedProjectFiles" value="true" />
+    <option name="version" value="1" />
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -588,494 +390,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Models/Interessenten/Interessenten.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-          <folding>
-            <marker date="1484552652441" expanded="false" signature="9:83" ph=" Created by PhpStorm. ..." />
-            <marker date="1484552652441" expanded="true" signature="1700:1707" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/interessent.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5117">
-          <caret line="301" column="62" selection-start-line="301" selection-start-column="62" selection-end-line="301" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/Klamottenboerse/Helfer.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1394">
-          <caret line="82" column="1" selection-start-line="82" selection-start-column="1" selection-end-line="82" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1275">
-          <caret line="75" column="7" selection-start-line="75" selection-start-column="7" selection-end-line="75" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/grunddaten.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3842">
-          <caret line="226" column="10" selection-start-line="226" selection-start-column="10" selection-end-line="226" selection-end-column="10" />
-          <folding>
-            <marker date="1484552656041" expanded="true" signature="147:11864" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="173:11853" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="209:11838" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="243:11819" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="286:9600" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="344:9573" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="400:708" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="450:673" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="509:634" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="761:9318" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="811:1571" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="870:979" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1038:1532" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1082:1489" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1298:1443" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1622:2688" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1681:1775" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1834:2649" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1878:2606" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2088:2561" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2739:3889" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2798:2911" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2970:3850" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3014:3807" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3270:3762" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3939:4975" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3998:4097" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="4156:4936" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="4200:4893" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="4421:4848" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="5025:6063" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="5084:5184" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6113:7135" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6172:6268" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6327:7096" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6371:7053" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6587:7008" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7185:8208" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7244:7341" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7400:8169" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7444:8126" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7660:8081" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8259:9282" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8318:8431" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8490:9243" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8534:9200" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8749:9155" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9373:9541" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9643:11796" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9701:11769" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9757:9838" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9891:11277" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="10026:11093" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="10203:10915" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11332:11738" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11411:11703" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11934:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11985:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="12025:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="12068:12303" ph="..." />
-            <marker date="1484552656041" expanded="false" signature="12191:12198" ph="×" />
-            <marker date="1484552656041" expanded="true" signature="12344:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="18460:18470" ph="{...}" />
-            <marker date="1484552656041" expanded="true" signature="18460:21813" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="18494:21799" ph="{...}" />
-            <marker date="1484552656041" expanded="true" signature="18658:18764" ph="{...}" />
-            <marker date="1484552656041" expanded="true" signature="18800:19125" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="19039:19111" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="19166:19491" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="19405:19477" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="19542:19867" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="19781:19853" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="19914:20267" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="20181:20253" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="20314:20667" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="20581:20653" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="20712:21066" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="20980:21052" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="21110:21463" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="21377:21449" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="21503:21786" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="21700:21772" ph="{&quot;dataType&quot;: 'json'...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/Interessenten/Interessenten.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-          <folding>
-            <marker date="1484552652441" expanded="false" signature="9:83" ph=" Created by PhpStorm. ..." />
-            <marker date="1484552652441" expanded="true" signature="1700:1707" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/interessent.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/Klamottenboerse/Helfer.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1377">
-          <caret line="93" column="56" selection-start-line="93" selection-start-column="56" selection-end-line="93" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1122">
-          <caret line="75" column="20" selection-start-line="75" selection-start-column="17" selection-end-line="75" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/grunddaten.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4437">
-          <caret line="261" column="64" selection-start-line="261" selection-start-column="0" selection-end-line="262" selection-end-column="0" />
-          <folding>
-            <marker date="1484552656041" expanded="true" signature="147:11864" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="173:11853" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="209:11838" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="243:11819" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="286:9600" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="344:9573" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="400:708" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="450:673" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="509:634" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="761:9318" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="811:1571" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="870:979" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1038:1532" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1082:1489" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1298:1443" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1622:2688" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1681:1775" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1834:2649" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1878:2606" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2088:2561" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2739:3889" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2798:2911" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2970:3850" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3014:3807" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3270:3762" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3939:4975" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3998:4097" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="4156:4936" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="4200:4893" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="4421:4848" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="5025:6063" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="5084:5184" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6113:7135" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6172:6268" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6327:7096" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6371:7053" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6587:7008" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7185:8208" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7244:7341" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7400:8169" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7444:8126" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7660:8081" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8259:9282" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8318:8431" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8490:9243" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8534:9200" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8749:9155" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9373:9541" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9643:11796" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9701:11769" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9757:9838" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9891:11277" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="10026:11093" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="10203:10915" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11332:11738" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11411:11703" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11934:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11985:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="12025:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="12068:12303" ph="..." />
-            <marker date="1484552656041" expanded="false" signature="12191:12198" ph="×" />
-            <marker date="1484552656041" expanded="true" signature="12344:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="18460:18470" ph="{...}" />
-            <marker date="1484552656041" expanded="true" signature="18460:21813" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="18494:21799" ph="{...}" />
-            <marker date="1484552656041" expanded="true" signature="18658:18764" ph="{...}" />
-            <marker date="1484552656041" expanded="true" signature="18800:19125" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="19039:19111" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="19166:19491" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="19405:19477" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="19542:19867" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="19781:19853" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="19914:20267" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="20181:20253" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="20314:20667" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="20581:20653" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="20712:21066" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="20980:21052" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="21110:21463" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="21377:21449" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="21503:21786" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="21700:21772" ph="{&quot;dataType&quot;: 'json'...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/elements/individualisierung.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="45" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HomeController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="33" column="33" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/interessent.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6902">
-          <caret line="406" column="51" selection-start-line="406" selection-start-column="51" selection-end-line="406" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/elements/individualisierung.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="45" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HomeController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="33" column="33" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/interessent.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6902">
-          <caret line="406" column="51" selection-start-line="406" selection-start-column="51" selection-end-line="406" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Repositories/Nachrichten/NachrichtenRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="16" selection-start-line="27" selection-start-column="16" selection-end-line="27" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Repositories/Nachrichten/NachrichtenRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/elements/individualisierung.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="7" column="45" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HomeController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="33" column="33" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/Klamottenboerse/Helfer.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/interessent.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5117">
-          <caret line="316" column="62" selection-start-line="316" selection-start-column="62" selection-end-line="316" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/Interessenten/Interessenten.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
-          <folding>
-            <marker date="1484552652441" expanded="false" signature="9:83" ph=" Created by PhpStorm. ..." />
-            <marker date="1484552652441" expanded="true" signature="1700:1707" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/grunddaten.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4250">
-          <caret line="250" column="10" selection-start-line="250" selection-start-column="10" selection-end-line="250" selection-end-column="10" />
-          <folding>
-            <marker date="1484552656041" expanded="true" signature="147:11864" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="173:11853" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="209:11838" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="243:11819" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="286:9600" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="344:9573" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="400:708" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="450:673" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="509:634" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="761:9318" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="811:1571" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="870:979" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1038:1532" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1082:1489" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1298:1443" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1622:2688" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1681:1775" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1834:2649" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="1878:2606" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2088:2561" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2739:3889" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2798:2911" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="2970:3850" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3014:3807" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3270:3762" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3939:4975" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="3998:4097" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="4156:4936" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="4200:4893" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="4421:4848" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="5025:6063" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="5084:5184" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6113:7135" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6172:6268" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6327:7096" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6371:7053" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="6587:7008" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7185:8208" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7244:7341" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7400:8169" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7444:8126" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="7660:8081" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8259:9282" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8318:8431" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8490:9243" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8534:9200" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="8749:9155" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9373:9541" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9643:11796" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9701:11769" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9757:9838" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="9891:11277" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="10026:11093" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="10203:10915" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11332:11738" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11411:11703" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11934:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="11985:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="12025:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="12068:12303" ph="..." />
-            <marker date="1484552656041" expanded="false" signature="12191:12198" ph="×" />
-            <marker date="1484552656041" expanded="true" signature="12344:12346" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="18460:18470" ph="{...}" />
-            <marker date="1484552656041" expanded="true" signature="18460:21813" ph="..." />
-            <marker date="1484552656041" expanded="true" signature="18494:21799" ph="{...}" />
-            <marker date="1484552656041" expanded="true" signature="18658:18764" ph="{...}" />
-            <marker date="1484552656041" expanded="true" signature="18800:19125" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="19039:19111" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="19166:19491" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="19405:19477" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="19542:19867" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="19781:19853" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="19914:20267" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="20181:20253" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="20314:20667" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="20581:20653" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="20712:21066" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="20980:21052" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="21110:21463" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="21377:21449" ph="{&quot;dataType&quot;: 'json'...}" />
-            <marker date="1484552656041" expanded="true" signature="21503:21786" ph="{&quot;url&quot;: '{{URL::to(&quot;/&quot;)}}/edit-Klamottenboerse'...}" />
-            <marker date="1484552656041" expanded="true" signature="21700:21772" ph="{&quot;dataType&quot;: 'json'...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="74" column="57" selection-start-line="74" selection-start-column="57" selection-end-line="74" selection-end-column="57" />
+        <state relative-caret-position="1105">
+          <caret line="74" column="57" lean-forward="false" selection-start-line="74" selection-start-column="57" selection-end-line="74" selection-end-column="57" />
           <folding />
         </state>
       </provider>
@@ -1083,31 +401,347 @@
     <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/neueKlamottenboerse.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/grunddaten.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="61" column="32" selection-start-line="61" selection-start-column="32" selection-end-line="61" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Repositories/Verkaeufernummern/NummernRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="29" column="8" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
-          <folding />
+        <state relative-caret-position="4250">
+          <caret line="250" column="10" lean-forward="false" selection-start-line="250" selection-start-column="10" selection-end-line="250" selection-end-column="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Repositories/Klamottenboerse/KlamottenboersenRepository.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
-          <caret line="37" column="1" selection-start-line="37" selection-start-column="1" selection-end-line="37" selection-end-column="1" />
+          <caret line="37" column="1" lean-forward="false" selection-start-line="37" selection-start-column="1" selection-end-line="37" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/Interessenten/Interessenten.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="49" column="0" lean-forward="false" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/interessent.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5117">
+          <caret line="301" column="62" lean-forward="false" selection-start-line="301" selection-start-column="62" selection-end-line="301" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/Klamottenboerse/Helfer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1394">
+          <caret line="82" column="1" lean-forward="false" selection-start-line="82" selection-start-column="1" selection-end-line="82" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1275">
+          <caret line="75" column="7" lean-forward="false" selection-start-line="75" selection-start-column="7" selection-end-line="75" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/grunddaten.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3842">
+          <caret line="226" column="10" lean-forward="false" selection-start-line="226" selection-start-column="10" selection-end-line="226" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/Interessenten/Interessenten.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="49" column="0" lean-forward="false" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/interessent.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/Klamottenboerse/Helfer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1377">
+          <caret line="93" column="56" lean-forward="false" selection-start-line="93" selection-start-column="56" selection-end-line="93" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1122">
+          <caret line="75" column="20" lean-forward="false" selection-start-line="75" selection-start-column="17" selection-end-line="75" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/grunddaten.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4437">
+          <caret line="261" column="64" lean-forward="false" selection-start-line="261" selection-start-column="0" selection-end-line="262" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/elements/individualisierung.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="45" lean-forward="false" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HomeController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="33" column="33" lean-forward="false" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/interessent.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6902">
+          <caret line="406" column="51" lean-forward="false" selection-start-line="406" selection-start-column="51" selection-end-line="406" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/elements/individualisierung.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="45" lean-forward="false" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HomeController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="33" column="33" lean-forward="false" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/interessent.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6902">
+          <caret line="406" column="51" lean-forward="false" selection-start-line="406" selection-start-column="51" selection-end-line="406" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Repositories/Nachrichten/NachrichtenRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" column="16" lean-forward="false" selection-start-line="27" selection-start-column="16" selection-end-line="27" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Repositories/Nachrichten/NachrichtenRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/elements/individualisierung.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="7" column="45" lean-forward="false" selection-start-line="7" selection-start-column="45" selection-end-line="7" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/HomeController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="33" column="33" lean-forward="false" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/Klamottenboerse/Helfer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Repositories/Klamottenboerse/KlamottenboersenRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="37" column="1" lean-forward="false" selection-start-line="37" selection-start-column="1" selection-end-line="37" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Repositories/Verkaeufernummern/NummernRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="29" column="8" lean-forward="false" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/Interessenten/Interessenten.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="776">
+          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/neueKlamottenboerse.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/grunddaten.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4250">
+          <caret line="250" column="10" lean-forward="false" selection-start-line="250" selection-start-column="10" selection-end-line="250" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/KlamottenboersenController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1326">
+          <caret line="90" column="32" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/klamottenboerse/importExport.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="11" lean-forward="false" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/app.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="674">
+          <caret line="230" column="57" lean-forward="false" selection-start-line="230" selection-start-column="57" selection-end-line="230" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../kasse/app/Http/Controllers/ImportController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="9" column="27" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/interessenten.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="31" column="69" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/layouts/app.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/elements/error.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="15" lean-forward="false" selection-start-line="0" selection-start-column="15" selection-end-line="0" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2278">
+          <caret line="143" column="54" lean-forward="false" selection-start-line="141" selection-start-column="4" selection-end-line="144" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://F:/Users/DDR/Desktop/ImportController.php" />
+    <entry file="file://F:/Users/DDR/Desktop/routes.php" />
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ImportController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1989">
+          <caret line="126" column="0" lean-forward="false" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
+          <folding>
+            <element signature="e#121#164#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/InteressentenController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/interessent.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="646">
+          <caret line="371" column="46" lean-forward="false" selection-start-line="371" selection-start-column="46" selection-end-line="371" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/Klamottenboerse/Vknummern.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="35" column="0" lean-forward="true" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/vknummern/uebersicht.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="714">
+          <caret line="96" column="52" lean-forward="false" selection-start-line="96" selection-start-column="52" selection-end-line="96" selection-end-column="52" />
           <folding />
         </state>
       </provider>

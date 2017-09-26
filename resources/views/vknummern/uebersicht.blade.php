@@ -94,6 +94,7 @@
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <ul class="dropdown-menu">
+                                                    <li><a href="{{ url("Nummern/$Nummer->vknummer/anzeigen") }}">bisherige Verkäufer anzeigen</a></li>
                                                     <li class="dropdown-header">vergeben an:</li>
                                                     <li class="dropdown-header">{{$Nummer->vergeben->vorname}} {{$Nummer->vergeben->nachname}}</li>
                                                     <li><a href="{{ url('Interessent/'.$Nummer->vergeben_an) }}">Vergabe löschen</a></li>
