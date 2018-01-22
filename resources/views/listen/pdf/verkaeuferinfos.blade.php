@@ -49,7 +49,7 @@
 
     <h4>Hinweise:</h4>
     <ul>
-        <li>Verkauft werden saisonabhängige Kinderbekleidung, Schuhe, Gummistiefel, Matschkleidung, Kinderwagen,
+        <li>Verkauft werden saisonabhängige Kinderbekleidung <b>NEU: ab Größe 74/80</b>, Schuhe, Gummistiefel, Matschkleidung, Kinderwagen,
            Kindersitze, Laufgitter, Kinderbetten, Spielzeug, Bücher, Fahrzeuge, Tragehilfen, ...</li>
         <li>Es werden maximal {{$Klamottenboerse->maxTeile}} Teile pro Verkäufer zugelassen
              (so können wir mehr Verkäufern die Chance bieten, mitzumachen)</li>

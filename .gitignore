@@ -25,3 +25,4 @@ config/mail.php
 resources/layouts/
 .idea/workspace.xml
 .idea/misc.xml
+.idea/workspace.xml
