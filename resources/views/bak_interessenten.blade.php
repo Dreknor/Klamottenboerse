@@ -42,10 +42,22 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel-body">
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         <p>Aktuelle Gruppe: {{ $Gruppe }}</p>
                     </div>
-
+                    <div class="col-md-4">
+                        <div class="pull-right">
+                            <form class="navbar-form" role="search" method="post" action="{{action("InteressentenController@search")}}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Suche" name="SearchString">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                    </div>
+                                </div>
+                                {{ csrf_field() }}
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,12 +94,13 @@
                             <thead>
                                 <tr>
                                     <th></th>
+                                    <th>Anrede</th>
                                     <th>Nachname</th>
                                     <th>Vorname</th>
                                     <th>Telefon</th>
+                                    <th>Handy</th>
                                     <th>E-Mail</th>
                                     <th>Kinderhaus</th>
-                                    <th>VK-Nummer</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -101,13 +114,11 @@
                                                 </span>
                                             </a>
                                         </td>
+                                        <td>{{ $Interessent->anrede }}</td>
                                         <td>{{ $Interessent->nachname }}</td>
                                         <td>{{ $Interessent->vorname }}</td>
-                                        <td>
-                                            {{ $Interessent->handy }}
-                                            @if($Interessent->handy != NULL and $Interessent->telefon != NULL) <br> @endif
-                                            {{ $Interessent->telefon }}
-                                        </td>
+                                        <td>{{ $Interessent->telefon }}</td>
+                                        <td>{{ $Interessent->handy }}</td>
                                         <td>{{ $Interessent->mail }}</td>
 
 
@@ -116,13 +127,7 @@
                                         @else
                                             <td>nein</td>
                                         @endif
-                                        <td>
-                                            @if(isset($Interessent->vknummern_vergeben->vknummer))
-                                                {{ $Interessent->vknummern_vergeben->vknummer }}
-                                            @else
 
-                                            @endif
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

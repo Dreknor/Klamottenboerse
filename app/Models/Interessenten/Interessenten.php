@@ -53,5 +53,9 @@ class Interessenten extends Model
             ->where('klamottenboerse_id', DB::raw("(select max(`id`) from klamottenboerse)"))
             ->orderBy('klamottenboerse_id', 'desc');
     }
+
+    public function notiz (){
+        return $this->hasOne(Notizen::class, 'interessenten_id');
+    }
 }
 

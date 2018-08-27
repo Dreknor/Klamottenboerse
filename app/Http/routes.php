@@ -2,23 +2,40 @@
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Routes File
 |--------------------------------------------------------------------------
 |
-| This file is where you may define all of the routes that are handled
-| by your application. Just tell Laravel the URIs it should respond
-| to using a Closure or controller method. Build something great!
+| Here is where you will register all of the routes in an application.
+| It's a breeze. Simply tell Laravel the URIs it should respond to
+| and give it the controller to call when that URI is requested.
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Application Routes
+|--------------------------------------------------------------------------
+|
+| This route group applies the "web" middleware group to every route
+| it contains. The "web" middleware group is defined in your HTTP
+| kernel and includes session state, CSRF protection, and more.
+|
+*/
+
+Route::group(['middleware' => ['auth']], function () {
+    //
 });
 
-Auth::routes();
-
 Route::group(['middleware' => 'web'], function () {
-   
+    Route::auth();
+    Route::get('logout', function(){
+        Auth::logout(); // logout user
+        return Redirect::to('/');
+    });
+    Route::get('/', 'WelcomeController@index');
 
     Route::get('/{id}/abmelden/{token}', 'InteressentenController@abmelden');
     Route::delete('/{id}/abmelden/{token}', 'InteressentenController@doAbmelden');
@@ -46,8 +63,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::put('/edit-Interessent', 'InteressentenController@update');
     Route::get('/deleteInteressent/{InteressentenID}', 'InteressentenController@warningDelete');
     Route::delete('/Interessent/{InteressentenID}', 'InteressentenController@destroy');
+
     Route::post('Notiz/{InteressentenID}', 'NotizenController@store');
-    
 
     /*
      * Routen zum anlegen neuer Interessenten
@@ -141,9 +158,14 @@ Route::group(['middleware' => 'web'], function () {
 
 
     //Import
-    Route::get('/import', 'ImportController@index');
+    //Route::get('/Import', 'ImportController@Import');
     //Route::get('/Import_csv', 'ImportController@Import_csv');
+
+    //Import
+    Route::get('/import', 'ImportController@index');
     Route::post('/import', 'ImportController@importExcel');
+
+    Route::get('/export', 'ExportController@downloadExcel');
 
 
 
@@ -154,6 +176,3 @@ Route::group(['middleware' => 'web'], function () {
 
 
 });
-Auth::routes();
-
-Route::get('/home', 'HomeController@index');

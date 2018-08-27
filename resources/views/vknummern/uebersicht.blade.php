@@ -50,11 +50,19 @@
                                                     <li role="separator" class="divider"></li>
                                                     @if($Nummer->reserviert_fuer != "")
                                                         <li class="dropdown-header">reserviert für:</li>
-                                                        <li class="dropdown-header">{{$Nummer->reserviert->vorname}} {{$Nummer->reserviert->nachname}}</li>
+                                                        <li class="dropdown-header">{{$Nummer->reserviert_fuer_Interessent->vorname}} {{$Nummer->reserviert_fuer_Interessent->nachname}}</li>
                                                         <li><a href="{{ url("Nummern/$Nummer->reserviert_fuer/aufheben") }}">aufheben</a></li>
                                                         <li role="separator" class="divider"></li>
                                                         <li><a href="{{ url("Nummern/$Nummer->id/Vergabe") }}">anderweitig vergeben</a></li>
                                                         <li role="separator" class="divider"></li>
+                                                    @else
+                                                        <li class="dropdown-header">bisherige VK:</li>
+                                                               @foreach($Nummer->bisherigeVerkaeufer AS $Verkaeufer)
+                                                                    <li class="dropdown-header">{{$Verkaeufer->vergeben_an_Interessent->vorname}} {{$Verkaeufer->vergeben_an_Interessent->nachname}}</li>
+                                                                @endforeach
+
+                                                        <li role="separator" class="divider"></li>
+
                                                     @endif
                                                     <li>
                                                         <a  href="#"
@@ -96,14 +104,15 @@
                                                 <ul class="dropdown-menu">
                                                     <li><a href="{{ url("Nummern/$Nummer->vknummer/anzeigen") }}">bisherige Verkäufer anzeigen</a></li>
                                                     <li class="dropdown-header">vergeben an:</li>
-                                                    <li class="dropdown-header">{{$Nummer->vergeben->vorname}} {{$Nummer->vergeben->nachname}}</li>
+                                                    <li class="dropdown-header">{{$Nummer->vergeben_an_Interessent->vorname}} {{$Nummer->vergeben_an_Interessent->nachname}}</li>
                                                     <li><a href="{{ url('Interessent/'.$Nummer->vergeben_an) }}">Vergabe löschen</a></li>
                                                     <li role="separator" class="divider"></li>
                                                     @if($Nummer->reserviert_fuer != "")
                                                         <li class="dropdown-header">reserviert für:</li>
-                                                        <li class="dropdown-header">{{$Nummer->reserviert->vorname}} {{$Nummer->reserviert->nachname}}</li>
+                                                        <li class="dropdown-header">{{$Nummer->reserviert_fuer_Interessent->vorname}} {{$Nummer->reserviert_fuer_Interessent->nachname}}</li>
                                                         <li role="separator" class="divider"></li>
                                                     @endif
+
 
                                                     <li>
                                                         <a  href="#"

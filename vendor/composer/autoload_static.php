@@ -11,8 +11,8 @@ class ComposerStaticInit7cbde07e1b3e3f09d3f7d7131f8a5616
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
-        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
+        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
@@ -56,10 +56,6 @@ class ComposerStaticInit7cbde07e1b3e3f09d3f7d7131f8a5616
             'Symfony\\Component\\Console\\' => 26,
             'SuperClosure\\' => 13,
         ),
-        'R' => 
-        array (
-            'Ramsey\\Uuid\\' => 12,
-        ),
         'P' => 
         array (
             'Psy\\' => 4,
@@ -93,7 +89,6 @@ class ComposerStaticInit7cbde07e1b3e3f09d3f7d7131f8a5616
             'Dotenv\\' => 7,
             'Dompdf\\' => 7,
             'Doctrine\\Instantiator\\' => 22,
-            'DeepCopy\\' => 9,
             'DebugBar\\' => 9,
         ),
         'C' => 
@@ -103,7 +98,6 @@ class ComposerStaticInit7cbde07e1b3e3f09d3f7d7131f8a5616
         ),
         'B' => 
         array (
-            'Bitbeans\\Yubikey\\' => 17,
             'Barryvdh\\DomPDF\\' => 16,
             'Barryvdh\\Debugbar\\' => 18,
         ),
@@ -200,10 +194,6 @@ class ComposerStaticInit7cbde07e1b3e3f09d3f7d7131f8a5616
         array (
             0 => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src',
         ),
-        'Ramsey\\Uuid\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/ramsey/uuid/src',
-        ),
         'Psy\\' => 
         array (
             0 => __DIR__ . '/..' . '/psy/psysh/src/Psy',
@@ -257,10 +247,6 @@ class ComposerStaticInit7cbde07e1b3e3f09d3f7d7131f8a5616
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
-        'DeepCopy\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
-        ),
         'DebugBar\\' => 
         array (
             0 => __DIR__ . '/..' . '/maximebf/debugbar/src/DebugBar',
@@ -272,10 +258,6 @@ class ComposerStaticInit7cbde07e1b3e3f09d3f7d7131f8a5616
         'Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
-        ),
-        'Bitbeans\\Yubikey\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/bitbeans/yubikey/src',
         ),
         'Barryvdh\\DomPDF\\' => 
         array (
@@ -292,13 +274,6 @@ class ComposerStaticInit7cbde07e1b3e3f09d3f7d7131f8a5616
     );
 
     public static $prefixesPsr0 = array (
-        'S' => 
-        array (
-            'Svg\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/phenx/php-svg-lib/src',
-            ),
-        ),
         'P' => 
         array (
             'Prophecy\\' => 
@@ -362,6 +337,7 @@ class ComposerStaticInit7cbde07e1b3e3f09d3f7d7131f8a5616
         'CreateInteressentenTable' => __DIR__ . '/../..' . '/database/migrations/2016_03_22_194047_create_interessenten_table.php',
         'CreateKlamottenboerseTable' => __DIR__ . '/../..' . '/database/migrations/2016_04_14_171400_create_klamottenboerse_table.php',
         'CreateNachrichten' => __DIR__ . '/../..' . '/database/migrations/2016_03_26_222400_create_nachrichten.php',
+        'CreateNotizensTable' => __DIR__ . '/../..' . '/database/migrations/2018_03_28_162236_create_notizens_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',
         'CreateVerkaeuferNummernTable' => __DIR__ . '/../..' . '/database/migrations/2016_05_01_172248_create_verkaeufer_nummern_table.php',
@@ -871,7 +847,6 @@ class ComposerStaticInit7cbde07e1b3e3f09d3f7d7131f8a5616
         'PHP_Token_YIELD' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_YIELD_FROM' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'SebastianBergmann\\CodeCoverage\\CodeCoverage' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/CodeCoverage.php',
-        'SebastianBergmann\\CodeUnitReverseLookup\\Wizard' => __DIR__ . '/..' . '/sebastian/code-unit-reverse-lookup/src/Wizard.php',
         'SebastianBergmann\\Comparator\\ArrayComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/ArrayComparator.php',
         'SebastianBergmann\\Comparator\\Comparator' => __DIR__ . '/..' . '/sebastian/comparator/src/Comparator.php',
         'SebastianBergmann\\Comparator\\ComparisonFailure' => __DIR__ . '/..' . '/sebastian/comparator/src/ComparisonFailure.php',
@@ -904,13 +879,9 @@ class ComposerStaticInit7cbde07e1b3e3f09d3f7d7131f8a5616
         'SebastianBergmann\\GlobalState\\Restorer' => __DIR__ . '/..' . '/sebastian/global-state/src/Restorer.php',
         'SebastianBergmann\\GlobalState\\RuntimeException' => __DIR__ . '/..' . '/sebastian/global-state/src/RuntimeException.php',
         'SebastianBergmann\\GlobalState\\Snapshot' => __DIR__ . '/..' . '/sebastian/global-state/src/Snapshot.php',
-        'SebastianBergmann\\ObjectEnumerator\\Enumerator' => __DIR__ . '/..' . '/sebastian/object-enumerator/src/Enumerator.php',
-        'SebastianBergmann\\ObjectEnumerator\\Exception' => __DIR__ . '/..' . '/sebastian/object-enumerator/src/Exception.php',
-        'SebastianBergmann\\ObjectEnumerator\\InvalidArgumentException' => __DIR__ . '/..' . '/sebastian/object-enumerator/src/InvalidArgumentException.php',
         'SebastianBergmann\\RecursionContext\\Context' => __DIR__ . '/..' . '/sebastian/recursion-context/src/Context.php',
         'SebastianBergmann\\RecursionContext\\Exception' => __DIR__ . '/..' . '/sebastian/recursion-context/src/Exception.php',
         'SebastianBergmann\\RecursionContext\\InvalidArgumentException' => __DIR__ . '/..' . '/sebastian/recursion-context/src/InvalidArgumentException.php',
-        'SebastianBergmann\\ResourceOperations\\ResourceOperations' => __DIR__ . '/..' . '/sebastian/resource-operations/src/ResourceOperations.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
         'TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',

@@ -25,5 +25,11 @@ class Klamottenboerse extends Model
 
     }
 
+    public function vknummern(){
+        return $this->hasMany(Vknummern::class, 'klamottenboersen_id')
+            ->orderBy('vknummer');
+
+    }
+
 
 }

@@ -14,7 +14,7 @@ use App\Repositories\Interessenten\InteressentenRepository;
 use App\Repositories\Mailvorlagen\VorlagenRepository;
 use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Http\Request;
-use Excel;
+use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Facades\Mail;
 
 class InteressentenController extends Controller
@@ -77,7 +77,7 @@ class InteressentenController extends Controller
 
             default:
                 return view('interessenten', [
-                    "entries" => $this->interessentenRepository->all(),
+                    "entries" => Interessenten::with('vknummern_vergeben')->orderBy('nachname')->get(),
                     "Gruppe"  => "All"
                 ]);
                 exit;
@@ -116,7 +116,7 @@ class InteressentenController extends Controller
         }
 
 
-        return view('Interessent', [
+        return view('interessent', [
            'Interessent' => $Interessent,
             'Dateien'   => $Dateien,
             'haeufigsteNummer' => $Nummern,

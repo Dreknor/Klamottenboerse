@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-4 col-lg-offset-2">
+        <div class="col-md-8 col-lg-offset-2">
             <form action="{{url('Nummern/vergeben')}}" method="post">
                 {{csrf_field()}}
                 <div class="panel panel-default">
@@ -14,11 +14,41 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="vknummer">Nummer auswählen:</label>
-                            <select class="form-control" id="vknummer" name="NummernID">
-                                @foreach($Nummern as $Nummer)
-                                    <option value="{{$Nummer->id}}">{{$Nummer->vknummer}}</option>
-                                @endforeach
-                            </select>
+                            <div class=" table-responsive">
+                                <table id="NummernTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Nachname</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($Nummern AS $Nummer)
+                                        <tr>
+                                            <td>
+                                                <input type="radio" name="NummernID" value="{{$Nummer->id}}">
+                                            </td>
+                                            <td>
+                                                {{$Nummer->vknummer}}
+                                            </td>
+                                            <td>
+                                                @if (count($Nummer->bisherigeVerkaeufer) > 0)
+                                                    @foreach($Nummer->bisherigeVerkaeufer AS $Verkaeufer)
+                                                        @if ($Verkaeufer->vergeben_an != "")
+                                                            <span class="label label-warning">{{$Verkaeufer->vergeben_an_Interessent->nachname}}, {{$Verkaeufer->vergeben_an_Interessent->vorname}}</span>
+                                                        @endif
+
+                                                    @endforeach
+                                                @endif
+
+                                            </td>
+                                        </tr>
+
+                                    @endforeach
+                                    </tbody>
+                                </table>
+
                         </div>
 
 
@@ -29,7 +59,21 @@
                     </div>
                 </div>
 
+                </div>
             </form>
         </div>
     </div>
+
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function(){
+            $('#NummernTable').DataTable({
+                paging: false
+            });
+        });
+
+
+    </script>
 @endsection

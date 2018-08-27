@@ -7,11 +7,8 @@
 @endif
 
 vielen Dank für Ihre Anmeldung zur Klamottenbörse.
-Ihre Verkäufernummer für die Klamottenbörse am {{$Klamottenboerse->datum->format('d.m.Y')}} ist die:
+Ihre Verkäufernummer für die Klamottenbörse am {{$Klamottenboerse->datum->format('d.m.Y')}} finden Sie zusammen mit allen wichtigen Informationen im Anhang.
 
-{{$VKNummer->vknummer}}
-
-Im Anhang finden Sie wieder alle wichtigen Informationen.
 Falls Sie weit unter der maximalen Stückanzahl ({{$Klamottenboerse->maxTeile}} Teile) liegen sollten, dann teilen Sie uns das bitte rechtzeitig mit, damit noch ein weiterer Verkäufer zusätzlich eine Chance bekommen kann.
 
 @if($Interessent->telefon == "" and $Interessent->handy =="")

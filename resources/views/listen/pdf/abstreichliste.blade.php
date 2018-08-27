@@ -12,14 +12,13 @@
 <body>
     <h2>Vergebene Verkäufernummern</h2>
 
-    <div style="clear:both; position:relative;">
-        <div style="position:absolute; left:0pt; width:45pt;">
-            {!! $Spalten[1] !!}
-        </div>
-        <div style="margin-left:50pt; width:45pt;">
-            {!! $Spalten[2] !!}
-        </div>
+    <div style="width: 100%">
 
+        @foreach($Spalten AS $key => $Spalte)
+            <div style="left:{{50*$key}}pt; width:80px;  position:relative; float: left; ">
+                {!! $Spalte !!}
+            </div>
+        @endforeach
     </div>
 
 

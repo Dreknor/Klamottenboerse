@@ -35,7 +35,10 @@ class NummernController extends Controller
     public function index(){
 
 
-        $Daten=$this->NummernRepository->all();
+        $Daten=Vknummern::with('vergeben_an_Interessent', 'reserviert_fuer_Interessent', 'Kommentar')
+            ->where('klamottenboersen_id', '=', $this->klamottenboersenRepository->getId())
+            ->orderBy('vknummer')
+            ->get();
 
         if (count($Daten)>0){
             $Interessenten= new InteressentenRepository();
@@ -53,7 +56,7 @@ class NummernController extends Controller
                 if ( is_integer($Nummer->reserviert_fuer)){
                     $Count['reserviert']++;
 
-                    $Nummer->reserviert = $Interessenten->findInteressent($Nummer->reserviert_fuer);
+                    //$Nummer->reserviert = $Interessenten->findInteressent($Nummer->reserviert_fuer);
 
 
                 }
@@ -61,19 +64,18 @@ class NummernController extends Controller
                 if (is_integer($Nummer->vergeben_an) ){
                     $Count['vergeben']++;
 
-                    $Nummer->vergeben = $Interessenten->findInteressent($Nummer->vergeben_an);
+                    //$Nummer->vergeben = $Interessenten->findInteressent($Nummer->vergeben_an);
                 }
 
                 $Nummern[]=$Nummer;
 
             }
 
-            $meisteNummer=$this->NummernRepository->haeufigsteNummer('1');
+
 
             return view('vknummern.uebersicht', [
-                'Nummern' => $Nummern,
+                'Nummern' => $Daten,
                 'Count' => $Count,
-                'meisteNummer' => $meisteNummer
             ]);
         } else {
 
@@ -87,7 +89,7 @@ class NummernController extends Controller
     }
     
     public function newNummer () {
-        return view('VKnummern.neueNummer', [
+        return view('vknummern.neueNummer', [
             'Klamottenboerse' => $this->Klamottenboerse
         ]);
     }
@@ -114,7 +116,7 @@ class NummernController extends Controller
 
         $Nummern=$this->NummernRepository->nichtreservierteNummern();
 
-        return view('VKnummern.reserviereNummer', [
+        return view('vknummern.reserviereNummer', [
             'Interessent' => $Interessent,
             'Nummern' => $Nummern
         ]);
@@ -132,6 +134,7 @@ class NummernController extends Controller
     }
     
     public function storeVergabe(Request $request){
+        //dd($request);
 
         $Nummer=$this->NummernRepository->storeNummer($request->input('InteressentenID'), $request->input('NummernID'));
         $Interessent= InteressentenRepository::findInteressent($request->input('InteressentenID'));
@@ -153,9 +156,10 @@ class NummernController extends Controller
            //Erstelle VerkäuferInfos
            $pdf = App::make('dompdf.wrapper');
            $pdf->loadView('listen.pdf.verkaeuferinfos',[
-               "Klamottenboerse" => $Klamottenboerse
+               "Klamottenboerse" => $Klamottenboerse,
+               "VKnummer"   => $VKnummer
            ]);
-           $pdf->save(storage_path().'\app\anhaenge\VerkaeuferInfos.pdf');
+           $pdf->save(storage_path().'/app/anhaenge/VerkaeuferInfos.pdf');
 
 
 
@@ -280,7 +284,7 @@ class NummernController extends Controller
 
         $Interessenten=$this->NummernRepository->InteressentenOhneNummer();
 
-        return view('VKnummern.Vergabe', [
+        return view('vknummern.Vergabe', [
             'Interessenten' => $Interessenten,
             'Nummer' => $this->NummernRepository->getVKNummer($NummernID)
         ]);    

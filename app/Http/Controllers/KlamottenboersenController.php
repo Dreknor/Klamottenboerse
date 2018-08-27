@@ -66,7 +66,7 @@ class KlamottenboersenController extends Controller
             }
 
             Vknummern::insert($data);
-            DB::table('Warteliste')->truncate();
+            DB::table('warteliste')->truncate();
 
 
             return redirect('Grunddaten');

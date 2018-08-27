@@ -17,6 +17,7 @@
 
 
 @foreach($Nummern AS $Nummer)
+    @php(set_time_limit ( 60))
             <table style="width: 100%;">
                 <tr>
                     <td style="width: 70%; align: left; vertical-align: top">
@@ -72,7 +73,7 @@
                 @endphp
 
             @else
-                <br><br><br><br>
+<hr><br>
                 @php
                     $Trenner=TRUE;
                 @endphp

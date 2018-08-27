@@ -46,7 +46,6 @@ Route::group(['middleware' => 'web'], function () {
     Route::put('/edit-Interessent', 'InteressentenController@update');
     Route::get('/deleteInteressent/{InteressentenID}', 'InteressentenController@warningDelete');
     Route::delete('/Interessent/{InteressentenID}', 'InteressentenController@destroy');
-    Route::post('Notiz/{InteressentenID}', 'NotizenController@store');
     
 
     /*

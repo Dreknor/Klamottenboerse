@@ -40,7 +40,7 @@
             @include('elements.navigation')
         </div>
     </nav>
-
+    
     @if(session('Meldung'))
         <div class="container">
             <div class="row">

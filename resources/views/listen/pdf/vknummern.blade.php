@@ -30,6 +30,8 @@
         .table-bordered th,
         .table-bordered td {
             border: 1px solid black !important;
+            max-height: 30px;
+            font-size: smaller;
         }
 
 
@@ -58,9 +60,9 @@
                     <th style="width: 70%;"></th>
                 </tr>
                 <tr>
-                    <th height="40px" style="width: 10%;">Verkäufernummer</th>
-                    <th height="40px" style="width: 20%;">Verkäufer</th>
-                    <th height="40px" style="width: 70%;">Telefon</th>
+                    <th height="30px" style="width: 10%;">Verkäufernummer</th>
+                    <th height="30px" style="width: 20%;">Verkäufer</th>
+                    <th height="30px" style="width: 70%;">Telefon</th>
                 </tr>
 
             @foreach($Nummern AS $Nummer)
@@ -76,7 +78,7 @@
                             <div class="col-md-12">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <h1>Verkäufer - Übersicht</h1>
+                                        <h2>Verkäufer - Übersicht</h2>
                                         Klamottenbörse am {{ $Klamottenboerse->datum->format('d.m.Y') }}
                                     </div>
                                 </div>
@@ -89,22 +91,22 @@
                                 <th></th>
                             </tr>
                             <tr>
-                                <th height="40px" >Verkäufernummer</th>
-                                <th height="40px">Verkäufer</th>
-                                <th height="40px" >Telefon</th>
+                                <th height="30px" >Verkäufernummer</th>
+                                <th height="30px">Verkäufer</th>
+                                <th height="30px" >Telefon</th>
                             </tr>
                     @endif
 
                   <tr >
-                    <th width="25%" height="40px">
+                    <th width="25%" height="30px">
                         {{ $Nummer->vknummer }}
                     </th>
-                    <td width="40%" height="40px" style="text-align: center;">
+                    <td width="40%" height="30px" style="text-align: center;">
                         @if(isset($Nummer->vorname))
                             {{$Nummer->vorname}} {{$Nummer->nachname}}
                         @endif
                     </td>
-                    <td width="35%" height="40px" style="text-align: center;">
+                    <td width="35%" height="30px" style="text-align: center;">
                         @if(isset($Nummer->telefon))
                              {{$Nummer->telefon}}
                         @endif

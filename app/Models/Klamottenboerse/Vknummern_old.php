@@ -34,12 +34,4 @@ class Vknummern extends Model
         return $this->hasOne(Vknummern_Kommentar::class, 'vknummer');
     }
 
-    public function bisherigeVerkaeufer(){
-        return $this->hasMany(Vknummern::class, 'vknummer', 'vknummer')->whereNotNull('vergeben_an')->limit(5)->orderBy('klamottenboersen_id', 'DESC')->with('vergeben_an_Interessent');
-    }
-
-
-
-
-
 }

@@ -12,8 +12,7 @@ namespace App\Repositories\Nachrichten;
 use App\Models\Interessenten\Nachrichten;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Repositories\Klamottenboerse;
-
+use Illuminate\Support\Facades\View;
 
 class NachrichtenRepository
 {
@@ -60,9 +59,9 @@ class NachrichtenRepository
         if ($Interessent->mail != "") {
             $Nachricht= $this->replaceString($Nachricht, $Interessent);
 
-            $this->senden($Nachricht, $Interessent);
+            
             $this->store($Interessent->id, $Nachricht['betreff'], $Nachricht['nachricht'], $Nachricht['anhang']);
-
+            $this->senden($Nachricht, $Interessent);
         }
         
     }
@@ -70,9 +69,6 @@ class NachrichtenRepository
     public function replaceString ($Nachricht, $Interessent ) {
 
             $Absender=Auth::user()->name;
-            $KlamottenboersenRepo=new Klamottenboerse\KlamottenboersenRepository();
-            $Klamottenboerse=$KlamottenboersenRepo->latest();
-
 
         if (isset($Interessent->vknummern_vergeben->vknummer)){
             $vknummer=$Interessent->vknummern_vergeben->vknummer;
@@ -96,8 +92,8 @@ class NachrichtenRepository
             $Liebe = "Liebe Familie";
         }
 
-        $SearchStrings =["VORNAME", "NACHNAME", "ANREDE","LIEBE", "ABSENDER", "EMAIL", "VKNUMMER", "DATUM", "ANMELDUNG"];
-        $ReplaceStrings =[$Interessent->vorname, $Interessent->nachname, $Anrede, $Liebe, $Absender, $Interessent->mail, $vknummer, $Klamottenboerse->datum->format('d.m.Y') , $Klamottenboerse->anmeldung->format('d.m.Y')];
+        $SearchStrings =["VORNAME", "NACHNAME", "ANREDE","LIEBE", "ABSENDER", "EMAIL", "VKNUMMER"];
+        $ReplaceStrings =[$Interessent->vorname, $Interessent->nachname, $Anrede, $Liebe, $Absender, $Interessent->mail, $vknummer];
 
         $Nachricht=str_replace($SearchStrings, $ReplaceStrings, $Nachricht);
 

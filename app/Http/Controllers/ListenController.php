@@ -64,21 +64,20 @@ class ListenController extends Controller
 
     public function nummern (){
         $Nummern=$this->nummernRepository->getNummernMitInteressenten();
-        $Spalten=array(
-            "1" => "",
-            "2" => ""
-            );
-        $Anzahl=1;
+
+        $Spalten=array();
 
         foreach ($Nummern AS $Nummer){
             if (isset($Nummer->vorname)){
-                if ( $Anzahl<=40){
-                    $Spalten[1].=$Nummer->vknummer."<br>";
 
-                } else {
-                    $Spalten[2].=$Nummer->vknummer."<br>";
+                $key=intval (floor($Nummer->vknummer/100));
+                if(!array_key_exists($key, $Spalten))
+                {
+                    $Spalten[$key] = "";
                 }
-                $Anzahl++;
+
+                $Spalten[$key].=$Nummer->vknummer."<br>";
+
             }
         }
 

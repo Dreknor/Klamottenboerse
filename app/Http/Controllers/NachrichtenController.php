@@ -86,7 +86,7 @@ class NachrichtenController extends Controller
             $message->to($empfaenger, $name)
                 ->subject($subject);
 
-            if ($anhang!=""){ $message->attach(storage_path('app\anhaenge\\'.$anhang));}
+            if ($anhang!=""){ $message->attach(storage_path('app/anhaenge/'.$anhang));}
         });
     }*/
 
