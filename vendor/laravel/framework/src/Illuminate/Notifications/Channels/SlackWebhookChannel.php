@@ -6,6 +6,7 @@ use GuzzleHttp\Client as HttpClient;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Messages\SlackAttachment;
+use Illuminate\Notifications\Messages\SlackAttachmentField;
 
 class SlackWebhookChannel
 {
@@ -32,17 +33,17 @@ class SlackWebhookChannel
      *
      * @param  mixed  $notifiable
      * @param  \Illuminate\Notifications\Notification  $notification
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return void
      */
     public function send($notifiable, Notification $notification)
     {
-        if (! $url = $notifiable->routeNotificationFor('slack')) {
+        if (! $url = $notifiable->routeNotificationFor('slack', $notification)) {
             return;
         }
 
-        $message = $notification->toSlack($notifiable);
-
-        $this->http->post($url, $this->buildJsonPayload($message));
+        $this->http->post($url, $this->buildJsonPayload(
+            $notification->toSlack($notifiable)
+        ));
     }
 
     /**
@@ -54,17 +55,21 @@ class SlackWebhookChannel
     protected function buildJsonPayload(SlackMessage $message)
     {
         $optionalFields = array_filter([
-            'username' => data_get($message, 'username'),
-            'icon_emoji' => data_get($message, 'icon'),
             'channel' => data_get($message, 'channel'),
+            'icon_emoji' => data_get($message, 'icon'),
+            'icon_url' => data_get($message, 'image'),
+            'link_names' => data_get($message, 'linkNames'),
+            'unfurl_links' => data_get($message, 'unfurlLinks'),
+            'unfurl_media' => data_get($message, 'unfurlMedia'),
+            'username' => data_get($message, 'username'),
         ]);
 
-        return [
+        return array_merge([
             'json' => array_merge([
                 'text' => $message->content,
                 'attachments' => $this->attachments($message),
             ], $optionalFields),
-        ];
+        ], $message->http);
     }
 
     /**
@@ -77,11 +82,22 @@ class SlackWebhookChannel
     {
         return collect($message->attachments)->map(function ($attachment) use ($message) {
             return array_filter([
-                'color' => $message->color(),
-                'title' => $attachment->title,
-                'text' => $attachment->content,
-                'title_link' => $attachment->url,
+                'author_icon' => $attachment->authorIcon,
+                'author_link' => $attachment->authorLink,
+                'author_name' => $attachment->authorName,
+                'color' => $attachment->color ?: $message->color(),
+                'fallback' => $attachment->fallback,
                 'fields' => $this->fields($attachment),
+                'footer' => $attachment->footer,
+                'footer_icon' => $attachment->footerIcon,
+                'image_url' => $attachment->imageUrl,
+                'mrkdwn_in' => $attachment->markdown,
+                'pretext' => $attachment->pretext,
+                'text' => $attachment->content,
+                'thumb_url' => $attachment->thumbUrl,
+                'title' => $attachment->title,
+                'title_link' => $attachment->url,
+                'ts' => $attachment->timestamp,
             ]);
         })->all();
     }
@@ -95,6 +111,10 @@ class SlackWebhookChannel
     protected function fields(SlackAttachment $attachment)
     {
         return collect($attachment->fields)->map(function ($value, $key) {
+            if ($value instanceof SlackAttachmentField) {
+                return $value->toArray();
+            }
+
             return ['title' => $key, 'value' => $value, 'short' => true];
         })->values()->all();
     }

@@ -1,16 +1,27 @@
 <?php
 
 namespace Barryvdh\Debugbar\DataCollector;
-use Illuminate\Contracts\Auth\Guard;
+
+use DebugBar\DataCollector\DataCollector;
+use DebugBar\DataCollector\Renderable;
 use Illuminate\Auth\SessionGuard;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Support\Str;
+use Illuminate\Contracts\Support\Arrayable;
+
 
 /**
  * Collector for Laravel's Auth provider
  */
-class MultiAuthCollector extends AuthCollector
+class MultiAuthCollector extends DataCollector implements Renderable
 {
     /** @var array $guards */
     protected $guards;
+
+    /** @var \Illuminate\Auth\AuthManager */
+    protected $auth;
+    /** @var bool */
+    protected $showName = false;
 
     /**
      * @param \Illuminate\Auth\AuthManager $auth
@@ -18,10 +29,18 @@ class MultiAuthCollector extends AuthCollector
      */
     public function __construct($auth, $guards)
     {
-        parent::__construct($auth);
+        $this->auth = $auth;
         $this->guards = $guards;
     }
 
+    /**
+     * Set to show the users name/email
+     * @param bool $showName
+     */
+    public function setShowName($showName)
+    {
+        $this->showName = (bool) $showName;
+    }
 
     /**
      * @{inheritDoc}
@@ -32,7 +51,11 @@ class MultiAuthCollector extends AuthCollector
         $names = '';
 
         foreach($this->guards as $guardName) {
-            $user = $this->resolveUser($this->auth->guard($guardName));
+            try {
+                $user = $this->resolveUser($this->auth->guard($guardName));
+            } catch (\Exception $e) {
+                continue;
+            }
 
             $data['guards'][$guardName] = $this->getUserInformation($user);
 
@@ -58,17 +81,62 @@ class MultiAuthCollector extends AuthCollector
         // then we must resolve user „manually”
         // to prevent csrf token regeneration
 
-        $usingSession = $guard instanceof SessionGuard;
-        $recaller = $usingSession ? $guard->getRequest()->cookies->get($guard->getRecallerName()) : null;
+        $recaller = $guard instanceof SessionGuard
+            ? $guard->getRequest()->cookies->get($guard->getRecallerName())
+            : null;
 
-        if($usingSession && !is_null($recaller)) {
-            list($id, $token) = explode('|', $recaller);
-            return $guard->getProvider()->retrieveByToken($id, $token);
-        } else {
-            return $guard->user();
+        if (is_string($recaller) && Str::contains($recaller, '|')) {
+            $segments = explode('|', $recaller);
+            if (count($segments) == 2 && trim($segments[0]) !== '' && trim($segments[1]) !== '') {
+                return $guard->getProvider()->retrieveByToken($segments[0], $segments[1]);
+            }
         }
+        return $guard->user();
     }
-    
+
+    /**
+     * Get displayed user information
+     * @param \Illuminate\Auth\UserInterface $user
+     * @return array
+     */
+    protected function getUserInformation($user = null)
+    {
+        // Defaults
+        if (is_null($user)) {
+            return [
+                'name' => 'Guest',
+                'user' => ['guest' => true],
+            ];
+        }
+
+        // The default auth identifer is the ID number, which isn't all that
+        // useful. Try username and email.
+        $identifier = $user->getAuthIdentifier();
+        if (is_numeric($identifier)) {
+            try {
+                if ($user->username) {
+                    $identifier = $user->username;
+                } elseif ($user->email) {
+                    $identifier = $user->email;
+                }
+            } catch (\Exception $e) {
+            }
+        }
+
+        return [
+            'name' => $identifier,
+            'user' => $user instanceof Arrayable ? $user->toArray() : $user,
+        ];
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public function getName()
+    {
+        return 'auth';
+    }
+
     /**
      * @{inheritDoc}
      */
@@ -94,4 +162,5 @@ class MultiAuthCollector extends AuthCollector
 
         return $widgets;
     }
+
 }
