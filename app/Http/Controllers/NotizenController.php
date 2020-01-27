@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Interessenten\Notizen;
+use App\Model\Notizen;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;

@@ -1,429 +1,238 @@
 @extends('layouts.app')
 
-
-@section('content')
-    <div id="_token" class="hidden" data-token="{{ csrf_token() }}"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <p>Daten der aktuellen Klamottenbörse</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        Datum der Klamottenbörse:
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p>
-                                            <a href="x" id="datum" data-type="date" data-value="{{ $Klamottenboerse->datum }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Wann findet die Klamottenbörse statt?">
-                                                {{ $Klamottenboerse->datum->format('d.m.Y')  }}
-                                            </a>
-
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        Anmeldung:
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p>
-                                            <a href="x" id="anmeldung" data-type="date" data-value="{{ $Klamottenboerse->anmeldung }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Anmeldedatum bearbeiten">
-                                                @if($Klamottenboerse->anmeldung != null and $Klamottenboerse->anmeldung->year > 1990)
-                                                    {{ $Klamottenboerse->anmeldung->format('d.m.Y') }}
-                                                @else
-                                                    Noch kein Datum angegeben
-                                                @endif
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        Anmeldung für das Kinderhaus:
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p>
-                                            <a href="x" id="anmeldungKinderhaus" data-type="date" data-value="{{ $Klamottenboerse->anmeldungKinderhaus }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Datum der Anmeldung für das Kinderhaus bearbeiten">
-                                            @if($Klamottenboerse->anmeldungKinderhaus != null and $Klamottenboerse->anmeldungKinderhaus->year > 1990 )
-                                                {{ $Klamottenboerse->anmeldungKinderhaus->format('d.m.Y') }}
-                                            @else
-                                                Noch kein Datum angegeben
-                                                @endif
-                                                </a>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        Anlieferung ab:
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p>
-                                            <a href="x" id="anlieferung_von" data-type="time" data-value="{{ $Klamottenboerse->anlieferung_von }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Anlieferung ab ... Uhr">
-                                                @if($Klamottenboerse->anlieferung_von != null )
-                                                    {{ $Klamottenboerse->anlieferung_von }} Uhr
-                                                @else
-                                                    Kein Zeitpunkt angegeben
-                                                @endif
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        Anlieferung bis:
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p>
-                                            <a href="x" id="anlieferung_bis" data-type="time" data-value="{{ $Klamottenboerse->anlieferung_bis }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Anlieferung bis ... Uhr">
-                                                @if($Klamottenboerse->anlieferung_bis != null )
-                                                    {{ $Klamottenboerse->anlieferung_bis }} Uhr
-                                                @else
-                                                    Kein Zeitpunkt angegeben
-                                                @endif
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        Abholung ab:
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p>
-                                            <a href="x" id="abholung_von" data-type="time" data-value="{{ $Klamottenboerse->abholung_von }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Anlieferung bis ... Uhr">
-                                                @if($Klamottenboerse->abholung_von != null )
-                                                    {{ $Klamottenboerse->abholung_von }} Uhr
-                                                @else
-                                                    Kein Zeitpunkt angegeben
-                                                @endif
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        Abholung bis:
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p>
-                                            <a href="x" id="abholung_bis" data-type="time" data-value="{{ $Klamottenboerse->abholung_bis }}" data-pk="{{ $Klamottenboerse->id }}" data-title="Anlieferung bis ... Uhr">
-                                                @if($Klamottenboerse->abholung_bis != null )
-                                                    {{ $Klamottenboerse->abholung_bis }} Uhr
-                                                @else
-                                                    Kein Zeitpunkt angegeben
-                                                @endif
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        maximale Teile pro Verkäufer:
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p>
-                                            <a href="x" id="maxTeile" data-type="number" data-value="{{ $Klamottenboerse->maxTeile }}" data-pk="{{ $Klamottenboerse->id }}" data-title="maximale Teile pro Verkäufer">
-                                                @if($Klamottenboerse->maxTeile != null )
-                                                    {{ $Klamottenboerse->maxTeile }}
-                                                @else
-                                                   Keine Anzahl angegeben
-                                                @endif
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="panel-footer">
-                                <a href="{{ url('Grunddaten/abschliessen') }}" class="btn btn-danger">Klamottenbörse abschließen</a>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <p>Helfer</p>
-                            </div>
-                            <div class="panel-body">
-                                @if(count($Klamottenboerse->helfer) != 0)
-                                    <div class="list-group">
-                                        @foreach($Klamottenboerse->helfer AS $Helfer)
-                                            <button type="button" class="list-group-item"
-                                                    data-toggle="modal"
-                                                    data-target="#Helfer"
-                                                    data-name="{!!  $Helfer->name !!}"
-                                                    data-mail="{{ $Helfer->mail }}"
-                                                    data-telefon="{{ $Helfer->telefon }}"
-                                                    data-bereich="{{ $Helfer->bereich }}"
-
-                                            >
-                                                <strong>{{  $Helfer->bereich  }} </strong> - {{  $Helfer->name  }}
-                                            </button>
-                                        @endforeach
-                                        {!! $Klamottenboerse->helfer->render() !!}
-                                    </div>
-                                @else
-                                    Bisher wurden keine Helfer erfasst
-                                @endif
-
-                            </div>
-                            <div class="panel-footer">
-                                <button type="button" class="btn btn-success"
-                                        data-toggle="modal"
-                                        data-target="#neuerHelfer"
-                                        data-title="Neuen Helfer anlegen">
-                                    neuer Helfer
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="Helfer" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-
-                    <form class="form-horizontal" role="form" method="POST" id="Helfer" action="{{ url('Grunddaten/Helfer/store')}}">
-                        {!! csrf_field() !!}
-                        <input type="hidden" name="klamottenboerse_id" value="{{$Klamottenboerse->id}}">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="input"  class="form-control" name="name" id="name_edit"  readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="mail">E-Mail</label>
-                            <input type="input" class="form-control" name="mail" id="mail_edit" placeholder="E-Mail des Helfer">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="telefon">Telefon</label>
-                            <input type="input" class="form-control" name="telefon" id="telefon_edit" placeholder="Telefon des Helfer">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="bereich">Bereich</label>
-                            <input type="input" class="form-control" name="bereich" id="bereich_edit" placeholder="Bereich wo geholfen wird">
-                        </div>
-                        <button type="submit"  class="btn btn-success" >Änderungen speichern</button>
-
-                    </form>
-
-                </div>
-                <div class="modal-footer">
-                    @if(count($Klamottenboerse->helfer) != 0)
-                        <form action="{!! url('Grunddaten/'.$Helfer->id.'/delete') !!}" method="post">
-                            {!! csrf_field() !!}
-                            {!! method_field('delete') !!}
-                             <button type="submit" class="btn btn-default btn-danger">
-                                <span class="glyphicon glyphicon-trash"></span> Helfer löschen
-                            </button>
-
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </form>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="neuerHelfer" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" role="form" method="POST" id="Helferform" action="{{ url('Grunddaten/Helfer/store')}}">
-                        {!! csrf_field() !!}
-                        <input type="hidden" name="klamottenboerse_id" value="{{$Klamottenboerse->id}}">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="input" form="Helferform" class="form-control" name="name"  placeholder="Name des Helfer">
-                        </div>
-                        <div class="form-group">
-                            <label for="mail">E-Mail</label>
-                            <input type="input" form="Helferform" class="form-control" name="mail" placeholder="E-Mail des Helfer">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="telefon">Telefon</label>
-                            <input type="input" form="Helferform" class="form-control" name="telefon" placeholder="Telefon des Helfer">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="bereich">Bereich</label>
-                            <input type="input" form="Helferform" class="form-control" name="bereich" placeholder="Bereich wo geholfen wird">
-                        </div>
-
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="Helferform" class="btn btn-success" >Helfer anlegen</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="text/javascript">
-
-        $('#neuerHelfer').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var title = button.data('title') // Extract info from data-* attributes
-            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-            var modal = $(this)
-            modal.find('.modal-title').text(title);
-
-        })
-
-        $('#Helfer').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var name = button.data('name') // Extract info from data-* attributes
-            var mail = button.data('mail')
-            var telefon = button.data('telefon')
-            var bereich = button.data('bereich')
-
-
-            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-            var modal = $(this)
-
-            modal.find('.modal-body #name_edit').val(name)
-            modal.find('.modal-body #mail_edit').val(mail)
-            modal.find('.modal-body #telefon_edit').val(telefon)
-            modal.find('.modal-body #bereich_edit').val(bereich)
-            modal.find('.modal-title').text(name)
-        })
-
-        $(function() {
-            //edit form style - popup or inline
-            $.fn.editable.defaults.mode = 'popup';
-
-            $.fn.editable.defaults.params = function (params) {
-                params._token = $("#_token").data("token");
-                return params;
-            };
-
-            $('#datum').editable({
-                url: '{{URL::to("/")}}/edit-Klamottenboerse',
-                title: 'Bearbeiten',
-                viewformat: 'dd.mm.yyyy',
-                placement: 'down',
-                send: 'always',
-                ajaxOptions: {
-                    dataType: 'json',
-                    type: 'put'}
+@section('js')
+    <script>
+        @if (!$errors->any())
+            $(document).ready(function() {
+                $('.hide').hide();
             });
-
-            $('#anmeldung').editable({
-                url: '{{URL::to("/")}}/edit-Klamottenboerse',
-                title: 'Bearbeiten',
-                viewformat: 'dd.mm.yyyy',
-                placement: 'down',
-                send: 'always',
-                ajaxOptions: {
-                    dataType: 'json',
-                    type: 'put'}
-            });
-
-            $('#anmeldungKinderhaus').editable({
-                url: '{{URL::to("/")}}/edit-Klamottenboerse',
-                title: 'Bearbeiten',
-                viewformat: 'dd.mm.yyyy',
-                placement: 'down',
-                send: 'always',
-                ajaxOptions: {
-                    dataType: 'json',
-                    type: 'put'}
-            });
-
-            $('#anlieferung_von').editable({
-                url: '{{URL::to("/")}}/edit-Klamottenboerse',
-                title: 'Bearbeiten',
-                viewformat: 'hh:ii',
-                format: 'hh:ii',
-                placement: 'down',
-                send: 'always',
-                ajaxOptions: {
-                    dataType: 'json',
-                    type: 'put'}
-            });
-
-            $('#anlieferung_bis').editable({
-                url: '{{URL::to("/")}}/edit-Klamottenboerse',
-                title: 'Bearbeiten',
-                format: 'hh:ii',
-                viewformat: 'hh:ii',
-                placement: 'down',
-                send: 'always',
-                ajaxOptions: {
-                    dataType: 'json',
-                    type: 'put'}
-            });
+        @else
+        $('#showDates').hide();
+        @endif
 
 
-            $('#abholung_bis').editable({
-                url: '{{URL::to("/")}}/edit-Klamottenboerse',
-                title: 'Bearbeiten',
-                format: 'yhh:ii',
-                viewformat: 'hh:ii',
-                placement: 'down',
-                send: 'always',
-                ajaxOptions: {
-                    dataType: 'json',
-                    type: 'put'}
-            });
 
-            $('#abholung_von').editable({
-                url: '{{URL::to("/")}}/edit-Klamottenboerse',
-                title: 'Bearbeiten',
-                format: 'hh:ii',
-                viewformat: 'hh:ii',
-                placement: 'down',
-                send: 'always',
-                ajaxOptions: {
-                    dataType: 'json',
-                    type: 'put'}
-            });
-
-            $('#maxTeile').editable({
-                url: '{{URL::to("/")}}/edit-Klamottenboerse',
-                title: 'Bearbeiten',
-                placement: 'down',
-                send: 'always',
-                ajaxOptions: {
-                    dataType: 'json',
-                    type: 'put'}
-            });
-
-        })
+        $('#editBtn').click(function() {
+            $('#form').toggle();
+            $('#saveBtn').toggle();
+            $('#showDates').toggle();
+        });
     </script>
 
 
-@endsection
+@stop
+
+@section('content')
+    <div class="container-fluid">
+        <header class="section-header">
+            <div class="tbl">
+                <div class="tbl-row">
+                    <div class="tbl-cell">
+                        <h2>Grunddaten</h2>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="row">
+            <div class="col-5">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        Daten der Klamottenbörse
+                        <span class="pull-right">
+                            <a class="btn btn-warning btn-sm" id="editBtn">
+                                 <i class="font-icon-pencil"></i>
+                            </a>
+
+                        </span>
+                    </div>
+                        <div id="showDates" class="card-body ">
+                            <div class="row">
+                                <div class="col">
+                                    Datum der Klamottenbörse:
+                                </div>
+                                <div class="col">
+                                    {{$klamottenboerse->datum->format('d.m.Y') ?: ""}}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Anmeldung:
+                                </div>
+                                <div class="col">
+                                    {{$klamottenboerse->anmeldung->format('d.m.Y') ?: ""}}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Anmeldung Kinderhaus:
+                                </div>
+                                <div class="col">
+                                    {{$klamottenboerse->anmeldungKinderhaus->format('d.m.Y') ?: ""}}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Anlieferung:
+                                </div>
+                                <div class="col">
+                                    {{$klamottenboerse->anlieferung_von ?: ""}} - {{$klamottenboerse->anlieferung_bis ?: ""}} Uhr
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Abholung:
+                                </div>
+                                <div class="col">
+                                    {{$klamottenboerse->abholung_von ?: ""}} - {{$klamottenboerse->abholung_bis ?: ""}} Uhr
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col">
+                                    max. Teile:
+                                </div>
+                                <div class="col">
+                                    {{$klamottenboerse->maxTeile ?: ""}}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-body hide" id="form">
+                            <form method="post" action="{{url('klamottenboerse/'.$klamottenboerse->id)}}" id="KlamottenboersenForm">
+                            {{method_field('PUT')}}
+                            {{csrf_field()}}
+                            <div class="form-group row @if ($errors->has('datum')) form-group-error @endif">
+                                    <label class="form-label" for="datum">Datum der Klamottenbörse:</label>
+                                    <input type="date" class="form-control" name="datum" id="datum"  placeholder="__.__.____" value="{{$klamottenboerse->datum->format('Y-m-d') ?: ""}}"  @if ($klamottenboerse->anmeldungKinderhaus < \Carbon\Carbon::now()) readonly @endif>
+                                @if ($errors->has('datum'))
+                                    <small class="text-muted">
+                                        @foreach ($errors->get('datum') as $message)
+                                            {{ $message }}
+                                        @endforeach
+                                    </small>
+                                @endif
+                            </div>
+                            <div class="form-group row @if ($errors->has('anmeldung')) form-group-error @endif">
+                                <label class="form-label" for="datum">Anmeldung:</label>
+                                <input type="date" class="form-control" name="anmeldung" id="anmeldung" placeholder="__.__.____" value="{{$klamottenboerse->anmeldung->format('Y-m-d') ?: ""}}" @if ($klamottenboerse->anmeldung < \Carbon\Carbon::now()) readonly @endif>
+                                @if ($errors->has('anmeldung'))
+                                    <small class="text-muted">
+                                        @foreach ($errors->get('anmeldung') as $message)
+                                            {{ $message }}
+                                        @endforeach
+                                    </small>
+                                @endif
+                            </div>
+                            <div class="form-group row @if ($errors->has('anmeldungKinderhaus')) form-group-error @endif">
+                                <label class="form-label" for="datum">Anmeldung für das Kinderhaus:</label>
+                                <input type="date" class="form-control" name="anmeldungKinderhaus" id="anmeldungKinderhaus" placeholder="__.__.____" value="{{$klamottenboerse->anmeldungKinderhaus->format('Y-m-d') ?: ""}}" @if ($klamottenboerse->anmeldungKinderhaus < \Carbon\Carbon::now()) readonly @endif>
+                                @if ($errors->has('anmeldungKinderhaus'))
+                                    <small class="text-muted">
+                                        @foreach ($errors->get('anmeldungKinderhaus') as $message)
+                                            {{ $message }}
+                                        @endforeach
+                                    </small>
+                                @endif
+                            </div>
+
+                            <div class="form-group row @if ($errors->has('anlieferung_von')) form-group-error @endif">
+                                <label class="form-label" for="datum"> Anlieferung von:</label>
+                                <input type="time" class="form-control" name="anlieferung_von" id="anlieferung_von" placeholder="__.__ Uhr" value="{{$klamottenboerse->anlieferung_von ?: ""}}">
+                                @if ($errors->has('anlieferung_von'))
+                                    <small class="text-muted">
+                                        @foreach ($errors->get('anlieferung_von') as $message)
+                                            {{ $message }}
+                                        @endforeach
+                                    </small>
+                                @endif
+                            </div>
+
+                            <div class="form-group row @if ($errors->has('anlieferung_bis')) form-group-error @endif">
+                                <label class="form-label" for="datum"> Anlieferung bis:</label>
+                                <input type="time" class="form-control" name="anlieferung_bis" id="anlieferung_bis" placeholder="__.__ Uhr" value="{{$klamottenboerse->anlieferung_bis ?: ""}}">
+                                @if ($errors->has('anlieferung_bis'))
+                                    <small class="text-muted">
+                                        @foreach ($errors->get('anlieferung_bis') as $message)
+                                            {{ $message }}
+                                        @endforeach
+                                    </small>
+                                @endif
+                            </div>
 
 
+                            <div class="form-group row @if ($errors->has('abholung_von')) form-group-error @endif">
+                                <label class="form-label" for="datum"> Abholung ab:</label>
+                                <input type="time" class="form-control" name="abholung_von" id="abholung_von" placeholder="__.__ Uhr" value="{{$klamottenboerse->abholung_von ?: ""}}">
+                                @if ($errors->has('abholung_von'))
+                                    <small class="text-muted">
+                                        @foreach ($errors->get('abholung_von') as $message)
+                                            {{ $message }}
+                                        @endforeach
+                                    </small>
+                                @endif
+                            </div>
+
+                            <div class="form-group row @if ($errors->has('abholung_bis')) form-group-error @endif">
+                                <label class="form-label" for="datum"> Abholung bis:</label>
+                                <input type="time" class="form-control" name="abholung_bis" id="abholung_bis" placeholder="__.__ Uhr" value="{{$klamottenboerse->abholung_bis ?: ""}}">
+                                @if ($errors->has('abholung_bis'))
+                                    <small class="text-muted">
+                                        @foreach ($errors->get('abholung_bis') as $message)
+                                            {{ $message }}
+                                        @endforeach
+                                    </small>
+                                @endif
+                            </div>
+
+                            <div class="form-group row @if ($errors->has('maxTeile')) form-group-error @endif">
+                                <label class="form-label" for="datum">maximale Teile pro Verkäufer:</label>
+                                <input type="number" step="1" class="form-control" name="maxTeile" id="maxTeile" placeholder="__" value="{{$klamottenboerse->maxTeile ?: ""}}">
+                                @if ($errors->has('maxTeile'))
+                                    <small class="text-muted">
+                                        @foreach ($errors->get('maxTeile') as $message)
+                                            {{ $message }}
+                                        @endforeach
+                                    </small>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success hide" form="KlamottenboersenForm" id="saveBtn">Speichern</button>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{url('klamottenboerse/create')}}" class="btn btn-success btn-rounded">neue Klamottenbörse</a>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        Helfer
+                    </div>
+                    <div class="card-body">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4 col-auto">
+                <div class="card">
+                    <div class="card-header">
+                        vergangene Klamottenbörsen
+                    </div>
+                    <div class="card-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+@stop

@@ -9,14 +9,14 @@
 
     <style>
         body{
-            margin: 20px;
+            margin: 8px;
         }
 
         .spalte {
-            width: 15%;
+            width: 13%;
             float: left;
             align-items: center;
-            margin: 10px;
+            margin: 3px;
 
         }
 
@@ -26,19 +26,17 @@
 </head>
 
 <body>
-    <h2>Vergebene Verkäufernummern</h2>
+    <h3>Vergebene Verkäufernummern</h3>
 
     @for ($i = 200; $i < 700; $i+=100)
                 <div class="spalte">
                     @foreach($Nummern->where('vknummer', ">=", $i)->where('vknummer', "<", ($i+100))->all()  AS $Nummer)
-                        <p >
-                            {{$Nummer->vknummer}}
-                        </p>
+                        {{$Nummer->vknummer}}<br>
+                        
                     @endforeach
                 </div>
 
     @endfor
-
 </body>
 
 </html>

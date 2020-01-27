@@ -5,155 +5,91 @@
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| This file is where you may define all of the routes that are handled
-| by your application. Just tell Laravel the URIs it should respond
-| to using a Closure or controller method. Build something great!
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index')->name('home');
+
 
 Auth::routes();
 
-Route::group(['middleware' => 'web'], function () {
-   
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/grunddaten', 'KlamottenboersenController@show');
 
-    Route::get('/{id}/abmelden/{token}', 'InteressentenController@abmelden');
-    Route::delete('/{id}/abmelden/{token}', 'InteressentenController@doAbmelden');
+    //Anmeldung moeglich
+    Route::get('/checkAnmeldung', 'MailController@anmeldungMoeglich');
 
-    //Route::get('/abmelden/{id}/{token}', 'InteressentenController@abmelden');
+    //Route::get('/unreadMail', 'MailController@unreadCount');
 
+    //Listen
+    Route::get('/listen/verkaeuferinfos', 'ListenController@verkaeuferinfos');
+    Route::get('/listen/vknummern', 'ListenController@vknummern');
+    Route::get('/listen/belehrung/{vknummer?}', 'ListenController@belehrung');
+    Route::get('/listen/abstreichliste', 'ListenController@abstreichliste');
 
+    //Mail
+    Route::get('/mail/{interessenten}/{mailvorlagen?}', 'MailController@composeNewMail');
+    Route::get('reply/{uid}/', 'MailController@replyMail');
+    Route::put('mail/reply/send', 'MailController@sendReply');
+    Route::put('mail/{interessent}/send', 'MailController@sendMail');
+    Route::get('/getMail/{uid}', 'MailController@getUidMail');
+    Route::post('/getMail/{uid}', 'MailController@getUidMail');
 
+    Route::get('/getMails/', 'MailController@getMails');
+    Route::post('/deleteMail/{uid}', 'MailController@deleteMessage');
+    Route::get('/deleteMail/{uid}', 'MailController@deleteMessage');
+    Route::get('/getUsermail/{id}', 'MailController@getInteressentenMail');
+    Route::get('/spamMail/{uid}', 'MailController@markSpamMail');
+    Route::post('/spamMail/{uid}', 'MailController@markSpamMail');
 
+    //Verkäufernummern
+    Route::get('/vknummer/{id}/reservierungAufheben', 'NummernController@reservierungAufheben');
+    Route::get('/vknummer/{interessenten}/reservierung', 'NummernController@reserviereNummer');
+    Route::post('/Nummern/reservieren', 'NummernController@nummerReservieren');
+    Route::get('/vknummer/{vknummer}/vergeben', 'NummernController@reservierungVergeben');
+    Route::get('/vknummer/{interessenten}/Nummervergeben', 'NummernController@vergebeNummer');
 
-    /*
-     * Routen für die Imteressenten-Übersicht
-     *
-     */
-    Route::get('/Ueberblick', 'InteressentenController@index');
-    Route::get('/Ueberblick/{Gruppe?}', 'InteressentenController@index');
-    Route::post('/Ueberblick', 'InteressentenController@search');
-    Route::get('/Ueberblick/{string}/export', 'InteressentenController@export');
-    
+    Route::get('/vknummern/{vknummer}/freiVergeben', 'NummernController@freiVergeben');
 
-    /*
-     * Routen für einzelne, bestimmte Interessenten
-     */
-    Route::get('/Interessent/{InteressentenID}', 'InteressentenController@show');
-    Route::put('/edit-Interessent', 'InteressentenController@update');
-    Route::get('/deleteInteressent/{InteressentenID}', 'InteressentenController@warningDelete');
-    Route::delete('/Interessent/{InteressentenID}', 'InteressentenController@destroy');
-    Route::post('Notiz/{InteressentenID}', 'NotizenController@store');
-    
-
-    /*
-     * Routen zum anlegen neuer Interessenten
-     */
-    Route::get('/Anlegen', function() {
-        return view('InteressentAnlegen');
-    });
-    Route::post('/Anlegen', 'InteressentenController@store');
-
-    /*
-    * Routen für Nachrichten
-    */
-    Route::post('/Nachricht/{InteressentenID}', 'NachrichtenController@send');
-    Route::post('/mail/{string}', 'NachrichtenController@mailGruppe');
-    Route::post('/mail', 'NachrichtenController@mailGruppe');
-
-    /*
-     * Routen für die Klamottenboerse
-    */
-
-    Route::get('Grunddaten', 'KlamottenboersenController@index');
-    Route::get('Grunddaten/abschliessen', 'KlamottenboersenController@neueKlamottenboerse');
-
-    Route::put('/edit-Klamottenboerse', 'KlamottenboersenController@update');
-
-    Route::post('Grunddaten/Anlegen', 'KlamottenboersenController@store');
-    Route::post('Grunddaten/Helfer/store', 'KlamottenboersenController@store_Helfer');
-
-
-    Route::delete('Grunddaten/{HelferID}/delete', 'KlamottenboersenController@destroy');
-
-
-    /*
-     * Routen zur Dateienverwaltung
-     */
-    Route::get('/Dateien', 'DateienController@index');
-    Route::get('/Dateien/{DateiID}', 'DateienController@get');
-    Route::put('Dateien/add', 'DateienController@uploadFiles');
-    Route::delete('Dateien/{DateiID}', 'DateienController@destroy');
-
-    /*
-     * Routen zur Nummernvergabe
-     */
-    Route::get('/Nummern', 'NummernController@index');
-    Route::get('/Nummern/new', 'NummernController@newNummer');
-    Route::post('/Nummern/new', 'NummernController@store');
-    Route::get('/Nummern/{InteressentenID}/aufheben', 'NummernController@deleteReservierung');
-    Route::get('/Nummern/{InteressentenID}/reservieren', 'NummernController@createReservierung');
-    Route::post('/Nummern/{InteressentenID}/reservieren', 'NummernController@storeReservierung');
-    Route::post('Nummern/vergeben', 'NummernController@storeVergabe');
-    Route::post('Nummern/vergabeLoeschen', 'NummernController@vergabeLoeschen');
-    Route::delete('Nummern/NummerLoeschen', 'NummernController@NummerLoeschen');
-    Route::get('/Nummern/{InteressentenID}/vergeben', 'NummernController@Nummernvergabe');
-    Route::post('Nummern/Kommentar/store', 'NummernController@storeKommentar');
-    Route::delete('Nummern/Kommentar/Loeschen', 'NummernController@KommentarLoeschen');
-    Route::get('Nummern/{NummernID}/Vergabe', 'NummernController@Vergabe');
-    Route::get('Nummern/{Vknummer}/anzeigen', 'NummernController@VerkaeuferAnzeigen');
-
-
-
-
-
-
-    /*
-     * Routen zur Listenerstellung
-     */
-
-    Route::get('/Listen', 'ListenController@index');
-    Route::get('Listen/vknummern', 'ListenController@vknummern');
-    Route::get('Listen/belehrung', 'ListenController@belehrung');
-    Route::get('Listen/helfer', 'ListenController@helfer');
-    Route::get('Listen/nummern', 'ListenController@nummern');
-    Route::get('Listen/Infos', 'ListenController@Infos');
-
-
-    /*
-     * Routen für die Mailvorlagen
-     */
-    Route::get('/Mailvorlagen', 'VorlagenController@index');
-    Route::delete('Mailvorlagen/loeschen', 'VorlagenController@deleteVorlage');
-    Route::post('Mailvorlagen/new', 'VorlagenController@storeVorlage');
-    Route::get('Mailvorlagen/new', function () {
-        return view('mailvorlagen.neueMailvorlagen');
-    });
-    Route::post('Mailvorlagen/edit', 'VorlagenController@edit');
-
-	
-    //Warteliste
-    Route::get('/Warteliste/{InteressentenID}', 'WartelistenController@set');
-    Route::delete('/Warteliste', 'WartelistenController@drop');
-
-
+    //Wartelise
+    Route::get('/warteliste/{interessentenID}/set', 'WartelistenController@set');
+    Route::delete('/warteliste/{interessentenID}/', 'WartelistenController@drop');
     //Import
-    Route::get('/import', 'ImportController@index');
-    //Route::get('/Import_csv', 'ImportController@Import_csv');
-    Route::post('/import', 'ImportController@importExcel');
+    Route::get('/import', 'KlamottenboersenController@import');
+    Route::put('/import/', 'KlamottenboersenController@saveImport');
 
 
+    Route::put('/vknummer/{vknummer}/remove', 'NummernController@removeVergabe');
+    Route::put('/vknummern/vergeben', 'NummernController@newVKnummerVergeben');
+
+    //Notitz
+    Route::put('notiz/{InteressentenID}','NotizenController@store');
+    //newInteressent from Mail
+    Route::post('newInteressent','InteressentenController@create');
+
+    Route::resources([
+        'interessenten' => 'InteressentenController',
+        'interessent' => 'InteressentenController',
+        'vknummern' => 'NummernController',
+        'mailvorlagen'  => 'MailvorlagenController'
+    ]);
 
 
+    //Klamottenbörse
+    Route::resource('klamottenboerse', "KlamottenboersenController");
 
 
+    Route::get('/mailable', function () {
+        $Interessent = \App\Model\Interessenten::find(73);
+        $VKnummer = \App\Model\VKnummer::find(567);
 
-
-
+        return new \App\Mail\Verkaeuferinfos($VKnummer);
+    });
 });
-Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+
+

@@ -10,21 +10,20 @@ namespace App\Http\Controllers;
 
 
 
-use App\Models\Klamottenboerse\Warteliste;
-use Illuminate\Http\Request;
+use App\Model\Warteliste;
 
 
 class WartelistenController extends Controller
 {
-    public function set($InteressentenID){
-        $Eintrag = Warteliste::firstOrCreate(['interessenten_id' =>$InteressentenID]);
-        return redirect()->back()->with(['Message' => 'Interessent auf Warteliste gesetzt.', 'Type' => 'success']);
+    public function set($interessentenID){
+        $Eintrag = Warteliste::firstOrCreate(['interessenten_id' =>$interessentenID]);
+        return redirect()->back()->with(['success' => 'Interessent auf Warteliste gesetzt.']);
 
     }
 
-    public function drop(Request $request){
-        $Warteliste= Warteliste::find($request->id);
+    public function drop($interessentenID){
+        $Warteliste= Warteliste::where('interessenten_id', $interessentenID)->first();
         $Warteliste->delete();
-        return redirect()->back()->with(['Message' => 'von Warteliste gelöscht.', 'Type' => 'success']);
+        return redirect()->back()->with(['success' => 'von Warteliste gelöscht.']);
     }
 }

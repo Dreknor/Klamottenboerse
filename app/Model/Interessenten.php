@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Model;
+
+use App\Model\Warteliste;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+
+class Interessenten extends Model
+{
+
+    use SoftDeletes;
+
+    public $table = "interessenten";
+
+    protected $fillable = array('vorname', 'nachname', 'mail', 'telefon', 'anrede', 'mitarbeiter', 'kinderhaus', 'handy' );
+
+
+    public function getKinderhausAttribute($value)
+    {
+        if ($value == 1){
+            return "ja";
+        }
+            return "nein";
+    }
+
+    public function getMitarbeiterAttribute($value)
+    {
+        if ($value == 1){
+            return "ja";
+        }
+        return "nein";
+    }
+
+    public function vknummer_reserviert(){
+        return $this->hasOne(VKnummer::class, 'reserviert_fuer')
+            ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+            ->orderBy('klamottenboersen_id', 'desc');
+    }
+
+    public function vknummern_vergeben(){
+        return $this->hasOne(VKnummer::class, 'vergeben_an')
+            ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+            ->orderBy('klamottenboersen_id', 'desc');
+
+    }
+
+    public function bisherige_vknummen(){
+        return $this->hasMany(VKnummer::class, 'vergeben_an')
+            ->orderBy('klamottenboersen_id', 'desc');
+
+    }
+
+    public function warteliste()
+    {
+        return $this->hasOne(Warteliste::class);
+    }
+
+
+    public function isWarteliste(){
+
+        return (bool) $this->warteliste()->first();
+    }
+
+    public function notiz () {
+        return $this->hasOne(Notizen::class, 'interessenten_id');
+    }
+}

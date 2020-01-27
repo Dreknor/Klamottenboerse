@@ -1,0 +1,289 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/package/host/localhost/nodejs-0.10.43/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install' ]
+2 info using npm@1.4.29
+3 info using node@v0.10.43
+4 warn deprecated This version of npm lacks support for important features,
+5 warn deprecated such as scoped packages, offered by the primary npm
+6 warn deprecated registry. Consider upgrading to at least npm@2, if not the
+7 warn deprecated latest stable version. To upgrade to npm@2, run:
+8 warn deprecated npm -g install npm@latest-2
+9 warn deprecated To upgrade to the latest stable version, run:
+10 warn deprecated npm -g install npm@latest
+11 warn deprecated (Depending on how Node.js was installed on your system, you
+12 warn deprecated may need to prefix the preceding commands with `sudo`, or if
+13 warn deprecated on Windows, run them from an Administrator prompt.)
+14 warn deprecated If you're running the version of npm bundled with
+15 warn deprecated Node.js 0.10 LTS, be aware that the next version of 0.10 LTS
+16 warn deprecated will be bundled with a version of npm@2, which has some small
+17 warn deprecated backwards-incompatible changes made to `npm run-script` and
+18 warn deprecated semver behavior.
+19 verbose readDependencies using package.json deps
+20 verbose install where, deps [ '/var/www/virtual/dreknor/verwaltung.klamottenboerse.de',
+20 verbose install   [ 'axios',
+20 verbose install     'bootstrap',
+20 verbose install     'cross-env',
+20 verbose install     'jquery',
+20 verbose install     'laravel-mix',
+20 verbose install     'lodash',
+20 verbose install     'popper.js',
+20 verbose install     'vue' ] ]
+21 info preinstall @
+22 verbose readDependencies using package.json deps
+23 verbose cache add [ 'bootstrap@^4.0.0', null ]
+24 verbose cache add name=undefined spec="bootstrap@^4.0.0" args=["bootstrap@^4.0.0",null]
+25 verbose parsed url { protocol: null,
+25 verbose parsed url   slashes: null,
+25 verbose parsed url   auth: null,
+25 verbose parsed url   host: null,
+25 verbose parsed url   port: null,
+25 verbose parsed url   hostname: null,
+25 verbose parsed url   hash: null,
+25 verbose parsed url   search: null,
+25 verbose parsed url   query: null,
+25 verbose parsed url   pathname: 'bootstrap@^4.0.0',
+25 verbose parsed url   path: 'bootstrap@^4.0.0',
+25 verbose parsed url   href: 'bootstrap@^4.0.0' }
+26 verbose cache add [ 'cross-env@^5.1', null ]
+27 verbose cache add name=undefined spec="cross-env@^5.1" args=["cross-env@^5.1",null]
+28 verbose parsed url { protocol: null,
+28 verbose parsed url   slashes: null,
+28 verbose parsed url   auth: null,
+28 verbose parsed url   host: null,
+28 verbose parsed url   port: null,
+28 verbose parsed url   hostname: null,
+28 verbose parsed url   hash: null,
+28 verbose parsed url   search: null,
+28 verbose parsed url   query: null,
+28 verbose parsed url   pathname: 'cross-env@^5.1',
+28 verbose parsed url   path: 'cross-env@^5.1',
+28 verbose parsed url   href: 'cross-env@^5.1' }
+29 verbose cache add [ 'jquery@^3.2', null ]
+30 verbose cache add name=undefined spec="jquery@^3.2" args=["jquery@^3.2",null]
+31 verbose parsed url { protocol: null,
+31 verbose parsed url   slashes: null,
+31 verbose parsed url   auth: null,
+31 verbose parsed url   host: null,
+31 verbose parsed url   port: null,
+31 verbose parsed url   hostname: null,
+31 verbose parsed url   hash: null,
+31 verbose parsed url   search: null,
+31 verbose parsed url   query: null,
+31 verbose parsed url   pathname: 'jquery@^3.2',
+31 verbose parsed url   path: 'jquery@^3.2',
+31 verbose parsed url   href: 'jquery@^3.2' }
+32 verbose cache add [ 'laravel-mix@^2.0', null ]
+33 verbose cache add name=undefined spec="laravel-mix@^2.0" args=["laravel-mix@^2.0",null]
+34 verbose parsed url { protocol: null,
+34 verbose parsed url   slashes: null,
+34 verbose parsed url   auth: null,
+34 verbose parsed url   host: null,
+34 verbose parsed url   port: null,
+34 verbose parsed url   hostname: null,
+34 verbose parsed url   hash: null,
+34 verbose parsed url   search: null,
+34 verbose parsed url   query: null,
+34 verbose parsed url   pathname: 'laravel-mix@^2.0',
+34 verbose parsed url   path: 'laravel-mix@^2.0',
+34 verbose parsed url   href: 'laravel-mix@^2.0' }
+35 verbose cache add [ 'lodash@^4.17.5', null ]
+36 verbose cache add name=undefined spec="lodash@^4.17.5" args=["lodash@^4.17.5",null]
+37 verbose parsed url { protocol: null,
+37 verbose parsed url   slashes: null,
+37 verbose parsed url   auth: null,
+37 verbose parsed url   host: null,
+37 verbose parsed url   port: null,
+37 verbose parsed url   hostname: null,
+37 verbose parsed url   hash: null,
+37 verbose parsed url   search: null,
+37 verbose parsed url   query: null,
+37 verbose parsed url   pathname: 'lodash@^4.17.5',
+37 verbose parsed url   path: 'lodash@^4.17.5',
+37 verbose parsed url   href: 'lodash@^4.17.5' }
+38 verbose cache add name="bootstrap" spec="^4.0.0" args=["bootstrap","^4.0.0"]
+39 verbose parsed url { protocol: null,
+39 verbose parsed url   slashes: null,
+39 verbose parsed url   auth: null,
+39 verbose parsed url   host: null,
+39 verbose parsed url   port: null,
+39 verbose parsed url   hostname: null,
+39 verbose parsed url   hash: null,
+39 verbose parsed url   search: null,
+39 verbose parsed url   query: null,
+39 verbose parsed url   pathname: '^4.0.0',
+39 verbose parsed url   path: '^4.0.0',
+39 verbose parsed url   href: '^4.0.0' }
+40 verbose addNamed [ 'bootstrap', '^4.0.0' ]
+41 verbose addNamed [ null, '>=4.0.0-0 <5.0.0-0' ]
+42 verbose cache add name="cross-env" spec="^5.1" args=["cross-env","^5.1"]
+43 verbose parsed url { protocol: null,
+43 verbose parsed url   slashes: null,
+43 verbose parsed url   auth: null,
+43 verbose parsed url   host: null,
+43 verbose parsed url   port: null,
+43 verbose parsed url   hostname: null,
+43 verbose parsed url   hash: null,
+43 verbose parsed url   search: null,
+43 verbose parsed url   query: null,
+43 verbose parsed url   pathname: '^5.1',
+43 verbose parsed url   path: '^5.1',
+43 verbose parsed url   href: '^5.1' }
+44 verbose addNamed [ 'cross-env', '^5.1' ]
+45 verbose addNamed [ null, '>=5.1.0-0 <6.0.0-0' ]
+46 verbose cache add name="jquery" spec="^3.2" args=["jquery","^3.2"]
+47 verbose parsed url { protocol: null,
+47 verbose parsed url   slashes: null,
+47 verbose parsed url   auth: null,
+47 verbose parsed url   host: null,
+47 verbose parsed url   port: null,
+47 verbose parsed url   hostname: null,
+47 verbose parsed url   hash: null,
+47 verbose parsed url   search: null,
+47 verbose parsed url   query: null,
+47 verbose parsed url   pathname: '^3.2',
+47 verbose parsed url   path: '^3.2',
+47 verbose parsed url   href: '^3.2' }
+48 verbose addNamed [ 'jquery', '^3.2' ]
+49 verbose addNamed [ null, '>=3.2.0-0 <4.0.0-0' ]
+50 verbose cache add name="laravel-mix" spec="^2.0" args=["laravel-mix","^2.0"]
+51 verbose parsed url { protocol: null,
+51 verbose parsed url   slashes: null,
+51 verbose parsed url   auth: null,
+51 verbose parsed url   host: null,
+51 verbose parsed url   port: null,
+51 verbose parsed url   hostname: null,
+51 verbose parsed url   hash: null,
+51 verbose parsed url   search: null,
+51 verbose parsed url   query: null,
+51 verbose parsed url   pathname: '^2.0',
+51 verbose parsed url   path: '^2.0',
+51 verbose parsed url   href: '^2.0' }
+52 verbose addNamed [ 'laravel-mix', '^2.0' ]
+53 verbose addNamed [ null, '>=2.0.0-0 <3.0.0-0' ]
+54 verbose cache add [ 'popper.js@^1.12', null ]
+55 verbose cache add name=undefined spec="popper.js@^1.12" args=["popper.js@^1.12",null]
+56 verbose parsed url { protocol: null,
+56 verbose parsed url   slashes: null,
+56 verbose parsed url   auth: null,
+56 verbose parsed url   host: null,
+56 verbose parsed url   port: null,
+56 verbose parsed url   hostname: null,
+56 verbose parsed url   hash: null,
+56 verbose parsed url   search: null,
+56 verbose parsed url   query: null,
+56 verbose parsed url   pathname: 'popper.js@^1.12',
+56 verbose parsed url   path: 'popper.js@^1.12',
+56 verbose parsed url   href: 'popper.js@^1.12' }
+57 verbose cache add [ 'vue@^2.5.17', null ]
+58 verbose cache add name=undefined spec="vue@^2.5.17" args=["vue@^2.5.17",null]
+59 verbose parsed url { protocol: null,
+59 verbose parsed url   slashes: null,
+59 verbose parsed url   auth: null,
+59 verbose parsed url   host: null,
+59 verbose parsed url   port: null,
+59 verbose parsed url   hostname: null,
+59 verbose parsed url   hash: null,
+59 verbose parsed url   search: null,
+59 verbose parsed url   query: null,
+59 verbose parsed url   pathname: 'vue@^2.5.17',
+59 verbose parsed url   path: 'vue@^2.5.17',
+59 verbose parsed url   href: 'vue@^2.5.17' }
+60 verbose cache add [ 'axios@^0.18', null ]
+61 verbose cache add name=undefined spec="axios@^0.18" args=["axios@^0.18",null]
+62 verbose parsed url { protocol: null,
+62 verbose parsed url   slashes: null,
+62 verbose parsed url   auth: null,
+62 verbose parsed url   host: null,
+62 verbose parsed url   port: null,
+62 verbose parsed url   hostname: null,
+62 verbose parsed url   hash: null,
+62 verbose parsed url   search: null,
+62 verbose parsed url   query: null,
+62 verbose parsed url   pathname: 'axios@^0.18',
+62 verbose parsed url   path: 'axios@^0.18',
+62 verbose parsed url   href: 'axios@^0.18' }
+63 verbose cache add name="lodash" spec="^4.17.5" args=["lodash","^4.17.5"]
+64 verbose parsed url { protocol: null,
+64 verbose parsed url   slashes: null,
+64 verbose parsed url   auth: null,
+64 verbose parsed url   host: null,
+64 verbose parsed url   port: null,
+64 verbose parsed url   hostname: null,
+64 verbose parsed url   hash: null,
+64 verbose parsed url   search: null,
+64 verbose parsed url   query: null,
+64 verbose parsed url   pathname: '^4.17.5',
+64 verbose parsed url   path: '^4.17.5',
+64 verbose parsed url   href: '^4.17.5' }
+65 verbose addNamed [ 'lodash', '^4.17.5' ]
+66 verbose addNamed [ null, '>=4.17.5-0 <5.0.0-0' ]
+67 verbose cache add name="popper.js" spec="^1.12" args=["popper.js","^1.12"]
+68 verbose parsed url { protocol: null,
+68 verbose parsed url   slashes: null,
+68 verbose parsed url   auth: null,
+68 verbose parsed url   host: null,
+68 verbose parsed url   port: null,
+68 verbose parsed url   hostname: null,
+68 verbose parsed url   hash: null,
+68 verbose parsed url   search: null,
+68 verbose parsed url   query: null,
+68 verbose parsed url   pathname: '^1.12',
+68 verbose parsed url   path: '^1.12',
+68 verbose parsed url   href: '^1.12' }
+69 verbose addNamed [ 'popper.js', '^1.12' ]
+70 verbose addNamed [ null, '>=1.12.0-0 <2.0.0-0' ]
+71 silly lockFile 60352c60-popper-js-1-12 popper.js@^1.12
+72 verbose lock popper.js@^1.12 /home/dreknor/.npm/60352c60-popper-js-1-12.lock
+73 verbose cache add name="vue" spec="^2.5.17" args=["vue","^2.5.17"]
+74 verbose parsed url { protocol: null,
+74 verbose parsed url   slashes: null,
+74 verbose parsed url   auth: null,
+74 verbose parsed url   host: null,
+74 verbose parsed url   port: null,
+74 verbose parsed url   hostname: null,
+74 verbose parsed url   hash: null,
+74 verbose parsed url   search: null,
+74 verbose parsed url   query: null,
+74 verbose parsed url   pathname: '^2.5.17',
+74 verbose parsed url   path: '^2.5.17',
+74 verbose parsed url   href: '^2.5.17' }
+75 verbose addNamed [ 'vue', '^2.5.17' ]
+76 verbose addNamed [ null, '>=2.5.17-0 <3.0.0-0' ]
+77 silly lockFile 5d7c3a38-vue-2-5-17 vue@^2.5.17
+78 verbose lock vue@^2.5.17 /home/dreknor/.npm/5d7c3a38-vue-2-5-17.lock
+79 verbose cache add name="axios" spec="^0.18" args=["axios","^0.18"]
+80 verbose parsed url { protocol: null,
+80 verbose parsed url   slashes: null,
+80 verbose parsed url   auth: null,
+80 verbose parsed url   host: null,
+80 verbose parsed url   port: null,
+80 verbose parsed url   hostname: null,
+80 verbose parsed url   hash: null,
+80 verbose parsed url   search: null,
+80 verbose parsed url   query: null,
+80 verbose parsed url   pathname: '^0.18',
+80 verbose parsed url   path: '^0.18',
+80 verbose parsed url   href: '^0.18' }
+81 verbose addNamed [ 'axios', '^0.18' ]
+82 verbose addNamed [ null, '>=0.18.0-0 <0.19.0-0' ]
+83 silly lockFile 25bc4e20-axios-0-18 axios@^0.18
+84 verbose lock axios@^0.18 /home/dreknor/.npm/25bc4e20-axios-0-18.lock
+85 silly lockFile 60352c60-popper-js-1-12 popper.js@^1.12
+86 error Error: Attempt to unlock popper.js@^1.12, which hasn't been locked
+86 error     at unlock (/package/host/localhost/nodejs-0.10.43/lib/node_modules/npm/lib/utils/locker.js:44:11)
+86 error     at cb (/package/host/localhost/nodejs-0.10.43/lib/node_modules/npm/lib/cache/add-named.js:32:5)
+86 error     at /package/host/localhost/nodejs-0.10.43/lib/node_modules/npm/lib/cache/add-named.js:41:20
+86 error     at /package/host/localhost/nodejs-0.10.43/lib/node_modules/npm/lib/utils/locker.js:30:7
+86 error     at cb (/package/host/localhost/nodejs-0.10.43/lib/node_modules/npm/node_modules/lockfile/lockfile.js:149:38)
+86 error     at /package/host/localhost/nodejs-0.10.43/lib/node_modules/npm/node_modules/lockfile/lockfile.js:177:38
+86 error     at Object.oncomplete (fs.js:108:15)
+87 error If you need help, you may report this *entire* log,
+87 error including the npm and node versions, at:
+87 error     <http://github.com/npm/npm/issues>
+88 error System Linux 2.6.32-696.18.7.el6.x86_64
+89 error command "/package/host/localhost/nodejs-0.10.43/bin/node" "/usr/local/bin/npm" "install"
+90 error cwd /var/www/virtual/dreknor/verwaltung.klamottenboerse.de
+91 error node -v v0.10.43
+92 error npm -v 1.4.29
+93 verbose exit [ 1, true ]

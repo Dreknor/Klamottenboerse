@@ -1,275 +1,165 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: DDR
- * Date: 22.03.2016
- * Time: 21:59
- */
 
 namespace App\Http\Controllers;
-use App\Http\Requests\InteressentenAnlegenRequest;
-use App\Models\Dateien\Dateien;
-use App\Models\Interessenten\Interessenten;
+
+use App\Http\Requests\CreateInteressentenRequest;
+use App\Http\Requests\UpdateInteressentRequest;
+use App\Model\Interessenten;
+use App\Model\Mailvorlagen;
 use App\Repositories\Interessenten\InteressentenRepository;
-use App\Repositories\Mailvorlagen\VorlagenRepository;
-use App\Repositories\Verkaeufernummern\NummernRepository;
+use App\Repositories\Mails\ImapRepository;
+use App\Repositories\Mails\MailRepository;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Excel;
-use Illuminate\Support\Facades\Mail;
 
 class InteressentenController extends Controller
 {
-    public function __construct(InteressentenRepository $interessentenRepository, NummernRepository $nummernRepository)
+    public function __construct(InteressentenRepository $interessentenRepository, MailRepository $mailRepository)
     {
-        $this->middleware('auth');
         $this->interessentenRepository = $interessentenRepository;
-        $this->nummernRepository = $nummernRepository;
+        $this->mailRepository = $mailRepository;
 
     }
 
     /**
-     * Zeigt eine Übersicht über alle erfassten Interessenten
+     * Display a listing of the resource.
      *
-     * @param string $Gruppe
      * @return \Illuminate\Http\Response
      */
-    public function index($Gruppe="")
+    public function index()
     {
-        
-
-        switch ($Gruppe) {
-            case "Verkaeufer":
-                return view('interessenten', [
-                    "entries" => $this->nummernRepository->getVerkaeufer(),
-                    "Gruppe"  => $Gruppe
-                ]);
-                exit;
-                
-            case "Kinderhaus":
-                return view('interessenten', [
-                    "entries" => $this->interessentenRepository->Kinderhaus(),
-                    "Gruppe"  => $Gruppe
-                ]);
-                exit;
-
-            case "Mitarbeiter":
-                return view('interessenten', [
-                    "entries" => $this->interessentenRepository->Mitarbeiter(),
-                    "Gruppe"  => $Gruppe
-                ]);
-                exit;
-
-           
-
-            case "Warteliste":
-                return view('interessenten', [
-                    "entries" => $this->interessentenRepository->Warteliste(),
-                    "Gruppe"  => $Gruppe
-                ]);
-                exit;
-
-            case "Nichtverkaeufer":
-                return view('interessenten', [
-                    "entries" => $this->nummernRepository->InteressentenOhneNummer(),
-                    "Gruppe"  => $Gruppe
-                ]);
-                exit;
-
-            default:
-                return view('interessenten', [
-                    "entries" => Interessenten::with('vknummern_vergeben')->orderBy('nachname')->get(),
-                    "Gruppe"  => "All"
-                ]);
-                exit;
-        }
-    }
-
-
-
-    public function search(Request $request) {
-
-        return view('interessenten',[
-            "entries" => $this->interessentenRepository->search($request->input('SearchString'))]);
-    }
-
-    public function show ($id) {
-        $VorlagenRepository = new VorlagenRepository();
-        $Vorlagen = $VorlagenRepository -> alle();
-
-        $Interessent=$this->interessentenRepository->findInteressent($id);
-        $Dateien=Dateien::query()->get();
-
-        $letzteNummer = $this->nummernRepository->letzteVKNummer($id);
-        if (is_object($letzteNummer)) {
-            $letzteNummer = $this->nummernRepository->NummerPruefen($letzteNummer->vknummer);
-        }
-
-        $haeufigsteNummern=$this->nummernRepository->haeufigsteNummer($id);
-        $Nummern=array();
-        if (count($haeufigsteNummern) > 0){
-            foreach ($haeufigsteNummern AS $Nummer){
-                $Nummer=$this->nummernRepository->NummerPruefen($Nummer->vknummer);
-                if (is_object($Nummer)){
-                    $Nummern[]=$Nummer;
-                }
-            }
-        }
-
-
-        return view('interessent', [
-           'Interessent' => $Interessent,
-            'Dateien'   => $Dateien,
-            'haeufigsteNummer' => $Nummern,
-            'letzteNummer' => $letzteNummer,
-            'Vorlagen'  => $Vorlagen,
-            'alleNummern' => $this->nummernRepository->alleNummernEinesInteressenten($Interessent->id)
-        ]);
-
-    }
-
-    public function warningDelete ($id) {
-        $Interessent=$this->interessentenRepository->findInteressent($id);
-        return view('deleteInteressent', [
-            'Interessent' => $Interessent
+        $Interressenten=$this->interessentenRepository->all();
+        $Interressenten->load('warteliste');
+        return view('interessenten.uberblick',[
+            "interessenten" => $Interressenten
         ]);
     }
 
-    public function destroy ($id) {
-        $Interessent=$this->interessentenRepository->findInteressent($id);
-       $Interessent->delete();
-        return redirect(action('InteressentenController@index'));
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $mail = \request()->input('email');
+        $name =\request()->input('personal');
+        return view('interessenten.create',[
+            "mail"  => (isset($mail)) ?  $mail : NULL,
+            "name"  => (isset($name)) ?  $name : NULL,
+        ]);
     }
 
-    public function update(Request $request) {
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(CreateInteressentenRequest $request)
+    {
+        $Interessent = new  Interessenten($request->all());
+        $Interessent->save();
 
-            $Daten[$request->input('name')]= $request->input('value');
-
-            $Interessent=Interessenten::query()->findOrFail( $request->input('pk'));
-            $Interessent->fill($Daten);
-
-            if($Interessent->save())
-                return response()->json(['status' => '1']);
-            else
-                return response()->json(['status' => '1']);
-
-
+        return redirect(url('interessent/'.$Interessent->id));
     }
 
-    public function store (InteressentenAnlegenRequest $request) {
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Model\Interessenten  $interessenten
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Interessenten $interessent)
+    {
+        $interessent->load('bisherige_vknummen', 'bisherige_vknummen.klamottenboerse', 'bisherige_vknummen.aktuelleKlamottenboerse');
 
-        $lastInsertedId = Interessenten::create($request->all())->id;
-        return redirect('/Interessent/'.$lastInsertedId);
+        $letzteVKnummern=$interessent->bisherige_vknummen;
 
+        $grouped = $letzteVKnummern->groupBy('vknummer');
+
+        $haeufigsteVKnummer = $grouped->sortByDesc((function($vknummer, $key) {
+            return count($vknummer);
+        }));
+
+
+
+        return view('interessenten.show',[
+            "interessent"   => $interessent,
+            "haeufigsteVKnummer"  => $haeufigsteVKnummer,
+            "letzteVKnummer"     =>$letzteVKnummern->first(),
+            "Vorlagen"      => Mailvorlagen::all()
+        ]);
     }
 
-    public function export ($string) {
-
-        switch ($string){
-            case "All":
-                Excel::create('Interessenten', function($excel) {
-
-                    $excel->sheet('Interessenten', function($sheet) {
-                        $sheet->fromModel(Interessenten::all());
-                    });
-
-                })->export('xls');
-                exit;
-            case "Verkaeufer":
-                Excel::create('Verkaeufer', function($excel) {
-
-                    $excel->sheet('Verkaeufer', function($sheet) {
-                        $sheet->fromModel($this->nummernRepository->getVerkaeufer2());
-                    });
-
-                })->export('xls');
-                exit;
-
-            case "Kinderhaus":
-                Excel::create('Kinderhauseltern', function($excel) {
-
-                    $excel->sheet('Kinderhauseltern', function($sheet) {
-                        $sheet->fromModel($this->interessentenRepository->Kinderhaus());
-                    });
-
-                })->export('xls');
-                exit;
-
-            case "Mitarbeiter":
-                Excel::create('Mitarbeiter', function($excel) {
-
-                    $excel->sheet('Mitarbeiter', function($sheet) {
-                        $sheet->fromModel($this->interessentenRepository->Mitarbeiter());
-                    });
-
-                })->export('xls');
-                exit;
-
-            case "Nichtverkaeufer":
-                Excel::create('Verkaeufer', function($excel) {
-
-                    $excel->sheet('Verkaeufer', function($sheet) {
-                        $sheet->fromModel($this->nummernRepository->InteressentenOhneNummer());
-                    });
-
-                })->export('xls');
-                exit;
-
-            case "Warteliste":
-                Excel::create('Verkaeufer', function($excel) {
-
-                    $excel->sheet('Verkaeufer', function($sheet) {
-                        $sheet->fromModel($this->interessentenRepository->Warteliste());
-                    });
-
-                })->export('xls');
-                exit;
-        }
-
-        return redirect(action('InteressentenController@index'));
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Model\Interessenten  $interessenten
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Interessenten $interessenten)
+    {
+        //
     }
 
-
-    public function abmelden ($id, $token) {
-        $Interessent=$this->interessentenRepository->findInteressent($id);
-        if (is_object($Interessent) and $token==$Interessent->mail){
-
-            return view('externeAufrufe.abmelden', [
-                'gefunden' => 'ja',
-                'id' => $id,
-                'token' => $token,
-            ]);
-
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Model\Interessenten  $interessenten
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateInteressentRequest $request, Interessenten $interessenten)
+    {
+        $interessenten->fill($request->all());
+        if ($request->input('kinderhaus') == "on"){
+            $interessenten->kinderhaus = 1;
         } else {
-            return view('externeAufrufe.abmelden', ['gefunden' => 'nein',]);
-
-
+            $interessenten->kinderhaus = 0;
         }
+
+        if ($request->input('mitarbeiter') == "on"){
+            $interessenten->mitarbeiter = 1;
+        } else {
+            $interessenten->mitarbeiter = 0;
+        }
+
+        try{
+            $interessenten->save();
+            return response()->json($interessenten, 200);
+        } catch (\Exception $exception){
+            return response()->json($exception, 400);
+        }
+
     }
 
-    public function doAbmelden($id, $token){
-        $Interessent=$this->interessentenRepository->findInteressent($id);
-        if ($Interessent->mail==$token){
-           
-            /*
-             * Benachrichtigen über Abmeldung
-             */
-           
-            Mail::send(array('text' => 'emails.benachrichtigungAbmeldung'),[
-                'vorname'   => $Interessent->vorname,
-                'nachname'   => $Interessent->nachname,
-                'mail'   => $Interessent->mail,
-                'telefon'   => $Interessent->telefon,
-            ], function($message) {
-                // note: if you don't set this, it will use the defaults from config/mail.php
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Model\Interessenten  $interessenten
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Interessenten $interessenten)
+    {
 
-                $message->from('anmeldung@klamottenboerse.de', 'Klamottenbörse');
-                $message->to('anmeldung@klamottenboerse.de', 'Klamottenbörse')
-                    ->subject('Abmeldung Klamottenbörse');
-            });
-            $Interessent->delete();
-            
+        try{
+
+
+
+            $this->mailRepository->sendDeleteInteressent($interessenten);
+
+            $interessenten->delete();
+
+
+            return redirect(url('/'))->with([
+                "success"  => "Interessent wurde gelöscht und informiert."
+            ]);
+        } catch (\Exception $exception){
+
+            dd($exception);
+            return redirect()->back()->with([
+                "error"  => "Löschen fehlgeschlagen"
+            ]);
         }
-        return view('externeAufrufe.abmeldenFertig');
-
     }
 }

@@ -82,7 +82,7 @@
                         </td>
                         <td width="40%">
                             <small>
-                                {{optional($Nummer->vergeben_an_Interessent->notiz)->notiz}}
+                                
                             </small>
 
                         </td>

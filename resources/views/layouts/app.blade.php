@@ -1,66 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>Klamottenbörse</title>
+	<!-- CSRF Token -->
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Fonts -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
-
-    <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.css')}}"/>
+	<title>{{ config('app.name', 'Laravel') }}</title>
 
 
-    <script src="{{asset('js/jquery-2.2.2.min.js')}}"></script>
-    <!-- x-editable -->
-     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
 
-    <link href="{{asset('css/bootstrap-datetimepicker.css')}}" rel="stylesheet" type="text/css">
-    <script src="{{asset('js/bootstrap-datetimepicker.js')}}"></script>
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="{{asset('css/lib/font-awesome/font-awesome.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/lib/bootstrap/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/main.css')}}">
 
-    <script type="text/javascript" src="{{asset('js/DataTables-1.10.12/js/jquery.dataTables.js')}}"></script>
-    <script type="text/javascript" src="{{asset('js/DataTables-1.10.12/js/dataTables.bootstrap.js')}}"></script>
-    <script type="text/javascript" src="{{asset('js/AutoFill-2.1.2/js/dataTables.autoFill.js')}}"></script>
-    <script type="text/javascript" src="{{asset('js/AutoFill-2.1.2/js/autoFill.bootstrap.js')}}"></script>
-
-    
-
-
+	@yield('css')
 </head>
+<body class="with-side-menu theme-picton-blue">
 
-<body id="app-layout">
-    <nav class="navbar navbar-default">
-        <div class="container">
-            @include('elements.navigation')
-        </div>
-    </nav>
-    
-    @if(session('Meldung'))
-        <div class="container">
-            <div class="row">
-                <div class="col-md-10" >
-                    <div class="alert alert-{{session('type')}} alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        {{session('Meldung')}}
+	<header class="site-header">
+	    <div class="container-fluid" >
+	        <a href="{{url('/')}}" class="navbar-brand col-sm-auto text-white">
+				Klamottenbörse
+	        </a>
 
+	        <button id="show-hide-sidebar-toggle" class="show-hide-sidebar text-white">
+	            <span class="">toggle menu</span>
+	        </button>
+
+	        <button class="hamburger hamburger--htla">
+	            <span>toggle menu</span>
+	        </button>
+	        <div class="site-header-content">
+	            <div class="site-header-content-in">
+	                <div class="site-header-shown">
+	                    <div class="dropdown user-menu">
+	                        <button class="dropdown-toggle" id="dd-user-menu" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                            <img src="{{asset('img/avatar-2-64.png')}}" alt="">
+	                        </button>
+	                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd-user-menu">
+
+	                            <div class="dropdown-divider"></div>
+                                <form class="" action="{{url('/logout')}}" method="post">
+                                    {{ csrf_field() }}
+                                    <button type="submit" name="logout" class="dropdown-item"><span class="font-icon glyphicon glyphicon-log-out"></span> Logout</button>
+                                </form>
+	                        </div>
+	                    </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    @endif
+	            </div><!--site-header-content-in-->
+	        </div><!--.site-header-content-->
+	    </div><!--.container-fluid-->
+	</header><!--.site-header-->
 
-    @yield('content')
+	<div class="mobile-menu-left-overlay"></div>
+	<nav class="side-menu">
+	    <ul class="side-menu-list">
+			<li class="">
+				<a href="{{url('/home')}}">
+	            <span>
+	                <i class="font-icon font-icon-dashboard"></i>
+	                <span class="lbl">Dashboard</span>
+	            </span>
+				</a>
+			</li>
 
-    <!-- JavaScripts -->
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+
+	        <li class="with-sub">
+	            <span>
+	                <i class="font-icon glyphicon glyphicon-user"></i>
+	                <span class="lbl">Interessenten</span>
+	            </span>
+	            <ul>
+	                <li><a href="{{url('interessenten')}}"><span class="lbl">Übersicht</span></a></li>
+	                <li><a href="{{url('interessenten/create')}}"><span class="lbl">Anlegen</span></a></li>
+	            </ul>
+	        </li>
+	        <li class="with-sub">
+	            <span>
+	                <i class="font-icon glyphicon glyphicon-calendar "></i>
+	                <span class="lbl">Klamottenbörse</span>
+	            </span>
+	            <ul>
+	                <li><a href="{{url('grunddaten')}}"><span class="lbl">Grunddaten</span></a></li>
+	                <li><a href="{{url('vknummern')}}"><span class="lbl">Verkäufernummern</span></a></li>
+                </ul>
+	        </li>
+			<li class="with-sub">
+	            <span>
+	                <i class="font-icon glyphicon glyphicon-list-alt"></i>
+	                <span class="lbl">Listen</span>
+	            </span>
+				<ul>
+					<!--<li><a href="{{url('listen/verkaeuferinfos')}}" target="_blank"><span class="lbl">Verkäuferinfos</span></a></li>-->
+					<li><a href="{{url('listen/vknummern')}}" target="_blank"><span class="lbl">Verkäufernummern</span></a></li>
+					<li><a href="{{url('listen/belehrung')}}" target="_blank"><span class="lbl">Belehrung</span></a></li>
+					<li><a href="{{url('listen/abstreichliste')}}" target="_blank"><span class="lbl">Abstreichliste</span></a></li>
+				</ul>
+			</li>
+            <li class="with-sub">
+	            <span>
+	                <i class="font-icon font-icon-cogwheel "></i>
+	                <span class="lbl">Settings</span>
+	            </span>
+                <ul>
+                    <li><a href="{{url('mailvorlagen')}}"><span class="lbl">Mail-Vorlagen</span></a></li>
+					<li><a href="{{url('import')}}"><span class="lbl">Import von Kasse</span></a></li>
+                </ul>
+            </li>
+
+	    </ul>
+
+
+	</nav><!--.side-menu-->
+
+	<div class="page-content">
+		<div class="container-fluid">
+			@yield('content')
+		</div><!--.container-fluid-->
+	</div><!--.page-content-->
+
+	<script src="{{asset('js/lib/jquery/jquery-3.2.1.min.js')}}"></script>
+	<script src="{{asset('js/lib/popper/popper.min.js')}}"></script>
+	<script src="{{asset('js/lib/tether/tether.min.js')}}"></script>
+	<script src="{{asset('js/lib/bootstrap/bootstrap.min.js')}}"></script>
+	<script src="{{asset('js/plugins.js')}}"></script>
+	<script src="{{asset('js/app.js')}}"></script>
+
+
+
+	@yield('js')
+
+	<script src="{{asset('js/lib/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+	<script src="{{asset('js/lib/bootstrap-notify/bootstrap-notify-init.js')}}"></script>
+	@if (session('success') )
+
+		<script>
+            $.notify({
+                message: '{{ session('success') }}'
+				},{
+                    // settings
+                    type: 'success'
+                }
+            );
+		</script>
+
+	@endif
+
+	@if (session('fehler') )
+
+		<script>
+            $.notify({
+                message: '{{ session('fehler') }}'
+				},{
+                    // settings
+                    type: 'danger'
+                }
+            );
+		</script>
+
+	@endif
+
+
 </body>
 </html>

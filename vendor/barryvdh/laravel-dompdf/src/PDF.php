@@ -2,9 +2,10 @@
 namespace Barryvdh\DomPDF;
 
 use Dompdf\Dompdf;
+use Dompdf\Options;
 use Exception;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\View\Factory as ViewFactory;
+use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Http\Response;
 
@@ -38,7 +39,7 @@ class PDF{
      * @param Dompdf $dompdf
      * @param \Illuminate\Contracts\Config\Repository $config
      * @param \Illuminate\Filesystem\Filesystem $files
-     * @param \Illuminate\View\Factory $view
+     * @param \Illuminate\Contracts\View\Factory $view
      */
     public function __construct(Dompdf $dompdf, ConfigRepository $config, Filesystem $files, ViewFactory $view){
         $this->dompdf = $dompdf;
@@ -124,6 +125,18 @@ class PDF{
     }
 
     /**
+     * Set/Change an option in DomPdf
+     *
+     * @param array $options
+     * @return static
+     */
+    public function setOptions(array $options) {
+        $options = new Options($options);
+        $this->dompdf->setOptions($options);
+        return $this;
+    }
+
+    /**
      * Output the PDF as a string.
      *
      * @return string The rendered PDF as string
@@ -156,7 +169,8 @@ class PDF{
         $output = $this->output();
         return new Response($output, 200, array(
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' =>  'attachment; filename="'.$filename.'"'
+                'Content-Disposition' =>  'attachment; filename="'.$filename.'"',
+                'Content-Length' => strlen($output),
             ));
     }
 
@@ -188,7 +202,7 @@ class PDF{
 
         if ( $this->showWarnings ) {
             global $_dompdf_warnings;
-            if(count($_dompdf_warnings)){
+            if(!empty($_dompdf_warnings) && count($_dompdf_warnings)){
                 $warnings = '';
                 foreach ($_dompdf_warnings as $msg){
                     $warnings .= $msg . "\n";
@@ -202,7 +216,16 @@ class PDF{
         $this->rendered = true;
     }
 
-
+    
+    public function setEncryption($password) {
+       if (!$this->dompdf) {
+           throw new Exception("DOMPDF not created yet");
+       }
+       $this->render();
+       return $this->dompdf->getCanvas()->get_cpdf()->setEncryption("pass", $password);
+    }
+    
+    
     protected function convertEntities($subject){
         $entities = array(
             '€' => '&#0128;',

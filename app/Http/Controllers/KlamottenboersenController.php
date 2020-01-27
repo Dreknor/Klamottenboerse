@@ -1,105 +1,136 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: DDR
- * Date: 27.03.2016
- * Time: 07:31
- */
 
 namespace App\Http\Controllers;
 
-
-use App\Models\Klamottenboerse\Helfer;
-use App\Models\Klamottenboerse\Klamottenboerse;
-use App\Models\Klamottenboerse\Vknummern;
-use App\Models\Klamottenboerse\Warteliste;
+use App\Http\Requests\neueKlamottenboerseRequest;
+use App\Http\Requests\UpdateKlamottenboerseRequest;
+use App\Imports\vknummernImport;
+use App\Model\Klamottenboerse;
+use App\Model\VKnummer;
 use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
-use App\Repositories\Verkaeufernummern\NummernRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class KlamottenboersenController extends Controller
 {
-    public function __construct(KlamottenboersenRepository $klamottenboersenRepository, NummernRepository $nummernRepository)
+    public function __construct(KlamottenboersenRepository $klamottenboersenRepository)
     {
-        $this->middleware('auth');
         $this->klamottenboersenRepository = $klamottenboersenRepository;
-        $this->nummernRepository = $nummernRepository;
     }
 
-    public function index(){
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function import()
+    {
+        return view('settings.upload');
+    }
 
-        return view('klamottenboerse.grunddaten', [
-            'Klamottenboerse' => $this->klamottenboersenRepository->latest()
+    public function saveImport(Request $request){
+
+
+        //$Excel = Excel::import(new vknummernImport(), request()->file('import'));
+        $collection = Excel::import(new vknummernImport(), request()->file('import'));
+        return redirect(url('home'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('klamottenboerse.neueKlamottenboerse',[
+           "klamottenboerse"    => $this->klamottenboersenRepository->aktuelleKlamottenboerse()
         ]);
     }
 
-    public function update(Request $request) {
-        $Daten[$request->input('name')]= $request->input('value');
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(neueKlamottenboerseRequest $request)
+    {
 
-        $Klamottenboerse=Klamottenboerse::query()->findOrFail( $request->input('pk'));
-        $Klamottenboerse->fill($Daten);
-
-        if($Klamottenboerse->save())
-            return response()->json(['status' => '1']);
-        else
-            return response()->json(['status' => '1']);
-
-
-    }
-
-    public function neueKlamottenboerse() {
-        return view('klamottenboerse.neueKlamottenboerse');
-    }
-    
-    public function store(Request $request){
+            $VKnummern=$this->klamottenboersenRepository->aktuelleKlamottenboerse()->vknummern;
 
 
-        $alleNummern=$this->nummernRepository->all();
-        $id=Klamottenboerse::create($request->all())->id;
 
-        if ($alleNummern != ""){
+            $Klamottenboerse = new Klamottenboerse($request->all());
+            $Klamottenboerse->save();
+
             $data=array();
-            foreach ($alleNummern as $Nummer) {
-                $data[] = array('vknummer' => $Nummer->vknummer, 'klamottenboersen_id'=>$id, 'reserviert_fuer' => $Nummer->reserviert_fuer );
+            foreach ($VKnummern as $Nummer) {
+                $data[] = array('vknummer' => $Nummer->vknummer, 'klamottenboersen_id'=>$Klamottenboerse->id, 'reserviert_fuer' => $Nummer->reserviert_fuer );
             }
 
-            Vknummern::insert($data);
-            DB::table('warteliste')->truncate();
+            VKnummer::insert($data);
 
 
-            return redirect('Grunddaten');
 
-        } else {
+        return redirect(url('klamottenboerse/'.$Klamottenboerse->id))->with([
+            "success"    => "Klamottenbörse angelegt."
+        ]);
+    }
 
-            return redirect('Nummern/new');
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Model\klamottenboerse  $klamottenboerse
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Klamottenboerse $klamottenboerse = NULL)
+    {
+        if ($klamottenboerse == NULL){
+            $klamottenboerse = $this->klamottenboersenRepository->aktuelleKlamottenboerse();
         }
 
-
-
-    }
-
-    public function destroy ($id) {
-        $Helfer=Helfer::query()->findOrFail($id);
-        $Helfer->delete();
-        return redirect(action('KlamottenboersenController@index'));
-    }
-    
-    public function store_Helfer (Request $request){
-
-        $Klamottenboerse = $this->klamottenboersenRepository->latest();
-
-        Helfer::updateOrCreate(
-            ["klamottenboerse_id" => $Klamottenboerse->id, "name" => $request->input('name')],
-            ["telefon" => $request->input('telefon'),
-            "mail" => $request->input('mail'),
-            "bereich" => $request->input('bereich')
+        return view('klamottenboerse.grunddaten',[
+            "klamottenboerse"   => $klamottenboerse
         ]);
-
-
-        //return view('klamottenboerse.grunddaten');
-        return back();
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Model\klamottenboerse  $klamottenboerse
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(klamottenboerse $klamottenboerse)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Model\klamottenboerse  $klamottenboerse
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateKlamottenboerseRequest $request, klamottenboerse $klamottenboerse)
+    {
+        $klamottenboerse->fill($request->all());
+        $klamottenboerse->save();
+
+        return redirect()->back()->with([
+           "success"    => "Daten gespeichert."
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Model\klamottenboerse  $klamottenboerse
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(klamottenboerse $klamottenboerse)
+    {
+        //
+    }
 }
