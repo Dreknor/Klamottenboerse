@@ -174,7 +174,7 @@
                             <tr>
                                 <td style="word-wrap:break-word;font-size:0px;padding:15px 30px 6px;" align="left">
                                     <div style="cursor:auto;color:#000000;font-family:Proxima Nova, Arial, Arial, Helvetica, sans-serif;font-size:15px;line-height:22px;text-align:left;">
-                                        {!! $text !!}
+                                        {!! $html !!}
                                     </div>
                                 </td>
                             </tr>

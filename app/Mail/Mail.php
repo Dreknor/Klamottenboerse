@@ -15,6 +15,7 @@ class Mail extends Mailable
 
     public $betreff;
     public $text;
+    public $html;
     public $interessent;
     /**
      * Create a new message instance.
@@ -29,6 +30,7 @@ class Mail extends Mailable
 
         $this->betreff = $request->input('betreff');
         $this->text= $request->input('text');
+        $this->html= $request->input('html');
     }
 
     /**

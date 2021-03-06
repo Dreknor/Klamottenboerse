@@ -9,6 +9,7 @@ use App\Model\Klamottenboerse;
 use App\Model\Mailvorlagen;
 use App\Repositories\Mails\ImapRepository;
 use App\Repositories\Mails\MailRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -133,26 +134,35 @@ class MailController extends Controller
     }
 
     public function anmeldungMoeglich(){
-
-        $Mailvorlage = Mailvorlagen::where('name', 'AnmeldungMoeglich')->first();
         $Klamottenboerse = Klamottenboerse::orderByDesc('datum')->first();
 
-        $interessenten = Interessenten::where('mail', '<>', '')->doesntHave('vknummern_vergeben')->get();
-        $interessenten = $interessenten->unique('mail');
-        $interessenten->load('vknummern_vergeben');
+        if ($Klamottenboerse->anmeldung->format('d.m.Y') == Carbon::now()->format('d.m.Y')){
+            $Mailvorlage = Mailvorlagen::where('name', 'AnmeldungMoeglich')->first();
 
 
-        foreach ($interessenten as $Interessent){
+            $interessenten = Interessenten::where('mail', '<>', '')->doesntHave('vknummern_vergeben')->get();
+            $interessenten = $interessenten->unique('mail');
+            $interessenten->load('vknummern_vergeben');
+
+
+            foreach ($interessenten as $Interessent){
 
 
 
-            $text = $this->mailRepository->replaceInMailvorlage(clone ($Mailvorlage), $Interessent, $Klamottenboerse)->text;
-            Mail::to($Interessent->mail)
-                ->queue(new AnmeldungMoeglichMail($Interessent, $Mailvorlage->betreff, $text));
+                $vorlage = $this->mailRepository->replaceInMailvorlage(clone ($Mailvorlage), $Interessent, $Klamottenboerse);
+
+                Mail::to($Interessent->mail)
+                    ->queue(new AnmeldungMoeglichMail($Interessent, $Mailvorlage->betreff, $vorlage->text, $vorlage->html));
+            }
+
+
+
+            return view('welcome');
+        } else {
+            //dump($Klamottenboerse->anmeldung->format('d.m.Y'). "== ".Carbon::now()->format('d.m.Y'));
+
         }
 
 
-
-        return view('welcome');
     }
 }

@@ -35,9 +35,22 @@
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-12 col-md-10">
-                            <textarea id="text" class="form-control" name="text" required>
-                                {{$Vorlage->text}}
-                            </textarea>
+                            <div class="row">
+                                <div class="col-12">
+                                    <textarea id="html" class="form-control html" name="html" required>
+                                        {{$Vorlage->html}}
+                                    </textarea>
+                                </div>
+                            </div>
+                            <div class="row mt-1">
+
+                            <div class="col-12">
+                                    <textarea id="text" class="form-control text" name="text" style="height: 250px" required>
+                                        {{$Vorlage->text}}
+                                    </textarea>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="col">
                             <span>Umgewandelt werden:</span>
@@ -82,7 +95,7 @@
     <script>
         tinymce.init({
             plugins: "table, autolink, image, lists, textcolor",
-            selector: '#text',
+            selector: '#html',
             toolbar:'bold, italic, underline, strikethrough, alignleft, aligncenter, alignright, alignjustify, styleselect, formatselect, fontselect, fontsizeselect, forecolor, backcolor, bullist, numlist, image, table, outdent, indent, blockquote, undo, redo, removeformat, autolink',
             menubar: false,
             height: 300,

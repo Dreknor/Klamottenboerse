@@ -14,17 +14,19 @@ class AnmeldungMoeglichMail extends Mailable implements ShouldQueue
     public $interessent;
     public $betreff;
     public $text;
+    public $html;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($interessenten, $betreff, $text)
+    public function __construct($interessenten, $betreff, $text, $html)
     {
         $this->interessent = $interessenten;
         $this->betreff = $betreff;
         $this->text = $text;
+        $this->html = $html;
     }
 
     /**

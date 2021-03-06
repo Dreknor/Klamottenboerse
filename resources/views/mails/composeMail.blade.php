@@ -12,8 +12,8 @@
                     <input type="text" name="betreff" value="@if (isset($Vorlage)) {{$Vorlage->betreff}} @endif" placeholder="Betreff" class="form-control" autofocus>
                 </div>
                 <div class="card-body">
-                        <textarea id="text" name="text" class="form-control">
-                            {{$Vorlage->text}}
+                        <textarea id="html" name="html" class="form-control">
+                            {{$Vorlage->html}}
                         </textarea>
                 </div>
                 <div class="card-footer">
@@ -36,7 +36,7 @@
     <script>
         tinymce.init({
             plugins: "table, autolink, image, lists",
-            selector: '#text',
+            selector: '#html',
             toolbar:'bold, italic, underline, strikethrough, alignleft, aligncenter, alignright, alignjustify, styleselect, formatselect, fontselect, fontsizeselect, bullist, numlist, image, table, outdent, indent, blockquote, undo, redo, removeformat, autolink',
             menubar: false,
             height: 300,

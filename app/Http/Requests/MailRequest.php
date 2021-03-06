@@ -25,7 +25,8 @@ class MailRequest extends FormRequest
     {
         return [
             'betreff'   => 'required|string',
-            'text'      => 'required|string'
+            'text'      => 'string',
+            'html'      => 'required|string'
         ];
     }
 }

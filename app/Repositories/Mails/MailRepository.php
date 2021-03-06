@@ -53,6 +53,7 @@ class MailRepository
     public function replaceInMailvorlage(Mailvorlagen $Vorlage, Interessenten $interessenten, $Klamottenboerse = null){
 
         $mailvorlagen = $Vorlage;
+
         if (is_null($Klamottenboerse)){
             $KlamottenboersenRepository = new KlamottenboersenRepository();
             $Klamottenboerse = $KlamottenboersenRepository->aktuelleKlamottenboerse();
@@ -78,13 +79,19 @@ class MailRepository
 
 
 
+        if (isset(auth()->user()->name)){
+            $absender = auth()->user()->name;
+        } else {
+            $absender = "Das Team der Klamottenboerse";
+        }
+
 
         $ReplaceStrings =[
             "VORNAME" => $interessenten->vorname ?? '',
             "NACHNAME"=> $interessenten->nachname ?? '',
             "ANREDE"=> $Anrede,
             "LIEBE"=> $Liebe,
-            "ABSENDER" => auth()->user()->name,
+            "ABSENDER" => $absender,
             "EMAIL"=> $interessenten->mail ?? '',
             "VKNUMMER"=> $interessenten->vknummern_vergeben->vknummer ?? '',
             "DATUM" => $Klamottenboerse->datum->format('d.m.Y') ,
@@ -97,10 +104,12 @@ class MailRepository
             "MAXTEILE" => $Klamottenboerse->maxTeile,
         ];
 
-        $Nachricht=str_replace(array_keys($ReplaceStrings), $ReplaceStrings, $mailvorlagen->text);
+        $Nachricht_text=str_replace(array_keys($ReplaceStrings), $ReplaceStrings, $mailvorlagen->text);
+        $Nachricht_html=str_replace(array_keys($ReplaceStrings), $ReplaceStrings, $mailvorlagen->html);
 
         $mailvorlagen->betreff = str_replace(array_keys($ReplaceStrings), $ReplaceStrings, $mailvorlagen->betreff);
-        $mailvorlagen->text = $Nachricht;
+        $mailvorlagen->text = $Nachricht_text;
+        $mailvorlagen->html = $Nachricht_html;
 
         return $mailvorlagen;
     }

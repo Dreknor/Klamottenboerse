@@ -10,6 +10,6 @@ class Mailvorlagen extends Model
     use SoftDeletes;
     //
     protected $table = "mailvorlagen";
-    protected $fillable = ["name", 'text', 'betreff'];
+    protected $fillable = ["name", 'text', 'betreff', 'html'];
 
 }
