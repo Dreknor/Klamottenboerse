@@ -18,12 +18,12 @@
 
     .row {
         width:100%;
-        height: 44%;
+        height: 46%;
         position: absolute;
     }
 
     .row-0 {
-        top: 500px;
+        top: 550px;
     }
 
     .row div {
@@ -65,15 +65,15 @@
             </table>
 
             <p><br>
-                Ich bin darüber informiert, dass die Elternvertretung des Evangelischen Kinderhauses der Friedenskirchgemeinde als Veranstalter der Klamottenbörse keine Haftung für abhanden gekommende Waren übernimmt, wenn gleich sorgfältig darauf geachtet wird, dass dies nicht passiert.
+                Ich bin darüber informiert, dass die Elternvertretung des Evangelischen Kinderhauses der Friedenskirchgemeinde als Veranstalter der Klamottenbörse keine Haftung für abhanden gekommene Waren übernimmt, wenngleich sorgfältig darauf geachtet wird, dass dies nicht passiert.
             </p>
-            <p>Die nicht verkaufte Ware muss am Tag der Klamottenbörse zwischen {{$Klamottenboerse->datum->format('d.m.Y')}} von  @php
+            <p>Die nicht verkaufte Ware muss am Tag der Klamottenbörse, dem {{$Klamottenboerse->datum->format('d.m.Y')}} zwischen @php
                     echo date('G.i', strtotime($Klamottenboerse->abholung_von));
                 @endphp
                 und
                 @php
                     echo date('G.i', strtotime($Klamottenboerse->abholung_bis));
-                @endphp Uhr  im Lutherhaus abgeholt werden.</p>
+                @endphp Uhr am Verkaufsort abgeholt werden.</p>
             <p> 25% des Verkaufserlöses ist für das Kinderhaus bestimmt.</p>
 
             <table style="width: 100%;">

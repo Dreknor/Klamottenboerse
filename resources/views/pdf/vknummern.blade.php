@@ -12,6 +12,11 @@
     -->
 
     <style rel="stylesheet" type="text/css">
+        @page {
+            size: 7in 9.25in;
+            margin: 27mm 16mm 27mm 16mm;
+        }
+
         table {
             border-collapse: collapse;
             border-spacing: 0;
@@ -51,9 +56,9 @@
             </div>
         </div>
 @for ($i = 200; $i < 700; $i+=100)
-        <div class="card">
+        <div class="card" style="width:6.5in;">
             <div class="card-body">
-            <table class="table table-bordered" width="100%">
+            <table class="table table-bordered">
                 <tr>
                     <th height="30px" style="width: 10%;text-align: center;">Verkäufernummer ({{$i}} - {{$i+100}})</th>
                     <th height="30px" style="width: 20%;text-align: center;">Verkäufer</th>
@@ -82,7 +87,7 @@
                         </td>
                         <td width="40%">
                             <small>
-                                
+
                             </small>
 
                         </td>

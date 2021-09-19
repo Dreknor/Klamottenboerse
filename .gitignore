@@ -17,6 +17,7 @@ bootstrap/cache/
 Homestead.json
 Homestead.yaml
 .env
+/vendor/*
 
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
@@ -26,3 +27,5 @@ resources/layouts/
 .idea/workspace.xml
 .idea/misc.xml
 .idea/workspace.xml
+vendor/bin/php-parse
+vendor/bin/phpunit
