@@ -38,11 +38,11 @@ class Klamottenboerse extends Model
 
     public function vknummern()
     {
-        return $this->hasMany('App\Model\VKnummer', 'klamottenboersen_id', 'id');
+        return $this->hasMany(\App\Model\VKnummer::class, 'klamottenboersen_id', 'id');
     }
 
     public function vknummern_vergeben()
     {
-        return $this->hasMany('App\Model\VKnummer', 'klamottenboersen_id', 'id')->where('vergeben_an', '!=', '');
+        return $this->hasMany(\App\Model\VKnummer::class, 'klamottenboersen_id', 'id')->where('vergeben_an', '!=', '');
     }
 }

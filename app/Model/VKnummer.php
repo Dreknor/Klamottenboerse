@@ -16,7 +16,7 @@ class VKnummer extends Model
 
     public function reserviert_fuer_Interessent()
     {
-        return $this->belongsTo('App\Model\Interessenten', 'reserviert_fuer');
+        return $this->belongsTo(\App\Model\Interessenten::class, 'reserviert_fuer');
     }
 
     public function vergeben_an_Interessent()
