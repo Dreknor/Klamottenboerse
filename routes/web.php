@@ -13,7 +13,6 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 
-
 Auth::routes();
 
 Route::group(['middleware' => ['web']], function () {
@@ -62,26 +61,23 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/import', 'KlamottenboersenController@import');
     Route::put('/import/', 'KlamottenboersenController@saveImport');
 
-
     Route::put('/vknummer/{vknummer}/remove', 'NummernController@removeVergabe');
     Route::put('/vknummern/vergeben', 'NummernController@newVKnummerVergeben');
 
     //Notitz
-    Route::put('notiz/{InteressentenID}','NotizenController@store');
+    Route::put('notiz/{InteressentenID}', 'NotizenController@store');
     //newInteressent from Mail
-    Route::post('newInteressent','InteressentenController@create');
+    Route::post('newInteressent', 'InteressentenController@create');
 
     Route::resources([
         'interessenten' => 'InteressentenController',
         'interessent' => 'InteressentenController',
         'vknummern' => 'NummernController',
-        'mailvorlagen'  => 'MailvorlagenController'
+        'mailvorlagen'  => 'MailvorlagenController',
     ]);
 
-
     //Klamottenbörse
-    Route::resource('klamottenboerse', "KlamottenboersenController");
-
+    Route::resource('klamottenboerse', 'KlamottenboersenController');
 
     Route::get('/mailable', function () {
         $Interessent = \App\Model\Interessenten::find(73);
@@ -90,6 +86,3 @@ Route::group(['middleware' => ['web']], function () {
         return new \App\Mail\Verkaeuferinfos($VKnummer);
     });
 });
-
-
-

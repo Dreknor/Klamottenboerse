@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use Laravel\Telescope\EntryType;
-use Laravel\Telescope\Telescope;
 use Illuminate\Support\Facades\Gate;
-use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\Contracts\EntriesRepository;
+use Laravel\Telescope\EntryType;
+use Laravel\Telescope\IncomingEntry;
+use Laravel\Telescope\Telescope;
 use Laravel\Telescope\TelescopeApplicationServiceProvider;
 
 class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
@@ -19,7 +19,6 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
     public function register()
     {
         // Telescope::night();
-
 
         Telescope::filter(function (IncomingEntry $entry) {
             if ($this->app->environment() == 'local') {
@@ -42,7 +41,6 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      */
     protected function gate()
     {
-
         Gate::define('viewTelescope', function ($user) {
             return in_array($user->email, [
                 'daniel@dieroehrichs.de',

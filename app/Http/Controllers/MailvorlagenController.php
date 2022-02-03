@@ -15,9 +15,9 @@ class MailvorlagenController extends Controller
      */
     public function index()
     {
-        return view('mails.vorlagen.index',[
-            "Vorlagen"  => Mailvorlagen::all()
-            ]);
+        return view('mails.vorlagen.index', [
+            'Vorlagen'  => Mailvorlagen::all(),
+        ]);
     }
 
     /**
@@ -39,13 +39,13 @@ class MailvorlagenController extends Controller
     public function store(Request $request)
     {
         $mailvorlagen = new Mailvorlagen($request->all());
-        $mailvorlagen->betreff = "";
-        $mailvorlagen->text = "";
+        $mailvorlagen->betreff = '';
+        $mailvorlagen->text = '';
 
         $mailvorlagen->save();
 
-        return redirect(url('mailvorlagen/'.$mailvorlagen->id."/edit"))->with([
-           "success"    => "Mailvorlage gespeichert"
+        return redirect(url('mailvorlagen/'.$mailvorlagen->id.'/edit'))->with([
+            'success'    => 'Mailvorlage gespeichert',
         ]);
     }
 
@@ -68,8 +68,8 @@ class MailvorlagenController extends Controller
      */
     public function edit(mailvorlagen $mailvorlagen)
     {
-        return view('mails.vorlagen.edit',[
-            "Vorlage"   => $mailvorlagen
+        return view('mails.vorlagen.edit', [
+            'Vorlage'   => $mailvorlagen,
         ]);
     }
 
@@ -86,7 +86,7 @@ class MailvorlagenController extends Controller
         $mailvorlagen->save();
 
         return redirect(url('mailvorlagen'))->with([
-            "success"   => "Vorlage gespeichert."
+            'success'   => 'Vorlage gespeichert.',
         ]);
     }
 
@@ -99,8 +99,9 @@ class MailvorlagenController extends Controller
     public function destroy(mailvorlagen $mailvorlagen)
     {
         $mailvorlagen->delete();
+
         return redirect(url('mailvorlagen'))->with([
-            "success"   => "Vorlage gelöscht."
+            'success'   => 'Vorlage gelöscht.',
         ]);
     }
 }

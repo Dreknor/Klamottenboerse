@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-
-
     /**
      * Create a new controller instance.
      *
@@ -32,16 +30,16 @@ class HomeController extends Controller
     {
         $Interessenten = Interessenten::all();
         //$Mails = $this->imapRepository->mailsInboxLastDays(10);
-        $Klamottenboerse=Klamottenboerse::with('vknummern', 'vknummern_vergeben')->get();
+        $Klamottenboerse = Klamottenboerse::with('vknummern', 'vknummern_vergeben')->get();
 
         //dd($Klamottenboerse->last());
         return view('home', [
-            "Interessenten" => $Interessenten,
+            'Interessenten' => $Interessenten,
             //"MailsCount"    => $Mails->count(),
             //"unreadMails"   => $Mails->where('flags.seen',0)->count(),
             //"Mails" => $Mails->sortByDesc('date')->paginate(10),
-            "Klamottenboersen"   => $Klamottenboerse,
-            "VKnummern"     => $Klamottenboerse->last()->vknummern
+            'Klamottenboersen'   => $Klamottenboerse,
+            'VKnummern'     => $Klamottenboerse->last()->vknummern,
         ]);
     }
 }

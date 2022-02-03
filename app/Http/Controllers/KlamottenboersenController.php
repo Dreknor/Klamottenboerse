@@ -28,11 +28,12 @@ class KlamottenboersenController extends Controller
         return view('settings.upload');
     }
 
-    public function saveImport(Request $request){
-
+    public function saveImport(Request $request)
+    {
 
         //$Excel = Excel::import(new vknummernImport(), request()->file('import'));
         $collection = Excel::import(new vknummernImport(), request()->file('import'));
+
         return redirect(url('home'));
     }
 
@@ -43,8 +44,8 @@ class KlamottenboersenController extends Controller
      */
     public function create()
     {
-        return view('klamottenboerse.neueKlamottenboerse',[
-           "klamottenboerse"    => $this->klamottenboersenRepository->aktuelleKlamottenboerse()
+        return view('klamottenboerse.neueKlamottenboerse', [
+            'klamottenboerse'    => $this->klamottenboersenRepository->aktuelleKlamottenboerse(),
         ]);
     }
 
@@ -56,25 +57,20 @@ class KlamottenboersenController extends Controller
      */
     public function store(neueKlamottenboerseRequest $request)
     {
+        $VKnummern = $this->klamottenboersenRepository->aktuelleKlamottenboerse()->vknummern;
 
-            $VKnummern=$this->klamottenboersenRepository->aktuelleKlamottenboerse()->vknummern;
+        $Klamottenboerse = new Klamottenboerse($request->all());
+        $Klamottenboerse->save();
 
+        $data = [];
+        foreach ($VKnummern as $Nummer) {
+            $data[] = ['vknummer' => $Nummer->vknummer, 'klamottenboersen_id'=>$Klamottenboerse->id, 'reserviert_fuer' => $Nummer->reserviert_fuer];
+        }
 
-
-            $Klamottenboerse = new Klamottenboerse($request->all());
-            $Klamottenboerse->save();
-
-            $data=array();
-            foreach ($VKnummern as $Nummer) {
-                $data[] = array('vknummer' => $Nummer->vknummer, 'klamottenboersen_id'=>$Klamottenboerse->id, 'reserviert_fuer' => $Nummer->reserviert_fuer );
-            }
-
-            VKnummer::insert($data);
-
-
+        VKnummer::insert($data);
 
         return redirect(url('klamottenboerse/'.$Klamottenboerse->id))->with([
-            "success"    => "Klamottenbörse angelegt."
+            'success'    => 'Klamottenbörse angelegt.',
         ]);
     }
 
@@ -84,14 +80,14 @@ class KlamottenboersenController extends Controller
      * @param  \App\Model\klamottenboerse  $klamottenboerse
      * @return \Illuminate\Http\Response
      */
-    public function show(Klamottenboerse $klamottenboerse = NULL)
+    public function show(Klamottenboerse $klamottenboerse = null)
     {
-        if ($klamottenboerse == NULL){
+        if ($klamottenboerse == null) {
             $klamottenboerse = $this->klamottenboersenRepository->aktuelleKlamottenboerse();
         }
 
-        return view('klamottenboerse.grunddaten',[
-            "klamottenboerse"   => $klamottenboerse
+        return view('klamottenboerse.grunddaten', [
+            'klamottenboerse'   => $klamottenboerse,
         ]);
     }
 
@@ -119,7 +115,7 @@ class KlamottenboersenController extends Controller
         $klamottenboerse->save();
 
         return redirect()->back()->with([
-           "success"    => "Daten gespeichert."
+            'success'    => 'Daten gespeichert.',
         ]);
     }
 

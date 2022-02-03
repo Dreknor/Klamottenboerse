@@ -8,7 +8,6 @@
 
 namespace App\Http\ViewComposers;
 
-
 use App\Model\Interessenten;
 use App\Repositories\Interessenten\InteressentenRepository;
 use App\Repositories\Mails\ImapRepository;
@@ -23,7 +22,6 @@ class AppComposer
 
     public function compose(View $view)
     {
-       // $view->with('unreadMail', $this->imapRepository->unseenMessages($this->imapRepository->connect()));
+        // $view->with('unreadMail', $this->imapRepository->unseenMessages($this->imapRepository->connect()));
     }
-
 }

@@ -8,17 +8,17 @@
 
 namespace App\Model;
 
-
 use App\Model\Interessenten;
 use Illuminate\Database\Eloquent\Model;
 
 class Warteliste extends Model
 {
-    public $table="warteliste";
+    public $table = 'warteliste';
 
-    protected $fillable = array('interessenten_id' );
+    protected $fillable = ['interessenten_id'];
 
-    public function Interessent () {
+    public function Interessent()
+    {
         return $this->belongsTo(Interessenten::class, 'interessenten_id');
     }
 }

@@ -14,25 +14,20 @@ class vknummernImport implements ToModel, WithHeadingRow
         $this->klamottenboerse = new KlamottenboersenRepository();
     }
 
-
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function model(array $row)
     {
-
-        if (isset($row['vknummer']) and isset($row['sum'])){
-
+        if (isset($row['vknummer']) and isset($row['sum'])) {
             return VKnummer::query()->updateOrCreate([
-                "vknummer"  => $row['vknummer'],
-                "klamottenboersen_id"   => $this->klamottenboerse->aktuelleKlamottenboerse()->id
-            ],[
-                "umsatz"    => $row['sum']
+                'vknummer'  => $row['vknummer'],
+                'klamottenboersen_id'   => $this->klamottenboerse->aktuelleKlamottenboerse()->id,
+            ], [
+                'umsatz'    => $row['sum'],
             ]);
         }
-
-
     }
 }
