@@ -4,9 +4,9 @@ namespace App\Mail;
 
 use App\Model\Interessenten;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class Nummerentzogen extends Mailable
 {
@@ -33,7 +33,7 @@ class Nummerentzogen extends Mailable
             ->text('mails.text.removeNumber')
             ->view('mails.removeNumber')
             ->with([
-                'Interessent' => $this->interessent
+                'Interessent' => $this->interessent,
             ]);
     }
 }

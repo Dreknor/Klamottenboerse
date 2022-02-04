@@ -5,16 +5,18 @@ namespace App\Mail;
 use App\Model\Interessenten;
 use App\Model\VKnummer;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class Verkaeuferinfos extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $vknummer;
+
     public $Klamottenboerse;
+
     public $Interessent;
 
     /**
@@ -25,9 +27,9 @@ class Verkaeuferinfos extends Mailable
     public function __construct(VKnummer $VKnummer, $attach)
     {
         $this->vknummer = $VKnummer;
-        $this->Klamottenboerse=$VKnummer->Klamottenboerse;
+        $this->Klamottenboerse = $VKnummer->Klamottenboerse;
         $this->attach = $attach;
-        $this->Interessent=$VKnummer->vergeben_an_Interessent;
+        $this->Interessent = $VKnummer->vergeben_an_Interessent;
     }
 
     /**

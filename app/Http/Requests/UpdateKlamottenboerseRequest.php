@@ -14,9 +14,10 @@ class UpdateKlamottenboerseRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::user()){
+        if (Auth::user()) {
             return true;
         }
+
         return false;
     }
 
@@ -27,28 +28,23 @@ class UpdateKlamottenboerseRequest extends FormRequest
      */
     public function rules()
     {
-
-
-
         return [
-            "datum" => "required|date|after:anmeldung|unique:klamottenboerse,datum,".$this->route('klamottenboerse')->id,
-            "anmeldung" => "required|date|after:anmeldungKinderhaus",
-            "anmeldungKinderhaus"   => "required|date",
-            "abholung_von"  => "required|date_format:H:i",
-            "abholung_bis"  => "required|date_format:H:i",
-            "anlieferung_von"   => "required|date_format:H:i",
-            "anlieferung_bis"   => "required|date_format:H:i",
-            "maxTeile"  => "required|integer|min:1"
+            'datum' => 'required|date|after:anmeldung|unique:klamottenboerse,datum,'.$this->route('klamottenboerse')->id,
+            'anmeldung' => 'required|date|after:anmeldungKinderhaus',
+            'anmeldungKinderhaus'   => 'required|date',
+            'abholung_von'  => 'required|date_format:H:i',
+            'abholung_bis'  => 'required|date_format:H:i',
+            'anlieferung_von'   => 'required|date_format:H:i',
+            'anlieferung_bis'   => 'required|date_format:H:i',
+            'maxTeile'  => 'required|integer|min:1',
         ];
-
-
     }
 
     public function messages()
     {
         return [
-            "maxTeile.required"     => "Maximale Teileanzahl muss angegeben werden.",
-            "maxTeile.min"     => "Maximale Teileanzahl muss mindestens 1 betragen."
+            'maxTeile.required'     => 'Maximale Teileanzahl muss angegeben werden.',
+            'maxTeile.min'     => 'Maximale Teileanzahl muss mindestens 1 betragen.',
         ];
     }
 }

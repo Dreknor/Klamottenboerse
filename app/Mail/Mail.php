@@ -5,18 +5,22 @@ namespace App\Mail;
 use App\Http\Requests\MailRequest;
 use App\Model\Interessenten;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class Mail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $betreff;
+
     public $text;
+
     public $html;
+
     public $interessent;
+
     /**
      * Create a new message instance.
      *
@@ -24,13 +28,13 @@ class Mail extends Mailable
      */
     public function __construct(MailRequest $request, Interessenten $interessent = null)
     {
-        if (isset($interessent)){
+        if (isset($interessent)) {
             $this->interessent = $interessent;
         }
 
         $this->betreff = $request->input('betreff');
-        $this->text= $request->input('text');
-        $this->html= $request->input('html');
+        $this->text = $request->input('text');
+        $this->html = $request->input('html');
     }
 
     /**
@@ -45,8 +49,6 @@ class Mail extends Mailable
             ->cc(env('MAIL_FROM_ADDRESS'))
             ->subject($this->betreff)
             ->text('mails.text.mail')
-            ->view('mails.mail')
-            ;
-
+            ->view('mails.mail');
     }
 }

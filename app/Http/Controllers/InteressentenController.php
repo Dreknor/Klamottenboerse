@@ -17,7 +17,6 @@ class InteressentenController extends Controller
     {
         $this->interessentenRepository = $interessentenRepository;
         $this->mailRepository = $mailRepository;
-
     }
 
     /**
@@ -27,10 +26,11 @@ class InteressentenController extends Controller
      */
     public function index()
     {
-        $Interressenten=$this->interessentenRepository->all();
+        $Interressenten = $this->interessentenRepository->all();
         $Interressenten->load('warteliste');
-        return view('interessenten.uberblick',[
-            "interessenten" => $Interressenten
+
+        return view('interessenten.uberblick', [
+            'interessenten' => $Interressenten,
         ]);
     }
 
@@ -42,10 +42,11 @@ class InteressentenController extends Controller
     public function create()
     {
         $mail = \request()->input('email');
-        $name =\request()->input('personal');
-        return view('interessenten.create',[
-            "mail"  => (isset($mail)) ?  $mail : NULL,
-            "name"  => (isset($name)) ?  $name : NULL,
+        $name = \request()->input('personal');
+
+        return view('interessenten.create', [
+            'mail'  => (isset($mail)) ? $mail : null,
+            'name'  => (isset($name)) ? $name : null,
         ]);
     }
 
@@ -73,21 +74,19 @@ class InteressentenController extends Controller
     {
         $interessent->load('bisherige_vknummen', 'bisherige_vknummen.klamottenboerse', 'bisherige_vknummen.aktuelleKlamottenboerse');
 
-        $letzteVKnummern=$interessent->bisherige_vknummen;
+        $letzteVKnummern = $interessent->bisherige_vknummen;
 
         $grouped = $letzteVKnummern->groupBy('vknummer');
 
-        $haeufigsteVKnummer = $grouped->sortByDesc((function($vknummer, $key) {
+        $haeufigsteVKnummer = $grouped->sortByDesc((function ($vknummer, $key) {
             return count($vknummer);
         }));
 
-
-
-        return view('interessenten.show',[
-            "interessent"   => $interessent,
-            "haeufigsteVKnummer"  => $haeufigsteVKnummer,
-            "letzteVKnummer"     =>$letzteVKnummern->first(),
-            "Vorlagen"      => Mailvorlagen::all()
+        return view('interessenten.show', [
+            'interessent'   => $interessent,
+            'haeufigsteVKnummer'  => $haeufigsteVKnummer,
+            'letzteVKnummer'     =>$letzteVKnummern->first(),
+            'Vorlagen'      => Mailvorlagen::all(),
         ]);
     }
 
@@ -112,25 +111,25 @@ class InteressentenController extends Controller
     public function update(UpdateInteressentRequest $request, Interessenten $interessenten)
     {
         $interessenten->fill($request->all());
-        if ($request->input('kinderhaus') == "on"){
+        if ($request->input('kinderhaus') == 'on') {
             $interessenten->kinderhaus = 1;
         } else {
             $interessenten->kinderhaus = 0;
         }
 
-        if ($request->input('mitarbeiter') == "on"){
+        if ($request->input('mitarbeiter') == 'on') {
             $interessenten->mitarbeiter = 1;
         } else {
             $interessenten->mitarbeiter = 0;
         }
 
-        try{
+        try {
             $interessenten->save();
+
             return response()->json($interessenten, 200);
-        } catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json($exception, 400);
         }
-
     }
 
     /**
@@ -141,24 +140,19 @@ class InteressentenController extends Controller
      */
     public function destroy(Interessenten $interessenten)
     {
-
-        try{
-
-
-
+        try {
             $this->mailRepository->sendDeleteInteressent($interessenten);
 
             $interessenten->delete();
 
-
             return redirect(url('/'))->with([
-                "success"  => "Interessent wurde gelöscht und informiert."
+                'success'  => 'Interessent wurde gelöscht und informiert.',
             ]);
-        } catch (\Exception $exception){
-
+        } catch (\Exception $exception) {
             dd($exception);
+
             return redirect()->back()->with([
-                "error"  => "Löschen fehlgeschlagen"
+                'error'  => 'Löschen fehlgeschlagen',
             ]);
         }
     }

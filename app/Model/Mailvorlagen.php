@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Mailvorlagen extends Model
 {
     use SoftDeletes;
-    //
-    protected $table = "mailvorlagen";
-    protected $fillable = ["name", 'text', 'betreff', 'html'];
 
+    //
+    protected $table = 'mailvorlagen';
+
+    protected $fillable = ['name', 'text', 'betreff', 'html'];
 }
