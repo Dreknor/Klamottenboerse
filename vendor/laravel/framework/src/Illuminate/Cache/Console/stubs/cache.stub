@@ -15,7 +15,7 @@ class CreateCacheTable extends Migration
     {
         Schema::create('cache', function (Blueprint $table) {
             $table->string('key')->unique();
-            $table->text('value');
+            $table->mediumText('value');
             $table->integer('expiration');
         });
     }
@@ -27,6 +27,6 @@ class CreateCacheTable extends Migration
      */
     public function down()
     {
-        Schema::drop('cache');
+        Schema::dropIfExists('cache');
     }
 }

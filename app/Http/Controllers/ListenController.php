@@ -1,99 +1,74 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: DDR
- * Date: 16.08.2016
- * Time: 09:45
- */
 
 namespace App\Http\Controllers;
 
-
-use App\Repositories\Interessenten\InteressentenRepository;
+use App\Model\VKnummer;
 use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
-use App\Repositories\Verkaeufernummern\NummernRepository;
-use Barryvdh\DomPDF\PDF;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
 class ListenController extends Controller
 {
-    public function __construct(InteressentenRepository $interessentenRepository, NummernRepository $nummernRepository, KlamottenboersenRepository $klamottenboersenRepository)
+    public function __construct(KlamottenboersenRepository $klamottenboersenRepository)
     {
-        $this->middleware('auth');
-        $this->interessentenRepository = $interessentenRepository;
-        $this->nummernRepository = $nummernRepository;
         $this->klamottenboersenRepository = $klamottenboersenRepository;
     }
 
-    public function index(){
-        return view('listen.listenuebersicht');
-    }
-
-    public function vknummern (){
-
+    public function verkaeuferinfos(){
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('listen.pdf.vknummern',[
-            "Klamottenboerse" => $this->klamottenboersenRepository->latest(),
-            "Nummern"   => $this->nummernRepository->getNummernMitInteressenten(),
-            "alteNummer" => 100
+        $pdf = $pdf->loadView('pdf.verkaeuferinfos',[
+            "Klamottenboerse"   => $this->klamottenboersenRepository->aktuelleKlamottenboerse()
         ]);
-        return $pdf->download('vknummern.pdf');
+
+        $pdf->save(storage_path().'/Verkaeuferinfos.pdf');
+        return $pdf->stream('Verkaeuferinfos.pdf');
 
 
     }
-    
-    public function belehrung(){
+
+    public function vknummern(){
+        $Klamottenboerse=$this->klamottenboersenRepository->aktuelleKlamottenboerse();
+
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('listen.pdf.belehrung',[
-            "Klamottenboerse" => $this->klamottenboersenRepository->latest(),
-            "Nummern"   => $this->nummernRepository->getNummernMitInteressenten()
-
+        $pdf = $pdf->loadView('pdf.vknummern',[
+            "Klamottenboerse"   => $Klamottenboerse,
+            "Nummern"           => $Klamottenboerse->vknummern_vergeben
         ]);
-        return $pdf->download('belehrung.pdf');
+
+        $pdf->save(storage_path().'/vknummern.pdf');
+        return $pdf->stream('vknummern.pdf');
     }
 
-    public function helfer(){
-        $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('listen.pdf.helfer',[
-            "Klamottenboerse" => $this->klamottenboersenRepository->latest()
+    public function belehrung($vknummer = ''){
+        $Klamottenboerse =$this->klamottenboersenRepository->aktuelleKlamottenboerse();
 
-        ]);
-        return $pdf->download('Helferliste.pdf');
-    }
-
-    public function nummern (){
-        $Nummern=$this->nummernRepository->getNummernMitInteressenten();
-        $Spalten=array(
-            "1" => "",
-            "2" => ""
-            );
-        $Anzahl=1;
-
-        foreach ($Nummern AS $Nummer){
-            if (isset($Nummer->vorname)){
-                if ( $Anzahl<=40){
-                    $Spalten[1].=$Nummer->vknummer."<br>";
-
-                } else {
-                    $Spalten[2].=$Nummer->vknummer."<br>";
-                }
-                $Anzahl++;
-            }
+        if (!$vknummer)
+            $VKnummer = $Klamottenboerse->vknummern_vergeben;
+        else {
+            $VKnummer = collect(VKnummer::with('vergeben_an_Interessent')->where('vknummer', $vknummer)->where('klamottenboersen_id', $Klamottenboerse->id)->get());
         }
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('listen.pdf.abstreichliste',[
-            "Spalten"   => $Spalten
+        $pdf = $pdf->loadView('pdf.belehrung',[
+            "Klamottenboerse"   => $Klamottenboerse,
+            "Nummern"           => $VKnummer
         ]);
-        return $pdf->download('Abstreichliste.pdf');
+
+        $pdf->save(storage_path().'/belehrung.pdf');
+        return $pdf->stream('belehrung.pdf');
     }
 
-    public function Infos(){
+    public function abstreichliste(){
+        $Klamottenboerse=$this->klamottenboersenRepository->aktuelleKlamottenboerse();
+
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('listen.pdf.verkaeuferinfos',[
-            "Klamottenboerse" => $this->klamottenboersenRepository->latest()
+        $pdf = $pdf->loadView('pdf.abstreichliste',[
+            "Klamottenboerse"   => $Klamottenboerse,
+            "Nummern"           => $Klamottenboerse->vknummern_vergeben
         ]);
-        return $pdf->download('VerkäuferInfos.pdf');
+
+        $pdf->save(storage_path().'/abstreichliste.pdf');
+        return $pdf->stream('abstreichliste.pdf');
     }
 }

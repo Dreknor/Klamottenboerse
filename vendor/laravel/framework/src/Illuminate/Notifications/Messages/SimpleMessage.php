@@ -3,6 +3,7 @@
 namespace Illuminate\Notifications\Messages;
 
 use Illuminate\Notifications\Action;
+use Illuminate\Contracts\Support\Htmlable;
 
 class SimpleMessage
 {
@@ -19,6 +20,20 @@ class SimpleMessage
      * @var string
      */
     public $subject;
+
+    /**
+     * The notification's greeting.
+     *
+     * @var string
+     */
+    public $greeting;
+
+    /**
+     * The notification's salutation.
+     *
+     * @var string
+     */
+    public $salutation;
 
     /**
      * The "intro" lines of the notification.
@@ -99,9 +114,35 @@ class SimpleMessage
     }
 
     /**
+     * Set the greeting of the notification.
+     *
+     * @param  string  $greeting
+     * @return $this
+     */
+    public function greeting($greeting)
+    {
+        $this->greeting = $greeting;
+
+        return $this;
+    }
+
+    /**
+     * Set the salutation of the notification.
+     *
+     * @param  string  $salutation
+     * @return $this
+     */
+    public function salutation($salutation)
+    {
+        $this->salutation = $salutation;
+
+        return $this;
+    }
+
+    /**
      * Add a line of text to the notification.
      *
-     * @param  \Illuminate\Notifications\Action|string  $line
+     * @param  mixed  $line
      * @return $this
      */
     public function line($line)
@@ -112,7 +153,7 @@ class SimpleMessage
     /**
      * Add a line of text to the notification.
      *
-     * @param  \Illuminate\Notifications\Action|string|array  $line
+     * @param  mixed  $line
      * @return $this
      */
     public function with($line)
@@ -131,16 +172,20 @@ class SimpleMessage
     /**
      * Format the given line of text.
      *
-     * @param  string|array  $line
-     * @return string
+     * @param  \Illuminate\Contracts\Support\Htmlable|string|array  $line
+     * @return \Illuminate\Contracts\Support\Htmlable|string
      */
     protected function formatLine($line)
     {
+        if ($line instanceof Htmlable) {
+            return $line;
+        }
+
         if (is_array($line)) {
             return implode(' ', array_map('trim', $line));
         }
 
-        return trim(implode(' ', array_map('trim', explode(PHP_EOL, $line))));
+        return trim(implode(' ', array_map('trim', preg_split('/\\r\\n|\\r|\\n/', $line))));
     }
 
     /**
@@ -168,6 +213,8 @@ class SimpleMessage
         return [
             'level' => $this->level,
             'subject' => $this->subject,
+            'greeting' => $this->greeting,
+            'salutation' => $this->salutation,
             'introLines' => $this->introLines,
             'outroLines' => $this->outroLines,
             'actionText' => $this->actionText,

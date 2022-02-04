@@ -1,286 +1,242 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: DDR
- * Date: 05.07.2016
- * Time: 05:57
- */
 
 namespace App\Http\Controllers;
 
 
-use App\Models\Klamottenboerse\Vknummern;
-use App\Models\Klamottenboerse\Vknummern_Kommentar;
-use App\Models\Klamottenboerse\Warteliste;
-use App\Repositories\Dateien\DateienRepository;
+use App\Http\Requests\ReserviereNummerRequest;
+use App\Mail\Nummerentzogen;
+use App\Mail\Verkaeuferinfos;
+use App\Model\Interessenten;
+use App\Model\Klamottenboerse;
+use App\Model\Mailvorlagen;
+use App\Model\VKnummer;
 use App\Repositories\Interessenten\InteressentenRepository;
-use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
-use App\Repositories\Nachrichten\NachrichtenRepository;
-use App\Repositories\Verkaeufernummern\NummernRepository;
+use App\Repositories\Mails\MailRepository;
+use App\Repositories\Nummern\VKnummerRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Mail;
 
 class NummernController extends Controller
 {
-    public function __construct(NummernRepository $nummernRepository, KlamottenboersenRepository $klamottenboersenRepository)
+    public function __construct(VKnummerRepository $VKnummerRepository, MailRepository $mailRepository)
     {
-        $this->middleware('auth');
-        $this->NummernRepository = $nummernRepository;
-        $this->klamottenboersenRepository = $klamottenboersenRepository;
-        $this->Klamottenboerse=$klamottenboersenRepository->getId();
+        $this->nummernRepository = $VKnummerRepository;
+        $this->mailRepository = $mailRepository;
+
     }
 
-    public function index(){
-
-
-        $Daten=$this->NummernRepository->all();
-        $Interessenten= new InteressentenRepository();
-        $Count=array(
-            "gesamt" => 0,
-            "reserviert" => 0,
-            "vergeben" => 0
-        );
-        $Nummern=array();
-        
-        foreach ($Daten AS $Nummer) {
-
-            $Count['gesamt']++;
-
-            if ( is_integer($Nummer->reserviert_fuer)){
-                $Count['reserviert']++;
-
-                $Nummer->reserviert = $Interessenten->findInteressent($Nummer->reserviert_fuer);
-                
-                
-            }
-
-            if (is_integer($Nummer->vergeben_an) ){
-                $Count['vergeben']++;
-
-                $Nummer->vergeben = $Interessenten->findInteressent($Nummer->vergeben_an);
-            }
-
-            $Nummern[]=$Nummer;
-
-        }
-
-        $meisteNummer=$this->NummernRepository->haeufigsteNummer('1');
-
-        return view('vknummern.uebersicht', [
-            'Nummern' => $Nummern,
-            'Count' => $Count,
-            'meisteNummer' => $meisteNummer
-        ]);
-    }
-    
-    public function newNummer () {
-        return view('VKnummern.neueNummer', [
-            'Klamottenboerse' => $this->Klamottenboerse
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $Klamottenboerse = Klamottenboerse::query()->latest()->with('vknummern', 'vknummern.vergeben_an_Interessent', 'vknummern.reserviert_fuer_Interessent', 'vknummern.bisherigeVerkaeufer')->first();
+        return view('vknummern.index',[
+           "vknummern"  => $Klamottenboerse->vknummern
         ]);
     }
 
-    public function store (Request $request) {
-        $Nummer=Vknummern::query()->firstOrCreate(['vknummer' => $request->vknummer, 'klamottenboersen_id' => $request->klamottenboersen_id]);
-        /*return view('VKnummern.neueNummer', [
-            'Klamottenboerse' => $this->Klamottenboerse
-        ]);*/
-        return redirect()->back()->with(['Meldung'=> 'Nummer '.$request->vknummer.' angelegt', 'type' => 'success']);
-    }
-    
-    public function deleteReservierung ($InteressentenID){
-        
-        $VKnummer=$this->NummernRepository->deleteReservierung($InteressentenID);
-
-        return redirect()->back();
-        
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('vknummern.newVKnummer');
     }
 
-    public function createReservierung($InteressentenID){
-        $Interessenten= new InteressentenRepository();
-        $Interessent=$Interessenten->findInteressent($InteressentenID);
-
-        $Nummern=$this->NummernRepository->nichtreservierteNummern();
-
-        return view('VKnummern.reserviereNummer', [
-            'Interessent' => $Interessent,
-            'Nummern' => $Nummern
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $Klamottenboerse = Klamottenboerse::query()->latest()->first();
+        $Nummmer= VKnummer::firstOrCreate([
+            "vknummer"  => $request->input('vknummer'),
+            "klamottenboersen_id"   => $Klamottenboerse->id
         ]);
+
+        return redirect(url('vknummern'));
     }
 
-    public function storeReservierung($InteressentenID, request $request){
-
-        $Nummer=Vknummern::query()
-                    ->where('id', $request->vknummer)
-                    ->update(['reserviert_fuer' => $InteressentenID]);
-
-        return redirect(url('Interessent/'.$InteressentenID));
-
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Model\  $nummernController
+     * @return \Illuminate\Http\Response
+     */
+    public function show(VKnummer $VKnummern)
+    {
+        //
     }
-    
-    public function storeVergabe(Request $request){
 
-        $Nummer=$this->NummernRepository->storeNummer($request->input('InteressentenID'), $request->input('NummernID'));
-        $Interessent= InteressentenRepository::findInteressent($request->input('InteressentenID'));
-       if ($Nummer==1){
-           
-           $Warteliste= Warteliste::where('interessenten_id', $Interessent->id)->first();
-
-           if (isset($Warteliste->interessenten_id)){
-               $Warteliste->delete();
-           }
-
-           $Interessent= InteressentenRepository::findInteressent($request->input('InteressentenID'));
-           $VKnummer=$this->NummernRepository->getVKNummer($request->input('NummernID'));
-
-           //Uhrzeiten formatieren
-           $Klamottenboerse=$this->klamottenboersenRepository->latest();
-           $Klamottenboerse->abholung_von = date('G.i', strtotime($Klamottenboerse->abholung_von));
-
-           //Erstelle VerkäuferInfos
-           $pdf = App::make('dompdf.wrapper');
-           $pdf->loadView('listen.pdf.verkaeuferinfos',[
-               "Klamottenboerse" => $Klamottenboerse
-           ]);
-           $pdf->save(storage_path().'\app\anhaenge\VerkaeuferInfos.pdf');
-
-
-           $text = View::make('emails.vergabeVKNummer', [
-               'Interessent'=> $Interessent,
-               'VKNummer' => $VKnummer,
-               'Klamottenboerse' => $this->klamottenboersenRepository->latest(),
-               'Absender'   => Auth::user()->name
-           ]);
-           
-           $Nachricht=[
-               'betreff' => 'Nummernvergabe Klamottenbörse',
-               'nachricht'   => $text,
-               'anhang' => 'VerkaeuferInfos.pdf',
-               'view'   => 'emails.blank'
-           ];
-
-           $Nachrichten=new NachrichtenRepository;
-           $Email = $Nachrichten->send($Interessent, $Nachricht);
-
-           return redirect(url('Interessent/'.$Interessent->id))->with(['Meldung' => 'Nummer wurde vergeben', 'type' => 'success']);
-
-        } else {
-
-           return redirect(url('Interessent/'.$Interessent->id))->with(['Meldung'=> 'Nummer konnte nicht vergeben werden', 'type' => 'danger']);
-
-
-        }
-
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(VKnummer $VKnummer)
+    {
+        //
     }
-    
-    public function vergabeLoeschen(Request $request) {
-        
-        $Nummer=$this->NummernRepository->deleteVergabe($request->input('NummernID'));
 
-        if ($Nummer==1){
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, VKnummer $VKnummer)
+    {
+        //
+    }
 
-            $Interessent= InteressentenRepository::findInteressent($request->input('InteressentenID'));
-            $VKnummer=$this->NummernRepository->getVKNummer($request->input('NummernID'));
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(VKnummer $VKnummer)
+    {
+        //
+    }
 
-            $text = View::make('emails.LoescheVKNummer', [
-                'Interessent'=> $Interessent,
-                'VKNummer' => $VKnummer
+    public function reservierungAufheben (VKnummer $id){
+        try {
+            $id->update([
+                "reserviert_fuer"   => NULL
             ]);
+            $id->save();
 
-            $Nachricht=[
-                'betreff' => 'Verkäufernummer Klamottenbörse',
-                'nachricht'   => $text,
-                'anhang' => '',
-                'view'   => 'emails.blank'
-            ];
-
-            $Nachrichten=new NachrichtenRepository;
-            $Email = $Nachrichten->send($Interessent, $Nachricht);
-
-            return redirect()->back()->with(['Meldung' => 'Vergabe wurde aufgehoben', 'type' => 'success']);
-
-        } else {
-           return redirect()->back()->with(['Meldung'=> 'Vergaberücknahme gescheitert', 'type' => 'danger']);
-
-        }
-    }
-
-    public function NummerLoeschen (Request $request) {
-
-        $Nummer=$this->NummernRepository->getVKNummer($request->input('id'));
-
-        if ($Nummer->vergeben_an != NULL) {
-            $Interessent= InteressentenRepository::findInteressent($Nummer->vergeben_an);
-            $VKnummer=$this->NummernRepository->getVKNummer($request->input('id'));
-
-            $text = View::make('emails.LoescheVKNummer', [
-                'Interessent'=> $Interessent,
-                'VKNummer' => $VKnummer
+            return redirect()->back()->with([
+                "success" => "Reservierung wurde aufgehoben."
             ]);
+        } catch (\Exception $exception){
 
-            $Nachricht=[
-                'betreff' => 'Verkäufernummer Klamottenbörse',
-                'nachricht'   => $text,
-                'anhang' => '',
-                'view'   => 'emails.blank'
-            ];
+            return redirect()->back()->with([
+                "fehler" => "Reservierung konnte nicht aufgehoben werden."
+            ]);
+        }
+    }
 
-            $Nachrichten=new NachrichtenRepository;
-            $Email = $Nachrichten->send($Interessent, $Nachricht);
+    public function reserviereNummer(Interessenten $interessenten){
 
+        $Nummern=$this->nummernRepository->freeNummern();
+
+
+
+        return view('vknummern.reserviereNummer',[
+            "Interessent"   => $interessenten,
+            "Nummern"       => $Nummern->load('bisherigeVerkaeufer')
+        ]);
+    }
+
+    public function nummerReservieren(ReserviereNummerRequest $reserviereNummerRequest){
+
+        try{
+            $Nummer = VKnummer::find($reserviereNummerRequest->input('NummernID'));
+            $Nummer->reserviert_fuer = $reserviereNummerRequest->input('interessent');
+            $Nummer->save();
+
+            return redirect(url('interessent/'.$reserviereNummerRequest->input('interessent')))->with([
+                "success" => "Nummer reserviert"
+            ]);
+        } catch (\Exception $exception){
+
+            return redirect(url('interessent/'.$reserviereNummerRequest->input('interessent')))->with([
+                "error" => "Nummer konnte nicht reserviert werden."
+            ]);
         }
 
-        $Nummer->delete();
-
-        return redirect() -> back() -> with(['Meldung' => 'Die Nummer wurde gelöscht.', 'type' => 'success']);
     }
-    
-    public function Nummernvergabe ($InteressentenID){
-        $Interessent = InteressentenRepository::findInteressent($InteressentenID);
-        $Nummern=$this->NummernRepository->nichtreservierteUndNichtVergebeneNummern();
 
-        return view('vknummern.nummernvergabe', [
-            'Interessent' => $Interessent,
-            'Nummern' => $Nummern
+    public function reservierungVergeben(VKnummer $vknummer){
+
+        $vknummer->vergeben_an = $vknummer->reserviert_fuer;
+        $vknummer->save();
+
+
+        if ($vknummer->vergeben_an_Interessent->has('warteliste') and $vknummer->vergeben_an_Interessent->warteliste != null){
+            $vknummer->vergeben_an_Interessent->warteliste->delete();
+        }
+
+        $this->mailRepository->sendVerkaeuferInfo($vknummer);
+
+        return redirect()->back()->with([
+            "success"  => "Nummer vergeben und Interessent informiert."
         ]);
     }
 
-   public function storeKommentar (Request $request){
-       $Kommentar = Vknummern_Kommentar::firstOrNew(['vknummer' => $request->input('vknummer')]);
-       $Kommentar->kommentar = $request->input('kommentar');
-       $Kommentar->save();
+    public function removeVergabe(VKnummer $vknummer){
+
+        try{
+
+            $Interessent = $vknummer->vergeben_an_Interessent;
+            $vknummer->vergeben_an = NULL;
+            $vknummer->save();
+
+            $this->mailRepository->sendRuecknahmeNummer($Interessent);
 
 
-       return redirect()->back()->with(['Meldung' => 'Kommentar gespeichert.', 'type' => 'success']);
-   }
+            //Mail::to($Interessent->mail)->send(new Nummerentzogen($Interessent));
 
-    public function KommentarLoeschen (Request $request) {
 
-        $Kommentar = Vknummern_Kommentar::find($request->input('id'));
-        $Kommentar->delete();
-
-        return redirect() -> back() -> with(['Meldung' => 'Der Kommentar wurde gelöscht.', 'type' => 'success']);
+            return redirect()->back()->with([
+                "success"  => "Vergabe wurde aufgehoben und Interessent informiert."
+            ]);
+        } catch (\Exception $exception){
+            return redirect()->back()->with([
+                "error"  => "Vergabe konnte nicht aufgehoben werden."
+            ]);
+        }
     }
 
-    public function Vergabe($NummernID){
+    public function vergebeNummer(Interessenten $interessenten){
 
-        $Interessenten=$this->NummernRepository->InteressentenOhneNummer();
+        $Nummern=$this->nummernRepository->freeNummern();
+        $Nummern = $Nummern->sortBy('vknummer');
+        //$interessenten = Interessenten::find($interessenten);
 
-        return view('VKnummern.Vergabe', [
-            'Interessenten' => $Interessenten,
-            'Nummer' => $this->NummernRepository->getVKNummer($NummernID)
-        ]);    
-    }
-    
-    public function VerkaeuferAnzeigen ($Vknummer){
-        
-        
-        return view('vknummern.VerkaeuferAnzeigen',[
-            'VerkaeuferArray' => $this->NummernRepository->VerkaeuferNummer($Vknummer),
-            'Nummer' => $Vknummer
+
+        return view('vknummern.vergebeNummer',[
+            "Interessent"   => $interessenten,
+            "Nummern"       => $Nummern->load('bisherigeVerkaeufer')
         ]);
     }
+
+    public function newVKnummerVergeben(Request $request){
+
+        $VKnummer = VKnummer::findOrFail($request->input('NummernID'));
+        $VKnummer->vergeben_an = $request->input('InteressentID');
+        $VKnummer->save();
+
+        if ($VKnummer->vergeben_an_Interessent->has('warteliste') and $VKnummer->vergeben_an_Interessent->warteliste != null){
+            $VKnummer->vergeben_an_Interessent->warteliste->delete();
+        }
+        $this->mailRepository->sendVerkaeuferInfo($VKnummer);
+
+        return redirect(url('interessent/'.$request->input('InteressentID')))->with([
+            "success"  => "Nummer vergeben und Interessent informiert."
+        ]);
+    }
+
+
+
+    public function freiVergeben (VKnummer $vknummer){
+
+        return view('vknummern.vergebeVKnummerUebersicht',[
+           "Nummer" => $vknummer,
+           "Interessenten" => Interessenten::doesntHave('vknummern_vergeben')->orderBy('nachname')->get()
+        ]);
+
+    }
+
 
 }

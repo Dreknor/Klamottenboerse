@@ -2,12 +2,14 @@
 
 namespace Illuminate\Queue;
 
-use DateTime;
-use Illuminate\Support\Arr;
+use DateTimeInterface;
 use Illuminate\Container\Container;
+use Illuminate\Support\InteractsWithTime;
 
 abstract class Queue
 {
+    use InteractsWithTime;
+
     /**
      * The IoC container instance.
      *
@@ -16,11 +18,18 @@ abstract class Queue
     protected $container;
 
     /**
-     * The encrypter implementation.
+     * The connection name for the queue.
      *
-     * @var \Illuminate\Contracts\Encryption\Encrypter
+     * @var string
      */
-    protected $encrypter;
+    protected $connectionName;
+
+    /**
+     * The create payload callbacks.
+     *
+     * @var callable[]
+     */
+    protected static $createPayloadCallbacks = [];
 
     /**
      * Push a new job onto the queue.
@@ -39,7 +48,7 @@ abstract class Queue
      * Push a new job onto the queue after a delay.
      *
      * @param  string  $queue
-     * @param  \DateTime|int  $delay
+     * @param  \DateTimeInterface|\DateInterval|int  $delay
      * @param  string  $job
      * @param  mixed   $data
      * @return mixed
@@ -55,7 +64,7 @@ abstract class Queue
      * @param  array   $jobs
      * @param  mixed   $data
      * @param  string  $queue
-     * @return mixed
+     * @return void
      */
     public function bulk($jobs, $data = '', $queue = null)
     {
@@ -68,75 +77,174 @@ abstract class Queue
      * Create a payload string from the given job and data.
      *
      * @param  string  $job
-     * @param  mixed   $data
      * @param  string  $queue
+     * @param  mixed   $data
      * @return string
+     *
+     * @throws \Illuminate\Queue\InvalidPayloadException
      */
-    protected function createPayload($job, $data = '', $queue = null)
+    protected function createPayload($job, $queue, $data = '')
     {
-        if (is_object($job)) {
-            return json_encode([
-                'job' => 'Illuminate\Queue\CallQueuedHandler@call',
-                'data' => [
-                    'commandName' => get_class($job),
-                    'command' => serialize(clone $job),
-                ],
-            ]);
+        $payload = json_encode($this->createPayloadArray($job, $queue, $data));
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new InvalidPayloadException(
+                'Unable to JSON encode payload. Error code: '.json_last_error()
+            );
         }
 
-        return json_encode($this->createPlainPayload($job, $data));
+        return $payload;
     }
 
     /**
-     * Create a typical, "plain" queue payload array.
+     * Create a payload array from the given job and data.
      *
-     * @param  string  $job
+     * @param  mixed  $job
+     * @param  string  $queue
      * @param  mixed  $data
      * @return array
      */
-    protected function createPlainPayload($job, $data)
+    protected function createPayloadArray($job, $queue, $data = '')
     {
-        return ['job' => $job, 'data' => $data];
+        return is_object($job)
+                    ? $this->createObjectPayload($job, $queue)
+                    : $this->createStringPayload($job, $queue, $data);
     }
 
     /**
-     * Set additional meta on a payload string.
+     * Create a payload for an object-based queue handler.
      *
-     * @param  string  $payload
-     * @param  string  $key
-     * @param  string  $value
+     * @param  mixed  $job
+     * @param  string  $queue
+     * @return array
+     */
+    protected function createObjectPayload($job, $queue)
+    {
+        $payload = $this->withCreatePayloadHooks($queue, [
+            'displayName' => $this->getDisplayName($job),
+            'job' => 'Illuminate\Queue\CallQueuedHandler@call',
+            'maxTries' => $job->tries ?? null,
+            'timeout' => $job->timeout ?? null,
+            'timeoutAt' => $this->getJobExpiration($job),
+            'data' => [
+                'commandName' => $job,
+                'command' => $job,
+            ],
+        ]);
+
+        return array_merge($payload, [
+            'data' => [
+                'commandName' => get_class($job),
+                'command' => serialize(clone $job),
+            ],
+        ]);
+    }
+
+    /**
+     * Get the display name for the given job.
+     *
+     * @param  mixed  $job
      * @return string
      */
-    protected function setMeta($payload, $key, $value)
+    protected function getDisplayName($job)
     {
-        $payload = json_decode($payload, true);
-
-        return json_encode(Arr::set($payload, $key, $value));
+        return method_exists($job, 'displayName')
+                        ? $job->displayName() : get_class($job);
     }
 
     /**
-     * Calculate the number of seconds with the given delay.
+     * Get the expiration timestamp for an object-based queue handler.
      *
-     * @param  \DateTime|int  $delay
-     * @return int
+     * @param  mixed  $job
+     * @return mixed
      */
-    protected function getSeconds($delay)
+    public function getJobExpiration($job)
     {
-        if ($delay instanceof DateTime) {
-            return max(0, $delay->getTimestamp() - $this->getTime());
+        if (! method_exists($job, 'retryUntil') && ! isset($job->timeoutAt)) {
+            return;
         }
 
-        return (int) $delay;
+        $expiration = $job->timeoutAt ?? $job->retryUntil();
+
+        return $expiration instanceof DateTimeInterface
+                        ? $expiration->getTimestamp() : $expiration;
     }
 
     /**
-     * Get the current UNIX timestamp.
+     * Create a typical, string based queue payload array.
      *
-     * @return int
+     * @param  string  $job
+     * @param  string  $queue
+     * @param  mixed  $data
+     * @return array
      */
-    protected function getTime()
+    protected function createStringPayload($job, $queue, $data)
     {
-        return time();
+        return $this->withCreatePayloadHooks($queue, [
+            'displayName' => is_string($job) ? explode('@', $job)[0] : null,
+            'job' => $job,
+            'maxTries' => null,
+            'timeout' => null,
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Register a callback to be executed when creating job payloads.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public static function createPayloadUsing($callback)
+    {
+        if (is_null($callback)) {
+            static::$createPayloadCallbacks = [];
+        } else {
+            static::$createPayloadCallbacks[] = $callback;
+        }
+    }
+
+    /**
+     * Create the given payload using any registered payload hooks.
+     *
+     * @param  string  $queue
+     * @param  array  $payload
+     * @return array
+     */
+    protected function withCreatePayloadHooks($queue, array $payload)
+    {
+        if (! empty(static::$createPayloadCallbacks)) {
+            foreach (static::$createPayloadCallbacks as $callback) {
+                $payload = array_merge($payload, call_user_func(
+                    $callback, $this->getConnectionName(), $queue, $payload
+                ));
+            }
+        }
+
+        return $payload;
+    }
+
+    /**
+     * Get the connection name for the queue.
+     *
+     * @return string
+     */
+    public function getConnectionName()
+    {
+        return $this->connectionName;
+    }
+
+    /**
+     * Set the connection name for the queue.
+     *
+     * @param  string  $name
+     * @return $this
+     */
+    public function setConnectionName($name)
+    {
+        $this->connectionName = $name;
+
+        return $this;
     }
 
     /**
