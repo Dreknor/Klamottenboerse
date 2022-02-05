@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,7 +18,7 @@ Route::get('/', 'HomeController@index')->name('home');
 Auth::routes();
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', [HomeController::class,'index'])->name('home');
     Route::get('/grunddaten', 'KlamottenboersenController@show');
 
     //Anmeldung moeglich
