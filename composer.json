@@ -21,8 +21,8 @@
         "sentry/sentry-laravel": "^2.4",
         "spatie/laravel-medialibrary": "^9.4",
         "spatie/laravel-permission": "^4.0",
-        "webklex/laravel-imap": "^2.4"
-
+        "webklex/laravel-imap": "^2.4",
+        "webklex/php-imap": "^2.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

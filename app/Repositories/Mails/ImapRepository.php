@@ -9,10 +9,8 @@
 namespace App\Repositories\Mails;
 
 use App\Model\Interessenten;
-use Carbon\Carbon;
-use function Sodium\add;
 use Webklex\IMAP\Facades\Client;
-use Webklex\IMAP\Support\MessageCollection;
+use Webklex\PHPIMAP\Support\MessageCollection;
 
 class ImapRepository
 {
@@ -52,7 +50,7 @@ class ImapRepository
             $ordner = $Client->getFolders(0, 'INBOX');
 
             foreach ($ordner as $Ordner) {
-                $message = $Ordner->search()->from($email)->on($date)->setFetchAttachment(false)->get();
+                $message = $Ordner->search()->from($email)->on($date)->get();
                 if (isset($message) and count($message) > 0) {
                     foreach ($message as $Message) {
                         if ($Message->uid == $uid) {
@@ -65,7 +63,7 @@ class ImapRepository
 
             $ordner = $Client->getFolders(0, 'Sent');
             foreach ($ordner as $Ordner) {
-                $message = $Ordner->search()->from($email)->on($date)->setFetchAttachment(false)->get();
+                $message = $Ordner->search()->from($email)->on($date)->get();
                 if (isset($message) and count($message) > 0) {
                     foreach ($message as $Message) {
                         if ($Message->uid == $uid) {
@@ -105,7 +103,7 @@ class ImapRepository
         $ordner = $Client->getFolders(0, 'INBOX');
 
         foreach ($ordner as $Ordner) {
-            $message = ($Ordner->search()->from($email)->setFetchAttachment(false)->get());
+            $message = ($Ordner->search()->from($email)->get());
             if (count($message) > 0) {
                 $messages = $messages->merge($message);
             }
@@ -114,7 +112,7 @@ class ImapRepository
         $ordner = $Client->getFolders(0, 'Sent');
 
         foreach ($ordner as $Ordner) {
-            $message = ($Ordner->search()->to($email)->setFetchAttachment(false)->get());
+            $message = ($Ordner->search()->to($email)->get());
             if (count($message) > 0) {
                 $messages = $messages->merge($message);
             }
@@ -134,7 +132,6 @@ class ImapRepository
         $aMessage = $aFolder->query()
             ->since(now()->subDays($Tage))
             ->setFetchBody(true)
-            ->setFetchAttachment(false)
             ->get();
 
         $sorted = $aMessage->sortByDesc('date');
