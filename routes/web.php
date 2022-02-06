@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InteressentenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,12 +72,15 @@ Route::group(['middleware' => ['web']], function () {
     //newInteressent from Mail
     Route::post('newInteressent', 'InteressentenController@create');
 
+
     Route::resources([
         'interessenten' => 'InteressentenController',
         'interessent' => 'InteressentenController',
         'vknummern' => 'NummernController',
         'mailvorlagen'  => 'MailvorlagenController',
     ]);
+    Route::get('interessent/{interessent}/{mailbox?}', [InteressentenController::class,'show']);
+
 
     //Klamottenbörse
     Route::resource('klamottenboerse', 'KlamottenboersenController');

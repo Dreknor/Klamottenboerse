@@ -29,3 +29,5 @@ resources/layouts/
 .idea/workspace.xml
 vendor/bin/php-parse
 vendor/bin/phpunit
+.idea/workspace.xml
+.idea/modules.xml

@@ -13,10 +13,11 @@ use Illuminate\Http\Request;
 
 class InteressentenController extends Controller
 {
-    public function __construct(InteressentenRepository $interessentenRepository, MailRepository $mailRepository)
+    public function __construct(InteressentenRepository $interessentenRepository, MailRepository $mailRepository, ImapRepository $imapRepository)
     {
         $this->interessentenRepository = $interessentenRepository;
         $this->mailRepository = $mailRepository;
+        $this->imapRepository = $imapRepository;
     }
 
     /**
@@ -68,9 +69,9 @@ class InteressentenController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Model\Interessenten  $interessenten
-     * @return \Illuminate\Http\Response
+     * @return
      */
-    public function show(Interessenten $interessent)
+    public function show(Interessenten $interessent, $mailbox='INBOX')
     {
         $interessent->load('bisherige_vknummen', 'bisherige_vknummen.klamottenboerse', 'bisherige_vknummen.aktuelleKlamottenboerse');
 
@@ -82,11 +83,20 @@ class InteressentenController extends Controller
             return count($vknummer);
         }));
 
+        if ($interessent->mail) {
+            $email = $interessent->mail;
+            $Mails = $this->imapRepository->findMailsOfEMail($email, $mailbox);
+        } else {
+            $Mails = [];
+        }
+
         return view('interessenten.show', [
             'interessent'   => $interessent,
             'haeufigsteVKnummer'  => $haeufigsteVKnummer,
             'letzteVKnummer'     =>$letzteVKnummern->first(),
             'Vorlagen'      => Mailvorlagen::all(),
+            'messages'   =>$Mails,
+            'mail_thread' => ($mailbox=='INBOX')? false : true
         ]);
     }
 

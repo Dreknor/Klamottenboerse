@@ -38,32 +38,44 @@ class MailController extends Controller
         $mail = $request->from;
         $date = $request->date;
 
-        $Mails = $this->imapRepository->findUid($uid, $mail, $date);
-
-        if (isset($Mails) and is_a($Mails, 'Illuminate\Database\Eloquent\Collection') and count($Mails) > 1) {
-            foreach ($Mails as $Mail) {
-                if (is_object($Mail)) {
-                    $Nachricht = $Mail;
-                }
-            }
-        } elseif (isset($Mails)) {
-            $Nachricht = $Mails;
-        } else {
-            $Nachricht = null;
-        }
-
-        if ($Nachricht == null) {
+        $Mail = $this->imapRepository->findUid($uid, $mail, $date);
+        if ($Mail == null) {
             return response()->json(['Nachricht'  => 'Keine Nachricht'], 400);
         }
 
-        return response()->json(['Nachricht'  => $Nachricht], 200);
+        $Mail->setFlag('Seen');
+
+        return response()->json(['Nachricht'  => $this->imapRepository->toArray($Mail)], 200);
     }
 
     public function getMails()
     {
         $Mails = $this->imapRepository->mailsInboxLastDays(10);
 
-        return response()->json(['Nachricht'  => $Mails], 200);
+        $mails = [];
+        foreach ($Mails as $key => $Mail) {
+            $Interressent = Interessenten::query()->where('mail', '=', $Mail->from[0]->mail)->first();
+
+            $EMail=[
+                'from'       => $Mail->header->from[0]->mail,
+                'subject'       => $Mail->header->subject[0],
+                'bodies'       => $Mail->bodies,
+                'flags'       =>$Mail->flags,
+                'date'       => $Mail->header->date[0],
+                'uid'       => $Mail->uid
+            ];
+
+
+
+            if (isset($Interressent)) {
+                $mails[$key]['interessent'] = $Interressent;
+                $mails[$key]['mail'] = $EMail;
+            } else {
+                $mails[$key]['mail'] = $EMail;
+            }
+        }
+
+        return response()->json(['Nachricht'  => $mails], 200);
     }
 
     public function deleteMessage($uid)
@@ -116,7 +128,7 @@ class MailController extends Controller
 
     public function sendReply(MailRequest $request)
     {
-        Mail::to($request->input('email'))->send(new \App\Mail\Mail($request));
+        Mail::to($request->email)->send(new \App\Mail\Mail($request));
 
         return redirect(url('/home'))->with([
             'success'=> 'Nachricht versandt.',

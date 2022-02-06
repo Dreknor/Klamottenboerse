@@ -32,7 +32,7 @@
                                 <div class="tbl-cell">
                                     <div class="title">Interessenten</div>
                                     <div class="amount color-blue">
-                                        {{$Klamottenboersen->last()->vknummern_vergeben->count()}} Verkäufer
+                                        {{$Klamottenboersen->last()->vknummern_vergeben()->count()}} Verkäufer
                                     </div>
                                     <div class="amount-sm">
                                         {{$Interessenten->count()}} Interessenten
@@ -123,12 +123,12 @@
                                                 </td>
                                                 <td >
                                                     <span class="pull-right">
-                                                        {{ number_format($klamottenboerse->vknummern->sum('umsatz'),2) }} €
+                                                        {{ number_format($klamottenboerse->vknummern()->sum('umsatz'),2) }} €
                                                     </span>
                                                 </td>
                                                 <td>
                                                     <span class="pull-right">
-                                                        {{ $klamottenboerse->vknummern->where('vergeben_an', '>', 0)->count() }}
+                                                        {{ $klamottenboerse->vknummern()->where('vergeben_an', '>', 0)->count() }}
                                                     </span>
 
                                                 </td>
@@ -159,17 +159,52 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <img src="{{asset('img/ajax-loader.gif')}}" id="wait" width="100px">
                         <ul class="list-group" id="nachrichten">
-
-                            <!-- fetch Mails befor show
-
-                            -->
+                            @foreach($messages as $message)
+                                <div class="mail-box-item" @if (!$message->getFlags()->get('seen'))) style="background-color: #facd97;" @endif" data-id="{{$message->getUid()}}" >
+                                    <div class="mail-box-item-header">
+                                        <div class="mail-box-item-photo align-content-center">
+                                            @if ($Interessenten->where('mail', $message->getFrom()[0]->mail)->first() != null)
+                                                <a href="{{url('interessent/'.$Interessenten->where('mail', $message->getFrom()[0]->mail)->first()->id)}}" class="btn btn-sm btn-rounded prevent"> <i class="font-icon font-icon-user text-white"></i> </a>
+                                            @endif
+                                        </div>
+                                        <div class="tbl mail-box-item-head-tbl mail-box-item-clickable">
+                                            <div class="tbl-row">
+                                                 <div class="tbl-cell">
+                                                    <div class="tbl mail-box-item-user-tbl">
+                                                        <div class="tbl-row">
+                                                            <div class="tbl-cell tbl-cell-name">
+                                                                {{$message->getFrom()[0]}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                 </div>
+                                                <div class="tbl-cell tbl-cell-date">
+                                                    {{\Carbon\Carbon::parse($message->getDate())->format('d.m.Y H:i')}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mail-box-item-title mail-box-item-clickable">
+                                            {{$message->getSubject()}}
+                                        </div>
+                                    </div>
+                                    <div class="mail-box-item-content mail-box-item-clickable">
+                                        <div class="attach">
+                                            @if ($message->getAttachments()->count() > 0)
+                                                <i class="fa fa-paperclip"></i>
+                                            @endif
+                                        </div>
+                                        <div class="txt">
+                                            @if ($message->getTextBody() != "")
+                                                {{\Illuminate\Support\Str::limit($message->getTextBody(), 450)}}
+                                            @else
+                                                {{\Illuminate\Support\Str::limit($message->getHTMLBody(), 450)}}
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </ul>
-
-
-
-                    </ul>
                 </div>
             </div>
 
@@ -208,7 +243,7 @@
             data: {
                 labels: [
                         @foreach($Klamottenboersen as $Klamottenboerse)
-                            @if($Klamottenboerse->vknummern->sum('umsatz') > 0)
+                            @if($Klamottenboerse->vknummern()->sum('umsatz') > 0)
                                 "{{$Klamottenboerse->datum->format('m/Y')}}",
                             @endif
                         @endforeach
@@ -217,8 +252,8 @@
                     label: "Umsätze",
                     data: [
                         @foreach($Klamottenboersen as $Klamottenboerse)
-                             @if($Klamottenboerse->vknummern->sum('umsatz') > 0)
-                                " {{$Klamottenboerse->vknummern->sum('umsatz') }}",
+                             @if($Klamottenboerse->vknummern()->sum('umsatz') > 0)
+                                " {{$Klamottenboerse->vknummern()->sum('umsatz') }}",
                              @endif
                         @endforeach
                     ],
@@ -236,7 +271,7 @@
             }
         });
     </script>
-
+<!--
     <script>
                 var urlMails = "{{url('/getMails/')}}";
                 $.ajax({
@@ -252,10 +287,10 @@
                         $.each(items.Nachricht, function (item, value) {
                             console.log(item);
                             console.log(value);
-                            if (value.bodies.text) {
 
-                                var text = value.bodies.text.content.substr(0, 150);
-                            } else if (value.bodies.html) {
+                            if (value.mail.bodies.text) {
+                                var text = value.mail.bodies.text.substr(0, 150);
+                            } else if (value.mail.bodies.html) {
                                 var temporalDivElement = document.createElement("div");
                                 // Set the HTML content with the providen
                                 temporalDivElement.innerHTML = value.bodies.html.content;
@@ -268,17 +303,17 @@
 
 
 
-                            if (typeof value.date === 'object' && value.date !== null) {
-                                var datum = new Date(value.date.date);
+                            if (typeof value.mail.date === 'string' && value.date !== null) {
+                                var datum = new Date(value.mail.date);
                             } else {
                                 var datum = new Date();
                             }
 
-                            var name = (value.interessent) ? value.interessent.vorname + ' ' +value.interessent.nachname :  (value.from[0].personal);
+                            var name = (value.interessent) ? value.interessent.vorname + ' ' +value.interessent.nachname :  (value.mail.from[0].personal);
 
-                            if (value.interessent) {
+                            if (typeof value.interessent === 'object') {
                                 var urlInteressent = "{{url('interessent/')}}" + '/'+ value.interessent.id;
-                                var button = '<a href="'+urlInteressent+'" class="btn btn-sm btn-rounded"> <i class="font-icon font-icon-user text-white"></i> </a>';
+                                var button = '<a href="'+urlInteressent+'" class="btn btn-sm btn-rounded prevent"> <i class="font-icon font-icon-user text-white"></i> </a>';
                                 var buttonSpam = '<button id="spam" class="btn btn-danger btn-sm btn-rounded"> <i class="fa fa-exclamation-triangle"></i>  </button>';
 
                             } else {
@@ -286,7 +321,7 @@
                                 var buttonSpam = '<button id="spam" class="btn btn-danger btn-sm btn-rounded"> <i class="fa fa-exclamation-triangle"></i>  </button>';
                             }
 
-                            if (value.flags['seen'] == 0) {
+                            if (value.mail.flags['seen'] == 0) {
                                 var selected = "selected";
                                 unread += 1;
                                 $('#unreadMails').text(unread + " ungelesene Mails");
@@ -298,12 +333,12 @@
 
 
                             $("#nachrichten").append(
-                                '<div class="mail-box-item '+ selected+'" data-id="'+ value.uid +'" data-interessent="' + urlInteressent + '">\n' +
+                                '<div class="mail-box-item '+ selected+'" data-id="'+ value.mail.uid +'" data-interessent="' + urlInteressent + '">\n' +
                                 '                                    <div class="mail-box-item-header">\n' +
                                 '                                        <div class="mail-box-item-photo align-content-center">' +
                                 '                                        '+button+
                                 '                                        </div>\n' +
-                                '                                        <div class="tbl mail-box-item-head-tbl">\n' +
+                                '                                        <div class="tbl mail-box-item-head-tbl mail-box-item-clickable">\n' +
                                 '                                            <div class="tbl-row">\n' +
                                 '                                                <div class="tbl-cell">\n' +
                                 '                                                    <div class="tbl mail-box-item-user-tbl">\n' +
@@ -317,9 +352,9 @@
                                 '                                                <div class="tbl-cell tbl-cell-date">'+datum.toLocaleDateString() + ', '+ datum.toLocaleTimeString() +'</div>\n' +
                                 '                                            </div>\n' +
                                 '                                        </div>\n' +
-                                '                                        <div class="mail-box-item-title">'+ value.subject.replace(/[_]/g, ' ') +'</div>\n' +
+                                '                                        <div class="mail-box-item-title mail-box-item-clickable">'+ value.mail.subject +'</div>\n' +
                                 '                                    </div>\n' +
-                                '                                    <div class="mail-box-item-content">\n' +
+                                '                                    <div class="mail-box-item-content mail-box-item-clickable">\n' +
                                 '                                        <div class="attach">\n' +
                                 '                                        </div>\n' +
                                 '                                        <div class="txt">\n' + text +
@@ -339,7 +374,7 @@
 
 
     </script>
-
+-->
     <script>
         $('#chartBtn').on('click', function () {
             $('#chartCol').hide();
@@ -358,6 +393,8 @@
             $('#showMail').addClass('hidden');
             $('#mailCol').show();
         });
+
+
     </script>
 
         @include('mails.elements.mailajax')

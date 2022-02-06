@@ -10,6 +10,9 @@ namespace App\Repositories\Mails;
 
 use App\Model\Interessenten;
 use Webklex\IMAP\Facades\Client;
+use Webklex\PHPIMAP\Attribute;
+use Webklex\PHPIMAP\Message;
+use Webklex\PHPIMAP\Query\WhereQuery;
 use Webklex\PHPIMAP\Support\MessageCollection;
 
 class ImapRepository
@@ -37,87 +40,68 @@ class ImapRepository
         }
     }
 
-    public function findUid($uid, $email = '', $date = '')
+    public function findUid($uid)
     {
         $Client = $this->connect();
         $ordner = $Client->getFolder('INBOX');
-        $Nachricht = [];
-        $Nachricht = $ordner->getMessage($uid, 1, 1, true);
+        $Nachricht = $ordner->messages()->where('uid',$uid)->get();
 
-        if (isset($Nachricht) and $Nachricht != null) {
-            return $Nachricht;
+        if (!is_null($Nachricht) and count($Nachricht) > 0) {
+            return $Nachricht->first();
         } else {
-            $ordner = $Client->getFolders(0, 'INBOX');
-
+            $ordner = $Client->getFolders();
             foreach ($ordner as $Ordner) {
-                $message = $Ordner->search()->from($email)->on($date)->get();
-                if (isset($message) and count($message) > 0) {
-                    foreach ($message as $Message) {
-                        if ($Message->uid == $uid) {
-                            return $Message;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            $ordner = $Client->getFolders(0, 'Sent');
-            foreach ($ordner as $Ordner) {
-                $message = $Ordner->search()->from($email)->on($date)->get();
-                if (isset($message) and count($message) > 0) {
-                    foreach ($message as $Message) {
-                        if ($Message->uid == $uid) {
-                            return $Message;
-                            break;
-                        }
-                    }
+                $message = $Ordner->messages()->where('uid',$uid)->get();
+                if (!is_null($message) and count($message) > 0) {
+                    return $message->first();
                 }
             }
         }
-
-        return $Nachricht;
     }
 
     public function deleteMessage($uid)
     {
-        $Client = $this->connect();
-        $ordner = $Client->getFolder('INBOX');
-        $message = $ordner->getMessage($uid);
 
-        return $message->moveToFolder('Trash');
+        $message = $this->findUid($uid);
+        $message->move('Trash');
+        return true;
     }
 
     public function spamMessage($uid)
     {
-        $Client = $this->connect();
-        $ordner = $Client->getFolder('INBOX');
-        $message = $ordner->getMessage($uid);
 
-        return $message->moveToFolder('0 Spamfilter.als Spam lernen');
+        $message = $this->findUid($uid);
+
+        return $message->move('0 Spamfilter.als Spam lernen');
     }
 
-    public function findMailsOfEMail($email)
+    public function findMailsOfEMail($email , $folder = 'INBOX')
     {
         $Client = $this->connect();
-        $messages = new MessageCollection();
-        $ordner = $Client->getFolders(0, 'INBOX');
+        $ordner = $Client->getFolderByName($folder);
 
-        foreach ($ordner as $Ordner) {
-            $message = ($Ordner->search()->from($email)->get());
-            if (count($message) > 0) {
-                $messages = $messages->merge($message);
-            }
+
+        if ($folder === 'INBOX'){
+            $messages = $ordner->query()->setFetchOrder("DESC")->from($email)->get();
+        } else {
+            $messages = $ordner->query()->setFetchOrder("DESC")->to($email)->get();
         }
 
+
+
+
+        /*
         $ordner = $Client->getFolders(0, 'Sent');
 
         foreach ($ordner as $Ordner) {
-            $message = ($Ordner->search()->to($email)->get());
+            $message = ($Ordner->search()->to($email)->setFetchOrderDesc()->get());
             if (count($message) > 0) {
                 $messages = $messages->merge($message);
             }
         }
+        */
 
+        //dd($messages);
         $sorted = $messages->sortByDesc('date');
 
         return $sorted;
@@ -135,15 +119,37 @@ class ImapRepository
             ->get();
 
         $sorted = $aMessage->sortByDesc('date');
-        $Mails = new MessageCollection();
-
-        foreach ($sorted as $key => $Mail) {
-            $Interressent = $Interessenten->where('mail', '=', $Mail->from[0]->mail)->first();
-            if (isset($Interressent)) {
-                $sorted[$key]->interessent = $Interressent;
-            }
-        }
 
         return $sorted;
+    }
+
+    public function toArray(Message $message){
+        $nachricht = [
+            'from' => [
+                'full' => $message->getFrom()[0]->full,
+                'personal' => $message->getFrom()[0]->personal,
+                'mail' => $message->getFrom()[0]->mail
+            ],
+            'subject' => $message->getSubject()[0],
+            'bodies' => [
+                'text' => $message->getTextBody(),
+                'html' => $message->getHTMLBody(),
+            ],
+        ];
+
+        $interessent = $this->isInteressent($message->getFrom()[0]->mail);
+
+        $nachricht['interessent'] = $interessent;
+
+        return $nachricht;
+    }
+
+    public function isInteressent($mail){
+        $Interessent = Interessenten::where('mail', $mail)->first();
+        if (!is_null($Interessent)){
+            return $Interessent;
+        } else {
+            return null;
+        }
     }
 }

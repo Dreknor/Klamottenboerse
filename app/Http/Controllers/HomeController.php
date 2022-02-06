@@ -29,8 +29,8 @@ class HomeController extends Controller
     public function index()
     {
         $Interessenten = Interessenten::all();
-        //$Mails = $this->imapRepository->mailsInboxLastDays(10);
-        $Klamottenboerse = Klamottenboerse::with('vknummern', 'vknummern_vergeben')->get();
+        $Mails = $this->imapRepository->mailsInboxLastDays(10);
+        $Klamottenboerse = Klamottenboerse::all();
 
         //dd($Klamottenboerse->last());
         return view('home', [
@@ -38,6 +38,7 @@ class HomeController extends Controller
             //"MailsCount"    => $Mails->count(),
             //"unreadMails"   => $Mails->where('flags.seen',0)->count(),
             //"Mails" => $Mails->sortByDesc('date')->paginate(10),
+            'messages'   => $Mails,
             'Klamottenboersen'   => $Klamottenboerse,
             'VKnummern'     => $Klamottenboerse->last()->vknummern,
         ]);

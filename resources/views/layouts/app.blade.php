@@ -70,7 +70,6 @@
 			</li>
 
 
-
 	        <li class="with-sub">
 	            <span>
 	                <i class="font-icon glyphicon glyphicon-user"></i>
@@ -120,6 +119,15 @@
 	</nav><!--.side-menu-->
 
 	<div class="page-content">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 		<div class="container-fluid">
 			@yield('content')
 		</div><!--.container-fluid-->
