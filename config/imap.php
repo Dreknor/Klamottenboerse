@@ -40,8 +40,8 @@ return [
             'port'  => env('IMAP_PORT', 993),
             'protocol'  => env('IMAP_PROTOCOL', 'imap'), //might also use imap, [pop3 or nntp (untested)]
             'encryption'    => env('IMAP_ENCRYPTION', 'ssl'), // Supported: false, 'ssl', 'tls'
-            'validate_cert' => env('IMAP_VALIDATE_CERT', true),
-            'username' => env('IMAP_USERNAME', 'root@example.com'),
+            'validate_cert' => env('IMAP_VALIDATE_CERT', false),
+            'username' => env('IMAP_USERNAME', ''),
             'password' => env('IMAP_PASSWORD', ''),
         ],
 
@@ -107,7 +107,7 @@ return [
         'fetch_attachment' => true,
         'fetch_flags' => true,
         'message_key' => 'id',
-        'fetch_order' => 'asc',
+        'fetch_order' => 'desc',
         'open' => [
             // 'DISABLE_AUTHENTICATOR' => 'GSSAPI'
         ],

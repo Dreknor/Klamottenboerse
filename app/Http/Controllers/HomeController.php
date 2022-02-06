@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Model\Interessenten;
 use App\Model\Klamottenboerse;
-use App\Model\VKnummer;
 use App\Repositories\Mails\ImapRepository;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {
+    private ImapRepository $imapRepository;
+
     /**
      * Create a new controller instance.
      *
@@ -24,7 +25,7 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function index()
     {
@@ -32,7 +33,6 @@ class HomeController extends Controller
         $Mails = $this->imapRepository->mailsInboxLastDays(10);
         $Klamottenboerse = Klamottenboerse::all();
 
-        //dd($Klamottenboerse->last());
         return view('home', [
             'Interessenten' => $Interessenten,
             //"MailsCount"    => $Mails->count(),

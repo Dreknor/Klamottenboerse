@@ -10,10 +10,7 @@ namespace App\Repositories\Mails;
 
 use App\Model\Interessenten;
 use Webklex\IMAP\Facades\Client;
-use Webklex\PHPIMAP\Attribute;
 use Webklex\PHPIMAP\Message;
-use Webklex\PHPIMAP\Query\WhereQuery;
-use Webklex\PHPIMAP\Support\MessageCollection;
 
 class ImapRepository
 {
@@ -21,7 +18,6 @@ class ImapRepository
     {
         $Client = Client::account('default');
         $Client->getConnection();
-
         return $Client;
     }
 
@@ -87,29 +83,15 @@ class ImapRepository
             $messages = $ordner->query()->setFetchOrder("DESC")->to($email)->get();
         }
 
-
-
-
-        /*
-        $ordner = $Client->getFolders(0, 'Sent');
-
-        foreach ($ordner as $Ordner) {
-            $message = ($Ordner->search()->to($email)->setFetchOrderDesc()->get());
-            if (count($message) > 0) {
-                $messages = $messages->merge($message);
-            }
-        }
-        */
-
-        //dd($messages);
-        $sorted = $messages->sortByDesc('date');
+        $sorted = $messages->sortByDesc(function ($item) {
+            return $item->getDate();
+        });
 
         return $sorted;
     }
 
     public function mailsInboxLastDays($Tage = 5)
     {
-        $Interessenten = Interessenten::all();
 
         $Client = $this->connect();
         $aFolder = $Client->getFolder('INBOX');
@@ -118,7 +100,9 @@ class ImapRepository
             ->setFetchBody(true)
             ->get();
 
-        $sorted = $aMessage->sortByDesc('date');
+        $sorted = $aMessage->sortByDesc(function ($item) {
+            return $item->getDate();
+        });
 
         return $sorted;
     }
