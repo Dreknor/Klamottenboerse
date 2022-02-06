@@ -16,6 +16,7 @@ class Mail extends Mailable
     public $betreff;
 
     public $text;
+    public $html;
 
     public $email;
 
@@ -34,6 +35,7 @@ class Mail extends Mailable
 
         $this->betreff = $request->betreff;
         $this->text = $request->text;
+        $this->html = $request->html;
         $this->email = $request->email;
     }
 
