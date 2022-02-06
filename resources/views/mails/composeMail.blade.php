@@ -13,7 +13,7 @@
                 </div>
                 <div class="card-body">
                         <textarea id="html" name="text" class="form-control">
-                            {{$Vorlage->text}}
+                            {!! $Vorlage->text !!}
                         </textarea>
                 </div>
                 <div class="card-footer">
