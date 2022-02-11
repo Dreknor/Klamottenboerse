@@ -22,10 +22,10 @@
                         <textarea id="text" name="text" class="form-control">
                             <br>
                             <hr>
-                            @if ($message->getHTMLBody() != "")
-                                {!! $message->getTextBody() !!}
+                            @if ($Mail->getHTMLBody() != "")
+                                {!! $Mail->getTextBody() !!}
                             @else
-                                {!! $message->getHTMLBody() !!}
+                                {!! $Mail->getHTMLBody() !!}
                             @endif
                         </textarea>
                 </div>
