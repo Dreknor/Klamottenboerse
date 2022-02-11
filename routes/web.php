@@ -14,14 +14,14 @@ use App\Http\Controllers\InteressentenController;
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
+
 
 Auth::routes();
 
-Route::group(['middleware' => ['web']], function () {
+Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', [HomeController::class,'index'])->name('home');
     Route::get('/grunddaten', 'KlamottenboersenController@show');
-
+    Route::get('/', 'HomeController@index')->name('home');
     //Anmeldung moeglich
     Route::get('/checkAnmeldung', 'MailController@anmeldungMoeglich');
 
