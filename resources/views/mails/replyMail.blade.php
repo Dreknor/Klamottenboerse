@@ -22,7 +22,12 @@
                         <textarea id="text" name="text" class="form-control">
                             <br>
                             <hr>
-                            {{$Mail->getTextBody()}}
+                            @if ($Mail->getTextBody() != "")
+                                {{$Mail->getTextBody()}}
+                            @else
+                                {!! $Mail->getHTMLBody() !!}
+                            @endif
+
                         </textarea>
                 </div>
                 <div class="card-footer">
