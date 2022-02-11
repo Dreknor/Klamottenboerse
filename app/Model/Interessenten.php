@@ -13,7 +13,12 @@ class Interessenten extends Model
 
     public $table = 'interessenten';
 
-    protected $fillable = ['vorname', 'nachname', 'mail', 'telefon', 'anrede', 'mitarbeiter', 'kinderhaus', 'handy'];
+    protected $fillable = ['vorname', 'nachname', 'mail', 'telefon', 'anrede', 'mitarbeiter', 'kinderhaus', 'handy', 'user_id'];
+
+
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 
     public function getKinderhausAttribute($value)
     {

@@ -13,7 +13,7 @@
 
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-
+    <script src="https://kit.fontawesome.com/c8f58e3eb6.js"></script>
     <link rel="stylesheet" href="{{asset('css/lib/font-awesome/font-awesome.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/lib/bootstrap/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/main.css')}}">
@@ -58,7 +58,8 @@
 	</header><!--.site-header-->
 
 	<div class="mobile-menu-left-overlay"></div>
-	<nav class="side-menu">
+    @auth()
+	    <nav class="side-menu">
 	    <ul class="side-menu-list">
 			<li class="">
 				<a href="{{url('/home')}}">
@@ -117,7 +118,7 @@
 
 
 	</nav><!--.side-menu-->
-
+    @endauth
 	<div class="page-content">
         @if ($errors->any())
             <div class="alert alert-danger">

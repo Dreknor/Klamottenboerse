@@ -11,6 +11,21 @@
                             <a class="btn btn-warning btn-sm" id="editBtn">
                                  <i class="font-icon-pencil"></i>
                             </a>
+                    </span>
+                    <span class="pull-right">
+                        @if ($interessent->mitarbeiter == 'ja')
+                            <div class="col"  id="loginText">
+                                @if (!is_null($interessent->user))
+                                    <a class="btn btn-danger btn-sm"  href="{{url('/interessenten/'.$interessent->id.'/deleteUserAccount')}}" title="Login löschen">
+                                        <i class="fa fa-lock" aria-hidden="true"></i>
+                                    </a>
+                                @else
+                                    <a class="btn btn-info btn-sm" href="{{url('/interessenten/'.$interessent->id.'/addUserAccount')}}" title="Login erstellen">
+                                        <i class="fa fa-key" aria-hidden="true"></i>
+                                     </a>
+                                @endif
+                            </div>
+                        @endif
 
                         </span>
                 </div>
@@ -80,6 +95,20 @@
                         <div class="col"  id="mitarbeiterText">
                             {{$interessent->mitarbeiter}}
                         </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            Verwaltungslogin
+                        </div>
+                        @if ($interessent->mitarbeiter == 'ja')
+                            <div class="col"  id="loginText">
+                                @if (!is_null($interessent->user))
+                                    Zugang vorhanden
+                                @else
+                                    Zugang ist nicht vorhanden
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body hide" id="form">

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InteressentenController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +18,13 @@ use App\Http\Controllers\InteressentenController;
 
 
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::group(['middleware' => ['auth']], function () {
+    //Create User
+    Route::get('/interessenten/{interessenten}/addUserAccount', [UserController::class, 'create']);
+    Route::get('/interessenten/{interessenten}/deleteUserAccount', [UserController::class, 'delete']);
+
     Route::get('/home', [HomeController::class,'index'])->name('home');
     Route::get('/grunddaten', 'KlamottenboersenController@show');
     Route::get('/', 'HomeController@index')->name('home');
