@@ -32,7 +32,6 @@ class Mail extends Mailable
         if (isset($interessent)) {
             $this->interessent = $interessent;
         }
-
         $this->betreff = $request->betreff;
         $this->text = $request->text;
         $this->html = $request->html;

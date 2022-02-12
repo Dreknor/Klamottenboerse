@@ -3,18 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReserviereNummerRequest;
-use App\Mail\Nummerentzogen;
-use App\Mail\Verkaeuferinfos;
 use App\Model\Interessenten;
 use App\Model\Klamottenboerse;
-use App\Model\Mailvorlagen;
 use App\Model\VKnummer;
-use App\Repositories\Interessenten\InteressentenRepository;
 use App\Repositories\Mails\MailRepository;
 use App\Repositories\Nummern\VKnummerRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
 
 class NummernController extends Controller
 {

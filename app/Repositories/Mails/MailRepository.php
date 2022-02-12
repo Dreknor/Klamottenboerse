@@ -27,16 +27,7 @@ class MailRepository
         $Mailtext = new MailRequest($Mailvorlage->toArray());
 
         Mail::to($VKnummer->vergeben_an_Interessent->mail)->send(new \App\Mail\Mail($Mailtext, $VKnummer->vergeben_an_Interessent));
-        /*
-                $pdf = App::make('dompdf.wrapper');
-                $pdf = $pdf->loadView('pdf.verkaeuferinfos',[
-                    "Klamottenboerse"   => $VKnummer->Klamottenboerse,
-                    "VKnummer"          => $VKnummer
-                ]);
-                $pdf->save(storage_path().'/Verkaeuferinfos.pdf');
 
-                Mail::to($VKnummer->vergeben_an_Interessent->mail)->send(new Verkaeuferinfos($VKnummer, storage_path()."/Verkaeuferinfos.pdf"));
-        */
     }
 
     public function sendRuecknahmeNummer(Interessenten $interessenten)

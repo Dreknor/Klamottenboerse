@@ -12,7 +12,7 @@
                     <input type="text" name="betreff" value="@if (isset($Vorlage)) {{$Vorlage->betreff}} @endif" placeholder="Betreff" class="form-control" autofocus>
                 </div>
                 <div class="card-body">
-                        <textarea id="html" name="text" class="form-control">
+                        <textarea id="html" name="html" class="form-control">
                             {!! $Vorlage->html !!}
                         </textarea>
                 </div>
