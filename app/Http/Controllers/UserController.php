@@ -52,11 +52,12 @@ class UserController extends Controller
                 'email'   => $interessenten->mail
             ], [
                 'name'   =>$interessenten->vorname .' '. $interessenten->nachname,
-
+                'password'   =>Hash::make($password)
             ]);
+
             $interessenten->update([
                 'user_id' => $user->id,
-                'password'   =>Hash::make($password)
+
             ]);
 
         }
