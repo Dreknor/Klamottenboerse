@@ -148,7 +148,7 @@ class MailController extends Controller
     {
         $Klamottenboerse = Klamottenboerse::orderByDesc('datum')->first();
 
-        if ($Klamottenboerse->anmeldung->format('d.m.Y') == Carbon::now()->format('d.m.Y')) {
+        if ($Klamottenboerse->anmeldung->format('d.m.Y') == Carbon::now()->format('d.m.Y') and $Klamottenboerse->sendInvitation == 1) {
             $Mailvorlage = Mailvorlagen::where('name', 'AnmeldungMoeglich')->first();
 
             $interessenten = Interessenten::where('mail', '<>', '')->doesntHave('vknummern_vergeben')->get();

@@ -196,6 +196,20 @@
                                     </small>
                                 @endif
                             </div>
+                            <div class="form-group row @if ($errors->has('sendInvitation')) form-group-error @endif">
+                                <label class="form-label" for="datum">automatische Mail für Anmeldung:</label>
+                                <select class="form-control" name="sendInvitation" id="sendInvitation">
+                                    <option value="1">Ja</option>
+                                    <option value="0">Nein</option>
+                                </select>
+                                @if ($errors->has('sendInvitation'))
+                                    <small class="text-muted">
+                                        @foreach ($errors->get('sendInvitation') as $message)
+                                            {{ $message }}
+                                        @endforeach
+                                    </small>
+                                @endif
+                            </div>
                         </form>
                     </div>
                     <div class="card-footer">
