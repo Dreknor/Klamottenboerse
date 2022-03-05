@@ -30,9 +30,14 @@
                                         <td>
                                             @if (count($Nummer->bisherigeVerkaeufer) > 0)
                                                 @foreach($Nummer->bisherigeVerkaeufer AS $Verkaeufer)
-                                                    @if (is_object($Verkaeufer->vergeben_an) and is_object($Verkaeufer->vergeben_an_Interessent) and $Verkaeufer->vergeben_an != "")
+                                                    @if ($Verkaeufer->vergeben_an != "")
                                                         <span class="label  @if ($Verkaeufer->vergeben_an == $Interessent->id) label-success @else label-light-grey @endif">
-                                                            {{$Verkaeufer->vergeben_an_Interessent->nachname}}, {{$Verkaeufer->vergeben_an_Interessent->vorname}}</span>
+                                                            @if (!is_object($Verkaeufer->vergeben_an_Interessent))
+                                                                gelöscht
+                                                            @else
+                                                                {{$Verkaeufer->vergeben_an_Interessent->nachname}}, {{$Verkaeufer->vergeben_an_Interessent->vorname}}
+                                                            @endif
+                                                        </span>
                                                     @endif
 
                                                 @endforeach
