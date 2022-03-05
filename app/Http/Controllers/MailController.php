@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MailRequest;
 use App\Mail\AnmeldungMoeglichMail;
+use App\Mail\ErinnerungVerkaeuferMail;
 use App\Model\Interessenten;
 use App\Model\Klamottenboerse;
 use App\Model\Mailvorlagen;
@@ -159,12 +160,30 @@ class MailController extends Controller
                 $vorlage = $this->mailRepository->replaceInMailvorlage(clone $Mailvorlage, $Interessent, $Klamottenboerse);
 
                 Mail::to($Interessent->mail)
-                    ->queue(new AnmeldungMoeglichMail($Interessent, $Mailvorlage->betreff, $vorlage->text, $vorlage->html));
+                    ->queue(new AnmeldungMoeglichMail($Interessent, $vorlage->betreff, $vorlage->text, $vorlage->html));
             }
 
             return view('welcome');
         } else {
             //dump($Klamottenboerse->anmeldung->format('d.m.Y'). "== ".Carbon::now()->format('d.m.Y'));
+        }
+    }
+
+    public function erinnerungVerkaeufer()
+    {
+        $Klamottenboerse = Klamottenboerse::orderByDesc('datum')->first();
+
+        if ($Klamottenboerse->sendErinnerung > 0 and $Klamottenboerse->datum->subDays($Klamottenboerse->sendErinnerung)->format('d.m.Y') == Carbon::now()->format('d.m.Y')) {
+            $Mailvorlage = Mailvorlagen::where('name', 'erinnerungVerkaeufer')->first();
+            $vknummern_vergeben = $Klamottenboerse->vknummern_vergeben;
+
+            foreach ($vknummern_vergeben as $vknummer) {
+                $Interessent= $vknummer->vergeben_an_Interessent;
+                $vorlage = $this->mailRepository->replaceInMailvorlage(clone $Mailvorlage, $Interessent, $Klamottenboerse);
+
+                Mail::to($Interessent->mail)->queue(new ErinnerungVerkaeuferMail($Interessent, $vorlage->betreff, $vorlage->text, $vorlage->html));
+            }
+
         }
     }
 }

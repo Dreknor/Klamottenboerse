@@ -96,6 +96,22 @@
                                     {{$klamottenboerse->maxTeile ?: ""}}
                                 </div>
                             </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    automatische Anmeldemail?
+                                </div>
+                                <div class="col">
+                                    {{($klamottenboerse->sendInvitation == 1)? 'ja' : "nein"}}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Erinnerungsmail für Verkäufer:
+                                </div>
+                                <div class="col">
+                                    {{($klamottenboerse->sendErinnerung > 0) ? $klamottenboerse->sendErinnerung : "0"}} Tage (0 = keine Erinnerung)
+                                </div>
+                            </div>
 
                         </div>
                         <div class="card-body hide" id="form">
@@ -210,6 +226,18 @@
                                     </small>
                                 @endif
                             </div>
+
+                                <div class="form-group row @if ($errors->has('sendErinnerung')) form-group-error @endif">
+                                    <label class="form-label" for="sendErinnerung">Erinnerung für Verkäufer x Tage vor der Klamottenbörse (0=keine):</label>
+                                    <input type="number" step="1" min="0" max="14" class="form-control" name="sendErinnerung" id="sendErinnerung" value="{{$klamottenboerse->sendErinnerung ?: 14}}">
+                                    @if ($errors->has('sendErinnerung'))
+                                        <small class="text-muted">
+                                            @foreach ($errors->get('sendErinnerung') as $message)
+                                                {{ $message }}
+                                            @endforeach
+                                        </small>
+                                    @endif
+                                </div>
                         </form>
                     </div>
                     <div class="card-footer">

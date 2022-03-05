@@ -10,7 +10,7 @@ class Klamottenboerse extends Model
 {
     public $table = 'klamottenboerse';
 
-    protected $fillable = ['datum', 'anmeldung', 'anmeldungKinderhaus', 'anlieferung_von', 'anlieferung_bis', 'abholung_von', 'abholung_bis', 'maxTeile', 'sendInvitation'];
+    protected $fillable = ['datum', 'anmeldung', 'anmeldungKinderhaus', 'anlieferung_von', 'anlieferung_bis', 'abholung_von', 'abholung_bis', 'maxTeile', 'sendInvitation', 'sendErinnerung'];
 
     protected $dates = ['created_at', 'updated_at', 'datum', 'anmeldung', 'anmeldungKinderhaus'];
 

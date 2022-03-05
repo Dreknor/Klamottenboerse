@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call('App\Http\Controllers\MailController@anmeldungMoeglich')->dailyAt('00:01:00');
+        $schedule->call('App\Http\Controllers\MailController@erinnerungVerkaeufer')->dailyAt('00:02:00');
     }
 
     /**

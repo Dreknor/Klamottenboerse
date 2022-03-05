@@ -37,7 +37,9 @@ class neueKlamottenboerseRequest extends FormRequest
             'anlieferung_von'   => 'required|date_format:H:i',
             'anlieferung_bis'   => 'required|date_format:H:i',
             'maxTeile'  => 'required|integer|min:1',
-            'sendInvitation' => 'sometimes'
+            'sendInvitation' => 'sometimes',
+            'sendErinnerung' => 'integer|min:0|max:14|nullable',
+
         ];
     }
 
