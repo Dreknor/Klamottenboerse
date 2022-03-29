@@ -9,15 +9,17 @@
 
     <!-- Styles -->
 <style>
+
     html,body {
         padding:0;
-        height:100%;
         margin: 20px;
         margin-left:30px;
+        width: 210mm;
+        height: 297mm;
     }
 
     .row {
-        width:100%;
+        width:90%;
         height: 46%;
         position: absolute;
     }
@@ -38,7 +40,7 @@
         background: black;
         position: absolute;
         top: 48%;
-        width: 100%;
+        width: 90%;
     }
 </style>
 
@@ -55,7 +57,13 @@
                 <tr>
                     <td style="width: 70%; align: left; vertical-align: top">
                         <p style="font-size: large;"><b>Name:</b> {{ $Nummer->vergeben_an_Interessent->vorname }} {{ $Nummer->vergeben_an_Interessent->nachname }} </p>
-                        <p style="font-size: large;"><b>Telefon:</b> {{ $Nummer->vergeben_an_Interessent->telefon }} {{ $Nummer->vergeben_an_Interessent->handy }}</p>
+                        <p style="font-size: large;">
+                            <b>Telefon:</b><br>
+                            {{ $Nummer->vergeben_an_Interessent->telefon }}
+                            @if ($Nummer->vergeben_an_Interessent->telefon != "" and $Nummer->vergeben_an_Interessent->handy != "")
+                                <br>
+                            @endif
+                            {{ $Nummer->vergeben_an_Interessent->handy }}</p>
                     </td>
                     <td style="width: 30%;  height: 80px; border: 1px solid black; vertical-align: top;">
                         <p>Verkäufernummer:</p>
@@ -78,13 +86,13 @@
 
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 50%; align: left; vertical-align: top">
+                    <td style="width: 40%; align: left; vertical-align: top">
                         <p><br>Radebeul, den
                             @php
                                 echo date('d.m.Y', strtotime($Klamottenboerse->datum."-1 day"));
                             @endphp  </p>
                     </td>
-                    <td style="width: 50%; align: left; vertical-align: top">
+                    <td style="width: 60%; align: left; vertical-align: top">
                         <p><br>Unterschrift: _______________________________</p>
                     </td>
                 </tr>
@@ -97,11 +105,14 @@
                 </tr>
             </table>
         </div>
-        @if ($loop->iteration%2)
-            <hr>
-        @else
-            <div style="page-break-after: always"></div>
+        @if (!$loop->last)
+            @if ($loop->iteration%2)
+                <hr>
+            @else
+                <div style="page-break-after: always"></div>
+            @endif
         @endif
+
 
 @endforeach
 </body>

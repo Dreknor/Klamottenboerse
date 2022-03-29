@@ -52,6 +52,7 @@ class ListenController extends Controller
         }
 
         $pdf = App::make('dompdf.wrapper');
+        $pdf->setPaper('a4');
         $pdf = $pdf->loadView('pdf.belehrung', [
             'Klamottenboerse'   => $Klamottenboerse,
             'Nummern'           => $VKnummer,
