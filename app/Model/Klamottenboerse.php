@@ -10,14 +10,19 @@ class Klamottenboerse extends Model
 {
     public $table = 'klamottenboerse';
 
-    protected $fillable = ['datum', 'anmeldung', 'anmeldungKinderhaus', 'anlieferung_von', 'anlieferung_bis', 'abholung_von', 'abholung_bis', 'maxTeile', 'sendInvitation', 'sendErinnerung'];
+    protected $fillable = ['belehrung', 'datum', 'anmeldung', 'anmeldungKinderhaus', 'anlieferung_von', 'anlieferung_bis', 'abholung_von', 'abholung_bis', 'maxTeile', 'sendInvitation', 'sendErinnerung'];
 
-    protected $dates = ['created_at', 'updated_at', 'datum', 'anmeldung', 'anmeldungKinderhaus'];
+   // protected $dates = ['created_at', 'updated_at', 'datum', 'anmeldung', 'anmeldungKinderhaus'];
 
     protected $times = ['anlieferung_von', 'anlieferung_bis', 'abholung_von', 'abholung_bis'];
 
     protected $casts = [
-      'boolean' => 'sendInvitation'
+     'sendInvitation' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'datum'  => 'datetime',
+        'anmeldung'  => 'datetime',
+        'anmeldungKinderhaus' => 'datetime'
     ];
 
     public function getAnlieferungvonAttribute($value)

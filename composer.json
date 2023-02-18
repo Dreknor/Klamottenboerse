@@ -8,32 +8,34 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.4|^8.0",
-        "barryvdh/laravel-dompdf": "^0.9",
+        "php": "^8.1",
+        "barryvdh/laravel-dompdf": "^v1.0.2",
         "enlightn/enlightn": "^1.11",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.32",
+        "laravel/framework": "^v9.0",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
         "maatwebsite/excel": "^3.1",
         "sentry/sentry-laravel": "^2.4",
-        "spatie/laravel-medialibrary": "^9.4",
-        "spatie/laravel-permission": "^4.0",
+        "spatie/laravel-medialibrary": "^10.0",
+        "spatie/laravel-permission": "^5.5.0",
         "webklex/laravel-imap": "^2.4",
         "webklex/php-imap": "^2.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
-        "facade/ignition": "^2.3.6",
+        "spatie/laravel-ignition": "^1.0",
         "fakerphp/faker": "^1.9.1",
         "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^5.0",
-        "oscarafdev/migrations-generator": "^2.0",
+        "nunomaduro/collision": "6.1.*",
         "phpunit/phpunit": "^9.0"
     },
     "autoload": {
+        "files": [
+            "app/helpers.php"
+        ],
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",

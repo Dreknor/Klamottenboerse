@@ -71,18 +71,7 @@
                     </td>
                 </tr>
             </table>
-
-            <p><br>
-                Ich bin darüber informiert, dass die Elternvertretung des Evangelischen Kinderhauses der Friedenskirchgemeinde als Veranstalter der Klamottenbörse keine Haftung für abhanden gekommene Waren übernimmt, wenngleich sorgfältig darauf geachtet wird, dass dies nicht passiert.
-            </p>
-            <p>Die nicht verkaufte Ware muss am Tag der Klamottenbörse, dem {{$Klamottenboerse->datum->format('d.m.Y')}} zwischen @php
-                    echo date('G.i', strtotime($Klamottenboerse->abholung_von));
-                @endphp
-                und
-                @php
-                    echo date('G.i', strtotime($Klamottenboerse->abholung_bis));
-                @endphp Uhr am Verkaufsort abgeholt werden.</p>
-            <p> 25% des Verkaufserlöses ist für das Kinderhaus bestimmt.</p>
+            {!! replaceInText($belehrung, $Nummer->vergeben_an_Interessent, $Klamottenboerse) !!}
 
             <table style="width: 100%;">
                 <tr>

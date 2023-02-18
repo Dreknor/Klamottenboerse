@@ -56,6 +56,7 @@ class ListenController extends Controller
         $pdf = $pdf->loadView('pdf.belehrung', [
             'Klamottenboerse'   => $Klamottenboerse,
             'Nummern'           => $VKnummer,
+            'belehrung'         => $Klamottenboerse->belehrung
         ]);
 
         $pdf->save(storage_path().'/belehrung.pdf');

@@ -1,6 +1,20 @@
 @extends('layouts.app')
 
 @section('js')
+    <script src='{{asset('js/tinymce/tinymce.min.js')}}'></script>
+    <script src='{{asset('js/tinymce/langs/de.js')}}'></script>
+<script>
+    tinymce.init({
+        plugins: "autolink, lists, textcolor",
+        selector: '#belehrung',
+        toolbar:'bold, italic, underline, strikethrough, alignleft, aligncenter, alignright, alignjustify, styleselect, formatselect, fontselect, fontsizeselect, forecolor, backcolor, bullist, numlist, outdent, indent, undo, redo, removeformat',
+        menubar: false,
+        height: 300,
+        table_default_attributes: {
+            border: '0'
+        }
+    });
+</script>
     <script>
         @if (!$errors->any())
             $(document).ready(function() {
@@ -20,6 +34,9 @@
     </script>
 
 
+
+
+
 @stop
 
 @section('content')
@@ -35,7 +52,7 @@
         </header>
 
         <div class="row">
-            <div class="col-5">
+            <div class="col-8">
                 <div class="card">
                     <div class="card-header bg-info text-white">
                         Daten der Klamottenbörse
@@ -238,6 +255,19 @@
                                         </small>
                                     @endif
                                 </div>
+                                <div class="form-group row @if ($errors->has('belehrung')) form-group-error @endif">
+                                    <label class="form-label" for="belehrung">Belehrung:</label>
+                                    <textarea class="form-control" name="belehrung" id="belehrung">
+                                        {!! $klamottenboerse->belehrung !!}
+                                    </textarea>
+                                    @if ($errors->has('belehrung'))
+                                        <small class="text-muted">
+                                            @foreach ($errors->get('belehrung') as $message)
+                                                {{ $message }}
+                                            @endforeach
+                                        </small>
+                                    @endif
+                                </div>
                         </form>
                     </div>
                     <div class="card-footer">
@@ -255,17 +285,6 @@
                 <div class="card">
                     <div class="card-header">
                         Helfer
-                    </div>
-                    <div class="card-body">
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-4 col-auto">
-                <div class="card">
-                    <div class="card-header">
-                        vergangene Klamottenbörsen
                     </div>
                     <div class="card-body">
 
