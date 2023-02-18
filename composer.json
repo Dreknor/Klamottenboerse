@@ -22,7 +22,7 @@
         "spatie/laravel-medialibrary": "^10.0",
         "spatie/laravel-permission": "^5.5.0",
         "webklex/laravel-imap": "^2.4",
-        "webklex/php-imap": "^2.7",
+        "webklex/php-imap": "^2.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
