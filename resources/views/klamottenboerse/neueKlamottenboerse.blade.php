@@ -120,6 +120,18 @@
                               </small>
                           @endif
                       </div>
+                      <div class="form-group row @if ($errors->has('sendInvitation')) form-group-error @endif">
+                          <label class="form-label" for="sendErinnerung">Erinnerung für Verkäufer x Tage vor der Klamottenbörse (0=keine):</label>
+                          <input type="number" step="1" min="0" max="14" class="form-control" name="sendErinnerung" id="sendErinnerung" value="{{$klamottenboerse->sendErinnerung ?: 14}}">
+                      @if ($errors->has('sendErinnerung'))
+                              <small class="text-muted">
+                                  @foreach ($errors->get('sendInvitation') as $message)
+                                      {{ $message }}
+                                  @endforeach
+                              </small>
+                          @endif
+                      </div>
+
 
                             </div>
                         <div class="card-footer">
