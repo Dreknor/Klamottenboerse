@@ -16,11 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+Route::get('/helfer', [\App\Http\Controllers\AppointmentController::class, 'index'])->name('helfer');
+Route::post('/helfer', [\App\Http\Controllers\AppointmentController::class, 'storeHelfer'])->name('helfer.store');
 
 Auth::routes(['register' => false]);
 
 Route::group(['middleware' => ['auth']], function () {
+
+    //Helfer
+    Route::get('/helfertermine', [\App\Http\Controllers\AppointmentController::class, 'create'])->name('helfertermine');
+    Route::post('/helfertermine', [\App\Http\Controllers\AppointmentController::class, 'store'])->name('appointment.store');
+    Route::delete('appointment/{appointment}', [\App\Http\Controllers\AppointmentController::class, 'destroy'])->name('appointment.destroy');
+
     //Create User
     Route::get('/interessenten/{interessenten}/addUserAccount', [UserController::class, 'create']);
     Route::get('/interessenten/{interessenten}/deleteUserAccount', [UserController::class, 'delete']);

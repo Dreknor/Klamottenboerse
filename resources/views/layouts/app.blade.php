@@ -89,6 +89,7 @@
 	            <ul>
 	                <li><a href="{{url('grunddaten')}}"><span class="lbl">Grunddaten</span></a></li>
 	                <li><a href="{{url('vknummern')}}"><span class="lbl">Verkäufernummern</span></a></li>
+                    <li><a href="{{url('helfertermine')}}"><span class="lbl">Helfer</span></a></li>
                 </ul>
 	        </li>
 			<li class="with-sub">
