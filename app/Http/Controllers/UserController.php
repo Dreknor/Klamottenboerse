@@ -76,6 +76,7 @@ class UserController extends Controller
 
     public function createKasseZugang(Interessenten $interessenten){
 
+
         if ($interessenten->mitarbeiter != "ja"){
             return redirect()->back()->with([
                 'fehler'   => 'Zugang darf nur für Mitarbeiter erstellt werden'
@@ -89,10 +90,8 @@ class UserController extends Controller
             if (!is_null($user)){
                 $user->restore();
                 $user->update([
-                    'password'   =>Hash::make($password),
                     'kasse'  => 1
                 ]);
-
             }
         } else {
             $user=User::firstOrCreate([
@@ -107,7 +106,15 @@ class UserController extends Controller
                 'user_id' => $user->id,
             ]);
 
+
+            Mail::to($interessenten->mail)->send(new sendPasswordMail($interessenten, $password));
         }
+
+        return redirect()->back()->with([
+            'success'   => 'Zugang wurde erstellt'
+        ]);
+
+
     }
 
     public function removeKassenZugang(Interessenten $interessenten)
@@ -122,7 +129,10 @@ class UserController extends Controller
             'kasse' => 0
         ]);
 
-        if ($interessenten->kasse == 0 and $interessenten->verwaltung == 0){
+        $user = $interessenten->user()->first();
+
+
+        if ($user->kasse == 0 and $user->verwaltung == 0){
             $interessenten->user()->delete();
         } else {
             return redirect()->back()->with([

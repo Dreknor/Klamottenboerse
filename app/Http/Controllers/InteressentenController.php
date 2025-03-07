@@ -27,9 +27,7 @@ class InteressentenController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->verwaltung != 1) {
-            return redirect()->back()->with('error', 'Berechtigung fehlt');
-        }
+
 
         $Interressenten = $this->interessentenRepository->all();
         $Interressenten->load('warteliste');
@@ -94,7 +92,12 @@ class InteressentenController extends Controller
 
         if ($interessent->mail) {
             $email = $interessent->mail;
-            $Mails = $this->imapRepository->findMailsOfEMail($email, $mailbox);
+            try {
+                $Mails = $this->imapRepository->findMailsOfEMail($email, $mailbox);
+            } catch (\Exception $exception) {
+                $Mails = [];
+            }
+
         } else {
             $Mails = [];
         }

@@ -36,6 +36,8 @@ Route::group(['middleware' => ['auth', 'isVerwaltung']], function () {
     //Create User
     Route::get('/interessenten/{interessenten}/addUserAccount', [UserController::class, 'create']);
     Route::get('/interessenten/{interessenten}/deleteUserAccount', [UserController::class, 'delete']);
+    Route::get('/interessenten/{interessenten}/removeKassenZugang', [UserController::class, 'removeKassenZugang']);
+    Route::get('/interessenten/{interessenten}/createKassenZugang', [UserController::class, 'createKasseZugang']);
 
     Route::get('/home', [HomeController::class,'index'])->name('home');
     Route::get('/grunddaten', 'KlamottenboersenController@show');

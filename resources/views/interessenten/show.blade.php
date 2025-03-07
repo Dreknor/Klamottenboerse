@@ -12,22 +12,35 @@
                                  <i class="font-icon-pencil"></i>
                             </a>
                     </span>
-                    <span class="pull-right">
-                        @if ($interessent->mitarbeiter == 'ja')
-                            <div class="col"  id="loginText">
-                                @if (!is_null($interessent->user))
-                                    <a class="btn btn-danger btn-sm"  href="{{url('/interessenten/'.$interessent->id.'/deleteUserAccount')}}" title="Login löschen">
-                                        <i class="fa fa-lock" aria-hidden="true"></i>
-                                    </a>
-                                @else
-                                    <a class="btn btn-info btn-sm" href="{{url('/interessenten/'.$interessent->id.'/addUserAccount')}}" title="Login erstellen">
-                                        <i class="fa fa-key" aria-hidden="true"></i>
-                                     </a>
+                            @if ($interessent->mitarbeiter == 'ja')
+                                <span class="pull-right">
+                                    <div class="col"  id="loginText">
+                                        @if (!is_null($interessent->user) and $interessent->user->verwatung == 1)
+                                                <a class="btn btn-danger btn-sm"  href="{{url('/interessenten/'.$interessent->id.'/deleteUserAccount')}}" title="Login löschen">
+                                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                            </a>
+                                            @else
+                                                <a class="btn btn-info btn-sm" href="{{url('/interessenten/'.$interessent->id.'/addUserAccount')}}" title="Login erstellen">
+                                                <i class="fa fa-key" aria-hidden="true"></i>
+                                             </a>
+                                            @endif
+                                    </div>
+                                </span>
+                                @if (!is_null($interessent->user) and $interessent->user->kasse == 1)
+                                    <span class="pull-right">
+                                        <div class="col"  id="loginText">
+                                            <a class="btn btn-danger btn-sm"  href="{{url('/interessenten/'.$interessent->id.'/removeKassenZugang')}}" title="Kassenzugang löschen">
+                                            <i class="fa-solid fa-cash-register"></i>
+                                        </a>
+                                        @else
+                                            <a class="btn btn-secondary btn-sm" href="{{url('/interessenten/'.$interessent->id.'/createKassenZugang')}}" title="Kassenlogin erstellen">
+                                           <i class="fa-solid fa-cash-register"></i>
+                                         </a>
+                                        </div>
+                                    </span>
                                 @endif
-                            </div>
-                        @endif
-
-                        </span>
+                            @endif
+                    </span>
                 </div>
                 <div id="daten" class="card-body ">
                     <div class="row mt-2">
