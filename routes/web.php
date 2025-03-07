@@ -111,3 +111,8 @@ Route::group(['middleware' => ['auth', 'isVerwaltung']], function () {
         return new \App\Mail\Verkaeuferinfos($VKnummer);
     });
 });
+
+Route::group(['middleware' => ['auth', 'isKasse']], function () {
+    Route::get('/kasse', 'KasseController@index');
+
+});
