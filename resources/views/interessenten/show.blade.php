@@ -28,7 +28,7 @@
                                 </span>
                                 @if (!is_null($interessent->user) and $interessent->user->kasse == 1)
                                     <span class="pull-right">
-                                        <div class="col"  id="loginText">
+
                                             <a class="btn btn-danger btn-sm"  href="{{url('/interessenten/'.$interessent->id.'/removeKassenZugang')}}" title="Kassenzugang löschen">
                                             <i class="fa-solid fa-cash-register"></i>
                                         </a>
@@ -36,11 +36,9 @@
                                             <a class="btn btn-secondary btn-sm" href="{{url('/interessenten/'.$interessent->id.'/createKassenZugang')}}" title="Kassenlogin erstellen">
                                            <i class="fa-solid fa-cash-register"></i>
                                          </a>
-                                        </div>
                                     </span>
                                 @endif
                             @endif
-                    </span>
                 </div>
                 <div id="daten" class="card-body ">
                     <div class="row mt-2">
