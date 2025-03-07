@@ -58,9 +58,10 @@
 	</header><!--.site-header-->
 
 	<div class="mobile-menu-left-overlay"></div>
-    @auth()
+
 	    <nav class="side-menu">
 	    <ul class="side-menu-list">
+            @auth
 			<li class="">
 				<a href="{{url('/home')}}">
 	            <span>
@@ -69,57 +70,60 @@
 	            </span>
 				</a>
 			</li>
+            @endauth
 
-
-	        <li class="with-sub">
+            @if(auth()->user()->verwaltung == 1)
+                    <li class="with-sub">
 	            <span>
 	                <i class="font-icon glyphicon glyphicon-user"></i>
 	                <span class="lbl">Interessenten</span>
 	            </span>
-	            <ul>
-	                <li><a href="{{url('interessenten')}}"><span class="lbl">Übersicht</span></a></li>
-	                <li><a href="{{url('interessenten/create')}}"><span class="lbl">Anlegen</span></a></li>
-	            </ul>
-	        </li>
-	        <li class="with-sub">
+                        <ul>
+                            <li><a href="{{url('interessenten')}}"><span class="lbl">Übersicht</span></a></li>
+                            <li><a href="{{url('interessenten/create')}}"><span class="lbl">Anlegen</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
 	            <span>
 	                <i class="font-icon glyphicon glyphicon-calendar "></i>
 	                <span class="lbl">Klamottenbörse</span>
 	            </span>
-	            <ul>
-	                <li><a href="{{url('grunddaten')}}"><span class="lbl">Grunddaten</span></a></li>
-	                <li><a href="{{url('vknummern')}}"><span class="lbl">Verkäufernummern</span></a></li>
-                    <li><a href="{{url('helfertermine')}}"><span class="lbl">Helfer</span></a></li>
-                </ul>
-	        </li>
-			<li class="with-sub">
+                        <ul>
+                            <li><a href="{{url('grunddaten')}}"><span class="lbl">Grunddaten</span></a></li>
+                            <li><a href="{{url('vknummern')}}"><span class="lbl">Verkäufernummern</span></a></li>
+                            <li><a href="{{url('helfertermine')}}"><span class="lbl">Helfer</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
 	            <span>
 	                <i class="font-icon glyphicon glyphicon-list-alt"></i>
 	                <span class="lbl">Listen</span>
 	            </span>
-				<ul>
-					<!--<li><a href="{{url('listen/verkaeuferinfos')}}" target="_blank"><span class="lbl">Verkäuferinfos</span></a></li>-->
-					<li><a href="{{url('listen/vknummern')}}" target="_blank"><span class="lbl">Verkäufernummern</span></a></li>
-					<li><a href="{{url('listen/belehrung')}}" target="_blank"><span class="lbl">Belehrung</span></a></li>
-					<li><a href="{{url('listen/abstreichliste')}}" target="_blank"><span class="lbl">Abstreichliste</span></a></li>
-				</ul>
-			</li>
-            <li class="with-sub">
+                        <ul>
+                            <!--<li><a href="{{url('listen/verkaeuferinfos')}}" target="_blank"><span class="lbl">Verkäuferinfos</span></a></li>-->
+                            <li><a href="{{url('listen/vknummern')}}" target="_blank"><span class="lbl">Verkäufernummern</span></a></li>
+                            <li><a href="{{url('listen/belehrung')}}" target="_blank"><span class="lbl">Belehrung</span></a></li>
+                            <li><a href="{{url('listen/abstreichliste')}}" target="_blank"><span class="lbl">Abstreichliste</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
 	            <span>
 	                <i class="font-icon font-icon-cogwheel "></i>
 	                <span class="lbl">Settings</span>
 	            </span>
-                <ul>
-                    <li><a href="{{url('mailvorlagen')}}"><span class="lbl">Mail-Vorlagen</span></a></li>
-					<li><a href="{{url('import')}}"><span class="lbl">Import von Kasse</span></a></li>
-                </ul>
-            </li>
+                        <ul>
+                            <li><a href="{{url('mailvorlagen')}}"><span class="lbl">Mail-Vorlagen</span></a></li>
+                            <li><a href="{{url('import')}}"><span class="lbl">Import von Kasse</span></a></li>
+                        </ul>
+                    </li>
+            @endif
+
+
 
 	    </ul>
 
 
 	</nav><!--.side-menu-->
-    @endauth
 	<div class="page-content">
         @if ($errors->any())
             <div class="alert alert-danger">

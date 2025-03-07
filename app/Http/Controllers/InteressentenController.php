@@ -27,6 +27,10 @@ class InteressentenController extends Controller
      */
     public function index()
     {
+        if (auth()->user()->verwaltung != 1) {
+            return redirect()->back()->with('error', 'Berechtigung fehlt');
+        }
+
         $Interressenten = $this->interessentenRepository->all();
         $Interressenten->load('warteliste');
 
@@ -42,6 +46,11 @@ class InteressentenController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->verwaltung != 1) {
+            return redirect()->back()->with('error', 'Berechtigung fehlt');
+        }
+
+
         $mail = \request()->input('email');
         $name = \request()->input('personal');
 

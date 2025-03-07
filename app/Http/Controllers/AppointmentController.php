@@ -19,6 +19,9 @@ class AppointmentController extends Controller
 
     public function storeHelfer(createHelferRequest $request)
     {
+
+
+
         $helfer = new Helfer();
         $helfer->name = $request->name;
         $helfer->mail = $request->mail;
@@ -42,6 +45,8 @@ class AppointmentController extends Controller
      */
     public function index()
     {
+
+
         return \view(
             'helferliste',
             [
@@ -58,6 +63,7 @@ class AppointmentController extends Controller
      */
     public function create()
     {
+
 
         $klamottenboerse = $this->klamottenboersenRepository->aktuelleKlamottenboerse();
 
@@ -77,6 +83,11 @@ class AppointmentController extends Controller
      */
     public function store(createAppointmentRequest $request)
     {
+
+        if (auth()->user()->verwaltung != 1) {
+            return redirect()->back()->with('error', 'Berechtigung fehlt');
+        }
+
         $klamottenboerse = $this->klamottenboersenRepository->aktuelleKlamottenboerse();
 
         for ($i = 0; $i < $request->anzahl; $i++) {
@@ -133,6 +144,10 @@ class AppointmentController extends Controller
      */
     public function destroy(Appointment $appointment)
     {
+        if (auth()->user()->verwaltung != 1) {
+            return redirect()->back()->with('error', 'Berechtigung fehlt');
+        }
+
         $appointment->helfer()->delete();
         $appointment->delete();
 

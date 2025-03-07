@@ -21,7 +21,12 @@ Route::post('/helfer', [\App\Http\Controllers\AppointmentController::class, 'sto
 
 Auth::routes(['register' => false]);
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth']], function (){
+    Route::get('/', 'HomeController@index')->name('home');
+
+} );
+
+Route::group(['middleware' => ['auth', 'isVerwaltung']], function () {
 
     //Helfer
     Route::get('/helfertermine', [\App\Http\Controllers\AppointmentController::class, 'create'])->name('helfertermine');
@@ -34,7 +39,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/home', [HomeController::class,'index'])->name('home');
     Route::get('/grunddaten', 'KlamottenboersenController@show');
-    Route::get('/', 'HomeController@index')->name('home');
     //Anmeldung moeglich
     Route::get('/checkAnmeldung', 'MailController@anmeldungMoeglich');
 

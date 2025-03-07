@@ -29,18 +29,25 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $Interessenten = Interessenten::all();
-        $Mails = $this->imapRepository->mailsInboxLastDays(10);
-        $Klamottenboerse = Klamottenboerse::all();
 
-        return view('home', [
-            'Interessenten' => $Interessenten,
-            //"MailsCount"    => $Mails->count(),
-            //"unreadMails"   => $Mails->where('flags.seen',0)->count(),
-            //"Mails" => $Mails->sortByDesc('date')->paginate(10),
-            'messages'   => $Mails,
-            'Klamottenboersen'   => $Klamottenboerse,
-            'VKnummern'     => $Klamottenboerse->last()->vknummern,
-        ]);
+        if (auth()->user()->verwaltung == 1) {
+            $Interessenten = Interessenten::all();
+            $Mails = $this->imapRepository->mailsInboxLastDays(10);
+            $Klamottenboerse = Klamottenboerse::all();
+
+            return view('home', [
+                'Interessenten' => $Interessenten,
+                //"MailsCount"    => $Mails->count(),
+                //"unreadMails"   => $Mails->where('flags.seen',0)->count(),
+                //"Mails" => $Mails->sortByDesc('date')->paginate(10),
+                'messages'   => $Mails,
+                'Klamottenboersen'   => $Klamottenboerse,
+                'VKnummern'     => $Klamottenboerse->last()->vknummern,
+            ]);
+        } elseif (auth()->user()->verwaltung){
+
+        } else {
+            return \view('welcome');
+        }
     }
 }

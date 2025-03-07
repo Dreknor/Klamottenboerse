@@ -16,9 +16,14 @@ class ImapRepository
 {
     public function connect()
     {
-        $Client = Client::account('default');
-        $Client->getConnection();
-        return $Client;
+        try {
+            $Client = Client::account('default');
+            $Client->getConnection();
+            return $Client;
+        } catch (\Exception $e) {
+            abort( 500, 'Verbindung zum Mailserver konnte nicht hergestellt werden');
+        }
+
     }
 
     public function unseenMessages()
@@ -92,19 +97,24 @@ class ImapRepository
 
     public function mailsInboxLastDays($Tage = 5)
     {
+        try {
+            $Client = $this->connect();
+            $aFolder = $Client->getFolder('INBOX');
+            $aMessage = $aFolder->query()
+                    ->since(now()->subDays($Tage))
+                    ->setFetchBody(true)
+                    ->get();
 
-        $Client = $this->connect();
-        $aFolder = $Client->getFolder('INBOX');
-        $aMessage = $aFolder->query()
-            ->since(now()->subDays($Tage))
-            ->setFetchBody(true)
-            ->get();
+                $sorted = $aMessage->sortByDesc(function ($item) {
+                    return $item->getDate();
+                });
 
-        $sorted = $aMessage->sortByDesc(function ($item) {
-            return $item->getDate();
-        });
+                return $sorted;
 
-        return $sorted;
+        } catch (\Exception $e) {
+            return $e;
+        }
+
     }
 
     public function toArray(Message $message){
