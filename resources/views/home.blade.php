@@ -297,6 +297,8 @@
                         type: 'linear',
                         display: true,
                         position: 'right',
+                        suggestedMin: 0,
+
 
                         // grid line settings
                         grid: {
