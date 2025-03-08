@@ -129,6 +129,32 @@
                                     {{($klamottenboerse->sendErinnerung > 0) ? $klamottenboerse->sendErinnerung : "0"}} Tage (0 = keine Erinnerung)
                                 </div>
                             </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Ort:
+                                </div>
+                                <div class="col">
+                                    {{$klamottenboerse->ort}}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Adresse:
+                                </div>
+                                <div class="col">
+                                    <a href="https://www.google.com/maps/place/{{urlencode($klamottenboerse->adresse)}}" target="_blank">
+                                        {{$klamottenboerse->adresse}}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Belehrung:
+                                </div>
+                                <div class="col">
+                                    {!! $klamottenboerse->belehrung !!}
+                                </div>
+                            </div>
 
                         </div>
                         <div class="card-body hide" id="form">
@@ -255,6 +281,32 @@
                                         </small>
                                     @endif
                                 </div>
+
+                                <div class="form-group row @if ($errors->has('ort')) form-group-error @endif">
+                                    <label class="form-label" for="ort">Ort:</label>
+                                    <input type="text" class="form-control" name="ort" id="ort" value="{{$klamottenboerse->ort ?: ""}}">
+                                    @if ($errors->has('ort'))
+                                        <small class="text-muted">
+                                            @foreach ($errors->get('ort') as $message)
+                                                {{ $message }}
+                                            @endforeach
+                                        </small>
+                                    @endif
+                                </div>
+
+                                <div class="form-group row @if ($errors->has('adresse')) form-group-error @endif">
+                                    <label class="form-label" for="adresse">Adresse:</label>
+                                    <input type="text" class="form-control" name="adresse" id="adresse" value="{{$klamottenboerse->adresse ?: ""}}">
+                                    @if ($errors->has('adresse'))
+                                        <small class="text-muted">
+                                            @foreach ($errors->get('adresse') as $message)
+                                                {{ $message }}
+                                            @endforeach
+                                        </small>
+                                    @endif
+                                </div>
+
+
                                 <div class="form-group row @if ($errors->has('belehrung')) form-group-error @endif">
                                     <label class="form-label" for="belehrung">Belehrung:</label>
                                     <textarea class="form-control" name="belehrung" id="belehrung">

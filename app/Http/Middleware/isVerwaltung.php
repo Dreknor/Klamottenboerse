@@ -21,9 +21,10 @@ class isVerwaltung
 
         if ($user->verwaltung == 1) {
             return $next($request);
-        } else
+        } else {
+            return redirect(url('/'))->with('danger', 'You are unauthorised to access this page');
+        }
 
-        return redirect(url('/'))->with('danger', 'You are unauthorised to access this page');
 
     }
 }

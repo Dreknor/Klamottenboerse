@@ -32,10 +32,12 @@ class VKnummerRepository
 
     public function vergebeneNummern(Klamottenboerse $klamottenboerse)
     {
-        return VKnummer::query()
-            ->whereNull('vergeben_an')
-            ->whereNull('reserviert_fuer')
-            ->where('klamottenboersen_id', DB::raw('(select max(`id`) from klamottenboerse)'))
-            ->get();
+        return \Cache::remember('vergebeneNummern', 60, function () use ($klamottenboerse) {
+            return VKnummer::query()
+                ->whereNotNull('vergeben_an')
+                ->where('klamottenboersen_id', $klamottenboerse->id)
+                ->orderBy('vergeben_an', 'ASC')
+                ->get();
+        });
     }
 }

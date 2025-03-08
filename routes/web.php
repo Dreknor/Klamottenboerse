@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InteressentenController;
+use App\Http\Controllers\Kasse\ExportController;
+use App\Http\Controllers\Kasse\KasseController;
+use App\Http\Controllers\Kasse\SettingsController;
+use App\Http\Controllers\Kasse\VerlaufController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -113,6 +117,32 @@ Route::group(['middleware' => ['auth', 'isVerwaltung']], function () {
 });
 
 Route::group(['middleware' => ['auth', 'isKasse']], function () {
-    Route::get('/kasse', 'KasseController@index');
+
+    Route::prefix('kasse')->group(function () {;
+        Route::get('/', [KasseController::class, 'index']);
+
+        Route::get('/verlauf', [VerlaufController::class, 'index']);
+        Route::get('/verlauf/verkaeufer', [VerlaufController::class, 'verkaeufer']);
+        Route::get('/verlauf/edit', [VerlaufController::class, 'activEdit'])->name('verlauf.activate.edit');
+        Route::get('verlauf/{VerkaufsID}/edit', [VerlaufController::class, 'editVerkauf']);
+        Route::post('/artikelBuchen', [KasseController::class, 'ArtikelInWarenkorb']);
+
+
+        Route::get('/kasse/{ArticleID}/edit', [KasseController::class, 'editArticle']);
+        Route::get('/bezahlen', [KasseController::class, 'bezahlen']);
+        Route::post('/wechselgeld', [KasseController::class, 'wechselgeld']);
+
+
+
+        Route::get('/settings', [SettingsController::class, 'index']);
+        Route::post('/settings', [SettingsController::class, 'save']);
+
+        Route::get('/Auswertung', [\App\Http\Controllers\Kasse\AbrechnungsController::class, 'perform']);
+
+        Route::get('import', [\App\Http\Controllers\Kasse\ImportController::class, 'index']);
+        Route::post('import', [\App\Http\Controllers\Kasse\ImportController::class, 'import']);
+        Route::get('export', [ExportController::class, 'downloadExcel']);
+    });
+
 
 });

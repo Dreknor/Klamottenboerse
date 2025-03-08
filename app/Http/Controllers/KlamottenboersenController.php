@@ -60,7 +60,9 @@ class KlamottenboersenController extends Controller
         $VKnummern = $this->klamottenboersenRepository->aktuelleKlamottenboerse()->vknummern;
 
         $old = $this->klamottenboersenRepository->aktuelleKlamottenboerse();
-        $Klamottenboerse = new Klamottenboerse($request->all());
+        $Klamottenboerse = new Klamottenboerse($request->validated());
+        $Klamottenboerse->ort = $old->ort;
+        $Klamottenboerse->adresse = $old->adresse;
         $Klamottenboerse->belehrung = $old->belehrung;
         $Klamottenboerse->save();
 

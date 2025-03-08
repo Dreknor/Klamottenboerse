@@ -81,6 +81,8 @@ class MailRepository
             'DATUM' => $Klamottenboerse->datum->format('d.m.Y'),
             'ANMELDUNG' => $Klamottenboerse->anmeldung->format('d.m.Y'),
             'ANNAHME' => $Klamottenboerse->datum->subDay()->format('d.m.Y'),
+            'ORT' => $Klamottenboerse->ort,
+            'ADRESSE' => $Klamottenboerse->adresse,
             'ANLIEFERUNG_AB'=> $Klamottenboerse->anlieferung_von,
             'ANLIEFERUNG_BIS' => $Klamottenboerse->anlieferung_bis,
             'ABHOLUNG_AB' => $Klamottenboerse->abholung_von,

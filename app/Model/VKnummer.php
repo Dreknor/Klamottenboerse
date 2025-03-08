@@ -40,4 +40,17 @@ class VKnummer extends Model
         return $this->hasOne(self::class, 'vknummer', 'vknummer')
             ->where('klamottenboersen_id', DB::raw('(select max(`id`) from klamottenboerse)'));
     }
+
+    public function verkaufteArtikel()
+    {
+        return $this->hasMany(verkaufteartikel::class, 'vknummer', 'vknummer')
+            ->orderBy('artikelnummer', 'ASC');
+    }
+
+    public function scopeAktuelleKlamottenboerse()
+    {
+        return $this->where('klamottenboersen_id', DB::raw('(select max(`id`) from klamottenboerse)'));
+    }
+
+
 }

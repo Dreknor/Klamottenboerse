@@ -34,6 +34,10 @@ class HomeController extends Controller
             $Interessenten = Interessenten::all();
             $Mails = $this->imapRepository->mailsInboxLastDays(10);
             $Klamottenboerse = Klamottenboerse::all();
+        $Interessenten = Interessenten::all();
+        //$Mails = $this->imapRepository->mailsInboxLastDays(10);
+        $Mails = [];
+        $Klamottenboerse = Klamottenboerse::all();
 
             return view('home', [
                 'Interessenten' => $Interessenten,
@@ -44,10 +48,11 @@ class HomeController extends Controller
                 'Klamottenboersen'   => $Klamottenboerse,
                 'VKnummern'     => $Klamottenboerse->last()->vknummern,
             ]);
-        } elseif (auth()->user()->verwaltung){
+        } elseif (auth()->user()->kasse == 1) {
+            return redirect(url('/kasse'));
 
         } else {
-            return \view('welcome');
+            return redirect()->route('login');
         }
     }
 }

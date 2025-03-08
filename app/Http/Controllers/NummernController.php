@@ -164,6 +164,14 @@ class NummernController extends Controller
 
     public function removeVergabe(VKnummer $vknummer)
     {
+
+        if ($vknummer->verkaufteArtikel->count() > 0) {
+            return redirect()->back()->with([
+                'Meldung'  => 'Nummer kann nicht zurückgezogen werden, da bereits Artikel verkauft wurden.',
+                'type' => 'danger',
+            ]);
+        }
+
         try {
             $Interessent = $vknummer->vergeben_an_Interessent;
             $vknummer->vergeben_an = null;

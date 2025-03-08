@@ -17,15 +17,13 @@ class isKasse
     public function handle(Request $request, Closure $next)
     {
 
-        if(!Auth::check()){
-            return redirect()->route('login');
-        }
+        $user = $request->user();
 
-        if(Auth::user()->isKasse == 1){
+        if ($user->kasse == 1) {
             return $next($request);
+        } else {
+            return redirect(url('/'))->with('danger', 'You are unauthorised to access this page');
         }
 
-        return redirect(url('/'))->with('unauthorised', 'You are
-                  unauthorised to access this page');
     }
 }

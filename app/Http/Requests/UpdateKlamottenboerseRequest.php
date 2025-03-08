@@ -14,7 +14,7 @@ class UpdateKlamottenboerseRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::user()) {
+        if (Auth::user() && Auth::user()->verwaltung == 1) {
             return true;
         }
 
@@ -39,6 +39,8 @@ class UpdateKlamottenboerseRequest extends FormRequest
             'maxTeile'  => 'required|integer|min:1',
             'sendErinnerung' => 'integer|min:0|max:14|nullable',
             'sendInvitation' => 'sometimes',
+            'ort' => 'string|nullable',
+            'adresse' => 'string|nullable',
         ];
     }
 

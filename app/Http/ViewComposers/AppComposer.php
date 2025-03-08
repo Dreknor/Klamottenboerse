@@ -15,6 +15,7 @@ use Illuminate\View\View;
 
 class AppComposer
 {
+    protected $imapRepository;
     public function __construct(ImapRepository $imapRepository)
     {
         $this->imapRepository = $imapRepository;

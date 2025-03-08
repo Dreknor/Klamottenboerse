@@ -60,34 +60,37 @@
 	<div class="mobile-menu-left-overlay"></div>
 
 	    <nav class="side-menu">
-	    <ul class="side-menu-list">
+
             @auth
-			<li class="">
-				<a href="{{url('/home')}}">
-	            <span>
-	                <i class="font-icon font-icon-dashboard"></i>
-	                <span class="lbl">Dashboard</span>
-	            </span>
-				</a>
-			</li>
+                <ul class="side-menu-list">
+                    <li class="">
+                        <a href="{{url('/home')}}">
+                        <span>
+                            <i class="font-icon font-icon-dashboard"></i>
+                            <span class="lbl">Dashboard</span>
+                        </span>
+                        </a>
+                    </li>
+                </ul>
             @endauth
 
             @if(auth()->user()->verwaltung == 1)
+                <ul class="side-menu-list">
                     <li class="with-sub">
-	            <span>
-	                <i class="font-icon glyphicon glyphicon-user"></i>
-	                <span class="lbl">Interessenten</span>
-	            </span>
+                        <span>
+                            <i class="font-icon glyphicon glyphicon-user"></i>
+                            <span class="lbl">Interessenten</span>
+                        </span>
                         <ul>
                             <li><a href="{{url('interessenten')}}"><span class="lbl">Übersicht</span></a></li>
                             <li><a href="{{url('interessenten/create')}}"><span class="lbl">Anlegen</span></a></li>
                         </ul>
                     </li>
                     <li class="with-sub">
-	            <span>
-	                <i class="font-icon glyphicon glyphicon-calendar "></i>
-	                <span class="lbl">Klamottenbörse</span>
-	            </span>
+                        <span>
+                            <i class="font-icon glyphicon glyphicon-calendar "></i>
+                            <span class="lbl">Klamottenbörse</span>
+                        </span>
                         <ul>
                             <li><a href="{{url('grunddaten')}}"><span class="lbl">Grunddaten</span></a></li>
                             <li><a href="{{url('vknummern')}}"><span class="lbl">Verkäufernummern</span></a></li>
@@ -95,32 +98,61 @@
                         </ul>
                     </li>
                     <li class="with-sub">
-	            <span>
-	                <i class="font-icon glyphicon glyphicon-list-alt"></i>
-	                <span class="lbl">Listen</span>
-	            </span>
-                        <ul>
-                            <!--<li><a href="{{url('listen/verkaeuferinfos')}}" target="_blank"><span class="lbl">Verkäuferinfos</span></a></li>-->
-                            <li><a href="{{url('listen/vknummern')}}" target="_blank"><span class="lbl">Verkäufernummern</span></a></li>
-                            <li><a href="{{url('listen/belehrung')}}" target="_blank"><span class="lbl">Belehrung</span></a></li>
-                            <li><a href="{{url('listen/abstreichliste')}}" target="_blank"><span class="lbl">Abstreichliste</span></a></li>
-                        </ul>
+                        <span>
+                            <i class="font-icon glyphicon glyphicon-list-alt"></i>
+                            <span class="lbl">Listen</span>
+                        </span>
+                            <ul>
+                                <!--<li><a href="{{url('listen/verkaeuferinfos')}}" target="_blank"><span class="lbl">Verkäuferinfos</span></a></li>-->
+                                <li><a href="{{url('listen/vknummern')}}" target="_blank"><span class="lbl">Verkäufernummern</span></a></li>
+                                <li><a href="{{url('listen/belehrung')}}" target="_blank"><span class="lbl">Belehrung</span></a></li>
+                                <li><a href="{{url('listen/abstreichliste')}}" target="_blank"><span class="lbl">Abstreichliste</span></a></li>
+                            </ul>
                     </li>
                     <li class="with-sub">
-	            <span>
-	                <i class="font-icon font-icon-cogwheel "></i>
-	                <span class="lbl">Settings</span>
-	            </span>
-                        <ul>
-                            <li><a href="{{url('mailvorlagen')}}"><span class="lbl">Mail-Vorlagen</span></a></li>
-                            <li><a href="{{url('import')}}"><span class="lbl">Import von Kasse</span></a></li>
-                        </ul>
+                        <span>
+                            <i class="font-icon font-icon-cogwheel "></i>
+                            <span class="lbl">Settings</span>
+                        </span>
+                            <ul>
+                                <li><a href="{{url('mailvorlagen')}}"><span class="lbl">Mail-Vorlagen</span></a></li>
+                                <li><a href="{{url('import')}}"><span class="lbl">Import von Kasse</span></a></li>
+                            </ul>
                     </li>
+                </ul>
+            @endif
+            @if(auth()->user()->kasse)
+                    <ul class="side-menu-list">
+                        <li>
+                            <a href="{{url("/kasse")}}">
+
+                                <i class="glyphicon glyphicon-euro"></i>
+                                <span class="lbl">
+                                    Kasse
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{url("kasse/verlauf")}}">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="lbl">
+                                    Verlauf
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{url("kasse/settings")}}">
+                                <i class="glyphicon glyphicon-cog"></i>
+                                <span class="lbl">
+                                    Einstellungen
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
             @endif
 
 
 
-	    </ul>
 
 
 	</nav><!--.side-menu-->
@@ -134,6 +166,13 @@
                 </ul>
             </div>
         @endif
+
+            @if(session()->has('Meldung'))
+                <div class="alert alert-{{session()->get('type')}}">
+                    {{ session()->get('Meldung') }}
+                </div>
+            @endif
+
 		<div class="container-fluid">
 			@yield('content')
 		</div><!--.container-fluid-->
