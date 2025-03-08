@@ -13,17 +13,22 @@ class CreateMailvorlagenTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('mailvorlagen', function(Blueprint $table)
-		{
-			$table->increments('id');
-			$table->text('name');
-			$table->text('betreff');
-			$table->text('text');
-			$table->text('html')->nullable();
-			$table->timestamps();
-			$table->softDeletes();
-			$table->boolean('deleteable')->nullable();
-		});
+
+        if (!Schema::hasTable('mailvorlagen')) {
+
+            Schema::create('mailvorlagen', function(Blueprint $table)
+            {
+                $table->increments('id');
+                $table->text('name');
+                $table->text('betreff');
+                $table->text('text');
+                $table->text('html')->nullable();
+                $table->timestamps();
+                $table->softDeletes();
+                $table->boolean('deleteable')->nullable();
+            });
+        }
+
 	}
 
 

@@ -13,13 +13,18 @@ class CreateNotizenTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('notizen', function(Blueprint $table)
-		{
-			$table->increments('id');
-			$table->integer('interessenten_id')->unsigned()->index('notizen_interessenten_id_foreign');
-			$table->text('notiz')->nullable();
-			$table->timestamps();
-		});
+
+        if (!Schema::hasTable('notizen')) {
+
+            Schema::create('notizen', function(Blueprint $table)
+            {
+                $table->increments('id');
+                $table->integer('interessenten_id')->unsigned()->index('notizen_interessenten_id_foreign');
+                $table->text('notiz')->nullable();
+                $table->timestamps();
+            });
+        }
+
 	}
 
 

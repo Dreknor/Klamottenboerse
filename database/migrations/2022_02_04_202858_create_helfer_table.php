@@ -13,16 +13,19 @@ class CreateHelferTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('helfer', function(Blueprint $table)
-		{
-			$table->increments('id');
-			$table->integer('klamottenboerse_id')->unsigned()->index();
-			$table->text('name');
-			$table->text('telefon');
-			$table->text('mail');
-			$table->text('bereich');
-			$table->timestamps();
-		});
+
+        if (!Schema::hasTable('helfer')) {
+            Schema::create('helfer', function(Blueprint $table)
+            {
+                $table->increments('id');
+                $table->integer('klamottenboerse_id')->unsigned()->index();
+                $table->text('name');
+                $table->text('telefon');
+                $table->text('mail');
+                $table->text('bereich');
+                $table->timestamps();
+            });
+        }
 	}
 
 

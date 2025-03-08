@@ -13,24 +13,29 @@ class CreateInteressentenTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('interessenten', function(Blueprint $table)
-		{
-			$table->increments('id');
-			$table->string('anrede');
-			$table->string('vorname')->index();
-			$table->string('nachname')->index();
-			$table->string('straße')->nullable();
-			$table->string('hausnummer')->nullable();
-			$table->char('plz')->nullable();
-			$table->string('ort')->nullable();
-			$table->char('telefon', 30)->nullable();
-			$table->string('handy')->nullable();
-			$table->string('mail');
-			$table->boolean('mitarbeiter')->nullable();
-			$table->boolean('kinderhaus')->nullable();
-			$table->timestamps();
-			$table->softDeletes();
-		});
+
+        if (!Schema::hasTable('interessenten')) {
+
+            Schema::create('interessenten', function(Blueprint $table)
+            {
+                $table->increments('id');
+                $table->string('anrede');
+                $table->string('vorname')->index();
+                $table->string('nachname')->index();
+                $table->string('straße')->nullable();
+                $table->string('hausnummer')->nullable();
+                $table->char('plz')->nullable();
+                $table->string('ort')->nullable();
+                $table->char('telefon', 30)->nullable();
+                $table->string('handy')->nullable();
+                $table->string('mail');
+                $table->boolean('mitarbeiter')->nullable();
+                $table->boolean('kinderhaus')->nullable();
+                $table->timestamps();
+                $table->softDeletes();
+            });
+
+        }
 	}
 
 

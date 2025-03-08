@@ -13,17 +13,22 @@ class CreateVknummernTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('vknummern', function(Blueprint $table)
-		{
-			$table->increments('id');
-			$table->integer('vknummer');
-			$table->integer('klamottenboersen_id')->unsigned()->index();
-			$table->integer('reserviert_fuer')->unsigned()->nullable()->index();
-			$table->integer('vergeben_an')->unsigned()->nullable()->index();
-			$table->decimal('umsatz')->nullable();
-			$table->softDeletes();
-			$table->timestamps();
-		});
+
+        if (!Schema::hasTable('vknummern')) {
+
+            Schema::create('vknummern', function(Blueprint $table)
+            {
+                $table->increments('id');
+                $table->integer('vknummer');
+                $table->integer('klamottenboersen_id')->unsigned()->index();
+                $table->integer('reserviert_fuer')->unsigned()->nullable()->index();
+                $table->integer('vergeben_an')->unsigned()->nullable()->index();
+                $table->decimal('umsatz')->nullable();
+                $table->softDeletes();
+                $table->timestamps();
+            });
+        }
+
 	}
 
 

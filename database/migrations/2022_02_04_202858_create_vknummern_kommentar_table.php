@@ -13,13 +13,18 @@ class CreateVknummernKommentarTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('vknummern_kommentar', function(Blueprint $table)
-		{
-			$table->increments('id');
-			$table->integer('vknummer')->unsigned();
-			$table->text('kommentar');
-			$table->timestamps();
-		});
+
+        if (!Schema::hasTable('vknummern_kommentar')) {
+
+            Schema::create('vknummern_kommentar', function(Blueprint $table)
+            {
+                $table->increments('id');
+                $table->integer('vknummer')->unsigned();
+                $table->text('kommentar');
+                $table->timestamps();
+            });
+        }
+
 	}
 
 

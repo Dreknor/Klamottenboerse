@@ -13,15 +13,20 @@ class CreateNachrichtenTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('nachrichten', function(Blueprint $table)
-		{
-			$table->increments('id');
-			$table->integer('interessent_id')->unsigned()->index();
-			$table->text('betreff');
-			$table->text('nachricht');
-			$table->timestamps();
-			$table->string('pfad');
-		});
+
+        if (!Schema::hasTable('nachrichten')) {
+
+            Schema::create('nachrichten', function(Blueprint $table)
+            {
+                $table->increments('id');
+                $table->integer('interessent_id')->unsigned()->index();
+                $table->text('betreff');
+                $table->text('nachricht');
+                $table->timestamps();
+                $table->string('pfad');
+            });
+        }
+
 	}
 
 

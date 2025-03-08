@@ -13,19 +13,22 @@ class CreateKlamottenboerseTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('klamottenboerse', function(Blueprint $table)
-		{
-			$table->increments('id');
-			$table->date('datum');
-			$table->date('anmeldung');
-			$table->date('anmeldungKinderhaus');
-			$table->time('anlieferung_von');
-			$table->time('anlieferung_bis');
-			$table->time('abholung_von');
-			$table->time('abholung_bis');
-			$table->integer('maxTeile');
-			$table->timestamps();
-		});
+
+        if (!Schema::hasTable('klamottenboerse')) {
+            Schema::create('klamottenboerse', function(Blueprint $table)
+            {
+                $table->increments('id');
+                $table->date('datum');
+                $table->date('anmeldung');
+                $table->date('anmeldungKinderhaus');
+                $table->time('anlieferung_von');
+                $table->time('anlieferung_bis');
+                $table->time('abholung_von');
+                $table->time('abholung_bis');
+                $table->integer('maxTeile');
+                $table->timestamps();
+            });
+        }
 	}
 
 

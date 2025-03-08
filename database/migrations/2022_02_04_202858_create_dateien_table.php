@@ -13,15 +13,18 @@ class CreateDateienTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('dateien', function(Blueprint $table)
-		{
-			$table->increments('datei_id');
-			$table->text('dateiname');
-			$table->text('dateibeschreibung');
-			$table->string('pfad');
-			$table->string('mime');
-			$table->timestamps();
-		});
+        if (!Schema::hasTable('dateien')) {
+            Schema::create('dateien', function(Blueprint $table)
+            {
+                $table->increments('datei_id');
+                $table->text('dateiname');
+                $table->text('dateibeschreibung');
+                $table->string('pfad');
+                $table->string('mime');
+                $table->timestamps();
+            });
+        }
+
 	}
 
 

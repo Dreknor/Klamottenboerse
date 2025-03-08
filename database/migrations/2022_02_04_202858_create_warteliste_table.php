@@ -13,12 +13,17 @@ class CreateWartelisteTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('warteliste', function(Blueprint $table)
-		{
-			$table->increments('id');
-			$table->integer('interessenten_id')->unsigned()->index();
-			$table->timestamps();
-		});
+
+        if (!Schema::hasTable('warteliste')) {
+
+            Schema::create('warteliste', function(Blueprint $table)
+            {
+                $table->increments('id');
+                $table->integer('interessenten_id')->unsigned()->index();
+                $table->timestamps();
+            });
+        }
+
 	}
 
 
