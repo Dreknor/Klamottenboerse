@@ -79,8 +79,14 @@
                 </tr>
             <tr>
                 <th align="left">erfolgreichster Verkäufer:</th>
-                <td align="right">{{ $erfolgreichsteVKnummer->vergeben_an_Interessent->vorname }} {{ $erfolgreichsteVKnummer->vergeben_an_Interessent->nachname }}
-                    {{ $verkaufteArtikel->where('vknummer', $erfolgreichsteVKnummer->vknummer)->count() }} Teile für {{ sprintf('%s', number_format($verkaufteArtikel->where('vknummer', $erfolgreichsteVKnummer->vknummer)->sum('betrag'), 2).' €')  }}</td>
+                @if($erfolgreichsteVKnummer)
+                    <td align="right">{{ $erfolgreichsteVKnummer->vergeben_an_Interessent->vorname }} {{ $erfolgreichsteVKnummer->vergeben_an_Interessent->nachname }}
+                        {{ $verkaufteArtikel->where('vknummer', $erfolgreichsteVKnummer->vknummer)->count() }} Teile für {{ sprintf('%s', number_format($verkaufteArtikel->where('vknummer', $erfolgreichsteVKnummer->vknummer)->sum('betrag'), 2).' €')  }}
+                    </td>
+                @else
+                    <td align="right">Keine Verkäufer</td>
+                @endif
+
 
             </tr>
         </table>
