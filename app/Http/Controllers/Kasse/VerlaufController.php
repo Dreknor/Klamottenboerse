@@ -25,17 +25,16 @@ use function React\Promise\all;
 
 class VerlaufController extends Controller
 {
-    protected $VerkaeufeRepository;
     protected $klamottenboersenRepository;
     protected $VKnummerRepository;
+    protected $VerkaeufeRepository;
 
-    public function __construct(VerkaeufeRepository $verkaeufeRepository, KlamottenboersenRepository $klamottenboersenRepository, VKnummerRepository $VKnummerRepository)
+    public function __construct(VerkaeufeRepository $verkaeufeRepository, KlamottenboersenRepository $klamottenboersenRepository, VKnummerRepository $VKnummerRepository, VerkaeufeRepository $VerkaeufeRepository)
     {
         $this->middleware('auth');
         $this->VerkaeufeRepository = $verkaeufeRepository;
         $this->klamottenboersenRepository = $klamottenboersenRepository;
         $this->VKnummerRepository = $VKnummerRepository;
-
     }
 
     public function index()
@@ -103,7 +102,7 @@ class VerlaufController extends Controller
 
     public function editVerkauf($VerkausID){
 
-        $Verkauf = $this->VerkäufeRepository->getVerkauf($VerkausID);
+        $Verkauf = $this->VerkaeufeRepository->getVerkauf($VerkausID);
 
         if ($Verkauf and ($Verkauf->user_id == Auth::user()->id or Auth::user()->verwaltung == 1)){
             $Artikel = [];
