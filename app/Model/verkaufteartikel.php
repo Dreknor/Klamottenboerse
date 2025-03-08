@@ -21,7 +21,7 @@ class verkaufteartikel extends Model
     }
 
     public function klamottenboerse(){
-        return $this->belongsTo(Klamottenboerse::class, 'klamottenboersen_id');
+        return $this->belongsTo(Klamottenboerse::class, 'klamottenboerse_id');
     }
 
     protected static function booted(): void

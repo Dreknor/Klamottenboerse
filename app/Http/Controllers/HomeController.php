@@ -35,8 +35,13 @@ class HomeController extends Controller
             $Interessenten = \Cache::remember('interessenten_anzahl', 5, function () {
                 return Interessenten::query()->count();
             });
-            $Klamottenboerse = Klamottenboerse::query()->withSum('vknummern', 'umsatz')->withCount('vknummern_vergeben')->get();
-//dd($Klamottenboerse);
+            $Klamottenboerse = Klamottenboerse::query()
+                ->withSum('vknummern', 'umsatz')
+                ->withCount('vknummern_vergeben')
+                ->withCount('verkaeufe')
+                ->withCount('verkaufteArtikel')
+                ->get();
+
             $Mails = $this->imapRepository->mailsInboxLastDays(10);
 
 

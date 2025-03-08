@@ -54,4 +54,14 @@ class Klamottenboerse extends Model
     {
         return $this->hasMany(\App\Model\VKnummer::class, 'klamottenboersen_id', 'id')->where('vergeben_an', '!=', '');
     }
+
+    public function verkaeufe()
+    {
+        return $this->hasMany(\App\Model\verkaeufe::class, 'klamottenboerse_id', 'id');
+    }
+
+    public function verkaufteArtikel()
+    {
+        return $this->hasMany(verkaufteartikel::class, 'klamottenboerse_id', 'id');
+    }
 }

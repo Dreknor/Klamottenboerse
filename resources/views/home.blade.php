@@ -219,7 +219,8 @@
 
 @stop
 @section('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         $('document').ready(function () {
             var back = ["#ff0000", '#FB8612', '#1EFB76', '#429dfb', '#fbf182'];
@@ -246,27 +247,65 @@
                             @endif
                         @endforeach
                 ],
-                datasets: [{
-                    label: "Umsätze",
-                    data: [
-                        @foreach($Klamottenboersen as $Klamottenboerse)
-                             @if($Klamottenboerse->vknummern_sum_umsatz > 0)
-                                " {{$Klamottenboerse->vknummern_sum_umsatz }}",
-                             @endif
-                        @endforeach
-                    ],
-                    backgroundColor: [
-                        'rgba(105, 0, 132, .2)',
-                    ],
-                    borderColor: [
-                        'rgba(200, 99, 132, .7)',
-                    ],
-                    borderWidth: 2
-                }]
+                datasets: [
+                    {
+                        label: "Umsätze",
+                        data: [
+                            @foreach($Klamottenboersen as $Klamottenboerse)
+                                 @if($Klamottenboerse->vknummern_sum_umsatz > 0)
+                                    " {{$Klamottenboerse->vknummern_sum_umsatz }}",
+                                 @endif
+                            @endforeach
+                        ],
+                        yAxisID: 'y',
+                    },
+                    {
+                        label: "Verkaufsvorgänge",
+                        data: [
+                            @foreach($Klamottenboersen as $Klamottenboerse)
+                                @if($Klamottenboerse->vknummern_sum_umsatz > 0)
+                                    "{{$Klamottenboerse->verkaeufe_count}}",
+                                @endif
+                            @endforeach
+                        ],
+                        yAxisID: 'y1',
+
+                    },
+                    {
+                        label: "verk Artikel",
+                        data: [
+                            @foreach($Klamottenboersen as $Klamottenboerse)
+                                @if($Klamottenboerse->vknummern_sum_umsatz > 0)
+                                    "{{$Klamottenboerse->verkaufte_artikel_count}}",
+                                @endif
+                            @endforeach
+                        ],
+                        yAxisID: 'y1',
+                    },
+
+                ]
             },
             options: {
-                responsive: true
+                responsive: true,
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+
+                        // grid line settings
+                        grid: {
+                            drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        },
+                    }
+                }
             }
+
         });
     </script>
     <script>
