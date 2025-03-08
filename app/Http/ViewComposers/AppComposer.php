@@ -23,6 +23,6 @@ class AppComposer
 
     public function compose(View $view)
     {
-        $view->with('unreadMail', $this->imapRepository->unseenMessages($this->imapRepository->connect()));
+        //$view->with('unreadMail', $this->imapRepository->unseenMessages($this->imapRepository->connect()));
     }
 }
