@@ -53,7 +53,11 @@ class SettingsController extends Controller
             ->orderBy('sum', 'DESC')
             ->first();
 
-        $vknummer = VKnummer::query()->where('vknummer', $erfolgreichsteVKnummer->vknummer)->where('klamottenboersen_id', (new KlamottenboersenRepository())->aktuelleKlamottenboerse()->id)->first();
+        if ($erfolgreichsteVKnummer){
+            $vknummer = VKnummer::query()->where('vknummer', $erfolgreichsteVKnummer->vknummer)->where('klamottenboersen_id', (new KlamottenboersenRepository())->aktuelleKlamottenboerse()->id)->first();
+        } else {
+            $vknummer = null;
+        }
 
 
         return view('kasse.settings.index', [
