@@ -29,7 +29,7 @@ class VerkaeufeErstellen extends Migration
         if (!Schema::hasTable('verkaufteartikel')){
             Schema::create('verkaufteartikel', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('verkauf')->index()->unsigned();
+                $table->integer('verkauf')->unsigned();
                 $table->integer('vknummer');
                 $table->integer('artikelnummer');
                 $table->float('betrag');
