@@ -48,6 +48,11 @@ class InteressentenController extends Controller
             return redirect()->back()->with('error', 'Berechtigung fehlt');
         }
 
+        $interessent = Interessenten::query()->where('mail', \request()->input('email'))->first();
+
+        if ($interessent) {
+            return redirect(url('interessent/'.$interessent->id));
+        }
 
         $mail = \request()->input('email');
         $name = \request()->input('personal');

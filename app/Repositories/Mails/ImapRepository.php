@@ -9,6 +9,7 @@
 namespace App\Repositories\Mails;
 
 use App\Model\Interessenten;
+use Illuminate\Support\Facades\Log;
 use Webklex\IMAP\Facades\Client;
 use Webklex\PHPIMAP\Message;
 
@@ -21,6 +22,8 @@ class ImapRepository
             $Client->getConnection();
             return $Client;
         } catch (\Exception $e) {
+
+            Log::info($e->getMessage());
             abort( 500, 'Verbindung zum Mailserver konnte nicht hergestellt werden');
         }
 
@@ -32,11 +35,12 @@ class ImapRepository
             $Client = $this->connect();
 
             $aFolder = $Client->getFolder('INBOX');
-            $aMessage = $aFolder
-                ->getUnseenMessages();
+            $aMessage = $aFolder->search()->fetchOrderDesc()->unseen()->leaveUnread()->get();
+
 
             return $aMessage;
         } catch (\Exception $e) {
+            Log::info($e->getMessage());
             return $e;
         }
     }

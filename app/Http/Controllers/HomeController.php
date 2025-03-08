@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Interessenten;
 use App\Model\Klamottenboerse;
+use App\Model\VKnummer;
 use App\Repositories\Mails\ImapRepository;
 use Illuminate\View\View;
 
@@ -31,22 +32,21 @@ class HomeController extends Controller
     {
 
         if (auth()->user()->verwaltung == 1) {
-            $Interessenten = Interessenten::all();
+            $Interessenten = \Cache::remember('interessenten_anzahl', 5, function () {
+                return Interessenten::query()->count();
+            });
+            $Klamottenboerse = Klamottenboerse::query()->withSum('vknummern', 'umsatz')->withCount('vknummern_vergeben')->get();
+//dd($Klamottenboerse);
             $Mails = $this->imapRepository->mailsInboxLastDays(10);
-            $Klamottenboerse = Klamottenboerse::all();
-        $Interessenten = Interessenten::all();
-        //$Mails = $this->imapRepository->mailsInboxLastDays(10);
-        $Mails = [];
-        $Klamottenboerse = Klamottenboerse::all();
+
 
             return view('home', [
                 'Interessenten' => $Interessenten,
-                //"MailsCount"    => $Mails->count(),
-                //"unreadMails"   => $Mails->where('flags.seen',0)->count(),
-                //"Mails" => $Mails->sortByDesc('date')->paginate(10),
+                "MailsCount"    => $Mails->count(),
+                "unreadMails"   => $Mails->where('flags.seen',0)->count(),
+                "Mails" => $Mails->sortByDesc('date')->paginate(10),
                 'messages'   => $Mails,
                 'Klamottenboersen'   => $Klamottenboerse,
-                'VKnummern'     => $Klamottenboerse->last()->vknummern,
             ]);
         } elseif (auth()->user()->kasse == 1) {
             return redirect(url('/kasse'));

@@ -32,10 +32,10 @@
                                 <div class="tbl-cell">
                                     <div class="title">Interessenten</div>
                                     <div class="amount color-blue">
-                                        {{$Klamottenboersen->last()->vknummern_vergeben()->count()}} Verkäufer
+                                        {{$Klamottenboersen->last()->vknummern_vergeben_count}} Verkäufer
                                     </div>
                                     <div class="amount-sm">
-                                        {{$Interessenten->count()}} Interessenten
+                                        {{$Interessenten}} Interessenten
                                     </div>
                                 </div>
                             </div>
@@ -123,12 +123,12 @@
                                                 </td>
                                                 <td >
                                                     <span class="pull-right">
-                                                        {{ number_format($klamottenboerse->vknummern()->sum('umsatz'),2) }} €
+                                                        {{ number_format($klamottenboerse->vknummern_sum_umsatz, 2) }} €
                                                     </span>
                                                 </td>
                                                 <td>
                                                     <span class="pull-right">
-                                                        {{ $klamottenboerse->vknummern()->where('vergeben_an', '>', 0)->count() }}
+                                                        {{ $klamottenboerse->vknummern_vergeben_count }}
                                                     </span>
 
                                                 </td>
@@ -164,9 +164,7 @@
                                 <div class="mail-box-item" @if (!$message->getFlags()->get('seen'))) style="background-color: #facd97;" @endif" data-id="{{$message->getUid()}}" >
                                     <div class="mail-box-item-header">
                                         <div class="mail-box-item-photo align-content-center">
-                                            @if ($Interessenten->where('mail', $message->getFrom()[0]->mail)->first() != null)
-                                                <a href="{{url('interessent/'.$Interessenten->where('mail', $message->getFrom()[0]->mail)->first()->id)}}" class="btn btn-sm btn-rounded prevent"> <i class="font-icon font-icon-user text-white"></i> </a>
-                                            @endif
+
                                         </div>
                                         <div class="tbl mail-box-item-head-tbl mail-box-item-clickable">
                                             <div class="tbl-row">
@@ -243,7 +241,7 @@
             data: {
                 labels: [
                         @foreach($Klamottenboersen as $Klamottenboerse)
-                            @if($Klamottenboerse->vknummern()->sum('umsatz') > 0)
+                            @if($Klamottenboerse->vknummern_sum_umsatz > 0)
                                 "{{$Klamottenboerse->datum->format('m/Y')}}",
                             @endif
                         @endforeach
@@ -252,8 +250,8 @@
                     label: "Umsätze",
                     data: [
                         @foreach($Klamottenboersen as $Klamottenboerse)
-                             @if($Klamottenboerse->vknummern()->sum('umsatz') > 0)
-                                " {{$Klamottenboerse->vknummern()->sum('umsatz') }}",
+                             @if($Klamottenboerse->vknummern_sum_umsatz > 0)
+                                " {{$Klamottenboerse->vknummern_sum_umsatz }}",
                              @endif
                         @endforeach
                     ],
