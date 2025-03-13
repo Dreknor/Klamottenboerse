@@ -11,11 +11,26 @@ use Illuminate\Support\Facades\Mail;
 
 class ErgebnisController extends Controller
 {
+
+    public function __construct()
+    {
+
+    }
+
     public function index() {
+
+        if (!(new KlamottenboersenRepository())->aktuelleKlamottenboerse()->ergebnis_freigabe) {
+            abort(404);
+        }
+
         return view('ergebnis.index');
     }
 
     public function mail(Request $request) {
+        if (!(new KlamottenboersenRepository())->aktuelleKlamottenboerse()->ergebnis_freigabe) {
+            abort(404);
+        }
+
         $request->validate([
             'email' => 'required|email',
         ]);
@@ -39,6 +54,10 @@ class ErgebnisController extends Controller
     }
 
     public function show($uuid) {
+        if (!(new KlamottenboersenRepository())->aktuelleKlamottenboerse()->ergebnis_freigabe) {
+            abort(404);
+        }
+
         $interessent = Interessenten::query()->where('uuid', $uuid)->first();
         if ($interessent) {
            $vknummer = $interessent->vknummern_vergeben;
