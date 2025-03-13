@@ -129,6 +129,16 @@
                                     {{($klamottenboerse->sendErinnerung > 0) ? $klamottenboerse->sendErinnerung : "0"}} Tage (0 = keine Erinnerung)
                                 </div>
                             </div>
+
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Verkäufer können online Verkaufsergebnis einsehen?:
+                                </div>
+                                <div class="col">
+                                    {{($klamottenboerse->ergebnis_freigabe == 1)? 'ja' : "nein"}}
+                                </div>
+                            </div>
+
                             <div class="row mt-2">
                                 <div class="col">
                                     Ort:
@@ -281,6 +291,22 @@
                                         </small>
                                     @endif
                                 </div>
+
+                                <div class="form-group row @if ($errors->has('ergebnis_freigabe')) form-group-error @endif">
+                                    <label class="form-label" for="ergebnis_freigabe">Ergebnisfreigabe:</label>
+                                    <select class="form-control" name="ergebnis_freigabe" id="ergebnis_freigabe">
+                                        <option value="1" @if($klamottenboerse->ergebnis_freigabe == 1) selected @endif>Ja</option>
+                                        <option value="0" @if($klamottenboerse->ergebnis_freigabe == 0) selected @endif>Nein</option>
+                                    </select>
+                                    @if ($errors->has('ergebnis_freigabe'))
+                                        <small class="text-muted">
+                                            @foreach ($errors->get('ergebnis_freigabe') as $message)
+                                                {{ $message }}
+                                            @endforeach
+                                        </small>
+                                    @endif
+                                </div>
+
 
                                 <div class="form-group row @if ($errors->has('ort')) form-group-error @endif">
                                     <label class="form-label" for="ort">Ort:</label>

@@ -64,6 +64,7 @@ class KlamottenboersenController extends Controller
         $Klamottenboerse->ort = $old->ort;
         $Klamottenboerse->adresse = $old->adresse;
         $Klamottenboerse->belehrung = $old->belehrung;
+        $Klamottenboerse->ergebnis_freigabe = $old->ergebnis_freigabe;
         $Klamottenboerse->save();
 
         $data = [];
@@ -115,7 +116,7 @@ class KlamottenboersenController extends Controller
      */
     public function update(UpdateKlamottenboerseRequest $request, klamottenboerse $klamottenboerse)
     {
-        $klamottenboerse->fill($request->all());
+        $klamottenboerse->fill($request->validated());
         $klamottenboerse->save();
 
         return redirect()->back()->with([

@@ -27,10 +27,10 @@
 	        <a href="{{url('/')}}" class="navbar-brand col-sm-auto text-white">
 				Klamottenbörse
 	        </a>
-
-	        <button id="show-hide-sidebar-toggle" class="show-hide-sidebar text-white">
-	            <span class="">toggle menu</span>
-	        </button>
+            @auth
+                <button id="show-hide-sidebar-toggle" class="show-hide-sidebar text-white">
+                    <span class="">toggle menu</span>
+                </button>
 
 	        <button class="hamburger hamburger--htla">
 	            <span>toggle menu</span>
@@ -54,14 +54,13 @@
                     </div>
 	            </div><!--site-header-content-in-->
 	        </div><!--.site-header-content-->
+            @endauth
 	    </div><!--.container-fluid-->
 	</header><!--.site-header-->
 
 	<div class="mobile-menu-left-overlay"></div>
-
+    @auth
 	    <nav class="side-menu">
-
-            @auth
                 <ul class="side-menu-list">
                     <li class="">
                         <a href="{{url('/home')}}">
@@ -72,7 +71,6 @@
                         </a>
                     </li>
                 </ul>
-            @endauth
 
             @if(auth()->user()->verwaltung == 1)
                 <ul class="side-menu-list">
@@ -154,8 +152,8 @@
 
 
 
-
-	</nav><!--.side-menu-->
+	</nav>
+    @endauth<!--.side-menu-->
 	<div class="page-content">
         @if ($errors->any())
             <div class="alert alert-danger">

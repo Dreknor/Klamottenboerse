@@ -23,6 +23,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/helfer', [\App\Http\Controllers\AppointmentController::class, 'index'])->name('helfer');
 Route::post('/helfer', [\App\Http\Controllers\AppointmentController::class, 'storeHelfer'])->name('helfer.store');
 
+Route::get('ergebnis', 'ErgebnisController@index')->name('ergebnis');
+Route::post('ergebnis', 'ErgebnisController@mail')->name('ergebnis.mail');
+Route::get('ergebnis/{uuid}', 'ErgebnisController@show')->name('ergebnis.show');
+
 Auth::routes(['register' => false]);
 
 Route::group(['middleware' => ['auth']], function (){

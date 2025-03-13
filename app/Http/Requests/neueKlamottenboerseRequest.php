@@ -41,6 +41,7 @@ class neueKlamottenboerseRequest extends FormRequest
             'sendErinnerung' => 'integer|min:0|max:14|nullable',
             'ort' => 'string|nullable',
             'adresse' => 'string|nullable',
+            'ergebnis_freigabe' => 'boolean',
 
         ];
     }

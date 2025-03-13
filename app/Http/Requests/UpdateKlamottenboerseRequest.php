@@ -41,6 +41,7 @@ class UpdateKlamottenboerseRequest extends FormRequest
             'sendInvitation' => 'sometimes',
             'ort' => 'string|nullable',
             'adresse' => 'string|nullable',
+            'ergebnis_freigabe' => 'boolean',
         ];
     }
 

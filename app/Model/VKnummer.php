@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Model\Interessenten;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -52,5 +53,21 @@ class VKnummer extends Model
         return $this->where('klamottenboersen_id', DB::raw('(select max(`id`) from klamottenboerse)'));
     }
 
+    public function umsatz() : Attribute
+    {
+        return Attribute::make(
+          get: function ($value) {
+              if ($value != null) {
+                  return $value;
+              } else {
+
+                  return \Cache::remember('umsatz' . $this->id, 5, function () {
+                      return $this->verkaufteArtikel()->sum('betrag');
+                  });
+              }
+          },
+        );
+
+    }
 
 }
