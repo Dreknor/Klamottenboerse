@@ -43,6 +43,7 @@ function replaceInText($text, App\Model\Interessenten $interessenten, $Klamotten
         'ABHOLUNG_AB' => $Klamottenboerse->abholung_von,
         'ABHOLUNG_BIS' => $Klamottenboerse->abholung_bis,
         'MAXTEILE' => $Klamottenboerse->maxTeile,
+        'VERKAEUFELINK' => route('ergebnis', ['uuid' => $interessenten->uuid]),
     ];
 
     $replaced_text = str_replace(array_keys($ReplaceStrings), $ReplaceStrings, $text);

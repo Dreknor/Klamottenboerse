@@ -72,6 +72,7 @@
                                 <li class="list-group-item">ABHOLUNG_AB</li>
                                 <li class="list-group-item">ABHOLUNG_BIS</li>
                                 <li class="list-group-item">MAXTEILE</li>
+                                <li class="list-group-item">VERKAEUFELINK</li>
                             </ul>
                         </div>
                     </div>
