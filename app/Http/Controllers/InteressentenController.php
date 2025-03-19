@@ -10,6 +10,7 @@ use App\Repositories\Interessenten\InteressentenRepository;
 use App\Repositories\Mails\ImapRepository;
 use App\Repositories\Mails\MailRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class InteressentenController extends Controller
 {
@@ -72,6 +73,7 @@ class InteressentenController extends Controller
     public function store(CreateInteressentenRequest $request)
     {
         $Interessent = new  Interessenten($request->all());
+        $Interessent->uuid = Str::uuid();
         $Interessent->save();
 
         return redirect(url('interessent/'.$Interessent->id));
