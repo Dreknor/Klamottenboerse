@@ -105,8 +105,6 @@
                     {{$Datensatz->vknummer}}
                 </td>
                 <td>{{ sprintf('%s', number_format($Datensatz->umsatz, 2).' €')  }}</td>
-                @dump($Datensatz)
-
                 <td>
                     {{ $Datensatz->vergeben_an_Interessent?->vorname }} {{ $Datensatz->vergeben_an_Interessent?->nachname }}
                 </td>
