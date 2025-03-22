@@ -61,8 +61,8 @@ class VKnummer extends Model
               if ($value != null && $value != 0) {
                   return $value;
               } else {
-                  return 10;
-                    //return $this->verkaufteArtikel()->sum('betrag');
+                  \Log::info($this->verkaufteArtikel);
+                    return $this->verkaufteArtikel->sum('betrag');
               }
           },
         );
