@@ -92,6 +92,14 @@
                     </div>
 
                     <div class="row mt-2">
+                        <div class="col">
+                            Ergebnis:
+                        </div>
+                        <div class="col" id="handyText">
+                            <a href="{{url('ergebnis/'.$interessent->uuid)}}">{{$interessent->uuid}}</a>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
                         <div class="col" >
                             Kinderhaus
                         </div>
