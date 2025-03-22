@@ -58,10 +58,11 @@ class VKnummer extends Model
     {
         return Attribute::make(
           get: function ($value) {
-              if ($value != null) {
+              if ($value != null && $value != 0) {
                   return $value;
               } else {
-                    return $this->verkaufteArtikel()->sum('betrag');
+                  return 10;
+                    //return $this->verkaufteArtikel()->sum('betrag');
               }
           },
         );
