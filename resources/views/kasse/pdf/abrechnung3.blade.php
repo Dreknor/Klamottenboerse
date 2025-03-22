@@ -98,15 +98,15 @@
               <th>VK-Nummer</th>
                 <th>Name</th>
             </tr>
-        @foreach($VKNummernNachUmsatz as $Datensatz)
+        @foreach($Vknummern as $Datensatz)
 
             <tr style="border-bottom: 1px solid black; text-align: center;">
-                <td>{{ sprintf('%s', number_format($Datensatz->sum, 2).' €')  }}</td>
                 <td>
-                    {{$Datensatz->verkaeufernummer->vknummer}}
+                    {{$Datensatz->vknummer}}
                 </td>
+                <td>{{ sprintf('%s', number_format($Datensatz->umsatz, 2).' €')  }}</td>
                 <td>
-                    {{ $Datensatz->verkaeufernummer->vorname }} {{ $Datensatz->verkaeufernummer->nachname }}
+                    {{ $Datensatz->vergeben_an_Interessent->vorname }} {{ $Datensatz->vergeben_an_Interessent->nachname }}
                 </td>
             </tr>
 
