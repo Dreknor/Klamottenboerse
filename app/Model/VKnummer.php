@@ -45,6 +45,7 @@ class VKnummer extends Model
     public function verkaufteArtikel()
     {
         return $this->hasMany(verkaufteartikel::class, 'vknummer', 'vknummer')
+            ->where('klamottenboerse_id', $this->klamottenboersen_id)
             ->orderBy('artikelnummer', 'ASC');
     }
 

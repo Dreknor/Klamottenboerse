@@ -384,6 +384,7 @@
                                         </div>
                                         <div class="col">
                                             @if($vknummer->verkaufteArtikel->count() > 0)
+                                                {{$vknummer->id}}
                                                 <span class="pull-right label label-pill label-success"><small>{{$vknummer->verkaufteArtikel->count()}} Artikel</small></span>
                                             @endif
                                         </div>
