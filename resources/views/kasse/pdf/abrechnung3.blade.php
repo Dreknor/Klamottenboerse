@@ -99,7 +99,7 @@
                 <th>Name</th>
             </tr>
         @foreach($Vknummern as $Datensatz)
-
+            @if($Datensatz->vergeben_an_Interessent)
             <tr style="border-bottom: 1px solid black; text-align: center;">
                 <td>
                     {{$Datensatz->vknummer}}
@@ -109,7 +109,7 @@
                     {{ $Datensatz->vergeben_an_Interessent?->vorname }} {{ $Datensatz->vergeben_an_Interessent?->nachname }}
                 </td>
             </tr>
-
+                @endif
 
         @endforeach
 
