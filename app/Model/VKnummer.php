@@ -60,10 +60,7 @@ class VKnummer extends Model
               if ($value != null) {
                   return $value;
               } else {
-
-                  return \Cache::remember('umsatz' . $this->id, 5, function () {
-                      return $this->verkaufteArtikel()->sum('betrag');
-                  });
+                    return $this->verkaufteArtikel()->sum('betrag');
               }
           },
         );
