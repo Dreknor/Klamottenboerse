@@ -88,7 +88,7 @@ class MailRepository
             'ABHOLUNG_AB' => $Klamottenboerse->abholung_von,
             'ABHOLUNG_BIS' => $Klamottenboerse->abholung_bis,
             'MAXTEILE' => $Klamottenboerse->maxTeile,
-            'VERKAEUFELINK' => route('ergebnis', ['uuid' => $interessenten->uuid]),
+            'VERKAEUFELINK' => url('ergebnis/'.$interessenten->uuid),
 
         ];
 
