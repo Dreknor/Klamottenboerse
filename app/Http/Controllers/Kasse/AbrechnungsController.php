@@ -29,13 +29,13 @@ class AbrechnungsController extends Controller
         $Settings = settings::query()->first();
         $VKnummern = VKnummer::query()->AktuelleKlamottenboerse()->get();
         $verkaufteArtikel = verkaufteartikel::query()->get();
-
+/*
         foreach ($VKnummern as $VKnummer) {
             $VKnummer->update([
                 "umsatz" => $verkaufteArtikel->where('vknummer', $VKnummer->vknummer)->sum('betrag'),
                 ]);
         }
-
+*/
         $Umsatz = verkaeufe::query()->sum('summe');
         $BetragKinderhaus = $Umsatz/100*$Settings->provision;
 

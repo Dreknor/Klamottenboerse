@@ -94,22 +94,28 @@
         <div class="page-break"></div>
         <table width="80%" style="margin-left: 50px;">
             <tr>
-              <th>Umsatz</th>
-              <th>VK-Nummer</th>
+                <th>VK-Nummer</th>
+
+                <th>Auszahlung</th>
                 <th>Name</th>
+                <th>Umsatz</th>
             </tr>
-        @foreach($VKNummernNachUmsatz as $Datensatz)
-
+        @foreach($Vknummern as $Datensatz)
+            @if($Datensatz->vergeben_an_Interessent)
             <tr style="border-bottom: 1px solid black; text-align: center;">
-                <td>{{ sprintf('%s', number_format($Datensatz->sum, 2).' €')  }}</td>
                 <td>
-                    {{$Datensatz->verkaeufernummer->vknummer}}
+                    {{$Datensatz->vknummer}}
                 </td>
-                <td>
-                    {{ $Datensatz->verkaeufernummer->vorname }} {{ $Datensatz->verkaeufernummer->nachname }}
-                </td>
-            </tr>
 
+                <th>
+                    {{ sprintf('%s', number_format($Datensatz->umsatz - round($Datensatz->umsatz/100*$Settings->provision,2), 2).' €')  }}
+                </th>
+                <td>
+                    {{ $Datensatz->vergeben_an_Interessent?->vorname }} {{ $Datensatz->vergeben_an_Interessent?->nachname }}
+                </td>
+                <td>{{ sprintf('%s', number_format($Datensatz->umsatz, 2).' €')  }}</td>
+            </tr>
+                @endif
 
         @endforeach
 
