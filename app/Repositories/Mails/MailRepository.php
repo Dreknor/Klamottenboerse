@@ -88,6 +88,8 @@ class MailRepository
             'ABHOLUNG_AB' => $Klamottenboerse->abholung_von,
             'ABHOLUNG_BIS' => $Klamottenboerse->abholung_bis,
             'MAXTEILE' => $Klamottenboerse->maxTeile,
+            'VERKAEUFELINK' => route('ergebnis', ['uuid' => $interessenten->uuid]),
+
         ];
 
         $Nachricht_text = str_replace(array_keys($ReplaceStrings), $ReplaceStrings, $mailvorlagen->text);
