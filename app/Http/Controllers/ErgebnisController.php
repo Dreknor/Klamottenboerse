@@ -44,7 +44,7 @@ class ErgebnisController extends Controller
             return redirect()->route('ergebnis')->with(['message' => 'Der Link ist ungültig.']);
         }
         // Alle freigegebenen Ergebnisse (auch vergangene) sammeln
-        $vknummern = $interessent->bisherige_vknummen()->take(2)->get()->filter(function($vknummer) {;
+        $vknummern = $interessent->bisherige_vknummen()->take(5)->get()->filter(function($vknummer) {;
             return $vknummer->Klamottenboerse && $vknummer->Klamottenboerse->ergebnis_freigabe;
         });
 
