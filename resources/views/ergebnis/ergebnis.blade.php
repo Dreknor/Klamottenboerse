@@ -6,7 +6,7 @@
             <div class="card mb-3">
                 <div class="card-header">
                     <h3>
-                        Ergebnis für VK-Nummer {{ $vknummer->vk_nummer }} zur Klamottenbörse am {{ $vknummer->klamottenboerse->datum->format('d.m.Y') }}
+                        Ergebnis für VK-Nummer {{ $vknummer->vknummer }} zur Klamottenbörse am {{ $vknummer->klamottenboerse->datum->format('d.m.Y') }}
                     </h3>
                 </div>
                 <div class="card-body">
