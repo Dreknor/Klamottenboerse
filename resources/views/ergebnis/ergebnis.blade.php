@@ -27,7 +27,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($vknummer->verkaufteArtikel->sortBy('artikelnummer') as $artikel)
+                                @foreach($vknummer->verkaufteArtikel()->withoutGlobalScopes()->get()->sortBy('artikelnummer') as $artikel)
                                     <tr>
                                         <td>
                                             {{ $artikel->artikelnummer }}
@@ -44,7 +44,7 @@
                                         Summe:
                                     </th>
                                     <th>
-                                        {{ number_format($vknummer->verkaufteArtikel->sum('betrag'), 2, ',', '.') }} €
+                                        {{ number_format($vknummer->verkaufteArtikel()->withoutGlobalScopes()->sum('betrag'), 2, ',', '.') }} €
                                     </th>
                                 </tr>
                                 <tr>
@@ -52,7 +52,7 @@
                                         Davon 25%:
                                     </th>
                                     <th>
-                                        {{ number_format($vknummer->verkaufteArtikel->sum('betrag') / 100 * 25, 2, ',', '.') }} €
+                                        {{ number_format($vknummer->verkaufteArtikel()->withoutGlobalScopes()->sum('betrag') / 100 * 25, 2, ',', '.') }} €
                                     </th>
                                 </tr>
                             <tr>
