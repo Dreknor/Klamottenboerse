@@ -383,9 +383,8 @@
                                             <span class="pull-right label label-pill label-secondary"><small>{{number_format($vknummer->umsatz, 2)}} €</small></span>
                                         </div>
                                         <div class="col">
-                                            @if($vknummer->verkaufteArtikel->count() > 0)
-                                                {{$vknummer->id}}
-                                                <span class="pull-right label label-pill label-success"><small>{{$vknummer->verkaufteArtikel->count()}} Artikel</small></span>
+                                            @if($vknummer->verkaufteArtikel()->withoutGlobalScopes()->count() > 0)
+                                                <span class="pull-right label label-pill label-success"><small>{{$vknummer->verkaufteArtikel()->withoutGlobalScopes()->count()}} Artikel</small></span>
                                             @endif
                                         </div>
                                     </div>
