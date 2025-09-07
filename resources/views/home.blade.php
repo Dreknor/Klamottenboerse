@@ -123,7 +123,7 @@
                                                 </td>
                                                 <td >
                                                     <span class="pull-right">
-                                                        {{ number_format($klamottenboerse->vknummern_sum_umsatz, 2) }} €
+                                                        {{ number_format($klamottenboerse->vknummern()->withoutGlobalScopes()->get()->sum('umsatz'), 2) }} €
                                                     </span>
                                                 </td>
                                                 <td>
@@ -242,7 +242,7 @@
             data: {
                 labels: [
                         @foreach($Klamottenboersen as $Klamottenboerse)
-                            @if($Klamottenboerse->vknummern_sum_umsatz > 0)
+                            @if($Klamottenboerse->vknummern()->withoutGlobalScopes()->get()->sum('umsatz') > 0)
                                 "{{$Klamottenboerse->datum->format('m/Y')}}",
                             @endif
                         @endforeach
@@ -252,8 +252,8 @@
                         label: "Umsätze",
                         data: [
                             @foreach($Klamottenboersen as $Klamottenboerse)
-                                 @if($Klamottenboerse->vknummern_sum_umsatz > 0)
-                                    " {{$Klamottenboerse->vknummern_sum_umsatz }}",
+                                 @if($Klamottenboerse->vknummern()->withoutGlobalScopes()->get()->sum('umsatz') > 0)
+                                    " {{$Klamottenboerse->vknummern()->withoutGlobalScopes()->get()->sum('umsatz') }}",
                                  @endif
                             @endforeach
                         ],
