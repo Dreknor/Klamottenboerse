@@ -60,7 +60,7 @@
                                     Auszahlungsbetrag:
                                 </th>
                                 <th>
-                                    {{ number_format($vknummer->verkaufteArtikel->sum('betrag') - $vknummer->verkaufteArtikel->sum('betrag') / 100 * 25, 2, ',', '.') }} €
+                                    {{ number_format($vknummer->verkaufteArtikel()->withoutGlobalScopes()->sum('betrag') - $vknummer->verkaufteArtikel()->withoutGlobalScopes()->sum('betrag') / 100 * 25, 2, ',', '.') }} €
                                 </th>
                             </tr>
                             </tfoot>
