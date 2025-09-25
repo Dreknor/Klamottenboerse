@@ -5,9 +5,11 @@ namespace App\Model;
 use App\Model\VKnummer;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Klamottenboerse extends Model
 {
+    use SoftDeletes;
     public $table = 'klamottenboerse';
 
     protected $fillable = ['belehrung', 'datum', 'anmeldung', 'anmeldungKinderhaus', 'anlieferung_von', 'anlieferung_bis', 'abholung_von', 'abholung_bis', 'maxTeile', 'sendInvitation', 'sendErinnerung', 'ort', 'adresse', 'ergebnis_freigabe'];
