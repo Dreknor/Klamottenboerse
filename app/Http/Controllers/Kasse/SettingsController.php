@@ -22,7 +22,9 @@ class SettingsController extends Controller
 
     public function index(){
 
+        $klamottenboerse = (new KlamottenboersenRepository())->aktuelleKlamottenboerse();
         $Settings = settings::query()
+            ->where('datum', $klamottenboerse->datum)
             ->orderBy('datum', 'DESC')
             ->first();
 
@@ -30,7 +32,7 @@ class SettingsController extends Controller
             $Settings = new settings([
                 "name" => "Klamottenbörse",
                 "kinderhaus" => "ev. Kinderhaus der Friedenskirchgemeinde Radebeul",
-                "datum" => (new KlamottenboersenRepository())->aktuelleKlamottenboerse()->datum,
+                "datum" => $klamottenboerse->datum,
                 "provision" => 25,
             ]);
             $Settings->save();
