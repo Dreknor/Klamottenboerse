@@ -112,33 +112,20 @@
                                             <th>Datum</th>
                                             <th>Umsatz</th>
                                             <th>Verkäufer</th>
-                                            <th>Teile</th>
+                                            <th>max. Teile</th>
+                                            <th>verkaufte Artikel</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($Klamottenboersen->sortByDesc('datum')->all() AS $klamottenboerse)
-                                            <tr>
-                                                <td>
-                                                    {{ $klamottenboerse->datum->format('d.m.Y') }}
-                                                </td>
-                                                <td >
-                                                    <span class="pull-right">
-                                                        {{ number_format($klamottenboerse->vknummern()->withoutGlobalScopes()->get()->sum('umsatz'), 2) }} €
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span class="pull-right">
-                                                        {{ $klamottenboerse->vknummern_vergeben_count }}
-                                                    </span>
-
-                                                </td>
-                                                <td>
-                                                    <span class="pull-right">
-                                                       {{ $klamottenboerse->maxTeile }}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                            @foreach($statistik->sortByDesc('datum') as $kb)
+                                                <tr>
+                                                    <td>{{$kb['datum']->format('d.m.Y')}}</td>
+                                                    <td>{{$kb['umsatz']}} €</td>
+                                                    <td>{{$kb['anmeldungen']}}</td>
+                                                    <td>{{$kb['maxTeile']}}</td>
+                                                    <td>{{$kb['verkaufteArtikel']}}</td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -241,31 +228,25 @@
             type: 'line',
             data: {
                 labels: [
-                        @foreach($Klamottenboersen as $Klamottenboerse)
-                            @if($Klamottenboerse->vknummern()->withoutGlobalScopes()->get()->sum('umsatz') > 0)
-                                "{{$Klamottenboerse->datum->format('m/Y')}}",
-                            @endif
+                        @foreach($statistik as $kb)
+                            "{{$kb['datum']->format('d.m.Y')}}",
                         @endforeach
                 ],
                 datasets: [
                     {
                         label: "Umsätze",
                         data: [
-                            @foreach($Klamottenboersen as $Klamottenboerse)
-                                 @if($Klamottenboerse->vknummern()->withoutGlobalScopes()->get()->sum('umsatz') > 0)
-                                    " {{$Klamottenboerse->vknummern()->withoutGlobalScopes()->get()->sum('umsatz') }}",
-                                 @endif
+                            @foreach($statistik as $kb)
+                                "{{$kb['umsatz']}}",
                             @endforeach
                         ],
                         yAxisID: 'y',
                     },
                     {
-                        label: "Verkaufsvorgänge",
+                        label: "Verkäufer",
                         data: [
-                            @foreach($Klamottenboersen as $Klamottenboerse)
-                                @if($Klamottenboerse->vknummern_sum_umsatz > 0)
-                                    "{{$Klamottenboerse->verkaeufe_count}}",
-                                @endif
+                            @foreach($statistik as $kb)
+                                "{{$kb['anmeldungen']}}",
                             @endforeach
                         ],
                         yAxisID: 'y1',
@@ -274,13 +255,11 @@
                     {
                         label: "verk Artikel",
                         data: [
-                            @foreach($Klamottenboersen as $Klamottenboerse)
-                                @if($Klamottenboerse->vknummern_sum_umsatz > 0)
-                                    "{{$Klamottenboerse->verkaufte_artikel_count}}",
-                                @endif
+                            @foreach($statistik as $kb)
+                                "{{$kb['verkaufteArtikel']}}",
                             @endforeach
                         ],
-                        yAxisID: 'y1',
+                        yAxisID: 'y',
                     },
 
                 ]

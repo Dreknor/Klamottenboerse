@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Interessenten;
 use App\Model\Klamottenboerse;
+use App\Model\verkaufteartikel;
 use App\Model\VKnummer;
 use App\Repositories\Mails\ImapRepository;
 use Illuminate\View\View;
@@ -36,11 +37,29 @@ class HomeController extends Controller
                 return Interessenten::query()->count();
             });
             $Klamottenboerse = Klamottenboerse::query()
-                ->withSum('vknummern', 'umsatz')
                 ->withCount('vknummern_vergeben')
-                ->withCount('verkaeufe')
                 ->withCount('verkaufteArtikel')
+                ->orderBy('datum')
                 ->get();
+
+            // Statistik als Collection initialisieren, damit sie später sortierbar ist
+            $statistik = collect();
+
+            foreach ($Klamottenboerse as $kb) {
+                if ($kb->vknummern_vergeben_count > 0 and $kb->vknummern_vergeben->sum('umsatz')) {
+                    $statistik->push([
+                        'datum' => $kb->datum,
+                        'anmeldungen' => $kb->vknummern_vergeben_count,
+                        'verkaufteArtikel' => $kb->verkaufte_artikel_count,
+                        'umsatz' => $kb->vknummern_vergeben->sum('umsatz'),
+                        'maxTeile' => $kb->maxTeile
+                    ]);
+                }
+
+            }
+
+            //dd($statistik);
+
 
             $Mails = $this->imapRepository->mailsInboxLastDays(10);
 
@@ -52,6 +71,7 @@ class HomeController extends Controller
                 "Mails" => $Mails->sortByDesc('date')->paginate(10),
                 'messages'   => $Mails,
                 'Klamottenboersen'   => $Klamottenboerse,
+                'statistik' => $statistik,
             ]);
         } elseif (auth()->user()->kasse == 1) {
             return redirect(url('/kasse'));

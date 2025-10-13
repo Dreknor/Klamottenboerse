@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Model\Interessenten;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class VKnummer extends Model
@@ -44,9 +45,10 @@ class VKnummer extends Model
 
     public function verkaufteArtikel()
     {
-        return $this->hasMany(verkaufteartikel::class, 'vknummer', 'vknummer')
-            ->where('klamottenboerse_id', $this->klamottenboersen_id)
-            ->orderBy('artikelnummer', 'ASC');
+            return $this->hasMany(verkaufteartikel::class, 'vknummer', 'vknummer')
+                ->where('klamottenboerse_id', $this->klamottenboersen_id)
+                ->withoutGlobalScopes()
+                ->orderBy('artikelnummer', 'ASC');
     }
 
     public function scopeAktuelleKlamottenboerse()
@@ -61,9 +63,11 @@ class VKnummer extends Model
               if ($value != null && $value != 0) {
                   return $value;
               } else {
-                    return $this->verkaufteArtikel->sum('betrag');
+                  return Cache::remember('umsatz_vknummer_'.$this->id, 60*30, function() {
+                      return $this->verkaufteArtikel()->sum('betrag');
+                    });
               }
-          },
+          }
         );
 
     }

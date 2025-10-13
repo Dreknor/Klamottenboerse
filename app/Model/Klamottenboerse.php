@@ -65,6 +65,6 @@ class Klamottenboerse extends Model
 
     public function verkaufteArtikel()
     {
-        return $this->hasMany(verkaufteartikel::class, 'klamottenboerse_id', 'id');
+        return $this->hasMany(verkaufteartikel::class, 'klamottenboerse_id', 'id')->withoutGlobalScopes();
     }
 }
