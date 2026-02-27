@@ -3,9 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Mail\AnmeldungMoeglichMail;
+use App\Mail\QueueBatchAbgeschlossenMail;
 use App\Model\Interessenten;
 use App\Model\Klamottenboerse;
 use App\Model\Mailvorlagen;
+use App\Model\User;
 use App\Repositories\Mails\MailRepository;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -84,12 +86,20 @@ class SendAnmeldungMoeglichMails extends Command
         $this->info("Verteile {$gesamt} Mails in Batches von " . self::MAILS_PRO_STUNDE . " (max. pro Stunde) ...");
 
         $batches = $interessenten->chunk(self::MAILS_PRO_STUNDE);
+        $batchAnzahl = $batches->count();
         $versendet = 0;
+
+        // Empfänger der Statusbenachrichtigungen: alle User mit verwaltung=1
+        $verwaltungsEmpfaenger = User::where('verwaltung', 1)->whereNotNull('email')->get();
+
+        // Lesbare Bezeichnung der Börse für die Benachrichtigungsmails
+        $boerseName = 'Klamottenbörse ' . $klamottenboerse->datum->format('d.m.Y');
 
         foreach ($batches as $batchIndex => $batch) {
             // Jeder Batch wird um batchIndex * 60 Minuten verzögert
             $delayMinuten = $batchIndex * 60;
             $versandZeit = Carbon::now()->addMinutes($delayMinuten);
+            $batchNummer = $batchIndex + 1;
 
             foreach ($batch as $interessent) {
                 $vorlage = $this->mailRepository->replaceInMailvorlage(clone $mailvorlage, $interessent, $klamottenboerse);
@@ -103,11 +113,28 @@ class SendAnmeldungMoeglichMails extends Command
                 $versendet++;
             }
 
-            $this->line("  Batch " . ($batchIndex + 1) . ": {$batch->count()} Mails eingeplant für " . $versandZeit->format('d.m.Y H:i') . " Uhr");
+            // Statusbenachrichtigung wird 2 Minuten nach dem letzten Mail des Batches gesendet
+            $benachrichtigungsZeit = $versandZeit->copy()->addMinutes(2);
+
+            if ($verwaltungsEmpfaenger->isNotEmpty()) {
+                $statusMail = new QueueBatchAbgeschlossenMail(
+                    batchNummer: $batchNummer,
+                    batchAnzahl: $batchAnzahl,
+                    mailsInBatch: $batch->count(),
+                    mailsGesamt: $gesamt,
+                    boerseName: $boerseName,
+                );
+
+                foreach ($verwaltungsEmpfaenger as $empfaenger) {
+                    Mail::to($empfaenger->email)->later($benachrichtigungsZeit, clone $statusMail);
+                }
+            }
+
+            $this->line("  Batch {$batchNummer}/{$batchAnzahl}: {$batch->count()} Mails eingeplant für " . $versandZeit->format('d.m.Y H:i') . " Uhr → Statusbericht um " . $benachrichtigungsZeit->format('H:i') . " Uhr");
         }
 
         $this->info("✓ {$versendet} Mails erfolgreich in die Queue eingestellt.");
-        $this->info("  Benötigte Zeit bei max. " . self::MAILS_PRO_STUNDE . " Mails/Stunde: ca. " . ($batches->count() - 1) . " Stunde(n) Gesamtlaufzeit.");
+        $this->info("  Benötigte Zeit bei max. " . self::MAILS_PRO_STUNDE . " Mails/Stunde: ca. " . ($batchAnzahl - 1) . " Stunde(n) Gesamtlaufzeit.");
 
         return Command::SUCCESS;
     }
