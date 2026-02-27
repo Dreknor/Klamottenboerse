@@ -10,6 +10,12 @@ class QueueBatchAbgeschlossenMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public int    $batchNummer;
+    public int    $batchAnzahl;
+    public int    $mailsInBatch;
+    public int    $mailsGesamt;
+    public string $boerseName;
+
     /**
      * @param int    $batchNummer    Nummer des abgeschlossenen Batches (1-basiert)
      * @param int    $batchAnzahl    Gesamtanzahl der Batches
@@ -17,13 +23,14 @@ class QueueBatchAbgeschlossenMail extends Mailable
      * @param int    $mailsGesamt    Gesamtanzahl aller einzuplanenden Mails
      * @param string $boerseName     Name / Datum der Klamottenbörse
      */
-    public function __construct(
-        public readonly int    $batchNummer,
-        public readonly int    $batchAnzahl,
-        public readonly int    $mailsInBatch,
-        public readonly int    $mailsGesamt,
-        public readonly string $boerseName,
-    ) {}
+    public function __construct(int $batchNummer, int $batchAnzahl, int $mailsInBatch, int $mailsGesamt, string $boerseName)
+    {
+        $this->batchNummer  = $batchNummer;
+        $this->batchAnzahl  = $batchAnzahl;
+        $this->mailsInBatch = $mailsInBatch;
+        $this->mailsGesamt  = $mailsGesamt;
+        $this->boerseName   = $boerseName;
+    }
 
     public function build(): static
     {
@@ -39,4 +46,3 @@ class QueueBatchAbgeschlossenMail extends Mailable
             ->view('mails.queue-batch-abgeschlossen');
     }
 }
-

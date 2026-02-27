@@ -117,16 +117,17 @@ class SendAnmeldungMoeglichMails extends Command
             $benachrichtigungsZeit = $versandZeit->copy()->addMinutes(2);
 
             if ($verwaltungsEmpfaenger->isNotEmpty()) {
-                $statusMail = new QueueBatchAbgeschlossenMail(
-                    batchNummer: $batchNummer,
-                    batchAnzahl: $batchAnzahl,
-                    mailsInBatch: $batch->count(),
-                    mailsGesamt: $gesamt,
-                    boerseName: $boerseName,
-                );
-
                 foreach ($verwaltungsEmpfaenger as $empfaenger) {
-                    Mail::to($empfaenger->email)->later($benachrichtigungsZeit, clone $statusMail);
+                    Mail::to($empfaenger->email)->later(
+                        $benachrichtigungsZeit,
+                        new QueueBatchAbgeschlossenMail(
+                            batchNummer: $batchNummer,
+                            batchAnzahl: $batchAnzahl,
+                            mailsInBatch: $batch->count(),
+                            mailsGesamt: $gesamt,
+                            boerseName: $boerseName,
+                        )
+                    );
                 }
             }
 
