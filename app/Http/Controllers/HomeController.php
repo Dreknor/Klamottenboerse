@@ -63,13 +63,25 @@ class HomeController extends Controller
 
             $Mails = $this->imapRepository->mailsInboxLastDays(10);
 
+            if (!$Mails) {
+                $MailsCount = 0;
+                $unreadMails = 0;
+                $Mails = [];
+                $messages = [];
+            } else {
+                $MailsCount = $Mails->count();
+                $unreadMails = $Mails->where('flags.seen',0)->count();
+                $Mails = $Mails->sortByDesc('date')->paginate(10);
+                $messages = $Mails;
+            }
+
 
             return view('home', [
                 'Interessenten' => $Interessenten,
-                "MailsCount"    => $Mails->count(),
-                "unreadMails"   => $Mails->where('flags.seen',0)->count(),
-                "Mails" => $Mails->sortByDesc('date')->paginate(10),
-                'messages'   => $Mails,
+                "MailsCount"    => $MailsCount,
+                "unreadMails"   => $unreadMails,
+                "Mails" => $Mails,
+                'messages'   => $messages,
                 'Klamottenboersen'   => $Klamottenboerse,
                 'statistik' => $statistik,
             ]);

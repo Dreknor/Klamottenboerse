@@ -24,13 +24,13 @@ class ImapRepository
         } catch (\Exception $e) {
 
             Log::info($e->getMessage());
-            abort( 500, 'Verbindung zum Mailserver konnte nicht hergestellt werden');
         }
 
     }
 
     public function unseenMessages()
     {
+
         try {
             $Client = $this->connect();
 
