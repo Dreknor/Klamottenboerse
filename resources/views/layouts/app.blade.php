@@ -114,6 +114,7 @@
                         </span>
                             <ul>
                                 <li><a href="{{url('mailvorlagen')}}"><span class="lbl">Mail-Vorlagen</span></a></li>
+                                <li><a href="{{url('mail-protokoll/anmeldung-moeglich')}}"><span class="lbl">Mail-Protokoll</span></a></li>
                                 <li><a href="{{url('import')}}"><span class="lbl">Import von Kasse</span></a></li>
                             </ul>
                     </li>

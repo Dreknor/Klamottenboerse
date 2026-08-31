@@ -75,6 +75,11 @@ Route::group(['middleware' => ['auth', 'isVerwaltung']], function () {
     Route::get('/spamMail/{uid}', 'MailController@markSpamMail');
     Route::post('/spamMail/{uid}', 'MailController@markSpamMail');
 
+    //Mail-Protokoll (Versandstatus / Logs "Anmeldung möglich")
+    Route::get('/mail-protokoll/anmeldung-moeglich', 'MailLogController@anmeldungMoeglich')->name('mailLog.anmeldungMoeglich');
+    Route::post('/mail-protokoll/anmeldung-moeglich/resend-all', 'MailLogController@resendAll')->name('mailLog.resendAll');
+    Route::post('/mail-protokoll/anmeldung-moeglich/{mailLog}/resend', 'MailLogController@resend')->name('mailLog.resend');
+
     //Verkäufernummern
     Route::get('/vknummer/{id}/reservierungAufheben', 'NummernController@reservierungAufheben');
     Route::get('/vknummer/{interessenten}/reservierung', 'NummernController@reserviereNummer');

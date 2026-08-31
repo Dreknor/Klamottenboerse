@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MailRequest;
-use App\Mail\AnmeldungMoeglichMail;
 use App\Mail\ErinnerungVerkaeuferMail;
 use App\Model\Interessenten;
 use App\Model\Klamottenboerse;
@@ -12,6 +11,7 @@ use App\Repositories\Mails\ImapRepository;
 use App\Repositories\Mails\MailRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
 
 class MailController extends Controller
@@ -147,26 +147,12 @@ class MailController extends Controller
 
     public function anmeldungMoeglich()
     {
-        $Klamottenboerse = Klamottenboerse::orderByDesc('datum')->first();
+        // Nutzt dasselbe Kommando wie der geplante Task, damit Versand,
+        // Protokollierung (mail_logs) und Drosselung auf max. 55 Mails/Stunde
+        // unabhängig vom Aufrufer (Cron oder dieser Route) identisch ablaufen.
+        Artisan::call('mail:anmeldung-moeglich');
 
-        if ($Klamottenboerse->anmeldung->format('d.m.Y') == Carbon::now()->format('d.m.Y') and $Klamottenboerse->sendInvitation == 1) {
-            $Mailvorlage = Mailvorlagen::where('name', 'AnmeldungMoeglich')->first();
-
-            $interessenten = Interessenten::where('mail', '<>', '')->doesntHave('vknummern_vergeben')->get();
-            $interessenten = $interessenten->unique('mail');
-            $interessenten->load('vknummern_vergeben');
-
-            foreach ($interessenten as $Interessent) {
-                $vorlage = $this->mailRepository->replaceInMailvorlage(clone $Mailvorlage, $Interessent, $Klamottenboerse);
-
-                Mail::to($Interessent->mail)
-                    ->queue(new AnmeldungMoeglichMail($Interessent, $vorlage->betreff, $vorlage->text, $vorlage->html));
-            }
-
-            return view('welcome');
-        } else {
-            //dump($Klamottenboerse->anmeldung->format('d.m.Y'). "== ".Carbon::now()->format('d.m.Y'));
-        }
+        return view('welcome');
     }
 
     public function erinnerungVerkaeufer()

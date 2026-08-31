@@ -2,16 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Mail\AnmeldungMoeglichMail;
-use App\Mail\QueueBatchAbgeschlossenMail;
+use App\Jobs\SendAnmeldungMoeglichMailJob;
 use App\Model\Interessenten;
 use App\Model\Klamottenboerse;
+use App\Model\MailLog;
 use App\Model\Mailvorlagen;
-use App\Model\User;
-use App\Repositories\Mails\MailRepository;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
 
 class SendAnmeldungMoeglichMails extends Command
 {
@@ -28,15 +25,10 @@ class SendAnmeldungMoeglichMails extends Command
      *
      * @var string
      */
-    protected $description = 'Sendet gestaffelt Anmeldungs-E-Mails (max. 55/Stunde) an alle Interessenten ohne VK-Nummer für die nächste Klamottenbörse.';
+    protected $description = 'Stellt die Anmeldungs-E-Mails an alle Interessenten ohne VK-Nummer für die nächste Klamottenbörse in die Warteschlange. Der tatsächliche Versand wird über einen Rate-Limiter auf max. 55 Mails/Stunde gedrosselt.';
 
-    /** Maximale Mails pro Stunde (Puffer unter dem Hoster-Limit von 60) */
-    const MAILS_PRO_STUNDE = 55;
-
-    public function __construct(private MailRepository $mailRepository)
-    {
-        parent::__construct();
-    }
+    /** Name der Mailvorlage / des Mail-Log-Typs */
+    const TYP = 'AnmeldungMoeglich';
 
     /**
      * Execute the console command.
@@ -63,10 +55,8 @@ class SendAnmeldungMoeglichMails extends Command
             return Command::SUCCESS;
         }
 
-        $mailvorlage = Mailvorlagen::where('name', 'AnmeldungMoeglich')->first();
-
-        if (! $mailvorlage) {
-            $this->error('Mailvorlage "AnmeldungMoeglich" nicht gefunden.');
+        if (! Mailvorlagen::where('name', self::TYP)->exists()) {
+            $this->error('Mailvorlage "' . self::TYP . '" nicht gefunden.');
             return Command::FAILURE;
         }
 
@@ -76,66 +66,46 @@ class SendAnmeldungMoeglichMails extends Command
             ->get()
             ->unique('mail');
 
-        $gesamt = $interessenten->count();
-
-        if ($gesamt === 0) {
+        if ($interessenten->isEmpty()) {
             $this->info('Keine Interessenten ohne VK-Nummer gefunden. Kein Versand nötig.');
             return Command::SUCCESS;
         }
 
-        $this->info("Verteile {$gesamt} Mails in Batches von " . self::MAILS_PRO_STUNDE . " (max. pro Stunde) ...");
+        // Bereits protokollierte (versendete oder noch offene) Mails für diese Börse
+        // nicht erneut einplanen, damit ein wiederholter Aufruf des Kommandos keine
+        // doppelten Mails erzeugt.
+        $bereitsProtokolliert = MailLog::typ(self::TYP)
+            ->where('klamottenboerse_id', $klamottenboerse->id)
+            ->pluck('email')
+            ->all();
 
-        $batches = $interessenten->chunk(self::MAILS_PRO_STUNDE);
-        $batchAnzahl = $batches->count();
-        $versendet = 0;
+        $neueInteressenten = $interessenten->reject(
+            fn ($interessent) => in_array($interessent->mail, $bereitsProtokolliert, true)
+        );
 
-        // Empfänger der Statusbenachrichtigungen: alle User mit verwaltung=1
-        $verwaltungsEmpfaenger = User::where('verwaltung', 1)->whereNotNull('email')->get();
-
-        // Lesbare Bezeichnung der Börse für die Benachrichtigungsmails
-        $boerseName = 'Klamottenbörse ' . $klamottenboerse->datum->format('d.m.Y');
-
-        foreach ($batches as $batchIndex => $batch) {
-            // Jeder Batch wird um batchIndex * 60 Minuten verzögert
-            $delayMinuten = $batchIndex * 60;
-            $versandZeit = Carbon::now()->addMinutes($delayMinuten);
-            $batchNummer = $batchIndex + 1;
-
-            foreach ($batch as $interessent) {
-                $vorlage = $this->mailRepository->replaceInMailvorlage(clone $mailvorlage, $interessent, $klamottenboerse);
-
-                Mail::to($interessent->mail)
-                    ->later(
-                        $versandZeit,
-                        new AnmeldungMoeglichMail($interessent, $vorlage->betreff, $vorlage->text, $vorlage->html)
-                    );
-
-                $versendet++;
-            }
-
-            // Statusbenachrichtigung wird 2 Minuten nach dem letzten Mail des Batches gesendet
-            $benachrichtigungsZeit = $versandZeit->copy()->addMinutes(2);
-
-            if ($verwaltungsEmpfaenger->isNotEmpty()) {
-                foreach ($verwaltungsEmpfaenger as $empfaenger) {
-                    Mail::to($empfaenger->email)->later(
-                        $benachrichtigungsZeit,
-                        new QueueBatchAbgeschlossenMail(
-                            batchNummer: $batchNummer,
-                            batchAnzahl: $batchAnzahl,
-                            mailsInBatch: $batch->count(),
-                            mailsGesamt: $gesamt,
-                            boerseName: $boerseName,
-                        )
-                    );
-                }
-            }
-
-            $this->line("  Batch {$batchNummer}/{$batchAnzahl}: {$batch->count()} Mails eingeplant für " . $versandZeit->format('d.m.Y H:i') . " Uhr → Statusbericht um " . $benachrichtigungsZeit->format('H:i') . " Uhr");
+        if ($neueInteressenten->isEmpty()) {
+            $this->info('Für alle Interessenten wurde bereits eine Mail eingeplant. Nutze das Frontend, um fehlgeschlagene Mails erneut zu versenden.');
+            return Command::SUCCESS;
         }
 
-        $this->info("✓ {$versendet} Mails erfolgreich in die Queue eingestellt.");
-        $this->info("  Benötigte Zeit bei max. " . self::MAILS_PRO_STUNDE . " Mails/Stunde: ca. " . ($batchAnzahl - 1) . " Stunde(n) Gesamtlaufzeit.");
+        $eingeplant = 0;
+
+        foreach ($neueInteressenten as $interessent) {
+            $mailLog = MailLog::create([
+                'interessent_id' => $interessent->id,
+                'klamottenboerse_id' => $klamottenboerse->id,
+                'typ' => self::TYP,
+                'email' => $interessent->mail,
+                'status' => MailLog::STATUS_QUEUED,
+            ]);
+
+            SendAnmeldungMoeglichMailJob::dispatch($mailLog->id);
+
+            $eingeplant++;
+        }
+
+        $this->info("✓ {$eingeplant} Mails wurden in die Warteschlange eingestellt (max. 55 Mails/Stunde werden tatsächlich versendet).");
+        $this->info('  Status und Versandprotokoll sind im Frontend unter "Mail-Protokoll" einsehbar.');
 
         return Command::SUCCESS;
     }
