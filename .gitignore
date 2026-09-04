@@ -1,4 +1,4 @@
-.idea
+.idea/
 vendor/
 node_modules/
 
@@ -26,6 +26,8 @@ config/mail.php
 resources/layouts/
 .idea/workspace.xml
 .idea/misc.xml
-.idea/workspace.xml
 vendor/bin/php-parse
 vendor/bin/phpunit
+
+.idea/modules.xml
+!/.gitignore

@@ -10,14 +10,15 @@ use App\Repositories\Interessenten\InteressentenRepository;
 use App\Repositories\Mails\ImapRepository;
 use App\Repositories\Mails\MailRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class InteressentenController extends Controller
 {
-    public function __construct(InteressentenRepository $interessentenRepository, MailRepository $mailRepository)
+    public function __construct(InteressentenRepository $interessentenRepository, MailRepository $mailRepository, ImapRepository $imapRepository)
     {
         $this->interessentenRepository = $interessentenRepository;
         $this->mailRepository = $mailRepository;
-
+        $this->imapRepository = $imapRepository;
     }
 
     /**
@@ -27,10 +28,13 @@ class InteressentenController extends Controller
      */
     public function index()
     {
-        $Interressenten=$this->interessentenRepository->all();
+
+
+        $Interressenten = $this->interessentenRepository->all();
         $Interressenten->load('warteliste');
-        return view('interessenten.uberblick',[
-            "interessenten" => $Interressenten
+
+        return view('interessenten.uberblick', [
+            'interessenten' => $Interressenten,
         ]);
     }
 
@@ -41,11 +45,22 @@ class InteressentenController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->verwaltung != 1) {
+            return redirect()->back()->with('error', 'Berechtigung fehlt');
+        }
+
+        $interessent = Interessenten::query()->where('mail', \request()->input('email'))->first();
+
+        if ($interessent) {
+            return redirect(url('interessent/'.$interessent->id));
+        }
+
         $mail = \request()->input('email');
-        $name =\request()->input('personal');
-        return view('interessenten.create',[
-            "mail"  => (isset($mail)) ?  $mail : NULL,
-            "name"  => (isset($name)) ?  $name : NULL,
+        $name = \request()->input('personal');
+
+        return view('interessenten.create', [
+            'mail'  => (isset($mail)) ? $mail : null,
+            'name'  => (isset($name)) ? $name : null,
         ]);
     }
 
@@ -58,6 +73,7 @@ class InteressentenController extends Controller
     public function store(CreateInteressentenRequest $request)
     {
         $Interessent = new  Interessenten($request->all());
+        $Interessent->uuid = Str::uuid();
         $Interessent->save();
 
         return redirect(url('interessent/'.$Interessent->id));
@@ -67,27 +83,39 @@ class InteressentenController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Model\Interessenten  $interessenten
-     * @return \Illuminate\Http\Response
+     * @return
      */
-    public function show(Interessenten $interessent)
+    public function show(Interessenten $interessent, $mailbox='INBOX')
     {
         $interessent->load('bisherige_vknummen', 'bisherige_vknummen.klamottenboerse', 'bisherige_vknummen.aktuelleKlamottenboerse');
 
-        $letzteVKnummern=$interessent->bisherige_vknummen;
+        $letzteVKnummern = $interessent->bisherige_vknummen;
 
         $grouped = $letzteVKnummern->groupBy('vknummer');
 
-        $haeufigsteVKnummer = $grouped->sortByDesc((function($vknummer, $key) {
+        $haeufigsteVKnummer = $grouped->sortByDesc((function ($vknummer, $key) {
             return count($vknummer);
         }));
 
+        if ($interessent->mail) {
+            $email = $interessent->mail;
+            try {
+                $Mails = $this->imapRepository->findMailsOfEMail($email, $mailbox);
+            } catch (\Exception $exception) {
+                $Mails = [];
+            }
 
+        } else {
+            $Mails = [];
+        }
 
-        return view('interessenten.show',[
-            "interessent"   => $interessent,
-            "haeufigsteVKnummer"  => $haeufigsteVKnummer,
-            "letzteVKnummer"     =>$letzteVKnummern->first(),
-            "Vorlagen"      => Mailvorlagen::all()
+        return view('interessenten.show', [
+            'interessent'   => $interessent,
+            'haeufigsteVKnummer'  => $haeufigsteVKnummer,
+            'letzteVKnummer'     =>$letzteVKnummern->first(),
+            'Vorlagen'      => Mailvorlagen::all(),
+            'messages'   =>$Mails,
+            'mail_thread' => ($mailbox=='INBOX')? false : true
         ]);
     }
 
@@ -112,25 +140,25 @@ class InteressentenController extends Controller
     public function update(UpdateInteressentRequest $request, Interessenten $interessenten)
     {
         $interessenten->fill($request->all());
-        if ($request->input('kinderhaus') == "on"){
+        if ($request->input('kinderhaus') == 'on') {
             $interessenten->kinderhaus = 1;
         } else {
             $interessenten->kinderhaus = 0;
         }
 
-        if ($request->input('mitarbeiter') == "on"){
+        if ($request->input('mitarbeiter') == 'on') {
             $interessenten->mitarbeiter = 1;
         } else {
             $interessenten->mitarbeiter = 0;
         }
 
-        try{
+        try {
             $interessenten->save();
+
             return response()->json($interessenten, 200);
-        } catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json($exception, 400);
         }
-
     }
 
     /**
@@ -141,24 +169,19 @@ class InteressentenController extends Controller
      */
     public function destroy(Interessenten $interessenten)
     {
-
-        try{
-
-
-
+        try {
             $this->mailRepository->sendDeleteInteressent($interessenten);
 
             $interessenten->delete();
 
-
             return redirect(url('/'))->with([
-                "success"  => "Interessent wurde gelöscht und informiert."
+                'success'  => 'Interessent wurde gelöscht und informiert.',
             ]);
-        } catch (\Exception $exception){
-
+        } catch (\Exception $exception) {
             dd($exception);
+
             return redirect()->back()->with([
-                "error"  => "Löschen fehlgeschlagen"
+                'error'  => 'Löschen fehlgeschlagen',
             ]);
         }
     }

@@ -2,37 +2,74 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Model\Interessenten;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-
 
 class VKnummer extends Model
 {
-    public $table = "vknummern";
+    public $table = 'vknummern';
 
-    protected $fillable = array("vknummer","klamottenboersen_id", "reserviert_fuer", "vergeben_an", 'umsatz');
-    protected $visible = array("vknummer","klamottenboersen_id", "reserviert_fuer", "vergeben_an", 'umsatz');
+    protected $fillable = ['vknummer', 'klamottenboersen_id', 'reserviert_fuer', 'vergeben_an', 'umsatz'];
 
-    public function reserviert_fuer_Interessent() {
-        return $this->belongsTo( 'App\Model\Interessenten','reserviert_fuer');
+    protected $visible = ['vknummer', 'klamottenboersen_id', 'reserviert_fuer', 'vergeben_an', 'umsatz'];
+
+    public function reserviert_fuer_Interessent()
+    {
+        return $this->belongsTo(\App\Model\Interessenten::class, 'reserviert_fuer');
     }
 
-    public function vergeben_an_Interessent() {
+    public function vergeben_an_Interessent()
+    {
         return $this->belongsTo(Interessenten::class, 'vergeben_an', 'id', 'vergeben_an');
     }
 
-    public function Klamottenboerse () {
+    public function Klamottenboerse()
+    {
         return $this->belongsTo(Klamottenboerse::class, 'klamottenboersen_id');
     }
 
-    public function bisherigeVerkaeufer(){
-        return $this->hasMany(VKnummer::class, 'vknummer', 'vknummer')
+    public function bisherigeVerkaeufer()
+    {
+        return $this->hasMany(self::class, 'vknummer', 'vknummer')
             ->whereNotNull('vergeben_an')->orderBy('klamottenboersen_id', 'DESC')->with('vergeben_an_Interessent');
     }
 
-    public function aktuelleKlamottenboerse(){
-        return $this->hasOne(VKnummer::class, 'vknummer', 'vknummer')
-            ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"));
+    public function aktuelleKlamottenboerse()
+    {
+        return $this->hasOne(self::class, 'vknummer', 'vknummer')
+            ->where('klamottenboersen_id', DB::raw('(select max(`id`) from klamottenboerse)'));
     }
+
+    public function verkaufteArtikel()
+    {
+            return $this->hasMany(verkaufteartikel::class, 'vknummer', 'vknummer')
+                ->where('klamottenboerse_id', $this->klamottenboersen_id)
+                ->withoutGlobalScopes()
+                ->orderBy('artikelnummer', 'ASC');
+    }
+
+    public function scopeAktuelleKlamottenboerse()
+    {
+        return $this->where('klamottenboersen_id', DB::raw('(select max(`id`) from klamottenboerse)'));
+    }
+
+    public function umsatz() : Attribute
+    {
+        return Attribute::make(
+          get: function ($value) {
+              if ($value != null && $value != 0) {
+                  return $value;
+              } else {
+                  return Cache::remember('umsatz_vknummer_'.$this->id, 60*30, function() {
+                      return $this->verkaufteArtikel()->sum('betrag');
+                    });
+              }
+          }
+        );
+
+    }
+
 }

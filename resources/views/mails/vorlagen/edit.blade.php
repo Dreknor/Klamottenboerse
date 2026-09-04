@@ -65,11 +65,14 @@
                                 <li class="list-group-item">DATUM</li>
                                 <li class="list-group-item">ANMELDUNG</li>
                                 <li class="list-group-item">ANNAHME</li>
+                                <li class="list-group-item">ORT</li>
+                                <li class="list-group-item">ADRESSE</li>
                                 <li class="list-group-item">ANLIEFERUNG_AB</li>
                                 <li class="list-group-item">ANLIEFERUNG_BIS</li>
                                 <li class="list-group-item">ABHOLUNG_AB</li>
                                 <li class="list-group-item">ABHOLUNG_BIS</li>
                                 <li class="list-group-item">MAXTEILE</li>
+                                <li class="list-group-item">VERKAEUFELINK</li>
                             </ul>
                         </div>
                     </div>

@@ -106,6 +106,33 @@
                                         </small>
                                     @endif
                                 </div>
+                      <div class="form-group row @if ($errors->has('sendInvitation')) form-group-error @endif">
+                          <label class="form-label" for="datum">automatische Mail für Anmeldung:</label>
+                          <select class="form-control" name="sendInvitation" id="sendInvitation">
+                              <option value="1">Ja</option>
+                              <option value="0">Nein</option>
+                          </select>
+                          @if ($errors->has('sendInvitation'))
+                              <small class="text-muted">
+                                  @foreach ($errors->get('sendInvitation') as $message)
+                                      {{ $message }}
+                                  @endforeach
+                              </small>
+                          @endif
+                      </div>
+                      <div class="form-group row @if ($errors->has('sendInvitation')) form-group-error @endif">
+                          <label class="form-label" for="sendErinnerung">Erinnerung für Verkäufer x Tage vor der Klamottenbörse (0=keine):</label>
+                          <input type="number" step="1" min="0" max="14" class="form-control" name="sendErinnerung" id="sendErinnerung" value="{{$klamottenboerse->sendErinnerung ?: 14}}">
+                      @if ($errors->has('sendErinnerung'))
+                              <small class="text-muted">
+                                  @foreach ($errors->get('sendInvitation') as $message)
+                                      {{ $message }}
+                                  @endforeach
+                              </small>
+                          @endif
+                      </div>
+
+
                             </div>
                         <div class="card-footer">
                             <input type="submit" class="btn btn-rounded btn-success btn-block flex-sm-wrap" value="Klamottenbörse abschließen und neue anlegen">

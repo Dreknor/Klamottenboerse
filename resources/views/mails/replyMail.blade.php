@@ -6,30 +6,33 @@
                 @csrf
                 @method('put')
                 <div class="card-header">
-                    <h4>Antwort an {{$Mail->from[0]->full}}</h4>
+                    <h4>Antwort an {{$Mail->getFrom()[0]->full}}</h4>
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
                         <label for="email" class="control-label col-sm-2">An:</label>
-                        <input type="text" name="email" value="{{$Mail->from[0]->mail}}" class="form-control col-sm-10">
+                        <input type="text" name="email" value="{{$Mail->getFrom()[0]->mail}}" class="form-control col-sm-10">
                     </div>
                     <div class="form-group row">
-                        <label for="email" class="control-label  col-sm-2">Betreff:</label>
-                        <input type="text" name="betreff" value="Re: {{$Mail->subject}}" placeholder="Betreff" class="form-control col-sm-10" autofocus>
+                        <label for="betreff" class="control-label  col-sm-2">Betreff:</label>
+                        <input type="text" name="betreff" value="Re: {{$Mail->getSubject()}}" placeholder="Betreff" class="form-control col-sm-10" autofocus>
                     </div>
                 </div>
                 <div class="card-body">
                         <textarea id="text" name="text" class="form-control">
                             <br>
                             <hr>
-                            @if (isset($Mail->bodies['text']))
-                                {{$Mail->bodies['text']->content}}
+                            @if ($Mail->getTextBody() != "")
+                                {{$Mail->getTextBody()}}
+                            @else
+                                {!! $Mail->getHTMLBody() !!}
                             @endif
+
                         </textarea>
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn">Nachricht versenden</button>
-                    <a href="{{back()}}" class="btn btn-grey">verwerfen</a>
+                    <a href="{{ url()->previous() }}" class="btn btn-grey">verwerfen</a>
                 </div>
             </form>
         </div>

@@ -2,22 +2,22 @@
 
 namespace App\Repositories\Klamottenboerse;
 
-
 use App\Model\Klamottenboerse;
 
 class KlamottenboersenRepository
 {
-
-    public function all(){
+    public function all()
+    {
         return Klamottenboerse::all();
     }
 
-    public function find($id){
+    public function find($id)
+    {
         return Klamottenboerse::find($id);
     }
 
-    public function aktuelleKlamottenboerse(){
+    public function aktuelleKlamottenboerse()
+    {
         return Klamottenboerse::query()->latest()->first();
     }
-
 }

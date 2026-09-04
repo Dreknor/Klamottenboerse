@@ -8,154 +8,146 @@
 
 namespace App\Repositories\Mails;
 
-
 use App\Model\Interessenten;
-use Carbon\Carbon;
-use function Sodium\add;
+use Illuminate\Support\Facades\Log;
 use Webklex\IMAP\Facades\Client;
-use Webklex\IMAP\Support\MessageCollection;
+use Webklex\PHPIMAP\Message;
 
 class ImapRepository
 {
-
-
-
-    public function connect(){
-
-
+    public function connect()
+    {
+        try {
             $Client = Client::account('default');
             $Client->getConnection();
             return $Client;
+        } catch (\Exception $e) {
+
+            Log::info($e->getMessage());
+        }
+
     }
 
-    public function unseenMessages(){
+    public function unseenMessages()
+    {
 
         try {
             $Client = $this->connect();
 
             $aFolder = $Client->getFolder('INBOX');
-            $aMessage = $aFolder
-                ->getUnseenMessages();
+            $aMessage = $aFolder->search()->fetchOrderDesc()->unseen()->leaveUnread()->get();
+
+
             return $aMessage;
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+            return $e;
+        }
+    }
+
+    public function findUid($uid)
+    {
+        $Client = $this->connect();
+        $ordner = $Client->getFolder('INBOX');
+        $Nachricht = $ordner->messages()->where('uid',$uid)->get();
+
+        if (!is_null($Nachricht) and count($Nachricht) > 0) {
+            return $Nachricht->first();
+        } else {
+            $ordner = $Client->getFolders();
+            foreach ($ordner as $Ordner) {
+                $message = $Ordner->messages()->where('uid',$uid)->get();
+                if (!is_null($message) and count($message) > 0) {
+                    return $message->first();
+                }
+            }
+        }
+    }
+
+    public function deleteMessage($uid)
+    {
+
+        $message = $this->findUid($uid);
+        $message->move('Trash');
+        return true;
+    }
+
+    public function spamMessage($uid)
+    {
+
+        $message = $this->findUid($uid);
+
+        return $message->move('0 Spamfilter.als Spam lernen');
+    }
+
+    public function findMailsOfEMail($email , $folder = 'INBOX')
+    {
+        $Client = $this->connect();
+        $ordner = $Client->getFolderByName($folder);
+
+
+        if ($folder === 'INBOX'){
+            $messages = $ordner->query()->setFetchOrder("DESC")->from($email)->get();
+        } else {
+            $messages = $ordner->query()->setFetchOrder("DESC")->to($email)->get();
+        }
+
+        $sorted = $messages->sortByDesc(function ($item) {
+            return $item->getDate();
+        });
+
+        return $sorted;
+    }
+
+    public function mailsInboxLastDays($Tage = 5)
+    {
+        try {
+            $Client = $this->connect();
+            $aFolder = $Client->getFolder('INBOX');
+            $aMessage = $aFolder->query()
+                    ->since(now()->subDays($Tage))
+                    ->setFetchBody(true)
+                    ->get();
+
+                $sorted = $aMessage->sortByDesc(function ($item) {
+                    return $item->getDate();
+                });
+
+                return $sorted;
+
         } catch (\Exception $e) {
             return $e;
         }
 
     }
 
-    public function findUid($uid, $email = "", $date = ""){
+    public function toArray(Message $message){
+        $nachricht = [
+            'from' => [
+                'full' => $message->getFrom()[0]->full,
+                'personal' => $message->getFrom()[0]->personal,
+                'mail' => $message->getFrom()[0]->mail
+            ],
+            'subject' => $message->getSubject()[0],
+            'bodies' => [
+                'text' => $message->getTextBody(),
+                'html' => $message->getHTMLBody(),
+            ],
+        ];
 
-        $Client = $this->connect();
-        $ordner = $Client->getFolder('INBOX');
-        $Nachricht=[];
-        $Nachricht=$ordner->getMessage($uid, 1, 1, true);
+        $interessent = $this->isInteressent($message->getFrom()[0]->mail);
 
-        if (isset($Nachricht) and $Nachricht != NULL){
-            return $Nachricht;
+        $nachricht['interessent'] = $interessent;
+
+        return $nachricht;
+    }
+
+    public function isInteressent($mail){
+        $Interessent = Interessenten::where('mail', $mail)->first();
+        if (!is_null($Interessent)){
+            return $Interessent;
         } else {
-            $ordner = $Client->getFolders(0, 'INBOX');
-
-            foreach ($ordner AS $Ordner){
-                $message=$Ordner->search()->from($email)->on($date)->setFetchAttachment(false)->get();
-                if (isset($message) and count($message)>0){
-                    foreach ($message as $Message){
-                        if ($Message->uid == $uid){
-                            return $Message;
-                            break;
-                        }
-                    }
-
-                }
-            }
-
-                $ordner = $Client->getFolders(0, 'Sent');
-                foreach ($ordner AS $Ordner){
-                    $message=$Ordner->search()->from($email)->on($date)->setFetchAttachment(false)->get();
-                    if (isset($message) and count($message)>0){
-                        foreach ($message as $Message){
-                            if ($Message->uid == $uid){
-                                return $Message;
-                                break;
-                            }
-                        }
-
-                    }
-                }
+            return null;
         }
-        return $Nachricht;
     }
-
-    public function deleteMessage($uid){
-        $Client = $this->connect();
-        $ordner = $Client->getFolder('INBOX');
-        $message=$ordner ->getMessage($uid);
-        return $message->moveToFolder('Trash');
-    }
-
-    public function spamMessage($uid){
-        $Client = $this->connect();
-        $ordner = $Client->getFolder('INBOX');
-        $message=$ordner ->getMessage($uid);
-        return $message->moveToFolder('0 Spamfilter.als Spam lernen');
-    }
-
-
-    public function findMailsOfEMail($email){
-
-        $Client = $this->connect();
-        $messages =new MessageCollection();
-        $ordner = $Client->getFolders(0, 'INBOX');
-
-        foreach ($ordner AS $Ordner){
-           $message=( $Ordner->search()->from($email)->setFetchAttachment(false)->get());
-           if (count($message)>0){
-               $messages=$messages->merge($message);
-           }
-        }
-
-        $ordner = $Client->getFolders(0, 'Sent');
-
-        foreach ($ordner AS $Ordner){
-            $message=( $Ordner->search()->to($email)->setFetchAttachment(false)->get());
-            if (count($message)>0){
-                $messages=$messages->merge($message);
-            }
-        }
-
-        $sorted = $messages->sortByDesc('date');
-
-
-        return $sorted;
-
-    }
-
-    public function mailsInboxLastDays($Tage = 5){
-
-        $Interessenten = Interessenten::all();
-
-        $Client = $this->connect();
-        $aFolder = $Client->getFolder('INBOX');
-        $aMessage = $aFolder->query()
-            ->since(now()->subDays($Tage))
-            ->setFetchBody(true)
-            ->setFetchAttachment(false)
-            ->get();
-
-        $sorted = $aMessage->sortByDesc('date');
-        $Mails = new MessageCollection();
-
-        foreach ($sorted AS $key => $Mail) {
-            $Interressent = $Interessenten->where('mail', "=",$Mail->from[0]->mail)->first();
-            if (isset($Interressent)){
-                $sorted[$key]->interessent = $Interressent;
-            }
-        }
-
-        return $sorted;
-
-    }
-
-
-
-
 }

@@ -24,8 +24,8 @@ class MailvorlagenEditRequest extends FormRequest
     public function rules()
     {
         return [
-            "betreff"   => "required|string",
-            "text"      => "required|string"
+            'betreff'   => 'required|string',
+            'text'      => 'required|string',
         ];
     }
 

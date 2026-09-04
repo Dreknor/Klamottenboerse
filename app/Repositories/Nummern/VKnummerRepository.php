@@ -8,35 +8,36 @@
 
 namespace App\Repositories\Nummern;
 
-
 use App\Model\Klamottenboerse;
 use App\Model\VKnummer;
 use Illuminate\Support\Facades\DB;
 
 class VKnummerRepository
 {
-
-    public function allLatest(){
-
-        return VKnummer::with('vergeben_an_Interessent', 'reserviert_fuer_Interessent', 'bisherigeVerkaeufer' )
-            ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+    public function allLatest()
+    {
+        return VKnummer::with('vergeben_an_Interessent', 'reserviert_fuer_Interessent', 'bisherigeVerkaeufer')
+            ->where('klamottenboersen_id', DB::raw('(select max(`id`) from klamottenboerse)'))
             ->get();
     }
 
-    public function freeNummern(){
+    public function freeNummern()
+    {
         return VKnummer::query()
             ->whereNull('vergeben_an')
             ->whereNull('reserviert_fuer')
-            ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
+            ->where('klamottenboersen_id', DB::raw('(select max(`id`) from klamottenboerse)'))
             ->get();
     }
 
-    public function vergebeneNummern(Klamottenboerse $klamottenboerse){
-        return VKnummer::query()
-            ->whereNull('vergeben_an')
-            ->whereNull('reserviert_fuer')
-            ->where('klamottenboersen_id', DB::raw("(select max(`id`) from klamottenboerse)"))
-            ->get();
+    public function vergebeneNummern(Klamottenboerse $klamottenboerse)
+    {
+        return \Cache::remember('vergebeneNummern', 60, function () use ($klamottenboerse) {
+            return VKnummer::query()
+                ->whereNotNull('vergeben_an')
+                ->where('klamottenboersen_id', $klamottenboerse->id)
+                ->orderBy('vergeben_an', 'ASC')
+                ->get();
+        });
     }
-
 }

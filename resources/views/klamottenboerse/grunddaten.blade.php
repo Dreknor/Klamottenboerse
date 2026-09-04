@@ -1,6 +1,20 @@
 @extends('layouts.app')
 
 @section('js')
+    <script src='{{asset('js/tinymce/tinymce.min.js')}}'></script>
+    <script src='{{asset('js/tinymce/langs/de.js')}}'></script>
+<script>
+    tinymce.init({
+        plugins: "autolink, lists, textcolor",
+        selector: '#belehrung',
+        toolbar:'bold, italic, underline, strikethrough, alignleft, aligncenter, alignright, alignjustify, styleselect, formatselect, fontselect, fontsizeselect, forecolor, backcolor, bullist, numlist, outdent, indent, undo, redo, removeformat',
+        menubar: false,
+        height: 300,
+        table_default_attributes: {
+            border: '0'
+        }
+    });
+</script>
     <script>
         @if (!$errors->any())
             $(document).ready(function() {
@@ -20,6 +34,9 @@
     </script>
 
 
+
+
+
 @stop
 
 @section('content')
@@ -35,7 +52,7 @@
         </header>
 
         <div class="row">
-            <div class="col-5">
+            <div class="col-8">
                 <div class="card">
                     <div class="card-header bg-info text-white">
                         Daten der Klamottenbörse
@@ -94,6 +111,58 @@
                                 </div>
                                 <div class="col">
                                     {{$klamottenboerse->maxTeile ?: ""}}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    automatische Anmeldemail?
+                                </div>
+                                <div class="col">
+                                    {{($klamottenboerse->sendInvitation == 1)? 'ja' : "nein"}}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Erinnerungsmail für Verkäufer:
+                                </div>
+                                <div class="col">
+                                    {{($klamottenboerse->sendErinnerung > 0) ? $klamottenboerse->sendErinnerung : "0"}} Tage (0 = keine Erinnerung)
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Verkäufer können online Verkaufsergebnis einsehen?:
+                                </div>
+                                <div class="col">
+                                    {{($klamottenboerse->ergebnis_freigabe == 1)? 'ja' : "nein"}}
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Ort:
+                                </div>
+                                <div class="col">
+                                    {{$klamottenboerse->ort}}
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Adresse:
+                                </div>
+                                <div class="col">
+                                    <a href="https://www.google.com/maps/place/{{urlencode($klamottenboerse->adresse)}}" target="_blank">
+                                        {{$klamottenboerse->adresse}}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    Belehrung:
+                                </div>
+                                <div class="col">
+                                    {!! $klamottenboerse->belehrung !!}
                                 </div>
                             </div>
 
@@ -196,6 +265,87 @@
                                     </small>
                                 @endif
                             </div>
+                            <div class="form-group row @if ($errors->has('sendInvitation')) form-group-error @endif">
+                                <label class="form-label" for="datum">automatische Mail für Anmeldung:</label>
+                                <select class="form-control" name="sendInvitation" id="sendInvitation">
+                                    <option value="1">Ja</option>
+                                    <option value="0">Nein</option>
+                                </select>
+                                @if ($errors->has('sendInvitation'))
+                                    <small class="text-muted">
+                                        @foreach ($errors->get('sendInvitation') as $message)
+                                            {{ $message }}
+                                        @endforeach
+                                    </small>
+                                @endif
+                            </div>
+
+                                <div class="form-group row @if ($errors->has('sendErinnerung')) form-group-error @endif">
+                                    <label class="form-label" for="sendErinnerung">Erinnerung für Verkäufer x Tage vor der Klamottenbörse (0=keine):</label>
+                                    <input type="number" step="1" min="0" max="14" class="form-control" name="sendErinnerung" id="sendErinnerung" value="{{$klamottenboerse->sendErinnerung ?: 14}}">
+                                    @if ($errors->has('sendErinnerung'))
+                                        <small class="text-muted">
+                                            @foreach ($errors->get('sendErinnerung') as $message)
+                                                {{ $message }}
+                                            @endforeach
+                                        </small>
+                                    @endif
+                                </div>
+
+                                <div class="form-group row @if ($errors->has('ergebnis_freigabe')) form-group-error @endif">
+                                    <label class="form-label" for="ergebnis_freigabe">Ergebnisfreigabe:</label>
+                                    <select class="form-control" name="ergebnis_freigabe" id="ergebnis_freigabe">
+                                        <option value="1" @if($klamottenboerse->ergebnis_freigabe == 1) selected @endif>Ja</option>
+                                        <option value="0" @if($klamottenboerse->ergebnis_freigabe == 0) selected @endif>Nein</option>
+                                    </select>
+                                    @if ($errors->has('ergebnis_freigabe'))
+                                        <small class="text-muted">
+                                            @foreach ($errors->get('ergebnis_freigabe') as $message)
+                                                {{ $message }}
+                                            @endforeach
+                                        </small>
+                                    @endif
+                                </div>
+
+
+                                <div class="form-group row @if ($errors->has('ort')) form-group-error @endif">
+                                    <label class="form-label" for="ort">Ort:</label>
+                                    <input type="text" class="form-control" name="ort" id="ort" value="{{$klamottenboerse->ort ?: ""}}">
+                                    @if ($errors->has('ort'))
+                                        <small class="text-muted">
+                                            @foreach ($errors->get('ort') as $message)
+                                                {{ $message }}
+                                            @endforeach
+                                        </small>
+                                    @endif
+                                </div>
+
+                                <div class="form-group row @if ($errors->has('adresse')) form-group-error @endif">
+                                    <label class="form-label" for="adresse">Adresse:</label>
+                                    <input type="text" class="form-control" name="adresse" id="adresse" value="{{$klamottenboerse->adresse ?: ""}}">
+                                    @if ($errors->has('adresse'))
+                                        <small class="text-muted">
+                                            @foreach ($errors->get('adresse') as $message)
+                                                {{ $message }}
+                                            @endforeach
+                                        </small>
+                                    @endif
+                                </div>
+
+
+                                <div class="form-group row @if ($errors->has('belehrung')) form-group-error @endif">
+                                    <label class="form-label" for="belehrung">Belehrung:</label>
+                                    <textarea class="form-control" name="belehrung" id="belehrung">
+                                        {!! $klamottenboerse->belehrung !!}
+                                    </textarea>
+                                    @if ($errors->has('belehrung'))
+                                        <small class="text-muted">
+                                            @foreach ($errors->get('belehrung') as $message)
+                                                {{ $message }}
+                                            @endforeach
+                                        </small>
+                                    @endif
+                                </div>
                         </form>
                     </div>
                     <div class="card-footer">
@@ -213,17 +363,6 @@
                 <div class="card">
                     <div class="card-header">
                         Helfer
-                    </div>
-                    <div class="card-body">
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-4 col-auto">
-                <div class="card">
-                    <div class="card-header">
-                        vergangene Klamottenbörsen
                     </div>
                     <div class="card-body">
 

@@ -13,7 +13,7 @@
 
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-
+    <script src="https://kit.fontawesome.com/c8f58e3eb6.js"></script>
     <link rel="stylesheet" href="{{asset('css/lib/font-awesome/font-awesome.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/lib/bootstrap/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/main.css')}}">
@@ -27,10 +27,10 @@
 	        <a href="{{url('/')}}" class="navbar-brand col-sm-auto text-white">
 				Klamottenbörse
 	        </a>
-
-	        <button id="show-hide-sidebar-toggle" class="show-hide-sidebar text-white">
-	            <span class="">toggle menu</span>
-	        </button>
+            @auth
+                <button id="show-hide-sidebar-toggle" class="show-hide-sidebar text-white">
+                    <span class="">toggle menu</span>
+                </button>
 
 	        <button class="hamburger hamburger--htla">
 	            <span>toggle menu</span>
@@ -54,72 +54,124 @@
                     </div>
 	            </div><!--site-header-content-in-->
 	        </div><!--.site-header-content-->
+            @endauth
 	    </div><!--.container-fluid-->
 	</header><!--.site-header-->
 
 	<div class="mobile-menu-left-overlay"></div>
-	<nav class="side-menu">
-	    <ul class="side-menu-list">
-			<li class="">
-				<a href="{{url('/home')}}">
-	            <span>
-	                <i class="font-icon font-icon-dashboard"></i>
-	                <span class="lbl">Dashboard</span>
-	            </span>
-				</a>
-			</li>
-
-
-
-	        <li class="with-sub">
-	            <span>
-	                <i class="font-icon glyphicon glyphicon-user"></i>
-	                <span class="lbl">Interessenten</span>
-	            </span>
-	            <ul>
-	                <li><a href="{{url('interessenten')}}"><span class="lbl">Übersicht</span></a></li>
-	                <li><a href="{{url('interessenten/create')}}"><span class="lbl">Anlegen</span></a></li>
-	            </ul>
-	        </li>
-	        <li class="with-sub">
-	            <span>
-	                <i class="font-icon glyphicon glyphicon-calendar "></i>
-	                <span class="lbl">Klamottenbörse</span>
-	            </span>
-	            <ul>
-	                <li><a href="{{url('grunddaten')}}"><span class="lbl">Grunddaten</span></a></li>
-	                <li><a href="{{url('vknummern')}}"><span class="lbl">Verkäufernummern</span></a></li>
+    @auth
+	    <nav class="side-menu">
+                <ul class="side-menu-list">
+                    <li class="">
+                        <a href="{{url('/home')}}">
+                        <span>
+                            <i class="font-icon font-icon-dashboard"></i>
+                            <span class="lbl">Dashboard</span>
+                        </span>
+                        </a>
+                    </li>
                 </ul>
-	        </li>
-			<li class="with-sub">
-	            <span>
-	                <i class="font-icon glyphicon glyphicon-list-alt"></i>
-	                <span class="lbl">Listen</span>
-	            </span>
-				<ul>
-					<!--<li><a href="{{url('listen/verkaeuferinfos')}}" target="_blank"><span class="lbl">Verkäuferinfos</span></a></li>-->
-					<li><a href="{{url('listen/vknummern')}}" target="_blank"><span class="lbl">Verkäufernummern</span></a></li>
-					<li><a href="{{url('listen/belehrung')}}" target="_blank"><span class="lbl">Belehrung</span></a></li>
-					<li><a href="{{url('listen/abstreichliste')}}" target="_blank"><span class="lbl">Abstreichliste</span></a></li>
-				</ul>
-			</li>
-            <li class="with-sub">
-	            <span>
-	                <i class="font-icon font-icon-cogwheel "></i>
-	                <span class="lbl">Settings</span>
-	            </span>
-                <ul>
-                    <li><a href="{{url('mailvorlagen')}}"><span class="lbl">Mail-Vorlagen</span></a></li>
-					<li><a href="{{url('import')}}"><span class="lbl">Import von Kasse</span></a></li>
+
+            @if(auth()->user()->verwaltung == 1)
+                <ul class="side-menu-list">
+                    <li class="with-sub">
+                        <span>
+                            <i class="font-icon glyphicon glyphicon-user"></i>
+                            <span class="lbl">Interessenten</span>
+                        </span>
+                        <ul>
+                            <li><a href="{{url('interessenten')}}"><span class="lbl">Übersicht</span></a></li>
+                            <li><a href="{{url('interessenten/create')}}"><span class="lbl">Anlegen</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <span>
+                            <i class="font-icon glyphicon glyphicon-calendar "></i>
+                            <span class="lbl">Klamottenbörse</span>
+                        </span>
+                        <ul>
+                            <li><a href="{{url('grunddaten')}}"><span class="lbl">Grunddaten</span></a></li>
+                            <li><a href="{{url('vknummern')}}"><span class="lbl">Verkäufernummern</span></a></li>
+                            <li><a href="{{url('helfertermine')}}"><span class="lbl">Helfer</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="with-sub">
+                        <span>
+                            <i class="font-icon glyphicon glyphicon-list-alt"></i>
+                            <span class="lbl">Listen</span>
+                        </span>
+                            <ul>
+                                <!--<li><a href="{{url('listen/verkaeuferinfos')}}" target="_blank"><span class="lbl">Verkäuferinfos</span></a></li>-->
+                                <li><a href="{{url('listen/vknummern')}}" target="_blank"><span class="lbl">Verkäufernummern</span></a></li>
+                                <li><a href="{{url('listen/belehrung')}}" target="_blank"><span class="lbl">Belehrung</span></a></li>
+                                <li><a href="{{url('listen/abstreichliste')}}" target="_blank"><span class="lbl">Abstreichliste</span></a></li>
+                            </ul>
+                    </li>
+                    <li class="with-sub">
+                        <span>
+                            <i class="font-icon font-icon-cogwheel "></i>
+                            <span class="lbl">Settings</span>
+                        </span>
+                            <ul>
+                                <li><a href="{{url('mailvorlagen')}}"><span class="lbl">Mail-Vorlagen</span></a></li>
+                                <li><a href="{{url('mail-protokoll/anmeldung-moeglich')}}"><span class="lbl">Mail-Protokoll</span></a></li>
+                                <li><a href="{{url('import')}}"><span class="lbl">Import von Kasse</span></a></li>
+                            </ul>
+                    </li>
                 </ul>
-            </li>
+            @endif
+            @if(auth()->user()->kasse)
+                    <ul class="side-menu-list">
+                        <li>
+                            <a href="{{url("/kasse")}}">
 
-	    </ul>
+                                <i class="glyphicon glyphicon-euro"></i>
+                                <span class="lbl">
+                                    Kasse
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{url("kasse/verlauf")}}">
+                                <i class="glyphicon glyphicon-list-alt"></i>
+                                <span class="lbl">
+                                    Verlauf
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{url("kasse/settings")}}">
+                                <i class="glyphicon glyphicon-cog"></i>
+                                <span class="lbl">
+                                    Einstellungen
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+            @endif
 
 
-	</nav><!--.side-menu-->
 
+
+	</nav>
+    @endauth<!--.side-menu-->
 	<div class="page-content">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+            @if(session()->has('Meldung'))
+                <div class="alert alert-{{session()->get('type')}}">
+                    {{ session()->get('Meldung') }}
+                </div>
+            @endif
+
 		<div class="container-fluid">
 			@yield('content')
 		</div><!--.container-fluid-->

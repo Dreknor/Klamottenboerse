@@ -14,9 +14,10 @@ class neueKlamottenboerseRequest extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::user()){
+        if (Auth::user() && Auth::user()->verwaltung == 1) {
             return true;
         }
+
         return false;
     }
 
@@ -27,28 +28,29 @@ class neueKlamottenboerseRequest extends FormRequest
      */
     public function rules()
     {
-
-
-
         return [
-            "datum" => "required|date|after:anmeldung|unique:klamottenboerse",
-            "anmeldung" => "required|date|after:anmeldungKinderhaus",
-            "anmeldungKinderhaus"   => "required|date",
-            "abholung_von"  => "required|date_format:H:i",
-            "abholung_bis"  => "required|date_format:H:i",
-            "anlieferung_von"   => "required|date_format:H:i",
-            "anlieferung_bis"   => "required|date_format:H:i",
-            "maxTeile"  => "required|integer|min:1"
+            'datum' => 'required|date|after:anmeldung|unique:klamottenboerse',
+            'anmeldung' => 'required|date|after:anmeldungKinderhaus',
+            'anmeldungKinderhaus'   => 'required|date',
+            'abholung_von'  => 'required|date_format:H:i',
+            'abholung_bis'  => 'required|date_format:H:i',
+            'anlieferung_von'   => 'required|date_format:H:i',
+            'anlieferung_bis'   => 'required|date_format:H:i',
+            'maxTeile'  => 'required|integer|min:1',
+            'sendInvitation' => 'sometimes',
+            'sendErinnerung' => 'integer|min:0|max:14|nullable',
+            'ort' => 'string|nullable',
+            'adresse' => 'string|nullable',
+            'ergebnis_freigabe' => 'boolean',
+
         ];
-
-
     }
 
     public function messages()
     {
         return [
-            "maxTeile.required"     => "Maximale Teileanzahl muss angegeben werden.",
-            "maxTeile.min"     => "Maximale Teileanzahl muss mindestens 1 betragen."
+            'maxTeile.required'     => 'Maximale Teileanzahl muss angegeben werden.',
+            'maxTeile.min'     => 'Maximale Teileanzahl muss mindestens 1 betragen.',
         ];
     }
 }

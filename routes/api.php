@@ -20,5 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['middleware' => ['web']], function () {
     Route::get('/termin', 'ApiController@termin');
     Route::get('/anmeldung', 'ApiController@anmeldung');
-
 });

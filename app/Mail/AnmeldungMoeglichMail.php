@@ -5,15 +5,17 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AnmeldungMoeglichMail extends Mailable implements ShouldQueue
+class AnmeldungMoeglichMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $interessent;
+
     public $betreff;
+
     public $text;
+
     public $html;
 
     /**
@@ -40,7 +42,6 @@ class AnmeldungMoeglichMail extends Mailable implements ShouldQueue
             ->from(env('MAIL_FROM_ADDRESS'))
             ->subject($this->betreff)
             ->text('mails.text.mail')
-            ->view('mails.mail')
-            ;
+            ->view('mails.mail');
     }
 }

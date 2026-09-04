@@ -3,11 +3,11 @@
 
 
 
-    $('#nachrichten').on('click', '.mail-box-item', function (e) {
-
-        var id = $(this).data('id');
-        var date = $(this).data('date');
-        var from = $(this).data('from');
+    $('#nachrichten').on('click', '.mail-box-item-clickable', function (e) {
+        var mailboxItem=e.target.closest(".mail-box-item")
+        var id = mailboxItem.dataset.id;
+        var date = mailboxItem.dataset.date;
+        var from = mailboxItem.dataset.from;
 
         var arr = {id:id, date:date, from:from, _token: '{{csrf_token()}}'};
 
@@ -33,20 +33,21 @@
                 $('#wait').hide();
             },
             success: function (data) {
+                console.log(data)
                 $(item).removeClass('selected');
                 $('#from').text(
-                    "Von: " + data.Nachricht.from[0].full
+                    "Von: " + data.Nachricht.from.full
                 );
                 $('#betreff').text(
                     data.Nachricht.subject.replace(re, " ")
                 );
                 if (data.Nachricht.bodies.html) {
                     $('#body').html(
-                        data.Nachricht.bodies.html.content
+                        data.Nachricht.bodies.html
                     );
                 } else if (data.Nachricht.bodies.text) {
                     $('#body').html(
-                        data.Nachricht.bodies.text.content.replace(/\n/g, '<br/>')
+                        data.Nachricht.bodies.text.replace(/\n/g, '<br/>')
                     );
                 } else {
                     $('#body').html(
@@ -54,16 +55,16 @@
                     );
                 }
 
-                if ($(item).data('interessent').length > 9) {
-                    $('#toInteressent').attr('href', $(item).data('interessent'));
+                if (data.Nachricht.interessent != null) {
+                    $('#toInteressent').attr('href', "{{url('interessent')}}"+"/"+data.Nachricht.interessent.id);
                     $('#toInteressent').show();
                     $('#createInteressent').hide();
 
                 } else {
                     $('#toInteressent').hide();
                     $('#createInteressent').show();
-                    $('#email').val(data.Nachricht.from[0].mail);
-                    $('#personal').val(data.Nachricht.from[0].personal);
+                    $('#email').val(data.Nachricht.from.mail);
+                    $('#personal').val(data.Nachricht.from.personal);
 
 
                 }

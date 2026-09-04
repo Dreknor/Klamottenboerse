@@ -2,360 +2,404 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span  id="headerName">{{$interessent->vorname}} {{$interessent->nachname}}</span>
-                        <span class="pull-right">
+
+        <div class="card-columns">
+            <div class="card">
+                <div class="card-header">
+                    <span  id="headerName">{{$interessent->vorname}} {{$interessent->nachname}}</span>
+                    <span class="pull-right">
                             <a class="btn btn-warning btn-sm" id="editBtn">
                                  <i class="font-icon-pencil"></i>
                             </a>
-
-                        </span>
-                    </div>
-                    <div id="daten" class="card-body ">
-                        <div class="row mt-2">
-                            <div class="col">
-                                Anrede
-                            </div>
-                            <div class="col" id="anredeText">
-                                {{$interessent->anrede}}
-                            </div>
-                        </div>
-
-                        <div class="row mt-2">
-                            <div class="col">
-                                Vorname
-                            </div>
-                            <div class="col" id="vornameText">
-                                {{$interessent->vorname}}
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col">
-                                Nachname
-                            </div>
-                            <div class="col" id="nachnameText">
-                                {{$interessent->nachname}}
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col">
-                               Telefon:
-                            </div>
-                            <div class="col" id="telefonText">
-                                {{$interessent->telefon}}
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col">
-                                Handy:
-                            </div>
-                            <div class="col" id="handyText">
-                                {{$interessent->handy}}
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col">
-                                E-Mail:
-                            </div>
-                            <div class="col"  id="mailText">
-                                {{$interessent->mail}}
-                            </div>
-                        </div>
-
-                        <div class="row mt-2">
-                            <div class="col" >
-                                Kinderhaus
-                            </div>
-                            <div class="col" id="kinderhausText">
-                                {{$interessent->kinderhaus}}
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col">
-                                Mitarbeiter
-                            </div>
-                            <div class="col"  id="mitarbeiterText">
-                                {{$interessent->mitarbeiter}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body hide" id="form">
-                        <form method="post" action="{{url('interessenten/'.$interessent->id)}}" id="InteressentenForm">
-                            {{method_field('PUT')}}
-                            {{csrf_field()}}
-                            <div class="form-group row @if ($errors->has('anrede')) form-group-error @endif">
-                                <label class="form-label" for="anrede">Anrede:</label>
-                                <select class="custom-select" name="anrede" tabindex="-1" aria-hidden="true" id="anrede">
-                                    <option @if ($interessent->anrede == "Herr")  selected @endif>Herr</option>
-                                    <option @if ($interessent->anrede == "Frau")  selected @endif>Frau</option>
-                                    <option @if ($interessent->anrede == "Familie")  selected @endif>Familie</option>
-
-                                </select>
-                            </div>
-                            <div class="form-group row @if ($errors->has('vorname')) form-group-error @endif">
-                                <label class="form-label" for="vorname">Vorname:</label>
-                                <input type="text" class="form-control" name="vorname" id="vorname"   value="{{$interessent->vorname ?: ""}}" >
-                                @if ($errors->has('vorname'))
-                                    <small class="text-muted">
-                                        @foreach ($errors->get('vorname') as $message)
-                                            {{ $message }}
-                                        @endforeach
-                                    </small>
-                                @endif
-                            </div>
-                            <div class="form-group row @if ($errors->has('nachname')) form-group-error @endif">
-                                <label class="form-label" for="datum">Nachname:</label>
-                                <input type="text" class="form-control" name="nachname" id="nachname"  value="{{$interessent->nachname ?: ""}}">
-                                @if ($errors->has('nachname'))
-                                    <small class="text-muted">
-                                        @foreach ($errors->get('nachname') as $message)
-                                            {{ $message }}
-                                        @endforeach
-                                    </small>
-                                @endif
-                            </div>
-                            <div class="form-group row @if ($errors->has('mail')) form-group-error @endif">
-                                <label class="form-label" for="datum">E-Mail:</label>
-                                <input type="text" class="form-control" name="mail" id="mail"  value="{{$interessent->mail ?: ""}}" >
-                                @if ($errors->has('mail'))
-                                    <small class="text-muted">
-                                        @foreach ($errors->get('mail') as $message)
-                                            {{ $message }}
-                                        @endforeach
-                                    </small>
-                                @endif
-                            </div>
-
-                            <div class="form-group row @if ($errors->has('telefon')) form-group-error @endif">
-                                <label class="form-label" for="datum">Telefon:</label>
-                                <input type="text" class="form-control" name="telefon" id="telefon"  value="{{$interessent->telefon ?: ""}}" >
-                                @if ($errors->has('telefon'))
-                                    <small class="text-muted">
-                                        @foreach ($errors->get('telefon') as $message)
-                                            {{ $message }}
-                                        @endforeach
-                                    </small>
-                                @endif
-                            </div>
-
-                            <div class="form-group row @if ($errors->has('handy')) form-group-error @endif">
-                                <label class="form-label" for="datum">Handy:</label>
-                                <input type="text" class="form-control" name="handy" id="handy"  value="{{$interessent->handy ?: ""}}" >
-                                @if ($errors->has('handy'))
-                                    <small class="text-muted">
-                                        @foreach ($errors->get('handy') as $message)
-                                            {{ $message }}
-                                        @endforeach
-                                    </small>
-                                @endif
-                            </div>
-
-
-                            <div class="row">
-                                <div class="form-group col">
-                                    <div class="checkbox-toggle">
-                                        <input type="checkbox" id="mitarbeiter" name="mitarbeiter" @if ($interessent->mitarbeiter == "ja") checked @endif>
-                                        <label for="mitarbeiter">Mitarbeiter</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group col">
-                                    <div class="checkbox-toggle">
-                                        <input type="checkbox" id="kinderhaus" name="kinderhaus" @if ($interessent->kinderhaus == "ja") checked @endif>
-                                        <label for="kinderhaus">Kinderhaus</label>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </form>
-                    </div>
-                    <div class="card-footer hide" id="footer">
-                        <button type="submit" class="btn btn-success " form="InteressentenForm" id="saveBtnForm">Speichern</button>
-
-                        <p class="btn btn-danger " id="deleteInteressentButton">Interessent löschen</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
-                        aktuelle Klamottenbörse
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            @if ($interessent->vknummer_reserviert)
-                                <div class="col-md-6">
-                                    <b>
-                                        reservierte Nummer:
-                                    </b>
-                                </div>
-                                <div class="col-md-6">
-                                    <button class="btn  btn-warning-outline">
-                                        {{$interessent->vknummer_reserviert->vknummer}}
-                                    </button>
-                                </div>
-                            @else
-                                <div class="alert alert-warning  col-12">
-                                    Keine Nummer reserviert
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            @if ($interessent->vknummern_vergeben)
-                                <div class="col-md-6">
-                                    <b>
-                                        vergebene Nummer:
-                                    </b>
-                                </div>
-                                <div class="col-md-6">
-                                    <button class="btn  btn-primary-outline">
-                                        {{$interessent->vknummern_vergeben->vknummer}}
-                                    </button>
-                                </div>
-                            @else
-                                <div class="alert alert-primary  col-12">
-                                    Keine Nummer vergeben
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        @if ($interessent->vknummern_vergeben)
-                            <a class="btn btn-danger btn-sm btn-block" href="#removeVergabeModal" role="button" data-toggle="modal">Nummer <b>{{$interessent->vknummern_vergeben->vknummer}}</b> freigeben</a>
-                            <a class="btn  btn-sm btn-block" target="_blank" href="{{url('listen/belehrung/'.$interessent->vknummern_vergeben->vknummer)}}">Belehrung drucken</a>
-
-                        @elseif (!($interessent->vknummern_vergeben) and $interessent->vknummer_reserviert)
-                            <div class="btn-group btn-group-sm btn-block">
-                                <a class="btn btn-success btn-sm btn-block @if ($interessent->vknummer_reserviert->vergeben_an != "") disabled @endif" href="{{url('vknummer/'.$interessent->vknummer_reserviert->id.'/vergeben')}}">Nummer <b>{{$interessent->vknummer_reserviert->vknummer}}</b> @if ($interessent->vknummer_reserviert->vergeben_an != "") bereits @endif vergeben </a>
-                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{url('vknummer/'.$interessent->id.'/Nummervergeben')}}">andere Nummer vergeben</a>
-                                </ul>
-                            </div>
-                                    <a class="btn btn-warning btn-sm btn-block" href="{{url('vknummer/'.$interessent->vknummer_reserviert->id.'/reservierungAufheben')}}">Reservierung <b>{{$interessent->vknummer_reserviert->vknummer}}</b> aufheben</a>
-                            @if ($interessent->warteliste)
-
-                                <form method="post" action="{{url('warteliste/'.$interessent->id)}}" class="form-horizontal mt-2 mb-2">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-info-outline btn-sm btn-block" type="submit">Warteliste aufheben</button>
-                                </form>
-
-                            @else
-                                <a class="btn btn-info-outline btn-sm btn-block" href="{{url('warteliste/'.$interessent->id."/set")}}">auf Warteliste</a>
-                            @endif
-                        @else
-                            <a class="btn btn-warning-outline btn-sm btn-block" href="{{url('vknummer/'.$interessent->id.'/reservierung')}}">Nummer reservieren</a>
-                            @if ($interessent->warteliste)
-
-                                <form method="post" action="{{url('warteliste/'.$interessent->id)}}" class="form-horizontal mt-2 mb-2">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-info-outline btn-sm btn-block" type="submit">Warteliste aufheben</button>
-                                </form>
-
-                            @else
-                                <a class="btn btn-info-outline btn-sm btn-block" href="{{url('warteliste/'.$interessent->id."/set")}}">auf Warteliste</a>
-                            @endif
-                            <div class="btn-group btn-group-sm btn-block">
-                                <a class="btn btn-success  btn-block" href="{{url('vknummer/'.$interessent->id.'/Nummervergeben')}}">Nummer vergeben</a>
-                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    @if(count($interessent->bisherige_vknummen)>0)
-                                        <h6 class="dropdown-header">letzte VK-Nummer:</h6>
-                                            <a class=" dropdown-item @if ($letzteVKnummer->aktuelleKlamottenboerse->vergeben_an == "" and $letzteVKnummer->aktuelleKlamottenboerse->reserviert_fuer == "" ) text-info VKNummer"
-                                               data-nummer="{{$letzteVKnummer->aktuelleKlamottenboerse->vknummer}}" data-id="{{$letzteVKnummer->aktuelleKlamottenboerse->id}} @else text-danger @endif">
-                                                {{$letzteVKnummer->aktuelleKlamottenboerse->vknummer}}
-                                                @if ($letzteVKnummer->aktuelleKlamottenboerse->vergeben_an != "")
-                                                    - ist vergeben
-                                                @elseif ($letzteVKnummer->aktuelleKlamottenboerse->reserviert_fuer != "")
-                                                    - ist reserviert
-                                                @else
-                                                    - vergeben und informieren
-                                                @endif
+                    </span>
+                            @if ($interessent->mitarbeiter == 'ja')
+                                <span class="pull-right">
+                                    <div class="col"  id="loginText">
+                                        @if (!is_null($interessent->user) and $interessent->user->verwatung == 1)
+                                                <a class="btn btn-danger btn-sm"  href="{{url('/interessenten/'.$interessent->id.'/deleteUserAccount')}}" title="Login löschen">
+                                                <i class="fa fa-lock" aria-hidden="true"></i>
                                             </a>
-                                        <h6 role="separator" class="dropdown-divider"></h6>
-                                        <h6 class="dropdown-header">häufigste VK-Nummer:</h6>
+                                            @else
+                                                <a class="btn btn-info btn-sm" href="{{url('/interessenten/'.$interessent->id.'/addUserAccount')}}" title="Login erstellen">
+                                                <i class="fa fa-key" aria-hidden="true"></i>
+                                             </a>
+                                            @endif
+                                    </div>
+                                </span>
+                                @if (!is_null($interessent->user) and $interessent->user->kasse == 1)
+                                    <span class="pull-right">
 
-                                        @foreach($haeufigsteVKnummer AS $vknummer =>$Nummer)
-                                                <a class=" dropdown-item @if ($Nummer->first()->aktuelleKlamottenboerse->vergeben_an == "" and $Nummer->first()->aktuelleKlamottenboerse->reserviert_fuer == "" ) text-info VKNummer"
-                                                   data-nummer="{{$Nummer->first()->aktuelleKlamottenboerse->vknummer}}" data-id="{{$Nummer->first()->aktuelleKlamottenboerse->id}} @else text-danger @endif">
-                                                    {{$vknummer}}
-                                                    @if ($Nummer->first()->aktuelleKlamottenboerse->vergeben_an != "")
-                                                        - ist vergeben
-                                                    @elseif ($Nummer->first()->aktuelleKlamottenboerse->reserviert_fuer != "")
-                                                        - ist reserviert
-                                                    @else
-                                                        - vergeben und informieren
-                                                    @endif
-                                                </a>
+                                            <a class="btn btn-danger btn-sm"  href="{{url('/interessenten/'.$interessent->id.'/removeKassenZugang')}}" title="Kassenzugang löschen">
+                                            <i class="fa-solid fa-cash-register"></i>
+                                        </a>
+                                        @else
+                                            <a class="btn btn-secondary btn-sm" href="{{url('/interessenten/'.$interessent->id.'/createKassenZugang')}}" title="Kassenlogin erstellen">
+                                           <i class="fa-solid fa-cash-register"></i>
+                                         </a>
+                                    </span>
+                                @endif
+                            @endif
+                </div>
+                <div id="daten" class="card-body ">
+                    <div class="row mt-2">
+                        <div class="col">
+                            Anrede
+                        </div>
+                        <div class="col" id="anredeText">
+                            {{$interessent->anrede}}
+                        </div>
+                    </div>
 
-                                        @endforeach
-                                    @endif
-                                        <h6 role="separator" class="dropdown-divider"></h6>
-                                        <h6 class="dropdown-header">neue Nummer</h6>
-                                        <a class="dropdown-item" href="{{url('vknummer/'.$interessent->id.'/Nummervergeben')}}">neue Nummer vergeben</a>
+                    <div class="row mt-2">
+                        <div class="col">
+                            Vorname
+                        </div>
+                        <div class="col" id="vornameText">
+                            {{$interessent->vorname}}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            Nachname
+                        </div>
+                        <div class="col" id="nachnameText">
+                            {{$interessent->nachname}}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            Telefon:
+                        </div>
+                        <div class="col" id="telefonText">
+                            {{$interessent->telefon}}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            Handy:
+                        </div>
+                        <div class="col" id="handyText">
+                            {{$interessent->handy}}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            E-Mail:
+                        </div>
+                        <div class="col"  id="mailText">
+                            {{$interessent->mail}}
+                        </div>
+                    </div>
 
-                                </ul>
+                    <div class="row mt-2">
+                        <div class="col">
+                            Ergebnis:
+                        </div>
+                        <div class="col" id="handyText">
+                            <a href="{{url('ergebnis/'.$interessent->uuid)}}">{{$interessent->uuid}}</a>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col" >
+                            Kinderhaus
+                        </div>
+                        <div class="col" id="kinderhausText">
+                            {{$interessent->kinderhaus}}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            Mitarbeiter
+                        </div>
+                        <div class="col"  id="mitarbeiterText">
+                            {{$interessent->mitarbeiter}}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            Verwaltungslogin
+                        </div>
+                        @if ($interessent->mitarbeiter == 'ja')
+                            <div class="col"  id="loginText">
+                                @if (!is_null($interessent->user))
+                                    Zugang vorhanden
+                                @else
+                                    Zugang ist nicht vorhanden
+                                @endif
                             </div>
                         @endif
-
-
-
                     </div>
                 </div>
-            </div>
+                <div class="card-body hide" id="form">
+                    <form method="post" action="{{url('interessenten/'.$interessent->id)}}" id="InteressentenForm">
+                        {{method_field('PUT')}}
+                        {{csrf_field()}}
+                        <div class="form-group row @if ($errors->has('anrede')) form-group-error @endif">
+                            <label class="form-label" for="anrede">Anrede:</label>
+                            <select class="custom-select" name="anrede" tabindex="-1" aria-hidden="true" id="anrede">
+                                <option @if ($interessent->anrede == "Herr")  selected @endif>Herr</option>
+                                <option @if ($interessent->anrede == "Frau")  selected @endif>Frau</option>
+                                <option @if ($interessent->anrede == "Familie")  selected @endif>Familie</option>
 
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
-                        Übersicht Verkäufernummern
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group">
-                            @if ($interessent->bisherige_vknummen()->count() > 0)
-                                @foreach($interessent->bisherige_vknummen as $vknummer)
-                                    <li class="list-group-item ">
-                                        <div class="row">
-                                            <div class="col text-sm-left">
-                                                {{$vknummer->klamottenboerse->datum->format('d.m.Y')}}
-                                            </div>
-                                            <div class="col">
-                                                <b class="">
-                                                    {{$vknummer->vknummer}}
-                                                </b>
-                                            </div>
-                                            <div class="col">
-                                                <span class="pull-right label label-pill label-secondary"><small>{{number_format($vknummer->umsatz, 2)}} €</small></span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            @else
-                                Bisher keine Verkäufernummern
+                            </select>
+                        </div>
+                        <div class="form-group row @if ($errors->has('vorname')) form-group-error @endif">
+                            <label class="form-label" for="vorname">Vorname:</label>
+                            <input type="text" class="form-control" name="vorname" id="vorname"   value="{{$interessent->vorname ?: ""}}" >
+                            @if ($errors->has('vorname'))
+                                <small class="text-muted">
+                                    @foreach ($errors->get('vorname') as $message)
+                                        {{ $message }}
+                                    @endforeach
+                                </small>
                             @endif
-                        </ul>
-                    </div>
+                        </div>
+                        <div class="form-group row @if ($errors->has('nachname')) form-group-error @endif">
+                            <label class="form-label" for="datum">Nachname:</label>
+                            <input type="text" class="form-control" name="nachname" id="nachname"  value="{{$interessent->nachname ?: ""}}">
+                            @if ($errors->has('nachname'))
+                                <small class="text-muted">
+                                    @foreach ($errors->get('nachname') as $message)
+                                        {{ $message }}
+                                    @endforeach
+                                </small>
+                            @endif
+                        </div>
+                        <div class="form-group row @if ($errors->has('mail')) form-group-error @endif">
+                            <label class="form-label" for="datum">E-Mail:</label>
+                            <input type="text" class="form-control" name="mail" id="mail"  value="{{$interessent->mail ?: ""}}" >
+                            @if ($errors->has('mail'))
+                                <small class="text-muted">
+                                    @foreach ($errors->get('mail') as $message)
+                                        {{ $message }}
+                                    @endforeach
+                                </small>
+                            @endif
+                        </div>
+
+                        <div class="form-group row @if ($errors->has('telefon')) form-group-error @endif">
+                            <label class="form-label" for="datum">Telefon:</label>
+                            <input type="text" class="form-control" name="telefon" id="telefon"  value="{{$interessent->telefon ?: ""}}" >
+                            @if ($errors->has('telefon'))
+                                <small class="text-muted">
+                                    @foreach ($errors->get('telefon') as $message)
+                                        {{ $message }}
+                                    @endforeach
+                                </small>
+                            @endif
+                        </div>
+
+                        <div class="form-group row @if ($errors->has('handy')) form-group-error @endif">
+                            <label class="form-label" for="datum">Handy:</label>
+                            <input type="text" class="form-control" name="handy" id="handy"  value="{{$interessent->handy ?: ""}}" >
+                            @if ($errors->has('handy'))
+                                <small class="text-muted">
+                                    @foreach ($errors->get('handy') as $message)
+                                        {{ $message }}
+                                    @endforeach
+                                </small>
+                            @endif
+                        </div>
+
+
+                        <div class="row">
+                            <div class="form-group col">
+                                <div class="checkbox-toggle">
+                                    <input type="checkbox" id="mitarbeiter" name="mitarbeiter" @if ($interessent->mitarbeiter == "ja") checked @endif>
+                                    <label for="mitarbeiter">Mitarbeiter</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group col">
+                                <div class="checkbox-toggle">
+                                    <input type="checkbox" id="kinderhaus" name="kinderhaus" @if ($interessent->kinderhaus == "ja") checked @endif>
+                                    <label for="kinderhaus">Kinderhaus</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer hide" id="footer">
+                    <button type="submit" class="btn btn-success " form="InteressentenForm" id="saveBtnForm">Speichern</button>
+
+                    <p class="btn btn-danger " id="deleteInteressentButton">Interessent löschen</p>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-header">
+                    aktuelle Klamottenbörse
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @if ($interessent->vknummer_reserviert)
+                            <div class="col-md-6">
+                                <b>
+                                    reservierte Nummer:
+                                </b>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn  btn-warning-outline">
+                                    {{$interessent->vknummer_reserviert->vknummer}}
+                                </button>
+                            </div>
+                        @else
+                            <div class="alert alert-warning  col-12">
+                                Keine Nummer reserviert
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @if ($interessent->vknummern_vergeben)
+                            <div class="col-md-6">
+                                <b>
+                                    vergebene Nummer:
+                                </b>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn  btn-primary-outline">
+                                    {{$interessent->vknummern_vergeben->vknummer}}
+                                </button>
+                            </div>
+                        @else
+                            <div class="alert alert-primary  col-12">
+                                Keine Nummer vergeben
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                <div class="card-footer">
+                    @if ($interessent->vknummern_vergeben)
+                        <a class="btn btn-danger btn-sm btn-block" href="#removeVergabeModal" role="button" data-toggle="modal">Nummer <b>{{$interessent->vknummern_vergeben->vknummer}}</b> freigeben</a>
+                        <a class="btn  btn-sm btn-block" target="_blank" href="{{url('listen/belehrung/'.$interessent->vknummern_vergeben->vknummer)}}">Belehrung drucken</a>
 
-            <div class=" col-md-6 col-sm-12" >
-                <div class="card">
-                    <div class="card-header">
-                        Nachrichten
-                        <span class="pull-right">
+                    @elseif (!($interessent->vknummern_vergeben) and $interessent->vknummer_reserviert)
+                        <div class="btn-group btn-group-sm btn-block">
+                            <a class="btn btn-success btn-sm btn-block @if ($interessent->vknummer_reserviert->vergeben_an != "") disabled @endif" href="{{url('vknummer/'.$interessent->vknummer_reserviert->id.'/vergeben')}}">Nummer <b>{{$interessent->vknummer_reserviert->vknummer}}</b> @if ($interessent->vknummer_reserviert->vergeben_an != "") bereits @endif vergeben </a>
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <a class="dropdown-item" href="{{url('vknummer/'.$interessent->id.'/Nummervergeben')}}">andere Nummer vergeben</a>
+                            </ul>
+                        </div>
+                        <a class="btn btn-warning btn-sm btn-block" href="{{url('vknummer/'.$interessent->vknummer_reserviert->id.'/reservierungAufheben')}}">Reservierung <b>{{$interessent->vknummer_reserviert->vknummer}}</b> aufheben</a>
+                        @if ($interessent->warteliste)
+
+                            <form method="post" action="{{url('warteliste/'.$interessent->id)}}" class="form-horizontal mt-2 mb-2">
+                                @csrf
+                                @method('delete')
+                                <button class="btn btn-info-outline btn-sm btn-block" type="submit">Warteliste aufheben</button>
+                            </form>
+
+                        @else
+                            <a class="btn btn-info-outline btn-sm btn-block" href="{{url('warteliste/'.$interessent->id."/set")}}">auf Warteliste</a>
+                        @endif
+                    @else
+                        <a class="btn btn-warning-outline btn-sm btn-block" href="{{url('vknummer/'.$interessent->id.'/reservierung')}}">Nummer reservieren</a>
+                        @if ($interessent->warteliste)
+
+                            <form method="post" action="{{url('warteliste/'.$interessent->id)}}" class="form-horizontal mt-2 mb-2">
+                                @csrf
+                                @method('delete')
+                                <button class="btn btn-info-outline btn-sm btn-block" type="submit">Warteliste aufheben</button>
+                            </form>
+
+                        @else
+                            <a class="btn btn-info-outline btn-sm btn-block" href="{{url('warteliste/'.$interessent->id."/set")}}">auf Warteliste</a>
+                        @endif
+                        <div class="btn-group btn-group-sm btn-block">
+                            <a class="btn btn-success  btn-block" href="{{url('vknummer/'.$interessent->id.'/Nummervergeben')}}">Nummer vergeben</a>
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                @if(count($interessent->bisherige_vknummen)>0)
+                                    <h6 class="dropdown-header">letzte VK-Nummer:</h6>
+                                    <a class=" dropdown-item @if ($letzteVKnummer->aktuelleKlamottenboerse->vergeben_an == "" and $letzteVKnummer->aktuelleKlamottenboerse->reserviert_fuer == "" ) text-info VKNummer"
+                                       data-nummer="{{$letzteVKnummer->aktuelleKlamottenboerse->vknummer}}" data-id="{{$letzteVKnummer->aktuelleKlamottenboerse->id}} @else text-danger @endif">
+                                        {{$letzteVKnummer->aktuelleKlamottenboerse->vknummer}}
+                                        @if ($letzteVKnummer->aktuelleKlamottenboerse->vergeben_an != "")
+                                            - ist vergeben
+                                        @elseif ($letzteVKnummer->aktuelleKlamottenboerse->reserviert_fuer != "")
+                                            - ist reserviert
+                                        @else
+                                            - vergeben und informieren
+                                        @endif
+                                    </a>
+                                    <h6 role="separator" class="dropdown-divider"></h6>
+                                    <h6 class="dropdown-header">häufigste VK-Nummer:</h6>
+
+                                    @foreach($haeufigsteVKnummer AS $vknummer =>$Nummer)
+                                        <a class=" dropdown-item @if ($Nummer->first()->aktuelleKlamottenboerse->vergeben_an == "" and $Nummer->first()->aktuelleKlamottenboerse->reserviert_fuer == "" ) text-info VKNummer"
+                                           data-nummer="{{$Nummer->first()->aktuelleKlamottenboerse->vknummer}}" data-id="{{$Nummer->first()->aktuelleKlamottenboerse->id}} @else text-danger @endif">
+                                            {{$vknummer}}
+                                            @if ($Nummer->first()->aktuelleKlamottenboerse->vergeben_an != "")
+                                                - ist vergeben
+                                            @elseif ($Nummer->first()->aktuelleKlamottenboerse->reserviert_fuer != "")
+                                                - ist reserviert
+                                            @else
+                                                - vergeben und informieren
+                                            @endif
+                                        </a>
+
+                                    @endforeach
+                                @endif
+                                <h6 role="separator" class="dropdown-divider"></h6>
+                                <h6 class="dropdown-header">neue Nummer</h6>
+                                <a class="dropdown-item" href="{{url('vknummer/'.$interessent->id.'/Nummervergeben')}}">neue Nummer vergeben</a>
+
+                            </ul>
+                        </div>
+                    @endif
+
+
+
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    Übersicht Verkäufernummern
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @if ($interessent->bisherige_vknummen->count() > 0)
+                            @foreach($interessent->bisherige_vknummen as $vknummer)
+                                <li class="list-group-item ">
+                                    <div class="row">
+                                        <div class="col text-sm-left">
+                                            {{$vknummer->klamottenboerse->datum->format('d.m.Y')}}
+                                        </div>
+                                        <div class="col">
+                                            <b class="">
+                                                {{$vknummer->vknummer}}
+                                            </b>
+                                        </div>
+                                        <div class="col">
+                                            <span class="pull-right label label-pill label-secondary"><small>{{number_format($vknummer->umsatz, 2)}} €</small></span>
+                                        </div>
+                                        <div class="col">
+                                            @if($vknummer->verkaufteArtikel()->withoutGlobalScopes()->count() > 0)
+                                                <span class="pull-right label label-pill label-success"><small>{{$vknummer->verkaufteArtikel()->withoutGlobalScopes()->count()}} Artikel</small></span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        @else
+                            Bisher keine Verkäufernummern
+                        @endif
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    Nachrichten
+                    <span class="pull-right">
                             <div class="btn-group btn-group-sm">
                                 <a class="btn btn-sm" href="{{url('/mail/'.$interessent->id)}}">
                                     <i class="font-icon font-icon-mail"></i>
@@ -371,40 +415,93 @@
                                 </ul>
                             </div>
                         </span>
-                    </div>
-                    <div class="card-body" >
-                        <ul class="list" id="nachrichten">
-
-                        </ul>
-                        <img src="{{asset('img/ajax-loader.gif')}}" id="wait" width="100px">
-                    </div>
-
+                </div>
+                <div class="card-header pb-0 mb-0">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link @if ($mail_thread==false) active @endif" aria-current="page" href="{{url('interessent/'.$interessent->id.'/')}}">Eingang</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($mail_thread==true) active @endif" href="{{url('interessent/'.$interessent->id.'/Sent')}}">Ausgang</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body" id="nachrichten">
+                    @foreach($messages as $message)
+                        <div class="mail-box-item mail-box-item-clickable" @if (!$message->getFlags()->get('seen'))) style="background-color: #facd97;" @endif" data-id="{{$message->getUid()}}" >
+                        <div class="mail-box-item-header">
+                            <div class="mail-box-item-photo align-content-center">
+                                @if ($message->getFrom()[0]->mail == $interessent->mail)
+                                    <div class="btn btn-sm btn-rounded ">
+                                        Von
+                                    </div>
+                                @else
+                                    <div class="btn btn-sm btn-rounded ">
+                                        An
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="tbl mail-box-item-head-tbl mail-box-item-clickable">
+                                <div class="tbl-row">
+                                    <div class="tbl-cell">
+                                        <div class="tbl mail-box-item-user-tbl">
+                                            <div class="tbl-row">
+                                                <div class="tbl-cell tbl-cell-name">
+                                                    {{$message->getFrom()[0]}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tbl-cell tbl-cell-date">
+                                        {{\Carbon\Carbon::parse($message->getDate())->format('d.m.Y H:i')}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mail-box-item-title mail-box-item-clickable">
+                                {{$message->getSubject()}}
+                            </div>
+                        </div>
+                        <div class="mail-box-item-content mail-box-item-clickable">
+                            <div class="attach">
+                                @if ($message->getAttachments()->count() > 0)
+                                    <i class="fa fa-paperclip"></i>
+                                @endif
+                            </div>
+                            <div class="txt">
+                                @if ($message->getTextBody() != "")
+                                    {{\Illuminate\Support\Str::limit($message->getTextBody(), 450)}}
+                                @else
+                                    {{\Illuminate\Support\Str::limit($message->getHTMLBody(), 450)}}
+                                @endif
+                            </div>
+                        </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
-            <div class=" col-md-6 col-sm-12" >
-                <div class="card">
-                    <div class="card-header">
-                        Notizen
-                        @if (isset($interessent->notiz->notiz))
-                            <span class="pull-right small">
-                                (aktualisiert: {{$interessent->notiz->updated_at->format('d.m.Y, H:i')}} Uhr)
-                            </span>
-                        @endif
-                    </div>
-                    <div class="card-body" >
-                        <form action="{{url('notiz')."/".$interessent->id}}" method="post" class="form-horizontal">
-                            @csrf
-                            @method('put')
-                            <textarea name="notiz" class="form-control" rows="5">{{ isset($interessent->notiz->notiz) ? $interessent->notiz->notiz : ''  }}</textarea>
+            <div class="card">
+                <div class="card-header">
+                    Notizen
+                    @if (isset($interessent->notiz->notiz))
+                        <span class="pull-right small">
+                                    (aktualisiert: {{$interessent->notiz->updated_at->format('d.m.Y, H:i')}} Uhr)
+                                </span>
+                    @endif
+                </div>
+                <div class="card-body">
+                    <form action="{{url('notiz')."/".$interessent->id}}" method="post" class="form-horizontal">
+                        @csrf
+                        @method('put')
+                        <textarea name="notiz" class="form-control"
+                                  rows="5">{{ isset($interessent->notiz->notiz) ? $interessent->notiz->notiz : ''  }}</textarea>
 
-                            <button type="submit" class="btn btn-success btn-block">speichern</button>
-                        </form>
-                    </div>
-
+                        <button type="submit" class="btn btn-success btn-block">speichern</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
 
 @if ($interessent->vknummern_vergeben)
     <div id="removeVergabeModal" class="modal" tabindex="-1" role="dialog">
@@ -480,15 +577,17 @@
             </div>
         </div>
     </div>
+    @include('mails.elements.mailModal')
 
-@stop
+@endsection
 
 @section('css')
     <link rel="stylesheet" href="{{asset('css/pages/mail.css')}}">
     <link rel="stylesheet" href="{{asset('css/seperate/ribbons.min.css')}}">
-@stop
+@endsection
 
 @section('js')
+    @include('mails.elements.mailajax')
 <script>
     $('.VKNummer').on('click', function (e) {
         var id = $(this).data('id');
@@ -558,89 +657,6 @@
         e.preventDefault();
     });
 
-        var url = "{{url('/getUsermail/'.$interessent->id)}}";
-
-        $.ajax({
-            dataType: "json",
-            url: url,
-            beforeSend: function() { $('#wait').show(); },
-            complete: function() { $('#wait').hide(); },
-            success: function (data) {
-                var items = jQuery.parseJSON(JSON.stringify(data.Nachrichten));
-
-                    $.each(items, function (item, value) {
-                        if ('text' in value.bodies) {
-                            var text = value.bodies.text.content.substr(0, 400);
-                        } else {
-                            var temporalDivElement = document.createElement("div");
-                            // Set the HTML content with the providen
-                            temporalDivElement.innerHTML = value.bodies.html.content;
-                            // Retrieve the text property of the element (cross-browser support)
-                            var text = temporalDivElement.textContent.substr(0, 400) || temporalDivElement.innerText || "";
-
-                        }
-
-                        if (value.from[0].mail == "anmeldung@klamottenboerse.de") {
-                            var color = "bg-info ";
-                            var textcolor = "text-white";
-                        } else {
-                            var color = "";
-                            var textcolor = "";
-                        }
-
-                        if (value.flags['seen'] == 0) {
-                            var selected = "selected";
-                            unread += 1;
-                            $('#unreadMails').text(unread + " ungelesene Mails");
-                            $('#unreadMails').addClass('color-blue');
-
-                        } else {
-                            var selected = "";
-                        }
-
-                        var datum = new Date(value.date.date);
-
-
-                        $("#nachrichten").append(
-                            '<div class="mail-box-item '+ selected+'" data-id="'+ value.uid +'" data-date="'+ value.date.date + '"  data-from="'+ value.from[0].mail + '" data-interessent="">\n' +
-                            '                                    <div class="mail-box-item-header">\n' +
-                            '                                        <div class="mail-box-item-photo align-content-center">' +
-                            '                                        </div>\n' +
-                            '                                        <div class="tbl mail-box-item-head-tbl col-md-12 col-sm-12">\n' +
-                            '                                            <div class="tbl-row">\n' +
-                            '                                                <div class="tbl-cell">\n' +
-                            '                                                    <div class="tbl mail-box-item-user-tbl">\n' +
-                            '                                                        <div class="tbl-row">\n' +
-                            '                                                            <div class="tbl-cell tbl-cell-name">\n' +
-                            '                                                            '+ value.from[0].full +
-                            '                                                            </div>\n' +
-                            '                                                        </div>\n' +
-                            '                                                    </div>\n' +
-                            '                                                </div>\n' +
-                            '                                                <div class="tbl-cell tbl-cell-date col-md-12 col-sm-12">'+datum.toLocaleDateString() + ', '+ datum.toLocaleTimeString() +'</div>\n' +
-                            '                                            </div>\n' +
-                            '                                        </div>\n' +
-                            '                                        <div class="mail-box-item-title">'+ value.subject.replace(/[_]/g, ' ') +'</div>\n' +
-                            '                                    </div>\n' +
-                            '                                    <div class="mail-box-item-content">\n' +
-                            '                                        <div class="attach">\n' +
-                            '\n' +
-                            '\n' +
-                            '                                        </div>\n' +
-                            '                                        <div class="txt">\n' + text +
-                            '                                        </div>\n' +
-                            '                                    </div>\n' +
-                            '                                </div>');
-
-
-                    });
-
-            },
-            error: function (data) {
-                $("#nachrichten").append('<li class="mail-box-item bg-danger text-white">Fehler beim Laden der E-Mails</li>');
-            }
-        });
-
         @if (!$errors->any())
         $(document).ready(function() {
             $('.hide').hide();
@@ -656,8 +672,7 @@
         });
 
 
-
     </script>
 
-@include('mails.elements.mailajax')
-@stop
+
+@endsection

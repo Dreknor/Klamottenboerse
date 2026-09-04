@@ -24,8 +24,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call('App\Http\Controllers\MailController@anmeldungMoeglich')->daily();
+        // Anmeldungs-Mails gestaffelt versenden (max. 55/Stunde wegen Hoster-Beschränkung)
+        $schedule->command('mail:anmeldung-moeglich')->dailyAt('07:00');
 
+        // Erinnerungsmail an Verkäufer
+        $schedule->call('App\Http\Controllers\MailController@erinnerungVerkaeufer')->dailyAt('00:02:00');
+
+        // Queue-Worker: alle 5 Minuten ausstehende Jobs verarbeiten
+        // (nutze den Cron-basierten Ansatz, falls kein dauerhafter Worker läuft)
+        $schedule->command('queue:work --stop-when-empty --max-jobs=60')->everyFiveMinutes()->withoutOverlapping();
     }
 
     /**

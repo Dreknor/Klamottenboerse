@@ -24,8 +24,8 @@ class ReserviereNummerRequest extends FormRequest
     public function rules()
     {
         return [
-            "interessent"   => 'integer|min:1|required',
-            "NummernID"   => 'integer|required',
+            'interessent'   => 'integer|min:1|required',
+            'NummernID'   => 'integer|required',
         ];
     }
 }
