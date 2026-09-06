@@ -428,7 +428,7 @@
                 </div>
                 <div class="card-body" id="nachrichten">
                     @foreach($messages as $message)
-                        <div class="mail-box-item mail-box-item-clickable" @if (!$message->getFlags()->get('seen'))) style="background-color: #facd97;" @endif" data-id="{{$message->getUid()}}" >
+                        <div class="mail-box-item mail-box-item-clickable" @if (!$message->getFlags()->get('seen')) style="background-color: #facd97;" @endif data-id="{{$message->getUid()}}" >
                         <div class="mail-box-item-header">
                             <div class="mail-box-item-photo align-content-center">
                                 @if ($message->getFrom()[0]->mail == $interessent->mail)
