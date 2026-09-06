@@ -55,7 +55,7 @@
                                     <label for="termin">Helfer werden benötigt:</label>
                                     <select name="termin" class="form-control">
                                         @foreach($termine as $termin)
-                                            <option value="{{$termin->id}}">{{$termin->date_start->format('d.m.Y H:i')}} - {{$termin->date_end->format('H:i')}} Uhr: {{$termin->beschreibung}}</option>
+                                            <option value="{{$termin->id}}">{{ \App\Model\Appointment::BEREICHE[$termin->bereich] ?? $termin->bereich }}: {{$termin->date_start->format('d.m.Y H:i')}} - {{$termin->date_end->format('H:i')}} Uhr: {{$termin->beschreibung}}</option>
                                         @endforeach
                                     </select>
                                 </div>

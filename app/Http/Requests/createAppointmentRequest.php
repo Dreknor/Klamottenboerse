@@ -25,6 +25,7 @@ class createAppointmentRequest extends FormRequest
     {
         return [
             'beschreibung' => 'required|string',
+            'bereich' => 'required|string|in:Aufbau,Boersendienst,Abbau',
             'date_start' => 'required|date',
             'date_end' => 'required|date|after:date_start',
             'anzahl' => 'required|integer|min:1'

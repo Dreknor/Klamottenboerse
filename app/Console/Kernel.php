@@ -33,6 +33,18 @@ class Kernel extends ConsoleKernel
         // Queue-Worker: alle 5 Minuten ausstehende Jobs verarbeiten
         // (nutze den Cron-basierten Ansatz, falls kein dauerhafter Worker läuft)
         $schedule->command('queue:work --stop-when-empty --max-jobs=60')->everyFiveMinutes()->withoutOverlapping();
+
+        // Endgültige Löschung selbst-gelöschter Interessenten nach Karenzzeit (Softdelete-Schutz)
+        $schedule->command('interessenten:purge-deleted')->dailyAt('03:30');
+
+        // Automatisches Wartelisten-Nachrücken: freie VK-Nummern anbieten
+        $schedule->command('warteliste:nachruecken')->hourly()->withoutOverlapping();
+
+        // Abgelaufene, unbestätigte Wartelisten-Angebote zurücksetzen
+        $schedule->command('warteliste:angebote-bereinigen')->hourly()->withoutOverlapping();
+
+        // Erinnerungs-Mails an Helfer vor ihrer Schicht (Aufbau/Börsendienst/Abbau)
+        $schedule->command('schicht:erinnerung-versenden')->hourly()->withoutOverlapping();
     }
 
     /**

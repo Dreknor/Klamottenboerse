@@ -12,7 +12,7 @@ class Klamottenboerse extends Model
     use SoftDeletes;
     public $table = 'klamottenboerse';
 
-    protected $fillable = ['belehrung', 'datum', 'anmeldung', 'anmeldungKinderhaus', 'anlieferung_von', 'anlieferung_bis', 'abholung_von', 'abholung_bis', 'maxTeile', 'sendInvitation', 'sendErinnerung', 'ort', 'adresse', 'ergebnis_freigabe'];
+    protected $fillable = ['belehrung', 'datum', 'anmeldung', 'anmeldungKinderhaus', 'anlieferung_von', 'anlieferung_bis', 'abholung_von', 'abholung_bis', 'maxTeile', 'sendInvitation', 'sendErinnerung', 'ort', 'adresse', 'ergebnis_freigabe', 'live_verkaufsansicht_freigabe'];
 
    // protected $dates = ['created_at', 'updated_at', 'datum', 'anmeldung', 'anmeldungKinderhaus'];
 
@@ -26,6 +26,7 @@ class Klamottenboerse extends Model
         'anmeldung'  => 'datetime',
         'anmeldungKinderhaus' => 'datetime',
         'ergebnis_freigabe' => 'boolean',
+        'live_verkaufsansicht_freigabe' => 'boolean',
     ];
 
     public function getAnlieferungvonAttribute($value)

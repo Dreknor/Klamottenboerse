@@ -18,6 +18,7 @@ use App\Repositories\Klamottenboerse\KlamottenboersenRepository;
 use App\Repositories\Nummern\VKnummerRepository;
 use App\Repositories\Verkaeufe\VerkaeufeRepository;
 use App\Repositories\Warenkorb\WarenkorbRepository;
+use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -118,6 +119,11 @@ class VerlaufController extends Controller
 
             }
             warenkorb::insert($Artikel);
+
+            AuditLogger::log('kasse.stornierung', $Verkauf, [
+                'summe' => $Verkauf->summe,
+                'artikel_anzahl' => count($Artikel),
+            ]);
 
             $Verkauf->artikel()->delete();
             $Verkauf->delete();

@@ -16,13 +16,14 @@
     <script src="https://kit.fontawesome.com/c8f58e3eb6.js"></script>
     <link rel="stylesheet" href="{{asset('css/lib/font-awesome/font-awesome.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/lib/bootstrap/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ @filemtime(public_path('css/app.css')) ?: 1 }}">
     <link rel="stylesheet" href="{{asset('css/main.css')}}">
 
 	@yield('css')
 </head>
-<body class="with-side-menu theme-picton-blue">
+<body class="app-shell with-side-menu theme-picton-blue">
 
-	<header class="site-header">
+	<header class="site-header border-b border-slate-200 bg-slate-900 text-white shadow-sm">
 	    <div class="container-fluid" >
 	        <a href="{{url('/')}}" class="navbar-brand col-sm-auto text-white">
 				Klamottenbörse
@@ -93,6 +94,7 @@
                             <li><a href="{{url('grunddaten')}}"><span class="lbl">Grunddaten</span></a></li>
                             <li><a href="{{url('vknummern')}}"><span class="lbl">Verkäufernummern</span></a></li>
                             <li><a href="{{url('helfertermine')}}"><span class="lbl">Helfer</span></a></li>
+                            <li><a href="{{url('kisten')}}"><span class="lbl">Kisten Check-in/-out</span></a></li>
                         </ul>
                     </li>
                     <li class="with-sub">
@@ -115,6 +117,7 @@
                             <ul>
                                 <li><a href="{{url('mailvorlagen')}}"><span class="lbl">Mail-Vorlagen</span></a></li>
                                 <li><a href="{{url('mail-protokoll/anmeldung-moeglich')}}"><span class="lbl">Mail-Protokoll</span></a></li>
+                                <li><a href="{{url('audit-log')}}"><span class="lbl">Audit-Log</span></a></li>
                                 <li><a href="{{url('import')}}"><span class="lbl">Import von Kasse</span></a></li>
                             </ul>
                     </li>

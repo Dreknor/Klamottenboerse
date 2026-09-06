@@ -4,9 +4,14 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InteressentenController;
 use App\Http\Controllers\Kasse\ExportController;
 use App\Http\Controllers\Kasse\KasseController;
+use App\Http\Controllers\Kasse\OfflineSyncController;
 use App\Http\Controllers\Kasse\SettingsController;
 use App\Http\Controllers\Kasse\VerlaufController;
+use App\Http\Controllers\PublicRegistrationController;
+use App\Http\Controllers\SelfServiceDeletionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VerkaeuferPortalController;
+use App\Http\Controllers\WartelistenAngebotController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +34,38 @@ Route::get('ergebnis/{uuid}', 'ErgebnisController@show')->name('ergebnis.show');
 
 Auth::routes(['register' => false]);
 
+//Öffentliche Selbstregistrierung für Interessenten (mit E-Mail-Bestätigung & Spamschutz)
+Route::group(['middleware' => ['throttle:6,1']], function () {
+    Route::get('/registrieren', [PublicRegistrationController::class, 'create'])->name('registrierung.create');
+    Route::post('/registrieren', [PublicRegistrationController::class, 'store'])->name('registrierung.store');
+});
+Route::get('/registrieren/{interessent}/bestaetigen', [PublicRegistrationController::class, 'confirm'])
+    ->name('registrierung.bestaetigen')
+    ->middleware('signed');
+
+//Selfservice zur Löschung der eigenen Registrierung (Softdelete-Schutz + zeitversetzte endgültige Löschung)
+Route::group(['middleware' => ['throttle:6,1']], function () {
+    Route::get('/registrieren/loeschen', [SelfServiceDeletionController::class, 'create'])->name('registrierung.loeschen');
+    Route::post('/registrieren/loeschen', [SelfServiceDeletionController::class, 'store'])->name('registrierung.loeschen.store');
+});
+Route::get('/registrieren/{interessent}/loeschung-bestaetigen', [SelfServiceDeletionController::class, 'confirm'])
+    ->name('registrierung.loeschung.bestaetigen')
+    ->middleware('signed');
+
+//Verkäufer-Self-Service-Portal (Artikel-Erfassung + Etiketten-Druck), Zugriff per UUID wie beim Ergebnis-Link
+Route::group(['middleware' => ['throttle:30,1']], function () {
+    Route::get('/verkaeufer/{uuid}', [VerkaeuferPortalController::class, 'index'])->name('verkaeuferPortal.index');
+    Route::post('/verkaeufer/{uuid}/artikel', [VerkaeuferPortalController::class, 'store'])->name('verkaeuferPortal.store');
+    Route::delete('/verkaeufer/{uuid}/artikel/{artikel}', [VerkaeuferPortalController::class, 'destroy'])->name('verkaeuferPortal.destroy');
+    Route::get('/verkaeufer/{uuid}/etiketten', [VerkaeuferPortalController::class, 'etiketten'])->name('verkaeuferPortal.etiketten');
+});
+
+//Automatisches Wartelisten-Nachrücken: Bestätigungslink per Token (kein Login nötig)
+Route::get('/warteliste/{token}/bestaetigen', [WartelistenAngebotController::class, 'confirm'])
+    ->name('warteliste.bestaetigen')
+    ->middleware('throttle:20,1');
+
+
 Route::group(['middleware' => ['auth']], function (){
     Route::get('/', 'HomeController@index')->name('home');
 
@@ -40,6 +77,12 @@ Route::group(['middleware' => ['auth', 'isVerwaltung']], function () {
     Route::get('/helfertermine', [\App\Http\Controllers\AppointmentController::class, 'create'])->name('helfertermine');
     Route::post('/helfertermine', [\App\Http\Controllers\AppointmentController::class, 'store'])->name('appointment.store');
     Route::delete('appointment/{appointment}', [\App\Http\Controllers\AppointmentController::class, 'destroy'])->name('appointment.destroy');
+
+    //Kisten Check-in / Check-out
+    Route::get('/kisten', [\App\Http\Controllers\KistenController::class, 'index'])->name('kisten.index');
+    Route::post('/kisten', [\App\Http\Controllers\KistenController::class, 'store'])->name('kisten.store');
+    Route::post('/kisten/{kiste}/checkout', [\App\Http\Controllers\KistenController::class, 'checkout'])->name('kisten.checkout');
+    Route::get('/kisten/scan/{qrToken}', [\App\Http\Controllers\KistenController::class, 'scan'])->name('kisten.scan');
 
     //Create User
     Route::get('/interessenten/{interessenten}/addUserAccount', [UserController::class, 'create']);
@@ -79,6 +122,9 @@ Route::group(['middleware' => ['auth', 'isVerwaltung']], function () {
     Route::get('/mail-protokoll/anmeldung-moeglich', 'MailLogController@anmeldungMoeglich')->name('mailLog.anmeldungMoeglich');
     Route::post('/mail-protokoll/anmeldung-moeglich/resend-all', 'MailLogController@resendAll')->name('mailLog.resendAll');
     Route::post('/mail-protokoll/anmeldung-moeglich/{mailLog}/resend', 'MailLogController@resend')->name('mailLog.resend');
+
+    //Audit-Log
+    Route::get('/audit-log', [\App\Http\Controllers\AuditLogController::class, 'index'])->name('auditLog.index');
 
     //Verkäufernummern
     Route::get('/vknummer/{id}/reservierungAufheben', 'NummernController@reservierungAufheben');
@@ -135,7 +181,7 @@ Route::group(['middleware' => ['auth', 'isKasse']], function () {
         Route::get('/verlauf/edit', [VerlaufController::class, 'activEdit'])->name('verlauf.activate.edit');
         Route::get('verlauf/{VerkaufsID}/edit', [VerlaufController::class, 'editVerkauf']);
         Route::post('/artikelBuchen', [KasseController::class, 'ArtikelInWarenkorb']);
-
+        Route::post('/sync', [OfflineSyncController::class, 'sync']);
 
         Route::get('/kasse/{ArticleID}/edit', [KasseController::class, 'editArticle']);
         Route::get('/bezahlen', [KasseController::class, 'bezahlen']);

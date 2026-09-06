@@ -8,6 +8,7 @@ use App\Model\Klamottenboerse;
 use App\Model\VKnummer;
 use App\Repositories\Mails\MailRepository;
 use App\Repositories\Nummern\VKnummerRepository;
+use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 
 class NummernController extends Controller
@@ -151,6 +152,11 @@ class NummernController extends Controller
         $vknummer->vergeben_an = $vknummer->reserviert_fuer;
         $vknummer->save();
 
+        AuditLogger::log('vknummer.vergeben', $vknummer, [
+            'vknummer' => $vknummer->vknummer,
+            'vergeben_an' => $vknummer->vergeben_an,
+        ]);
+
         if ($vknummer->vergeben_an_Interessent->has('warteliste') and $vknummer->vergeben_an_Interessent->warteliste != null) {
             $vknummer->vergeben_an_Interessent->warteliste->delete();
         }
@@ -174,8 +180,14 @@ class NummernController extends Controller
 
         try {
             $Interessent = $vknummer->vergeben_an_Interessent;
+            $vorherigeVergabe = $vknummer->vergeben_an;
             $vknummer->vergeben_an = null;
             $vknummer->save();
+
+            AuditLogger::log('vknummer.rueckgabe', $vknummer, [
+                'vknummer' => $vknummer->vknummer,
+                'vorherige_vergabe' => $vorherigeVergabe,
+            ]);
 
             $this->mailRepository->sendRuecknahmeNummer($Interessent);
 
@@ -206,8 +218,15 @@ class NummernController extends Controller
     public function newVKnummerVergeben(Request $request)
     {
         $VKnummer = VKnummer::findOrFail($request->input('NummernID'));
+        $vorherigeVergabe = $VKnummer->vergeben_an;
         $VKnummer->vergeben_an = $request->input('InteressentID');
         $VKnummer->save();
+
+        AuditLogger::log('vknummer.ueberschreiben', $VKnummer, [
+            'vknummer' => $VKnummer->vknummer,
+            'vorherige_vergabe' => $vorherigeVergabe,
+            'neue_vergabe' => $VKnummer->vergeben_an,
+        ]);
 
         if ($VKnummer->vergeben_an_Interessent->has('warteliste') and $VKnummer->vergeben_an_Interessent->warteliste != null) {
             $VKnummer->vergeben_an_Interessent->warteliste->delete();

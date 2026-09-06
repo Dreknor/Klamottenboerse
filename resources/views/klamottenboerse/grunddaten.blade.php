@@ -307,6 +307,21 @@
                                     @endif
                                 </div>
 
+                                <div class="form-group row @if ($errors->has('live_verkaufsansicht_freigabe')) form-group-error @endif">
+                                    <label class="form-label" for="live_verkaufsansicht_freigabe">Live-Verkaufsansicht für Verkäufer:</label>
+                                    <select class="form-control" name="live_verkaufsansicht_freigabe" id="live_verkaufsansicht_freigabe">
+                                        <option value="1" @if($klamottenboerse->live_verkaufsansicht_freigabe == 1) selected @endif>Ja</option>
+                                        <option value="0" @if($klamottenboerse->live_verkaufsansicht_freigabe == 0) selected @endif>Nein</option>
+                                    </select>
+                                    @if ($errors->has('live_verkaufsansicht_freigabe'))
+                                        <small class="text-muted">
+                                            @foreach ($errors->get('live_verkaufsansicht_freigabe') as $message)
+                                                {{ $message }}
+                                            @endforeach
+                                        </small>
+                                    @endif
+                                </div>
+
 
                                 <div class="form-group row @if ($errors->has('ort')) form-group-error @endif">
                                     <label class="form-label" for="ort">Ort:</label>

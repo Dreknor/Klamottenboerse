@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class isKasse
 {
@@ -16,14 +17,10 @@ class isKasse
      */
     public function handle(Request $request, Closure $next)
     {
-
-        $user = $request->user();
-
-        if ($user->kasse == 1) {
-            return $next($request);
-        } else {
+        if (Gate::denies('access-kasse', $request->user())) {
             return redirect(url('/'))->with('danger', 'You are unauthorised to access this page');
         }
 
+        return $next($request);
     }
 }

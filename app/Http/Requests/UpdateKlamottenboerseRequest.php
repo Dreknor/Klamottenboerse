@@ -42,6 +42,7 @@ class UpdateKlamottenboerseRequest extends FormRequest
             'ort' => 'string|nullable',
             'adresse' => 'string|nullable',
             'ergebnis_freigabe' => 'boolean',
+            'live_verkaufsansicht_freigabe' => 'boolean',
         ];
     }
 

@@ -15,27 +15,20 @@ class AbrechnungExport implements FromCollection, ShouldAutoSize, WithMultipleSh
 {
     use Exportable;
 
-
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        //
+       return collect();
     }
 
     public function sheets(): array
     {
-        $sheets = [
-            new VKNummernSheet(),
-            new VerkäufeSheet(),
-            new VerkaufteArtikelSheet()
-
-        ];
-
-        return $sheets;
-
+       return [
+           new VKNummernSheet(),
+           new VerkäufeSheet(),
+           new VerkaufteArtikelSheet(),
+       ];
     }
-
-
 }
