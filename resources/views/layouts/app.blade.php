@@ -158,7 +158,7 @@
 
 	</nav>
     @endauth<!--.side-menu-->
-	<div class="page-content">
+	<div id="app" class="page-content">
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
