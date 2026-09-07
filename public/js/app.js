@@ -160,17 +160,23 @@ $(document).ready(function(){
 			clickLink = parent.find('>span'),
 			subMenu = parent.find('>ul');
 
-		clickLink.click(function() {
+		subMenu.hide();
+
+		clickLink.click(function(event) {
+			if ($(event.target).closest('a').length) {
+				return;
+			}
+
 			if (parent.hasClass('opened')) {
 				parent.removeClass('opened');
-				subMenu.slideUp();
+				subMenu.stop(true, true).slideUp();
 				subMenu.find('.opened').removeClass('opened');
 			} else {
 				if (clickLink.parents('.with-sub').length == 1) {
-					$('.side-menu-list .opened').removeClass('opened').find('ul').slideUp();
+					$('.side-menu-list .opened').removeClass('opened').find('ul').stop(true, true).slideUp();
 				}
 				parent.addClass('opened');
-				subMenu.slideDown();
+				subMenu.stop(true, true).slideDown();
 			}
 		});
 	});
