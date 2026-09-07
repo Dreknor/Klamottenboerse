@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class isVerwaltung
 {
@@ -17,14 +17,10 @@ class isVerwaltung
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = $request->user();
-
-        if ($user->verwaltung == 1) {
-            return $next($request);
-        } else {
+        if (Gate::denies('access-verwaltung', $request->user())) {
             return redirect(url('/'))->with('danger', 'You are unauthorised to access this page');
         }
 
-
+        return $next($request);
     }
 }

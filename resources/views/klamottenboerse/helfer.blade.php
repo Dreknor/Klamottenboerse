@@ -9,31 +9,36 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <h4>offene Termine</h4>
-                        <p>noch benötigte Helfer:</p>
-                        <ul class="list-group">
-                            @foreach($termine as $termin)
-                                <li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            {{ $termin->date_start->format('d.m.Y H:i')}} - {{$termin->date_end->format('H:i')}}
-                                        </div>
-                                        <div class="col-md-5">
-                                            {{ $termin->beschreibung }}
-                                        </div>
-                                        <div class="col-md-2">
-                                            <form action="{{ route('appointment.destroy', $termin->id)  }}" method="post">
-                                                @method('DELETE')
-                                                @csrf
-                                                <input type="hidden" name="id" value="{{ $termin->id }}">
+                        <h4>offene Termine – Schicht-Baukasten</h4>
+                        <p>noch benötigte Helfer, gruppiert nach Bereich:</p>
+                        @foreach(\App\Model\Appointment::BEREICHE as $bereichKey => $bereichLabel)
+                            <h5 class="mt-3">{{ $bereichLabel }}</h5>
+                            <ul class="list-group mb-3">
+                                @forelse($termine->where('bereich', $bereichKey) as $termin)
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                {{ $termin->date_start->format('d.m.Y H:i')}} - {{$termin->date_end->format('H:i')}}
+                                            </div>
+                                            <div class="col-md-5">
+                                                {{ $termin->beschreibung }}
+                                            </div>
+                                            <div class="col-md-2">
+                                                <form action="{{ route('appointment.destroy', $termin->id)  }}" method="post">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $termin->id }}">
 
-                                                <button type="submit" class="btn btn-danger">löschen</button>
-                                            </form>
+                                                    <button type="submit" class="btn btn-danger">löschen</button>
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
+                                    </li>
+                                @empty
+                                    <li class="list-group-item text-muted">keine offenen Termine</li>
+                                @endforelse
+                            </ul>
+                        @endforeach
                         <hr>
                         <div class="card">
                             <div class="card-header">
@@ -53,6 +58,14 @@
                                     <div class="form-group">
                                         <label for="beschreibung">Beschreibung</label>
                                         <input type="text" name="beschreibung" class="form-control"  value="{{old('beschreibung')}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bereich">Bereich</label>
+                                        <select name="bereich" class="form-control">
+                                            @foreach(\App\Model\Appointment::BEREICHE as $bereichKey => $bereichLabel)
+                                                <option value="{{ $bereichKey }}" {{ old('bereich') == $bereichKey ? 'selected' : '' }}>{{ $bereichLabel }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <select name="anzahl" class="form-control">
@@ -75,6 +88,7 @@
                         <ul class="list-group">
                             @foreach($helfer as $helfer)
                                 <li class="list-group-item">
+                                    {{ \App\Model\Appointment::BEREICHE[$helfer->appointment->bereich] ?? $helfer->appointment->bereich }}:
                                     {{ $helfer->appointment->date_start->format('d.m.Y H:i') }} - {{ $helfer->appointment->date_end->format('H:i') }} Uhr: {{$helfer->appointment->beschreibung}} <br>
                                    {{ $helfer->name }} ( {{ $helfer->mail }} / {{ $helfer->telefon }})
                                 </li>

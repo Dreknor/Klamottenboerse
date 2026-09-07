@@ -15,6 +15,7 @@ class MailLog extends Model
 
     protected $fillable = [
         'interessent_id',
+        'helfer_id',
         'klamottenboerse_id',
         'typ',
         'email',
@@ -35,6 +36,11 @@ class MailLog extends Model
     public function interessent()
     {
         return $this->belongsTo(Interessenten::class, 'interessent_id');
+    }
+
+    public function helfer()
+    {
+        return $this->belongsTo(Helfer::class, 'helfer_id');
     }
 
     public function klamottenboerse()

@@ -3,6 +3,12 @@
 @section('content')
 
 <div class="container-fluid">
+    <div class="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+        <div class="flex items-center justify-between gap-3">
+            <span id="offline-status">Online: Synchronisation aktiv.</span>
+            <button type="button" id="sync-offline-sales" class="btn btn-sm btn-outline-secondary">Puffer synchronisieren</button>
+        </div>
+    </div>
 
 
     <div class="row">
@@ -104,4 +110,8 @@
         </div>
     </div>
 </div>
+@section('js')
+    <script src="{{ asset('js/offline-kasse.js') }}"></script>
+@endsection
+
 @endsection

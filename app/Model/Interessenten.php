@@ -13,7 +13,24 @@ class Interessenten extends Model
 
     public $table = 'interessenten';
 
-    protected $fillable = ['vorname', 'nachname', 'mail', 'telefon', 'anrede', 'mitarbeiter', 'kinderhaus', 'handy', 'user_id'];
+    protected $fillable = ['uuid', 'vorname', 'nachname', 'mail', 'telefon', 'anrede', 'mitarbeiter', 'kinderhaus', 'handy', 'user_id', 'email_verified_at', 'registration_source', 'deletion_requested_at'];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'deletion_requested_at' => 'datetime',
+    ];
+
+    public function markEmailAsVerified(): bool
+    {
+        return $this->forceFill([
+            'email_verified_at' => $this->freshTimestamp(),
+        ])->save();
+    }
+
+    public function hasVerifiedEmail(): bool
+    {
+        return ! is_null($this->email_verified_at);
+    }
 
 
     public function user(){

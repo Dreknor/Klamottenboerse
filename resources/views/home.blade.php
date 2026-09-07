@@ -148,7 +148,7 @@
                     <div class="card-body">
                         <ul class="list-group" id="nachrichten">
                             @foreach($messages as $message)
-                                <div class="mail-box-item" @if (!$message->getFlags()->get('seen'))) style="background-color: #facd97;" @endif" data-id="{{$message->getUid()}}" >
+                                <div class="mail-box-item" @if (!$message->getFlags()->get('seen')) style="background-color: #facd97;" @endif data-id="{{$message->getUid()}}" >
                                     <div class="mail-box-item-header">
                                         <div class="mail-box-item-photo align-content-center">
 

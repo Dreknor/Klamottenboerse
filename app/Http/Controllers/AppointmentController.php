@@ -94,6 +94,7 @@ class AppointmentController extends Controller
             $appointment = new Appointment();
             $appointment->klamottenboerse_id = $klamottenboerse->id;
             $appointment->beschreibung = $request->beschreibung;
+            $appointment->bereich = $request->bereich;
             $appointment->date_start = $request->date_start;
             $appointment->date_end = $request->date_end;
             $appointment->save();
