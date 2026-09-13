@@ -142,6 +142,7 @@ class MailController extends Controller
     {
         try {
             Mail::to($interessent->mail)->send(new \App\Mail\Mail($request, $interessent));
+            Log::debug("Mail an {$interessent->mail} versendet. Request: ".json_encode($request->all()));
         } catch (\Exception $e) {
             Log::error("Fehler beim Versenden der Mail an {$interessent->mail}: {$e->getMessage()}");
             return redirect(url('interessent/'.$interessent->id))->with([
