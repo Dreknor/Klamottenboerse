@@ -282,9 +282,9 @@
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
-                            <ul class="dropdown-menu">
+                            <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{url('vknummer/'.$interessent->id.'/Nummervergeben')}}">andere Nummer vergeben</a>
-                            </ul>
+                            </div>
                         </div>
                         <a class="btn btn-warning btn-sm btn-block" href="{{url('vknummer/'.$interessent->vknummer_reserviert->id.'/reservierungAufheben')}}">Reservierung <b>{{$interessent->vknummer_reserviert->vknummer}}</b> aufheben</a>
                         @if ($interessent->warteliste)
@@ -317,7 +317,7 @@
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
-                            <ul class="dropdown-menu">
+                            <div class="dropdown-menu">
                                 @if(count($interessent->bisherige_vknummen)>0)
                                     <h6 class="dropdown-header">letzte VK-Nummer:</h6>
                                     <a class=" dropdown-item @if ($letzteVKnummer->aktuelleKlamottenboerse->vergeben_an == "" and $letzteVKnummer->aktuelleKlamottenboerse->reserviert_fuer == "" ) text-info VKNummer"
@@ -353,7 +353,7 @@
                                 <h6 class="dropdown-header">neue Nummer</h6>
                                 <a class="dropdown-item" href="{{url('vknummer/'.$interessent->id.'/Nummervergeben')}}">neue Nummer vergeben</a>
 
-                            </ul>
+                            </div>
                         </div>
                     @endif
 
@@ -408,11 +408,11 @@
                                     <span class="caret"></span>
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <div class="dropdown-menu">
                                     @foreach($Vorlagen AS $Vorlage)
                                         <a class="dropdown-item" href="{{url('mail/'.$interessent->id.'/'.$Vorlage->id)}}">{{$Vorlage->name}}</a>
                                     @endforeach
-                                </ul>
+                                </div>
                             </div>
                         </span>
                 </div>

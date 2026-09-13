@@ -140,7 +140,14 @@ class MailController extends Controller
 
     public function sendMail(Interessenten $interessent, MailRequest $request)
     {
-        Mail::to($interessent->mail)->send(new \App\Mail\Mail($request, $interessent));
+        try {
+            Mail::to($interessent->mail)->send(new \App\Mail\Mail($request, $interessent));
+        } catch (\Exception $e) {
+            Log::error("Fehler beim Versenden der Mail an {$interessent->mail}: {$e->getMessage()}");
+            return redirect(url('interessent/'.$interessent->id))->with([
+                'error'=> 'Fehler beim Versenden der Nachricht.',
+            ]);
+        }
 
         return redirect(url('interessent/'.$interessent->id))->with([
             'success'=> 'Nachricht versandt.',
