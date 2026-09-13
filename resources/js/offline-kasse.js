@@ -3,6 +3,14 @@
     const STORE_NAME = 'pending_sales';
     const DEVICE_ID = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
+    function isOfflineRequestError(error) {
+        if (!error) {
+            return false;
+        }
+
+        return error instanceof TypeError || error.name === 'AbortError';
+    }
+
     function openDatabase() {
         return new Promise((resolve, reject) => {
             if (!('indexedDB' in window)) {
@@ -91,7 +99,8 @@
     }
 
     function syncQueuedSales() {
-        const csrfToken = document.head.querySelector('meta[name="csrf-token"]')?.content;
+        const csrfTokenElement = document.head.querySelector('meta[name="csrf-token"]');
+        const csrfToken = csrfTokenElement ? csrfTokenElement.content : null;
         if (!csrfToken) {
             return Promise.resolve(false);
         }
@@ -133,6 +142,25 @@
         });
     }
 
+    function submitSale(form) {
+        const formData = new FormData(form);
+
+        return fetch(form.action, {
+            method: form.method || 'POST',
+            body: formData,
+            credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error('Online sale submit failed');
+            }
+
+            return response;
+        });
+    }
+
     function serializeForm(form) {
         const formData = new FormData(form);
         const data = {};
@@ -167,20 +195,26 @@
         }
 
         form.addEventListener('submit', function (event) {
-            if (navigator.onLine) {
-                return;
-            }
-
             event.preventDefault();
             const payload = serializeForm(form);
 
-            addQueuedSale(payload)
+            submitSale(form)
                 .then(() => {
-                    setStatus('Offline: Verkauf lokal gespeichert und wird synchronisiert.', true);
-                    form.reset();
+                    window.location.assign('/kasse');
                 })
-                .catch(() => {
-                    setStatus('Offline: Speicherung fehlgeschlagen, bitte erneut versuchen.', true);
+                .catch((error) => {
+                    if (!navigator.onLine && !isOfflineRequestError(error)) {
+                        throw error;
+                    }
+
+                    return addQueuedSale(payload)
+                        .then(() => {
+                            setStatus('Offline: Verkauf lokal gespeichert und wird synchronisiert.', true);
+                            form.reset();
+                        })
+                        .catch(() => {
+                            setStatus('Offline: Speicherung fehlgeschlagen, bitte erneut versuchen.', true);
+                        });
                 });
         });
     }
