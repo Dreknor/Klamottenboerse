@@ -49212,7 +49212,11 @@ if (false) {
 /* 43 */
 /***/ (function(module, exports) {
 
-throw new Error("Module build failed: ModuleBuildError: Module build failed: Error: true is not a PostCSS plugin\n    at Processor.normalize (D:\\www\\klamottenboerse\\node_modules\\postcss-loader\\node_modules\\postcss\\lib\\processor.js:145:15)\n    at new Processor (D:\\www\\klamottenboerse\\node_modules\\postcss-loader\\node_modules\\postcss\\lib\\processor.js:51:25)\n    at postcss (D:\\www\\klamottenboerse\\node_modules\\postcss-loader\\node_modules\\postcss\\lib\\postcss.js:73:10)\n    at D:\\www\\klamottenboerse\\node_modules\\postcss-loader\\lib\\index.js:143:12\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at D:\\www\\klamottenboerse\\node_modules\\webpack\\lib\\NormalModule.js:195:19\n    at D:\\www\\klamottenboerse\\node_modules\\loader-runner\\lib\\LoaderRunner.js:367:11\n    at D:\\www\\klamottenboerse\\node_modules\\loader-runner\\lib\\LoaderRunner.js:233:18\n    at context.callback (D:\\www\\klamottenboerse\\node_modules\\loader-runner\\lib\\LoaderRunner.js:111:13)\n    at D:\\www\\klamottenboerse\\node_modules\\postcss-loader\\lib\\index.js:194:71\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)");
+// Original CSS build output failed at build time (broken postcss-loader
+// module) and only threw an error here. The real, working stylesheet is
+// already loaded separately via <link rel="stylesheet" href="css/app.css">
+// in the layout, so this module is a harmless no-op.
+module.exports = {};
 
 /***/ })
 /******/ ]);

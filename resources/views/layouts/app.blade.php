@@ -59,14 +59,14 @@
 	    </div><!--.container-fluid-->
 	</header><!--.site-header-->
 
-	<div class="mobile-menu-left-overlay"></div>
+    <div class="mobile-menu-left-overlay"></div>
     @auth
 	    <nav class="side-menu">
-                <ul class="side-menu-list">
-                    <li class="">
-                        <a href="{{url('/home')}}">
-                        <span>
-                            <i class="font-icon font-icon-dashboard"></i>
+	        <ul class="side-menu-list">
+	            <li class="">
+	                <a href="{{url('/home')}}">
+	                <span>
+	                    <i class="font-icon font-icon-dashboard"></i>
                             <span class="lbl">Dashboard</span>
                         </span>
                         </a>
@@ -76,7 +76,7 @@
             @if(auth()->user()->verwaltung == 1)
                 <ul class="side-menu-list">
                     <li class="with-sub">
-                        <span>
+                        <span class="d-block">
                             <i class="font-icon glyphicon glyphicon-user"></i>
                             <span class="lbl">Interessenten</span>
                         </span>
@@ -86,7 +86,7 @@
                         </ul>
                     </li>
                     <li class="with-sub">
-                        <span>
+                        <span class="d-block">
                             <i class="font-icon glyphicon glyphicon-calendar "></i>
                             <span class="lbl">Klamottenbörse</span>
                         </span>
@@ -98,7 +98,7 @@
                         </ul>
                     </li>
                     <li class="with-sub">
-                        <span>
+                        <span class="d-block">
                             <i class="font-icon glyphicon glyphicon-list-alt"></i>
                             <span class="lbl">Listen</span>
                         </span>
@@ -110,7 +110,7 @@
                             </ul>
                     </li>
                     <li class="with-sub">
-                        <span>
+                        <span class="d-block">
                             <i class="font-icon font-icon-cogwheel "></i>
                             <span class="lbl">Settings</span>
                         </span>
@@ -186,6 +186,7 @@
 	<script src="{{asset('js/lib/bootstrap/bootstrap.min.js')}}"></script>
 	<script src="{{asset('js/plugins.js')}}"></script>
 	<script src="{{asset('js/app.js')}}"></script>
+	<script src="{{asset('js/side-menu.js')}}?v={{ @filemtime(public_path('js/side-menu.js')) ?: 1 }}"></script>
 
 
 
