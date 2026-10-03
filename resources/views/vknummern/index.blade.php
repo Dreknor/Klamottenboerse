@@ -24,10 +24,10 @@
                 <div class="row ">
                         @foreach($vknummern->where('vknummer', ">=", 200)->where('vknummer', "<", 300)->all() AS $vknummer)
                             <div class="dropdown m-1 @if ($vknummer->vergeben_an_Interessent != NULL) @elseif ($vknummer->reserviert_fuer_Interessent != NULL) warning @endif"  style="width: 60px;">
-                                <button type="button" class="btn btn-sm dropdown-toggle @if ($vknummer->vergeben_an != NULL) btn-success @elseif ($vknummer->reserviert_fuer != NULL) btn-warning @endif" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button id="vknummer-toggle-{{ $vknummer->id }}" type="button" class="btn btn-sm dropdown-toggle @if ($vknummer->vergeben_an != NULL) btn-success @elseif ($vknummer->reserviert_fuer != NULL) btn-warning @endif" data-toggle="dropdown" aria-controls="vknummer-menu-{{ $vknummer->id }}" aria-haspopup="true" aria-expanded="false">
                                     {{$vknummer->vknummer}}
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" >
+                                <div id="vknummer-menu-{{ $vknummer->id }}" class="dropdown-menu" aria-labelledby="vknummer-toggle-{{ $vknummer->id }}">
                                         @if ($vknummer->vergeben_an_Interessent != NULL and is_object($vknummer->vergeben_an_Interessent))
                                             <div class="dropdown-header">vergeben an:</div>
                                                 <a class="dropdown-item text-success" href="{{url('interessent/'.$vknummer->vergeben_an_Interessent->id)}}">{{$vknummer->vergeben_an_Interessent->vorname}} {{$vknummer->vergeben_an_Interessent->nachname}}</a>
@@ -58,10 +58,10 @@
                 <div class="row ">
                         @foreach($vknummern->where('vknummer', ">=", 300)->where('vknummer', "<", 400)->all() AS $vknummer)
                             <div class="dropdown m-1 @if ($vknummer->vergeben_an_Interessent != NULL) @elseif ($vknummer->reserviert_fuer_Interessent != NULL) warning @endif"  style="width: 60px;">
-                                <button type="button" class="btn btn-sm dropdown-toggle @if ($vknummer->vergeben_an != NULL) btn-success @elseif ($vknummer->reserviert_fuer != NULL) btn-warning @endif" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button id="vknummer-toggle-{{ $vknummer->id }}" type="button" class="btn btn-sm dropdown-toggle @if ($vknummer->vergeben_an != NULL) btn-success @elseif ($vknummer->reserviert_fuer != NULL) btn-warning @endif" data-toggle="dropdown" aria-controls="vknummer-menu-{{ $vknummer->id }}" aria-haspopup="true" aria-expanded="false">
                                     {{$vknummer->vknummer}}
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" >
+                                <div id="vknummer-menu-{{ $vknummer->id }}" class="dropdown-menu" aria-labelledby="vknummer-toggle-{{ $vknummer->id }}">
                                         @if ($vknummer->vergeben_an_Interessent != NULL and is_object($vknummer->vergeben_an_Interessent))
                                             <div class="dropdown-header">vergeben an:</div>
                                                 <a class="dropdown-item text-success" href="{{url('interessent/'.$vknummer->vergeben_an_Interessent->id)}}">{{$vknummer->vergeben_an_Interessent->vorname}} {{$vknummer->vergeben_an_Interessent->nachname}}</a>
@@ -91,10 +91,10 @@
                 <div class="row ">
                         @foreach($vknummern->where('vknummer', ">=", 400)->where('vknummer', "<", 500)->all() AS $vknummer)
                             <div class="dropdown m-1 @if ($vknummer->vergeben_an_Interessent != NULL) @elseif ($vknummer->reserviert_fuer_Interessent != NULL) warning @endif"  style="width: 60px;">
-                                <button type="button" class="btn btn-sm dropdown-toggle @if ($vknummer->vergeben_an != NULL) btn-success @elseif ($vknummer->reserviert_fuer != NULL) btn-warning @endif" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button id="vknummer-toggle-{{ $vknummer->id }}" type="button" class="btn btn-sm dropdown-toggle @if ($vknummer->vergeben_an != NULL) btn-success @elseif ($vknummer->reserviert_fuer != NULL) btn-warning @endif" data-toggle="dropdown" aria-controls="vknummer-menu-{{ $vknummer->id }}" aria-haspopup="true" aria-expanded="false">
                                     {{$vknummer->vknummer}}
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" >
+                                <div id="vknummer-menu-{{ $vknummer->id }}" class="dropdown-menu" aria-labelledby="vknummer-toggle-{{ $vknummer->id }}">
                                         @if ($vknummer->vergeben_an_Interessent != NULL and is_object($vknummer->vergeben_an_Interessent))
                                             <div class="dropdown-header">vergeben an:</div>
                                                 <a class="dropdown-item text-success" href="{{url('interessent/'.$vknummer->vergeben_an_Interessent->id)}}">{{$vknummer->vergeben_an_Interessent->vorname}} {{$vknummer->vergeben_an_Interessent->nachname}}</a>
@@ -124,10 +124,10 @@
                 <div class="row ">
                         @foreach($vknummern->where('vknummer', ">=", 500)->where('vknummer', "<", 600)->all() AS $vknummer)
                             <div class="dropdown m-1 @if ($vknummer->vergeben_an_Interessent != NULL) @elseif ($vknummer->reserviert_fuer_Interessent != NULL) warning @endif"  style="width: 60px;">
-                                <button type="button" class="btn btn-sm dropdown-toggle @if ($vknummer->vergeben_an != NULL) btn-success @elseif ($vknummer->reserviert_fuer != NULL) btn-warning @endif" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button id="vknummer-toggle-{{ $vknummer->id }}" type="button" class="btn btn-sm dropdown-toggle @if ($vknummer->vergeben_an != NULL) btn-success @elseif ($vknummer->reserviert_fuer != NULL) btn-warning @endif" data-toggle="dropdown" aria-controls="vknummer-menu-{{ $vknummer->id }}" aria-haspopup="true" aria-expanded="false">
                                     {{$vknummer->vknummer}}
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" >
+                                <div id="vknummer-menu-{{ $vknummer->id }}" class="dropdown-menu" aria-labelledby="vknummer-toggle-{{ $vknummer->id }}">
                                         @if ($vknummer->vergeben_an_Interessent != NULL and is_object($vknummer->vergeben_an_Interessent))
                                             <div class="dropdown-header">vergeben an:</div>
                                                 <a class="dropdown-item text-success" href="{{url('interessent/'.$vknummer->vergeben_an_Interessent->id)}}">{{$vknummer->vergeben_an_Interessent->vorname}} {{$vknummer->vergeben_an_Interessent->nachname}}</a>
@@ -157,10 +157,10 @@
                 <div class="row ">
                         @foreach($vknummern->where('vknummer', ">=", 600)->where('vknummer', "<", 700)->all() AS $vknummer)
                             <div class="dropdown m-1 @if ($vknummer->vergeben_an_Interessent != NULL) @elseif ($vknummer->reserviert_fuer_Interessent != NULL) warning @endif"  style="width: 60px;">
-                                <button type="button" class="btn btn-sm dropdown-toggle @if ($vknummer->vergeben_an != NULL) btn-success @elseif ($vknummer->reserviert_fuer != NULL) btn-warning @endif" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button id="vknummer-toggle-{{ $vknummer->id }}" type="button" class="btn btn-sm dropdown-toggle @if ($vknummer->vergeben_an != NULL) btn-success @elseif ($vknummer->reserviert_fuer != NULL) btn-warning @endif" data-toggle="dropdown" aria-controls="vknummer-menu-{{ $vknummer->id }}" aria-haspopup="true" aria-expanded="false">
                                     {{$vknummer->vknummer}}
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" >
+                                <div id="vknummer-menu-{{ $vknummer->id }}" class="dropdown-menu" aria-labelledby="vknummer-toggle-{{ $vknummer->id }}">
                                         @if ($vknummer->vergeben_an_Interessent != NULL and is_object($vknummer->vergeben_an_Interessent))
                                             <div class="dropdown-header">vergeben an:</div>
                                                 <a class="dropdown-item text-success" href="{{url('interessent/'.$vknummer->vergeben_an_Interessent->id)}}">{{$vknummer->vergeben_an_Interessent->vorname}} {{$vknummer->vergeben_an_Interessent->nachname}}</a>

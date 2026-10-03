@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Model\User;
+use App\Model\Interessenten;
+use App\Model\VKnummer;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\ViewErrorBag;
 use Tests\TestCase;
@@ -60,5 +62,43 @@ class NavigationAndOfflineBufferTest extends TestCase
         $this->assertStringContainsString('id="offline-status" role="status"', $html);
         $this->assertStringContainsString('id="sync-offline-sales"', $html);
         $this->assertStringContainsString('js/offline-kasse.js?v=', $html);
+    }
+
+    public function test_layout_loads_only_one_jquery_and_bootstrap_implementation_before_plugins(): void
+    {
+        $html = view('kasse.settings.index')->render();
+
+        $this->assertSame(1, substr_count($html, '/js/app.js?v='));
+        $this->assertStringNotContainsString('/js/lib/jquery/', $html);
+        $this->assertStringNotContainsString('/js/lib/bootstrap/bootstrap.min.js', $html);
+        $this->assertStringNotContainsString('/js/lib/popper/', $html);
+        $this->assertLessThan(strpos($html, '/js/plugins.js'), strpos($html, '/js/app.js?v='));
+    }
+
+    public function test_each_seller_number_has_a_unique_dropdown_with_existing_actions(): void
+    {
+        $seller = new Interessenten(['vorname' => 'Maria', 'nachname' => 'Muster']);
+        $seller->id = 42;
+        $numbers = collect([201, 301, 401, 501, 601])->map(function ($number) use ($seller) {
+            $vknummer = new VKnummer(['vknummer' => $number, 'reserviert_fuer' => $seller->id]);
+            $vknummer->id = $number;
+            $vknummer->setRelation('vergeben_an_Interessent', null);
+            $vknummer->setRelation('reserviert_fuer_Interessent', $seller);
+            $vknummer->setRelation('bisherigeVerkaeufer', collect());
+
+            return $vknummer;
+        });
+        $html = view('vknummern.index', ['vknummern' => $numbers])->render();
+
+        foreach ($numbers as $number) {
+            $this->assertSame(1, substr_count($html, 'id="vknummer-toggle-'.$number->id.'"'));
+            $this->assertSame(1, substr_count($html, 'id="vknummer-menu-'.$number->id.'"'));
+            $this->assertStringContainsString('aria-controls="vknummer-menu-'.$number->id.'"', $html);
+            $this->assertStringContainsString('aria-labelledby="vknummer-toggle-'.$number->id.'"', $html);
+            $this->assertStringContainsString('/vknummern/'.$number->id.'/freiVergeben', $html);
+            $this->assertStringContainsString('data-id="'.$number->id.'"', $html);
+        }
+        $this->assertSame(6, substr_count($html, 'data-toggle="dropdown"'));
+        $this->assertStringNotContainsString('btnGroupDrop1', $html);
     }
 }
