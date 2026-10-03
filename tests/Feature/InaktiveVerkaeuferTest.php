@@ -149,6 +149,22 @@ class InaktiveVerkaeuferTest extends TestCase
             ->assertOk()->assertSee('OhneReservierung')->assertDontSee('MitReservierung');
     }
 
+    public function test_last_participation_uses_entire_history_regardless_of_selected_period(): void
+    {
+        $person = $this->person('HistorischeTeilnahme');
+        $this->teilnahme($person, $this->boerse('2020-04-01'), 201);
+        $this->teilnahme($person, $this->boerse('2022-10-01'), 201);
+        $this->actingAs($this->admin());
+
+        foreach ([12, 24, 36] as $monate) {
+            $this->get(route('interessenten.inaktive-verkaeufer', ['monate' => $monate]))
+                ->assertOk()->assertSee('HistorischeTeilnahme')
+                ->assertSee('01.10.2022')->assertDontSee('01.04.2020')
+                ->assertViewHas('verkaeufer', fn ($personen) => $personen->total() === 1
+                    && $personen[0]->letzte_teilnahme->toDateString() === '2022-10-01');
+        }
+    }
+
     public function test_no_events_produces_an_empty_overview(): void
     {
         $this->actingAs($this->admin())->get(route('interessenten.inaktive-verkaeufer'))

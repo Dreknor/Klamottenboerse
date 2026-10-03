@@ -9,6 +9,7 @@
     <section class="card">
         <div class="card-body">
             <p>Als Teilnahme z&auml;hlt eine vergebene Verk&auml;ufernummer bei einer bereits stattgefundenen B&ouml;rse, unabh&auml;ngig vom Umsatz. Interessenten ohne bisherige Teilnahme werden ebenfalls angezeigt, wenn sie bereits zu Beginn des gew&auml;hlten Zeitraums angelegt waren.</p>
+            <p>&bdquo;Letzte Teilnahme&ldquo; zeigt die letzte Teilnahme aus der gesamten Historie, auch vor dem gew&auml;hlten Zeitraum. Der Zeitraum filtert nur die angezeigten Personen.</p>
             <p>Reservierungen beziehen sich auf die aktuelle B&ouml;rse:
                 @if($aktuelleBoerse)
                     {{ $aktuelleBoerse->datum->format('d.m.Y') }}.
