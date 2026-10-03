@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{{asset('css/lib/bootstrap/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ @filemtime(public_path('css/app.css')) ?: 1 }}">
     <link rel="stylesheet" href="{{asset('css/main.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/navigation.css') }}?v={{ @filemtime(public_path('css/navigation.css')) ?: 1 }}">
 
 	@yield('css')
 </head>
@@ -29,11 +30,11 @@
 				Klamottenbörse
 	        </a>
             @auth
-                <button id="show-hide-sidebar-toggle" class="show-hide-sidebar text-white">
+                <button id="show-hide-sidebar-toggle" type="button" class="show-hide-sidebar text-white" aria-label="Navigation umschalten" aria-controls="side-menu" aria-expanded="true">
                     <span class="">toggle menu</span>
                 </button>
 
-	        <button class="hamburger hamburger--htla">
+	        <button type="button" class="hamburger hamburger--htla" aria-label="Navigation umschalten" aria-controls="side-menu" aria-expanded="false">
 	            <span>toggle menu</span>
 	        </button>
 	        <div class="site-header-content">
@@ -61,7 +62,7 @@
 
     <div class="mobile-menu-left-overlay"></div>
     @auth
-	    <nav class="side-menu">
+	    <nav id="side-menu" class="side-menu" aria-label="Hauptnavigation">
 	        <ul class="side-menu-list">
 	            <li class="">
 	                <a href="{{url('/home')}}">
@@ -76,21 +77,22 @@
             @if(auth()->user()->verwaltung == 1)
                 <ul class="side-menu-list">
                     <li class="with-sub">
-                        <span class="d-block">
+                        <button type="button" class="side-menu-toggle" aria-controls="menu-interessenten" aria-expanded="false">
                             <i class="font-icon glyphicon glyphicon-user"></i>
                             <span class="lbl">Interessenten</span>
-                        </span>
-                        <ul>
+                        </button>
+                        <ul id="menu-interessenten" hidden>
                             <li><a href="{{url('interessenten')}}"><span class="lbl">Übersicht</span></a></li>
+                            <li><a href="{{ route('interessenten.inaktive-verkaeufer') }}"><span class="lbl">Inaktive Verk&auml;ufer</span></a></li>
                             <li><a href="{{url('interessenten/create')}}"><span class="lbl">Anlegen</span></a></li>
                         </ul>
                     </li>
                     <li class="with-sub">
-                        <span class="d-block">
+                        <button type="button" class="side-menu-toggle" aria-controls="menu-boerse" aria-expanded="false">
                             <i class="font-icon glyphicon glyphicon-calendar "></i>
                             <span class="lbl">Klamottenbörse</span>
-                        </span>
-                        <ul>
+                        </button>
+                        <ul id="menu-boerse" hidden>
                             <li><a href="{{url('grunddaten')}}"><span class="lbl">Grunddaten</span></a></li>
                             <li><a href="{{url('vknummern')}}"><span class="lbl">Verkäufernummern</span></a></li>
                             <li><a href="{{url('helfertermine')}}"><span class="lbl">Helfer</span></a></li>
@@ -98,11 +100,11 @@
                         </ul>
                     </li>
                     <li class="with-sub">
-                        <span class="d-block">
+                        <button type="button" class="side-menu-toggle" aria-controls="menu-listen" aria-expanded="false">
                             <i class="font-icon glyphicon glyphicon-list-alt"></i>
                             <span class="lbl">Listen</span>
-                        </span>
-                            <ul>
+                        </button>
+                            <ul id="menu-listen" hidden>
                                 <!--<li><a href="{{url('listen/verkaeuferinfos')}}" target="_blank"><span class="lbl">Verkäuferinfos</span></a></li>-->
                                 <li><a href="{{url('listen/vknummern')}}" target="_blank"><span class="lbl">Verkäufernummern</span></a></li>
                                 <li><a href="{{url('listen/belehrung')}}" target="_blank"><span class="lbl">Belehrung</span></a></li>
@@ -110,11 +112,11 @@
                             </ul>
                     </li>
                     <li class="with-sub">
-                        <span class="d-block">
+                        <button type="button" class="side-menu-toggle" aria-controls="menu-settings" aria-expanded="false">
                             <i class="font-icon font-icon-cogwheel "></i>
                             <span class="lbl">Settings</span>
-                        </span>
-                            <ul>
+                        </button>
+                            <ul id="menu-settings" hidden>
                                 <li><a href="{{url('mailvorlagen')}}"><span class="lbl">Mail-Vorlagen</span></a></li>
                                 <li><a href="{{url('mail-protokoll/anmeldung-moeglich')}}"><span class="lbl">Mail-Protokoll</span></a></li>
                                 <li><a href="{{url('audit-log')}}"><span class="lbl">Audit-Log</span></a></li>

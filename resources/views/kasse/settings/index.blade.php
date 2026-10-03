@@ -3,6 +3,16 @@
 @section('content')
     <div class="row">
         <div class="col">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3>Offline-Pufferspeicher</h3>
+                </div>
+                <div class="card-body">
+                    <p>Der Pufferspeicher enth&auml;lt lokal gespeicherte Verk&auml;ufe dieses Ger&auml;ts. Bei bestehender Verbindung werden sie automatisch synchronisiert.</p>
+                    <p id="offline-status" role="status">Synchronisation wird vorbereitet.</p>
+                    <button type="button" id="sync-offline-sales" class="btn btn-outline-secondary">Puffer synchronisieren</button>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-header bg-primary text-white">
                     <h3>Einstellungen</h3>
@@ -102,4 +112,8 @@
         </div>
     </div>
 
+@endsection
+
+@section('js')
+    <script src="{{ asset('js/offline-kasse.js') }}?v={{ @filemtime(public_path('js/offline-kasse.js')) ?: 1 }}"></script>
 @endsection

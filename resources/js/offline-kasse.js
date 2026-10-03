@@ -176,16 +176,18 @@
         return data;
     }
 
-    function setStatus(message, isWarning) {
-        const element = document.getElementById('offline-status');
+    function setStatus(message, isWarning, showFeedback = false) {
+        const element = document.getElementById('offline-status')
+            || (showFeedback ? document.getElementById('offline-sale-feedback') : null);
         if (!element) {
             return;
         }
 
         element.textContent = message;
-        element.className = isWarning
-            ? 'text-amber-600'
-            : 'text-emerald-600';
+        element.hidden = false;
+        element.className = element.id === 'offline-sale-feedback'
+            ? (isWarning ? 'alert alert-warning' : 'alert alert-success')
+            : (isWarning ? 'text-amber-600' : 'text-emerald-600');
     }
 
     function attachFormListener() {
@@ -209,11 +211,11 @@
 
                     return addQueuedSale(payload)
                         .then(() => {
-                            setStatus('Offline: Verkauf lokal gespeichert und wird synchronisiert.', true);
+                            setStatus('Offline: Verkauf lokal gespeichert und wird synchronisiert.', true, true);
                             form.reset();
                         })
                         .catch(() => {
-                            setStatus('Offline: Speicherung fehlgeschlagen, bitte erneut versuchen.', true);
+                            setStatus('Offline: Speicherung fehlgeschlagen, bitte erneut versuchen.', true, true);
                         });
                 });
         });
@@ -224,7 +226,7 @@
 
         if (navigator.onLine) {
             setStatus('Online: Synchronisation aktiv.', false);
-            syncQueuedSales().catch(() => setStatus('Offline-Puffer konnte nicht synchronisiert werden.', true));
+            syncQueuedSales().catch(() => setStatus('Offline-Puffer konnte nicht synchronisiert werden.', true, true));
         } else {
             setStatus('Offline: Verkäufe werden lokal gepuffert.', true);
         }
