@@ -6,6 +6,12 @@ use App\Model\Interessenten;
 use App\Model\Klamottenboerse;
 use App\Model\User;
 use App\Model\VKnummer;
+use App\Model\MailLog;
+use App\Jobs\SendInaktivLoeschungMailJob;
+use App\Mail\InaktivLoeschungMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
+use Symfony\Component\Mailer\Exception\TransportException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -275,5 +281,120 @@ class InaktiveVerkaeuferTest extends TestCase
         ]);
         $this->actingAs($user)->get(route('interessenten.inaktive-verkaeufer'))
             ->assertRedirect(url('/'))->assertSessionHas('danger');
+    }
+
+    public function test_sorting_and_searching_work_across_columns(): void
+    {
+        $boerse = $this->boerse('2023-01-01');
+        $anna = $this->person('Anna');
+        $zed = $this->person('Zed');
+        $zed->forceFill(['handy' => '0123456789', 'created_at' => '2022-02-02'])->save();
+        $this->teilnahme($anna, $boerse, 201);
+        $this->teilnahme($zed, $boerse, 202);
+        $aktuell = $this->boerse('2026-11-01');
+        VKnummer::create(['vknummer' => 399, 'klamottenboersen_id' => $aktuell->id, 'reserviert_fuer' => $zed->id]);
+        $this->actingAs($this->admin());
+        foreach (['name', 'mail', 'telefon', 'letzte_teilnahme', 'created_at', 'nummern'] as $column) {
+            $this->get(route('interessenten.inaktive-verkaeufer', ['sort' => $column, 'richtung' => 'desc']))->assertOk();
+        }
+        $this->get(route('interessenten.inaktive-verkaeufer', ['sort' => 'name', 'richtung' => 'desc']))
+            ->assertViewHas('verkaeufer', fn ($personen) => $personen->pluck('id')->all() === [$zed->id, $anna->id]);
+        foreach (['name' => 'Zed', 'mail' => $zed->mail, 'telefon' => '012345', 'created_at' => '2022-02', 'nummern' => '399'] as $column => $term) {
+            $this->get(route('interessenten.inaktive-verkaeufer', ['spalten' => [$column => $term]]))
+                ->assertOk()->assertViewHas('verkaeufer', fn ($personen) => $personen->pluck('id')->all() === [$zed->id]);
+        }
+        $this->get(route('interessenten.inaktive-verkaeufer', ['suche' => '012345']))
+            ->assertOk()->assertViewHas('verkaeufer', fn ($personen) => $personen->pluck('id')->all() === [$zed->id]);
+        $this->get(route('interessenten.inaktive-verkaeufer', ['spalten' => ['nummern' => 'keine']]))
+            ->assertOk()->assertViewHas('verkaeufer', fn ($personen) => $personen->pluck('id')->all() === [$anna->id]);
+        $this->get(route('interessenten.inaktive-verkaeufer', ['suche' => '0']))
+            ->assertOk()->assertViewHas('verkaeufer', fn ($personen) => $personen->total() === 2);
+        $this->get(route('interessenten.inaktive-verkaeufer', ['sort' => 'invalid']))
+            ->assertSessionHasErrors('sort');
+    }
+
+    public function test_bulk_deletion_soft_deletes_selected_people_and_queues_notifications(): void
+    {
+        Queue::fake();
+        $boerse = $this->boerse('2023-01-01');
+        $first = $this->person('First');
+        $second = $this->person('Second');
+        $retained = $this->person('Retained');
+        foreach ([$first, $second, $retained] as $i => $person) {
+            $this->teilnahme($person, $boerse, 201 + $i);
+        }
+        $this->actingAs($this->admin())->delete(route('interessenten.inaktive-verkaeufer.destroy'), [
+            'ids' => [$first->id, $second->id], 'bestaetigung' => 1,
+        ])->assertRedirect()->assertSessionHas('type', 'success');
+        $this->assertSoftDeleted('interessenten', ['id' => $first->id]);
+        $this->assertSoftDeleted('interessenten', ['id' => $second->id]);
+        $this->assertNull($retained->fresh()->deleted_at);
+        Queue::assertPushed(SendInaktivLoeschungMailJob::class, 2);
+        $this->assertDatabaseCount('mail_logs', 2);
+        $this->assertDatabaseCount('audit_logs', 2);
+
+        Mail::fake();
+        $log = MailLog::where('interessent_id', $first->id)->firstOrFail();
+        $job = new SendInaktivLoeschungMailJob($log->id, $first->vorname, $first->nachname);
+        $job->handle();
+        $job->handle();
+        Mail::assertSent(InaktivLoeschungMail::class, 1);
+        Mail::assertSent(InaktivLoeschungMail::class, fn ($mail) => $mail->hasTo($first->mail)
+            && $mail->vorname === $first->vorname && $mail->nachname === $first->nachname);
+        $data = ['vorname' => $first->vorname, 'nachname' => $first->nachname];
+        foreach (['mails.inaktiv-loeschung', 'mails.text.inaktiv-loeschung'] as $view) {
+            $this->assertStringContainsString('weiterhin eingetragen bleiben', view($view, $data)->render());
+        }
+        $mailable = (new InaktivLoeschungMail($first->vorname, $first->nachname))->build();
+        $this->assertTrue($mailable->hasReplyTo(config('mail.from.address')));
+        $this->assertEquals(MailLog::STATUS_SENT, $log->fresh()->status);
+    }
+
+    public function test_bulk_deletion_rejects_invalid_or_outdated_selections_without_deleting_anyone(): void
+    {
+        Queue::fake();
+        $old = $this->person('Old');
+        $old->forceFill(['created_at' => '2023-01-01'])->save();
+        $recent = $this->person('Recent');
+        $this->actingAs($this->admin());
+        $url = route('interessenten.inaktive-verkaeufer.destroy');
+        $this->delete($url, ['ids' => [$old->id]])->assertSessionHasErrors('bestaetigung');
+        $this->delete($url, ['ids' => [$old->id, $recent->id], 'bestaetigung' => 1])->assertSessionHasErrors('ids');
+        $this->delete($url, ['ids' => [$old->id, $old->id], 'bestaetigung' => 1])->assertSessionHasErrors('ids.0');
+        $old->forceFill(['mail' => ''])->save();
+        $this->delete($url, ['ids' => [$old->id], 'bestaetigung' => 1])->assertSessionHasErrors('ids');
+        $this->assertNull($old->fresh()->deleted_at);
+        $this->assertNull($recent->fresh()->deleted_at);
+        Queue::assertNothingPushed();
+        $this->assertDatabaseCount('mail_logs', 0);
+    }
+
+    public function test_bulk_deletion_requires_administration_access(): void
+    {
+        $url = route('interessenten.inaktive-verkaeufer.destroy');
+        $this->delete($url, ['ids' => [1], 'bestaetigung' => 1])->assertRedirect('/login');
+        $user = $this->admin();
+        $user->verwaltung = 0;
+        $user->save();
+        $this->actingAs($user)->delete($url, ['ids' => [1], 'bestaetigung' => 1])
+            ->assertRedirect(url('/'))->assertSessionHas('danger');
+    }
+
+    public function test_notification_transport_failure_is_recorded_and_rethrown(): void
+    {
+        $log = MailLog::create([
+            'typ' => 'inaktivLoeschung', 'email' => 'test@example.test',
+            'betreff' => 'Test', 'status' => MailLog::STATUS_QUEUED,
+        ]);
+        Mail::shouldReceive('to')->once()->andReturnSelf();
+        Mail::shouldReceive('send')->once()->andThrow(new TransportException('SMTP unavailable'));
+        try {
+            (new SendInaktivLoeschungMailJob($log->id, 'Maria', 'Muster'))->handle();
+            $this->fail('Expected transport exception');
+        } catch (TransportException $exception) {
+            $this->assertSame('SMTP unavailable', $exception->getMessage());
+        }
+        $this->assertEquals(MailLog::STATUS_FAILED, $log->fresh()->status);
+        $this->assertSame('SMTP unavailable', $log->fresh()->fehler);
     }
 }

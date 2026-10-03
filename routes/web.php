@@ -152,6 +152,8 @@ Route::group(['middleware' => ['auth', 'isVerwaltung']], function () {
 
     Route::get('/interessenten/inaktive-verkaeufer', [\App\Http\Controllers\InaktiveVerkaeuferController::class, 'index'])
         ->name('interessenten.inaktive-verkaeufer');
+    Route::delete('/interessenten/inaktive-verkaeufer', [\App\Http\Controllers\InaktiveVerkaeuferController::class, 'destroy'])
+        ->name('interessenten.inaktive-verkaeufer.destroy');
 
     Route::resources([
         'interessenten' => 'InteressentenController',
