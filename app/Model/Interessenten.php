@@ -62,6 +62,11 @@ class Interessenten extends Model
             ->orderBy('klamottenboersen_id', 'desc');
     }
 
+    public function reservierteNummern()
+    {
+        return $this->hasMany(VKnummer::class, 'reserviert_fuer');
+    }
+
     public function vknummern_vergeben()
     {
         return $this->hasOne(VKnummer::class, 'vergeben_an')

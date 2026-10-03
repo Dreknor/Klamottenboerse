@@ -101,6 +101,7 @@
                     <div class="tbl-cell">
                         <h2 id="Ueberschrift">Interessenten</h2>
                         <div class="subtitle" id="subtitle">Alle Interessenten</div>
+                        <a href="{{ route('interessenten.inaktive-verkaeufer') }}" class="btn btn-outline-secondary mt-2">Inaktive Verk&auml;ufer</a>
                     </div>
                 </div>
             </div>

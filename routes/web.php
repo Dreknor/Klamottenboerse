@@ -150,6 +150,8 @@ Route::group(['middleware' => ['auth', 'isVerwaltung']], function () {
     //newInteressent from Mail
     Route::post('newInteressent', 'InteressentenController@create');
 
+    Route::get('/interessenten/inaktive-verkaeufer', [\App\Http\Controllers\InaktiveVerkaeuferController::class, 'index'])
+        ->name('interessenten.inaktive-verkaeufer');
 
     Route::resources([
         'interessenten' => 'InteressentenController',
