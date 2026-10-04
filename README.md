@@ -24,8 +24,12 @@ cp .env.example .env && php artisan key:generate   # DB, MAIL_* und IMAP_* eintr
 php artisan migrate --force
 php artisan db:seed --class=GrunddatenSeeder --force
 php artisan db:seed --class=MailvorlagenSeeder --force
+php artisan db:seed --class=SeitenSeeder --force      # Startseite, Infoseiten, Impressum, Datenschutz
+php artisan storage:link
 php artisan admin:anlegen vorname@example.org
 ```
+
+Danach im Backend unter „Einstellungen“ die Betreiber-Angaben für Impressum und Datenschutz eintragen.
 
 Für alle automatischen Abläufe (Mailversand mit Stundenlimit, Mailplan, Warteliste, Postfach-Abruf,
 Aufgaben-Erinnerungen) genügt ein Cron-Eintrag:
@@ -33,6 +37,9 @@ Aufgaben-Erinnerungen) genügt ein Cron-Eintrag:
 ```
 * * * * * cd /pfad/zur/app && php artisan schedule:run >> /dev/null 2>&1
 ```
+
+Automatisch laufen außerdem: Löschung inaktiver Personen nach 24 Monaten (mit Vorwarnung per Mail)
+und die Erledigung selbst beantragter Löschungen nach der Abrechnung (`datenschutz:inaktive`).
 
 ## Übernahme aus V1
 
@@ -46,6 +53,20 @@ php artisan v1:import --frisch   # erneuter Import: leert vorher alle Fachdaten
 
 Am Ende werden je Börse Anzahl verkaufter Artikel und Umsatz zwischen V1 und V2 auf den Cent verglichen.
 Bei einer Abweichung wird nichts gespeichert. Die Passwörter des Teams werden übernommen.
+
+## Übernahme aus der Nextcloud
+
+Bilder und Protokolle werden einmalig per WebDAV übernommen (wiederholbar, ohne Doppelungen).
+Passwort am besten als App-Passwort in `NEXTCLOUD_PASSWORT` oder bei der Abfrage eingeben:
+
+```bash
+php artisan nextcloud:import --url=https://cloud.example.org/remote.php/dav/files/BENUTZER --benutzer=BENUTZER --bilder="Klamottenbörse/Fotos" --protokolle="Klamottenbörse/Protokolle"
+```
+
+## Lokal testen mit Mailpit
+
+`MAIL_HOST=127.0.0.1`, `MAIL_PORT=1025` und `IMAP_TREIBER=mailpit` (Postfach-Adresse in `IMAP_USERNAME`).
+Der Posteingang liest dann Mails an diese Adresse über die Mailpit-API statt über IMAP.
 
 ## Entwicklung
 
