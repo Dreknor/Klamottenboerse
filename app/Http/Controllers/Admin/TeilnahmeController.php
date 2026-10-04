@@ -28,7 +28,7 @@ class TeilnahmeController extends Controller
         $suche = trim((string) $request->query('suche'));
 
         $teilnahmen = $boerse->teilnahmen()
-            ->with('person')
+            ->with(['person', 'notizen'])
             ->withCount(['artikel', 'kisten'])
             ->when($status, fn ($q) => $q->where('status', $status))
             ->when(! $status, fn ($q) => $q->where('status', '!=', TeilnahmeStatus::Abgesagt->value))
@@ -103,6 +103,14 @@ class TeilnahmeController extends Controller
         }
 
         return back()->with('erfolg', 'Nummer geändert.');
+    }
+
+    public function notiz(Request $request, Teilnahme $teilnahme): RedirectResponse
+    {
+        $daten = $request->validate(['text' => ['required', 'string', 'max:2000']]);
+        $teilnahme->notizen()->create(['text' => $daten['text'], 'autor_id' => $request->user()->id]);
+
+        return back()->with('erfolg', 'Notiz gespeichert.');
     }
 
     public function nachruecken(BoerseKontext $kontext, WartelisteNachruecken $nachruecken): RedirectResponse

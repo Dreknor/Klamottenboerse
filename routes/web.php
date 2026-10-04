@@ -112,6 +112,7 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::post('/verkaeufer/{teilnahme}/absagen', [Admin\TeilnahmeController::class, 'absagen'])->name('teilnahmen.absagen');
     Route::post('/verkaeufer/{teilnahme}/nummer', [Admin\TeilnahmeController::class, 'nummer'])->name('teilnahmen.nummer');
     Route::post('/verkaeufer/nachruecken', [Admin\TeilnahmeController::class, 'nachruecken'])->name('teilnahmen.nachruecken');
+    Route::post('/verkaeufer/{teilnahme}/notizen', [Admin\TeilnahmeController::class, 'notiz'])->name('teilnahmen.notiz');
 
     Route::get('/reservierungen', [Admin\ReservierungController::class, 'index'])->name('reservierungen.index');
     Route::post('/reservierungen', [Admin\ReservierungController::class, 'store'])->name('reservierungen.store');
@@ -160,6 +161,11 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::post('/posteingang/{mail}/antworten', [Admin\PosteingangController::class, 'antworten'])->name('posteingang.antworten');
     Route::post('/posteingang/{mail}/zuordnen', [Admin\PosteingangController::class, 'zuordnen'])->name('posteingang.zuordnen');
     Route::post('/posteingang/{mail}/status', [Admin\PosteingangController::class, 'status'])->name('posteingang.status');
+
+    Route::get('/verkaeufe', [Admin\VerkaufController::class, 'index'])->name('verkaeufe.index');
+    Route::post('/verkaeufe/{bon}/storno', [Admin\VerkaufController::class, 'bonStornieren'])->name('verkaeufe.bon');
+    Route::delete('/verkaeufe/{bon}/storno', [Admin\VerkaufController::class, 'stornoZuruecknehmen'])->name('verkaeufe.zuruecknehmen');
+    Route::post('/verkaeufe/position/{position}/storno', [Admin\VerkaufController::class, 'positionStornieren'])->name('verkaeufe.position');
 
     Route::get('/abrechnung', [Admin\AbrechnungController::class, 'index'])->name('abrechnung.index');
     Route::post('/abrechnung/berechnen', [Admin\AbrechnungController::class, 'berechnen'])->name('abrechnung.berechnen');

@@ -6,6 +6,7 @@
             ['Verkäufer & Nummern', 'admin.teilnahmen.index', 'admin.teilnahmen.*'],
             ['Reservierungen', 'admin.reservierungen.index', 'admin.reservierungen.*'],
             ['Helfer & Schichten', 'admin.schichten.index', 'admin.schichten.*'],
+            ['Verkäufe & Stornos', 'admin.verkaeufe.index', 'admin.verkaeufe.*'],
             ['Abrechnung', 'admin.abrechnung.index', 'admin.abrechnung.*'],
             ['Statistik', 'admin.statistik.index', 'admin.statistik.*'],
             ['Feedback', 'admin.feedback.index', 'admin.feedback.*'],

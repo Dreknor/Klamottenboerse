@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Teilnahme extends Model
 {
@@ -55,6 +56,11 @@ class Teilnahme extends Model
     public function bonpositionen(): HasMany
     {
         return $this->hasMany(Bonposition::class);
+    }
+
+    public function notizen(): MorphMany
+    {
+        return $this->morphMany(Notiz::class, 'notizbar')->latest();
     }
 
     public function abrechnung(): HasOne

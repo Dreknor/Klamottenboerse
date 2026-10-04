@@ -18,6 +18,9 @@
                         <td><x-ui.abzeichen :farbe="$t->status->farbe()">{{ $t->status->label() }}</x-ui.abzeichen></td>
                         <td>{{ $t->abrechnung ? \App\Support\Geld::format($t->abrechnung->auszahlung_cent) : '' }}</td>
                     </tr>
+                    @foreach ($t->notizen as $notiz)
+                        <tr><td></td><td colspan="3" class="text-xs text-amber-900">✎ {{ $notiz->text }}</td></tr>
+                    @endforeach
                 @empty
                     <tr><td colspan="4" class="text-stone-500">Noch nie verkauft.</td></tr>
                 @endforelse

@@ -65,7 +65,7 @@
                 <thead><tr><th>Nr.</th><th>Name</th><th>Status</th><th>Artikel</th><th>Kisten</th><th>Aktionen</th></tr></thead>
                 <tbody>
                 @forelse ($teilnahmen as $t)
-                    <tr x-data="{ aendern: false }">
+                    <tr x-data="{ aendern: false, notiz: false }">
                         <td class="font-mono text-base font-semibold">{{ $t->nummer ?? ($t->wartelisten_position ? 'W'.$t->wartelisten_position : '–') }}</td>
                         <td>
                             @if ($t->person)
@@ -74,6 +74,9 @@
                             @else
                                 <span class="font-medium">Kinderhaus</span> <span class="text-xs text-stone-500">(ohne Spende)</span>
                             @endif
+                            @foreach ($t->notizen as $notiz)
+                                <span class="mt-1 block rounded bg-amber-50 px-2 py-0.5 text-xs text-amber-900">✎ {{ $notiz->text }}</span>
+                            @endforeach
                         </td>
                         <td>
                             <x-ui.abzeichen :farbe="$t->status->farbe()">{{ $t->status->label() }}</x-ui.abzeichen>
@@ -88,6 +91,12 @@
                                 @endif
                                 <form method="post" action="{{ route('admin.teilnahmen.absagen', $t) }}" class="ml-3 inline" onsubmit="return confirm('Teilnahme von {{ $t->person?->name }} wirklich absagen?')">
                                     @csrf<button class="text-red-700 hover:underline">Absagen</button>
+                                </form>
+                                <button type="button" class="ml-3 text-stone-600 hover:underline" @click="notiz = !notiz">Notiz</button>
+                                <form x-show="notiz" x-cloak method="post" action="{{ route('admin.teilnahmen.notiz', $t) }}" class="mt-2 flex items-center gap-2">
+                                    @csrf
+                                    <input name="text" class="feld py-1" placeholder="z. B. bringt drei Kisten" required>
+                                    <x-ui.knopf groesse="klein">Speichern</x-ui.knopf>
                                 </form>
                                 <form x-show="aendern" x-cloak method="post" action="{{ route('admin.teilnahmen.nummer', $t) }}" class="mt-2 flex items-center gap-2">
                                     @csrf
