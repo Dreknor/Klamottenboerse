@@ -70,6 +70,9 @@
                     Verkäufer sehen ihren Erlös live im Portal
                 </label>
             </div>
+            <x-ui.feld name="belehrung" label="Belehrung zum Unterschreiben bei der Kistenabgabe" typ="textarea" rows="7" class="mt-4"
+                       :wert="$boerse->belehrung ?? \App\Support\Belehrung::STANDARD"
+                       hilfe="Wird auf die Belehrungs-Blätter gedruckt. Platzhalter: {datum}, {ort}, {abholung_ab}, {abholung_bis}, {anlieferung_ab}, {anlieferung_bis}, {provision}, {vorname}, {nachname}, {nummer}. **fett** ist möglich." />
             <x-ui.feld name="hinweise" label="Interne Hinweise" typ="textarea" :wert="$boerse->hinweise" class="mt-4" />
         </x-ui.karte>
 

@@ -13,6 +13,7 @@ use App\Models\Ort;
 use App\Models\Person;
 use App\Models\Schicht;
 use App\Models\Teilnahme;
+use App\Support\Belehrung;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection;
@@ -274,7 +275,7 @@ class V1Import extends Command
                 'rundung_cent' => 1, // V1 hat nicht gerundet – alte Abrechnungen bleiben exakt
                 'ergebnis_freigegeben' => (bool) ($k->ergebnis_freigabe ?? false),
                 'live_erloes_freigegeben' => (bool) ($k->live_verkaufsansicht_freigabe ?? false),
-                'hinweise' => $k->belehrung ?? null,
+                'belehrung' => Belehrung::ausV1Html($k->belehrung ?? null),
             ])->refresh(); // Standardwerte (z. B. Kinderhaus-Nummer 600) laden
             $boerse->forceFill(['created_at' => $k->created_at])->saveQuietly();
             $this->map('klamottenboerse', $k->id, $boerse->id);

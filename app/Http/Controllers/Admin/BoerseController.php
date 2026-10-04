@@ -106,6 +106,7 @@ class BoerseController extends Controller
             'rundung_cent' => ['required', 'integer', 'in:1,5,10,50,100'],
             'angebot_stunden' => ['required', 'integer', 'min:1', 'max:336'],
             'hinweise' => ['nullable', 'string', 'max:5000'],
+            'belehrung' => ['nullable', 'string', 'max:5000'],
             'live_erloes_freigegeben' => ['nullable', 'boolean'],
         ]);
 

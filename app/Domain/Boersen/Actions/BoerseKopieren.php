@@ -20,7 +20,7 @@ class BoerseKopieren
             $tage = (int) $vorlage->verkaufstag->copy()->startOfDay()->diffInDays($neuerVerkaufstag->copy()->startOfDay(), false);
 
             $daten = $vorlage->only([
-                'ort_id', 'nummer_von', 'nummer_bis', 'blockgroesse', 'block_toleranz', 'kapazitaet',
+                'ort_id', 'nummer_von', 'nummer_bis', 'blockgroesse', 'block_toleranz', 'kapazitaet', 'belehrung',
                 'kinderhaus_nummer', 'max_teile', 'max_kisten', 'provision_promille', 'rundung_cent',
                 'angebot_stunden', 'hinweise',
             ]);

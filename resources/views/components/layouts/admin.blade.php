@@ -6,9 +6,10 @@
      */
     $navigation = [
         'Diese Börse' => [
-            ['Verkäufer & Nummern', 'admin.teilnahmen.index', 'admin.teilnahmen.*|admin.reservierungen.*', [
+            ['Verkäufer & Nummern', 'admin.teilnahmen.index', 'admin.teilnahmen.*|admin.reservierungen.*|admin.listen.*', [
                 ['Verkäufer & Nummern', 'admin.teilnahmen.index', 'admin.teilnahmen.*'],
                 ['Reservierte Nummern', 'admin.reservierungen.index', 'admin.reservierungen.*'],
+                ['Listen & Drucken', 'admin.listen.index', 'admin.listen.*'],
             ]],
             ['Helfer & Schichten', 'admin.schichten.index', 'admin.schichten.*'],
             ['Verkauf & Abrechnung', 'admin.verkaeufe.index', 'admin.verkaeufe.*|admin.abrechnung.*', [

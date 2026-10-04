@@ -129,6 +129,12 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::post('/verkaeufer/nachruecken', [Admin\TeilnahmeController::class, 'nachruecken'])->name('teilnahmen.nachruecken');
     Route::post('/verkaeufer/{teilnahme}/notizen', [Admin\TeilnahmeController::class, 'notiz'])->name('teilnahmen.notiz');
 
+    Route::get('/listen', [Admin\ListenController::class, 'index'])->name('listen.index');
+    Route::get('/listen/verkaeufer.pdf', [Admin\ListenController::class, 'verkaeuferliste'])->name('listen.verkaeuferliste');
+    Route::get('/listen/belehrungen.pdf', [Admin\ListenController::class, 'belehrungen'])->name('listen.belehrungen');
+    Route::get('/listen/abstreichliste.pdf', [Admin\ListenController::class, 'abstreichliste'])->name('listen.abstreichliste');
+    Route::get('/listen/helfer.pdf', [Admin\ListenController::class, 'helferliste'])->name('listen.helferliste');
+
     Route::get('/reservierungen', [Admin\ReservierungController::class, 'index'])->name('reservierungen.index');
     Route::post('/reservierungen', [Admin\ReservierungController::class, 'store'])->name('reservierungen.store');
     Route::delete('/reservierungen/{reservierung}', [Admin\ReservierungController::class, 'destroy'])->name('reservierungen.destroy');
