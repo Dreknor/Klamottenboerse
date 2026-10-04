@@ -18,6 +18,18 @@ class Einstellungen
         'erinnerung_aufgaben_tage' => 2,
     ];
 
+    /** Pflichtangaben für Impressum und Datenschutzerklärung (Platzhalter => Beschreibung). */
+    public const BETREIBER = [
+        'betreiber_name' => 'Name des Trägers bzw. Vereins',
+        'betreiber_anschrift' => 'Anschrift',
+        'betreiber_vertreten' => 'vertreten durch (Name)',
+        'kontakt_email' => 'E-Mail-Adresse',
+        'kontakt_telefon' => 'Telefonnummer',
+        'register' => 'Registereintrag (z. B. Vereinsregister, Nummer) – falls vorhanden',
+        'hoster' => 'Hosting-Anbieter mit Anschrift',
+        'datenschutz_kontakt' => 'Ansprechperson für Datenschutz',
+    ];
+
     private const CACHE_KEY = 'einstellungen.alle';
 
     public static function get(string $schluessel, mixed $standard = null): mixed

@@ -28,5 +28,14 @@
     .tabelle { @apply min-w-full divide-y divide-stone-200 text-sm; }
     .tabelle th { @apply px-3 py-2 text-left font-medium text-stone-500; }
     .tabelle td { @apply px-3 py-2 align-top; }
+
+    /* Fließtext aus Markdown (Impressum, Datenschutz, Mail-Vorschau) */
+    .inhalt { @apply space-y-4 leading-relaxed text-stone-700; }
+    .inhalt h2 { @apply mt-8 text-xl; }
+    .inhalt h3 { @apply mt-6 text-lg font-semibold text-stone-900; }
+    .inhalt ul { @apply list-disc space-y-1 pl-6; }
+    .inhalt ol { @apply list-decimal space-y-1 pl-6; }
+    .inhalt a { @apply underline; }
+    .inhalt code { @apply rounded bg-stone-100 px-1 text-sm; }
     .tabelle tbody tr { @apply hover:bg-stone-50; }
 }

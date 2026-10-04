@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Kommunikation\Platzhalter;
 use App\Support\Barcode;
 use App\Support\Geld;
 
@@ -37,4 +38,11 @@ it('kodiert und liest den Etiketten-Barcode', function () {
         ->and(Barcode::lesen($code))->toBe(['nummer' => 215, 'artikel' => 7, 'preis_cent' => 450])
         ->and(Barcode::lesen('abc'))->toBeNull()
         ->and(Barcode::lesen('2150070045'))->toBeNull();
+});
+
+it('lässt Zeilen mit nur leeren Platzhaltern weg', function () {
+    $text = "Hallo {vorname},\n- Verkauf: {verkauf}\n- Ort: {ort}\n{unbekannt}";
+
+    expect(Platzhalter::ersetzen($text, ['vorname' => 'Mia', 'verkauf' => '', 'ort' => 'Saal']))
+        ->toBe("Hallo Mia,\n- Ort: Saal\n{unbekannt}");
 });

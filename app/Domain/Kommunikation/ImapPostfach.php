@@ -21,12 +21,20 @@ class ImapPostfach
 
     public static function istKonfiguriert(): bool
     {
+        if (config('imap.treiber') === 'mailpit') {
+            return filled(config('imap.username'));
+        }
+
         return filled(config('imap.host')) && filled(config('imap.username'));
     }
 
     /** Ruft neue Mails ab. Gibt die Anzahl neu übernommener Mails zurück. */
     public function abrufen(string $ordner = 'INBOX'): int
     {
+        if (config('imap.treiber') === 'mailpit') {
+            return (new MailpitPostfach)->abrufen();
+        }
+
         $folder = $this->client()->getFolderByPath($ordner);
         if (! $folder) {
             throw new RuntimeException("Ordner {$ordner} nicht gefunden.");
@@ -55,6 +63,10 @@ class ImapPostfach
     /** Verschiebt die Mail auf dem Server (z. B. in den Spam- oder Papierkorb-Ordner). */
     public function verschieben(Posteingang $mail, string $zielordner): void
     {
+        if ($mail->ordner === MailpitPostfach::ORDNER) {
+            return; // Mailpit kennt keine Ordner
+        }
+
         $folder = $this->client()->getFolderByPath($mail->ordner);
         $message = $folder?->query()->getMessageByUid($mail->uid);
         $message?->move($zielordner, true);

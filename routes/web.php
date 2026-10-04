@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [Public\StartController::class, 'index'])->name('start');
+Route::get('/impressum', [Public\SeiteController::class, 'impressum'])->name('impressum');
+Route::get('/datenschutz', [Public\SeiteController::class, 'datenschutz'])->name('datenschutz');
 
 Route::get('/anmeldung', [Public\AnmeldungController::class, 'create'])->name('anmeldung.create');
 Route::post('/anmeldung', [Public\AnmeldungController::class, 'store'])->middleware('throttle:6,1')->name('anmeldung.store');
@@ -156,6 +158,10 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
 
     Route::get('/statistik', [Admin\StatistikController::class, 'index'])->name('statistik.index');
     Route::get('/feedback', [Admin\FeedbackController::class, 'index'])->name('feedback.index');
+
+    Route::get('/seiten', [Admin\SeiteController::class, 'index'])->name('seiten.index');
+    Route::get('/seiten/{seite}', [Admin\SeiteController::class, 'edit'])->name('seiten.edit');
+    Route::put('/seiten/{seite}', [Admin\SeiteController::class, 'update'])->name('seiten.update');
 
     Route::get('/einstellungen', [Admin\EinstellungenController::class, 'edit'])->name('einstellungen.edit');
     Route::put('/einstellungen', [Admin\EinstellungenController::class, 'update'])->name('einstellungen.update');

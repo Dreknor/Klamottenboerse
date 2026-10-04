@@ -1,6 +1,9 @@
 <?php
 
 return [
+    // "imap" im Betrieb; "mailpit" nur lokal zum Testen (Mailpit hat kein IMAP, aber eine REST-API)
+    'treiber' => env('IMAP_TREIBER', 'imap'),
+    'mailpit_url' => env('MAILPIT_URL', 'http://localhost:8025'),
     // Postfach, das im Backend als Posteingang angezeigt wird (z. B. anmeldung@klamottenboerse.de)
     'host' => env('IMAP_HOST'),
     'port' => (int) env('IMAP_PORT', 993),

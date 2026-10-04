@@ -10,6 +10,9 @@
                 <style>a{color:#a33f00;} p{margin:0 0 14px;} ul{padding-left:20px;margin:0 0 14px;}</style>
                 {!! $html !!}
             </td></tr>
+            <tr><td style="padding:14px 28px;border-top:1px solid #e7e5e4;font-size:12px;color:#78716c;">
+                <a href="{{ route('impressum') }}" style="color:#78716c;">Impressum</a> · <a href="{{ route('datenschutz') }}" style="color:#78716c;">Datenschutz</a>
+            </td></tr>
         </table>
     </td></tr>
 </table>

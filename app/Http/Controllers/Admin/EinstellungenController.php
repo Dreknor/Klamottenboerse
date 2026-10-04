@@ -31,10 +31,11 @@ class EinstellungenController extends Controller
             'empfaenger_spende' => ['required', 'string', 'max:190'],
             'mail_max_pro_stunde' => ['required', 'integer', 'min:1', 'max:10000'],
             'erinnerung_aufgaben_tage' => ['required', 'integer', 'min:0', 'max:30'],
-        ]);
+        ] + collect(Einstellungen::BETREIBER)->mapWithKeys(fn ($_, $schluessel) => [$schluessel => ['nullable', 'string', 'max:500']])->all());
 
+        $zahlen = ['mail_max_pro_stunde', 'erinnerung_aufgaben_tage'];
         foreach ($daten as $schluessel => $wert) {
-            Einstellungen::set($schluessel, is_numeric($wert) ? (int) $wert : $wert);
+            Einstellungen::set($schluessel, in_array($schluessel, $zahlen, true) ? (int) $wert : trim((string) $wert));
         }
 
         return back()->with('erfolg', 'Einstellungen gespeichert.');

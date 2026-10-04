@@ -22,6 +22,9 @@
             ['Postausgang', 'admin.postausgang.index', 'admin.postausgang.*'],
             ['Mailvorlagen', 'admin.mailvorlagen.index', 'admin.mailvorlagen.*'],
         ],
+        'Website' => [
+            ['Impressum & Datenschutz', 'admin.seiten.index', 'admin.seiten.*'],
+        ],
         'Vor Ort' => [
             ['Kasse', 'kasse.index', 'kasse.*'],
             ['Tablet: Annahme & Ausgabe', 'tablet.index', 'tablet.*'],

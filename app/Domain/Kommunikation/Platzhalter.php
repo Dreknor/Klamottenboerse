@@ -73,10 +73,23 @@ class Platzhalter
         return array_map(fn ($wert) => (string) $wert, array_merge($werte, $daten));
     }
 
-    /** @param  array<string, string>  $werte */
+    /**
+     * Ersetzt Platzhalter. Zeilen, deren Platzhalter alle leer sind (z. B. "- Verkauf: {verkauf}" ohne
+     * eingetragene Verkaufszeit), fallen ganz weg, damit keine halben Sätze in Mails stehen.
+     *
+     * @param  array<string, string>  $werte
+     */
     public static function ersetzen(string $text, array $werte): string
     {
-        return preg_replace_callback('/\{([a-z_]+)\}/', fn ($m) => $werte[$m[1]] ?? $m[0], $text);
+        $zeilen = preg_split('/\R/', $text);
+
+        $zeilen = array_filter($zeilen, function (string $zeile) use ($werte) {
+            preg_match_all('/\{([a-z_]+)\}/', $zeile, $treffer);
+
+            return $treffer[1] === [] || collect($treffer[1])->contains(fn ($name) => ($werte[$name] ?? '{'.$name.'}') !== '');
+        });
+
+        return preg_replace_callback('/\{([a-z_]+)\}/', fn ($m) => $werte[$m[1]] ?? $m[0], implode("\n", $zeilen));
     }
 
     /** "18. Februar 2027, 18:00 Uhr" – ohne Uhrzeit, wenn keine angegeben ist (00:00). */

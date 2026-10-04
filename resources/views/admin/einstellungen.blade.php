@@ -10,6 +10,15 @@
             </div>
         </x-ui.karte>
 
+        <x-ui.karte titel="Betreiber (für Impressum und Datenschutz)">
+            <div class="grid gap-4 md:grid-cols-2">
+                @foreach (\App\Support\Einstellungen::BETREIBER as $schluessel => $beschreibung)
+                    <x-ui.feld :name="$schluessel" :label="$beschreibung" :wert="$werte[$schluessel] ?? ''" />
+                @endforeach
+            </div>
+            <p class="mt-3 text-sm text-stone-500">Diese Angaben werden über Platzhalter in <a href="{{ route('admin.seiten.index') }}">Impressum und Datenschutzerklärung</a> eingesetzt.</p>
+        </x-ui.karte>
+
         <x-ui.karte titel="Mailversand">
             <div class="grid gap-4 md:grid-cols-2">
                 <x-ui.feld name="mail_max_pro_stunde" label="Höchstens Mails pro Stunde" typ="number" :wert="$werte['mail_max_pro_stunde']" required
