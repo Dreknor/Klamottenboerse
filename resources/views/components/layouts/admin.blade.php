@@ -27,7 +27,7 @@
             ['Mailvorlagen', 'admin.mailvorlagen.index', 'admin.mailvorlagen.*'],
         ],
         'Website' => [
-            ['Impressum & Datenschutz', 'admin.seiten.index', 'admin.seiten.*'],
+            ['Seiten & Menü', 'admin.seiten.index', 'admin.seiten.*'],
         ],
         'Vor Ort' => [
             ['Kasse', 'kasse.index', 'kasse.*'],

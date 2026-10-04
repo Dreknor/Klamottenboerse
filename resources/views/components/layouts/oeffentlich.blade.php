@@ -22,12 +22,18 @@
         </a>
         <button type="button" class="rounded-lg border border-stone-300 px-3 py-1.5 sm:hidden" @click="menu = !menu" :aria-expanded="menu" aria-label="Menü">☰</button>
         <nav class="hidden gap-5 text-sm font-medium sm:flex" aria-label="Hauptmenü">
+            @foreach ($menue as $eintrag)
+                <a href="{{ route('seite', $eintrag->slug) }}" @if (request()->is($eintrag->slug)) aria-current="page" @endif>{{ $eintrag->titel }}</a>
+            @endforeach
             <a href="{{ route('anmeldung.create') }}">Als Verkäufer anmelden</a>
             <a href="{{ route('helfer.index') }}">Helfen</a>
             <a href="{{ route('portal.index') }}">Mein Portal</a>
         </nav>
     </div>
     <nav x-show="menu" x-cloak class="flex flex-col gap-1 border-t border-stone-100 px-4 py-2 sm:hidden" aria-label="Hauptmenü mobil">
+        @foreach ($menue as $eintrag)
+            <a href="{{ route('seite', $eintrag->slug) }}" class="py-2">{{ $eintrag->titel }}</a>
+        @endforeach
         <a href="{{ route('anmeldung.create') }}" class="py-2">Als Verkäufer anmelden</a>
         <a href="{{ route('helfer.index') }}" class="py-2">Helfen</a>
         <a href="{{ route('portal.index') }}" class="py-2">Mein Portal</a>

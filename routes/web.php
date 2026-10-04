@@ -196,8 +196,16 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::get('/feedback', [Admin\FeedbackController::class, 'index'])->name('feedback.index');
 
     Route::get('/seiten', [Admin\SeiteController::class, 'index'])->name('seiten.index');
+    Route::post('/seiten', [Admin\SeiteController::class, 'store'])->name('seiten.store');
     Route::get('/seiten/{seite}', [Admin\SeiteController::class, 'edit'])->name('seiten.edit');
     Route::put('/seiten/{seite}', [Admin\SeiteController::class, 'update'])->name('seiten.update');
+    Route::delete('/seiten/{seite}', [Admin\SeiteController::class, 'destroy'])->name('seiten.destroy');
+    Route::get('/seiten/{seite}/vorschau', [Admin\SeiteController::class, 'vorschau'])->name('seiten.vorschau');
+    Route::post('/seiten/{seite}/verwerfen', [Admin\SeiteController::class, 'entwurfVerwerfen'])->name('seiten.verwerfen');
+    Route::post('/seiten/{seite}/versionen/{version}', [Admin\SeiteController::class, 'versionLaden'])->name('seiten.version');
+    Route::put('/seiten/{seite}/einstellungen', [Admin\SeiteController::class, 'einstellungen'])->name('seiten.einstellungen');
+    Route::post('/seiten/{seite}/bilder', [Admin\SeiteController::class, 'bildHochladen'])->name('seiten.bild');
+    Route::delete('/seiten/{seite}/bilder/{media}', [Admin\SeiteController::class, 'bildLoeschen'])->name('seiten.bild.loeschen');
 
     Route::get('/konto', [Admin\KontoController::class, 'edit'])->name('konto.edit');
     Route::put('/konto/passwort', [Admin\KontoController::class, 'passwort'])->name('konto.passwort');
@@ -205,3 +213,12 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::get('/einstellungen', [Admin\EinstellungenController::class, 'edit'])->name('einstellungen.edit');
     Route::put('/einstellungen', [Admin\EinstellungenController::class, 'update'])->name('einstellungen.update');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Weitere Website-Seiten aus dem Website-Editor (z. B. /faq) – muss als letzte Route stehen
+|--------------------------------------------------------------------------
+*/
+Route::get('/{seite:slug}', [Public\SeiteController::class, 'zeigen'])
+    ->where('seite', '[a-z0-9][a-z0-9-]*')
+    ->name('seite');

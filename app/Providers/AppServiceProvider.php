@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Domain\Kommunikation\VorlagenMail;
 use App\Models\Boerse;
 use App\Models\Posteingang;
+use App\Models\Seite;
 use App\Support\BoerseKontext;
 use Carbon\Carbon;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -35,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
                 ."[Neues Passwort festlegen]({$link})\n\nWenn du das nicht angefordert hast, kannst du diese Mail ignorieren.";
 
             return (new VorlagenMail('Neues Passwort für die Klamottenbörse', $text))->to($person->email);
+        });
+
+        View::composer('components.layouts.oeffentlich', function ($view) {
+            $view->with('menue', Seite::query()->veroeffentlicht()->where('im_menue', true)
+                ->orderBy('menue_reihenfolge')->orderBy('titel')->get(['slug', 'titel']));
         });
 
         View::composer('components.layouts.admin', function ($view) {
