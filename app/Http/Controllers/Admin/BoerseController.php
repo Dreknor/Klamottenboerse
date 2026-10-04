@@ -97,7 +97,6 @@ class BoerseController extends Controller
             'abholung_ende' => ['nullable', 'date', 'after_or_equal:abholung_beginn'],
             'nummer_von' => ['required', 'integer', 'min:1', 'max:998'],
             'nummer_bis' => ['required', 'integer', 'gt:nummer_von', 'max:999'],
-            'blockgroesse' => ['required', 'integer', 'min:10', 'max:500'],
             'block_toleranz' => ['required', 'integer', 'min:0', 'max:100'],
             'kapazitaet' => ['required', 'integer', 'min:1', 'max:999'],
             'kinderhaus_nummer' => ['required', 'integer', 'min:1', 'max:999'],

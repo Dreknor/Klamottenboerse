@@ -79,7 +79,7 @@
                     @foreach ($updates as $u)
                         <details class="rounded-lg border border-stone-200" @if ($loop->first && $u->status !== 'erfolgreich') open @endif>
                             <summary class="flex cursor-pointer flex-wrap items-center gap-2 px-3 py-2 text-sm">
-                                <x-ui.abzeichen :farbe="match ($u->status) { 'erfolgreich' => 'green', 'laeuft' => 'amber', default => 'red' }">{{ $u->status }}</x-ui.abzeichen>
+                                <x-ui.abzeichen :farbe="match ($u->status) { 'erfolgreich' => 'emerald', 'laeuft' => 'amber', default => 'red' }">{{ $u->status }}</x-ui.abzeichen>
                                 {{ $u->created_at->isoFormat('D.M.YYYY HH:mm') }} · {{ $u->person?->name ?? 'unbekannt' }}
                                 <span class="font-mono text-xs text-stone-500">{{ \Illuminate\Support\Str::limit($u->von_version, 7, '') }} → {{ \Illuminate\Support\Str::limit($u->auf_version ?? '–', 7, '') }}</span>
                             </summary>

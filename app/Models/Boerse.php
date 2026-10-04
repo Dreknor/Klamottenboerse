@@ -164,7 +164,7 @@ class Boerse extends Model
     public function bloecke(): array
     {
         $bloecke = [];
-        $groesse = max(1, (int) $this->blockgroesse);
+        $groesse = 100; // Blöcke sind immer die 100er-Bereiche (Orga am Verkaufstag)
         $von = (int) $this->nummer_von;
         $bis = (int) $this->nummer_bis;
 

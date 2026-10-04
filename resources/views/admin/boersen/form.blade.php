@@ -51,7 +51,6 @@
                 <x-ui.feld name="nummer_von" label="Nummern von" typ="number" :wert="$boerse->nummer_von" required />
                 <x-ui.feld name="nummer_bis" label="Nummern bis" typ="number" :wert="$boerse->nummer_bis" required />
                 <x-ui.feld name="kapazitaet" label="Plätze (Verkäufer)" typ="number" :wert="$boerse->kapazitaet" required />
-                <x-ui.feld name="blockgroesse" label="Blockgröße" typ="number" :wert="$boerse->blockgroesse" required hilfe="Für den Ausgleich am Verkaufstag, meist 100" />
                 <x-ui.feld name="block_toleranz" label="Erlaubte Abweichung je Block" typ="number" :wert="$boerse->block_toleranz" required />
                 <x-ui.feld name="kinderhaus_nummer" label="Feste Nummer Kinderhaus" typ="number" :wert="$boerse->kinderhaus_nummer" required hilfe="Wird automatisch erfasst, ohne Spende" />
                 <x-ui.feld name="angebot_stunden" label="Warteliste: Angebot gilt (Stunden)" typ="number" :wert="$boerse->angebot_stunden" required />
