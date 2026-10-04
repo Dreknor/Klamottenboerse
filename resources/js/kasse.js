@@ -17,7 +17,7 @@ const schreiben = (schluessel, wert) => localStorage.setItem(schluessel, JSON.st
 
 export const euro = (cent) => (cent / 100).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' });
 
-export function kasse({ datenUrl, syncUrl, stornoUrl, boerseId }) {
+export function kasse({ datenUrl, syncUrl, stornoUrl, tokenUrl, boerseId }) {
     return {
         kassenname: localStorage.getItem('kasse.name') || '',
         positionen: [],
@@ -47,6 +47,24 @@ export function kasse({ datenUrl, syncUrl, stornoUrl, boerseId }) {
             window.addEventListener('online', () => { this.online = true; this.synchronisieren(); });
             window.addEventListener('offline', () => { this.online = false; });
             this.$nextTick(() => this.$refs.scan?.focus());
+
+            // Seite und Dateien im Browser ablegen, damit die Kasse auch ohne Netz startet
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/kasse-sw.js', { scope: '/kasse' }).catch(() => {});
+            }
+        },
+
+        // Nach längerer Offline-Phase ist der Sicherheits-Token der (gespeicherten) Seite evtl. veraltet.
+        async tokenErneuern() {
+            try {
+                const antwort = await fetch(tokenUrl, { headers: { Accept: 'application/json' } });
+                if (!antwort.ok) return false;
+                const { token } = await antwort.json();
+                document.querySelector('meta[name=csrf-token]')?.setAttribute('content', token);
+                return true;
+            } catch {
+                return false;
+            }
         },
 
         get summe() {
@@ -191,9 +209,9 @@ export function kasse({ datenUrl, syncUrl, stornoUrl, boerseId }) {
         async synchronisieren() {
             if (this._sync || !this.offeneBons.length) return;
             this._sync = true;
-            const token = document.querySelector('meta[name=csrf-token]')?.content;
             try {
                 for (const bon of [...this.offeneBons]) {
+                    const token = document.querySelector('meta[name=csrf-token]')?.content;
                     const antwort = await fetch(syncUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-CSRF-TOKEN': token },
@@ -206,8 +224,10 @@ export function kasse({ datenUrl, syncUrl, stornoUrl, boerseId }) {
                         const fehler = await antwort.json();
                         this.hinweis(`Bon konnte nicht gespeichert werden: ${fehler.message}. Bitte Orga-Team holen.`);
                         break;
+                    } else if (antwort.status === 419 && (await this.tokenErneuern())) {
+                        break; // nächster Versuch in wenigen Sekunden mit neuem Token
                     } else if (antwort.status === 419 || antwort.status === 401) {
-                        this.hinweis('Sitzung abgelaufen – bitte Seite neu laden und anmelden. Offene Bons bleiben gespeichert.');
+                        this.hinweis('Sitzung abgelaufen – bitte neu anmelden. Offene Bons bleiben gespeichert.');
                         break;
                     } else {
                         break;

@@ -179,3 +179,11 @@ it('kann Info-Mails per Link abbestellen', function () {
 
     expect($person->fresh()->info_mails_erlaubt_at)->toBeNull();
 });
+
+it('liefert der Kasse einen frischen Sicherheits-Token und den Service Worker', function () {
+    $kasse = tap(Person::factory()->create())->assignRole('kasse');
+
+    $this->actingAs($kasse)->withSession(['login_art' => 'passwort'])
+        ->getJson(route('kasse.token'))->assertOk()->assertJsonStructure(['token']);
+    expect(file_get_contents(public_path('kasse-sw.js')))->toContain("const SEITE = '/kasse'");
+});

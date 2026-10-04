@@ -82,6 +82,7 @@ Route::middleware('auth')->prefix('portal')->name('portal.')->group(function () 
 Route::middleware(['auth', 'passwort', 'role:admin|orga|kasse'])->prefix('kasse')->name('kasse.')->group(function () {
     Route::get('/', [KasseController::class, 'index'])->name('index');
     Route::get('/daten', [KasseController::class, 'daten'])->name('daten');
+    Route::get('/token', fn () => response()->json(['token' => csrf_token()]))->name('token');
     Route::post('/bons', [KasseController::class, 'sync'])->name('sync');
     Route::post('/bons/{bon:uuid}/storno', [KasseController::class, 'storno'])->name('storno');
 });
