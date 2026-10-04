@@ -68,6 +68,7 @@ Route::middleware('auth')->prefix('portal')->name('portal.')->group(function () 
     Route::get('/etiketten', [Portal\DruckController::class, 'etiketten'])->name('etiketten');
     Route::get('/kistenzettel', [Portal\DruckController::class, 'kistenzettel'])->name('kistenzettel');
     Route::post('/absage', [Portal\PortalController::class, 'absagen'])->name('absage');
+    Route::get('/unterlagen/{media}', [Portal\PortalController::class, 'unterlage'])->name('unterlage');
     Route::get('/meine-daten', [Portal\DatenController::class, 'index'])->name('daten');
     Route::get('/meine-daten/export', [Portal\DatenController::class, 'export'])->name('daten.export');
     Route::post('/meine-daten/loeschen', [Portal\DatenController::class, 'loeschen'])->name('daten.loeschen');
@@ -139,8 +140,24 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::post('/aufgaben/{aufgabe}/erledigt', [Admin\AufgabeController::class, 'erledigt'])->name('aufgaben.erledigt');
     Route::delete('/aufgaben/{aufgabe}', [Admin\AufgabeController::class, 'destroy'])->name('aufgaben.destroy');
     Route::get('/checklistenvorlagen', [Admin\ChecklistenvorlageController::class, 'index'])->name('checklistenvorlagen.index');
+    Route::post('/checklistenvorlagen', [Admin\ChecklistenvorlageController::class, 'vorlageAnlegen'])->name('checklistenvorlagen.anlegen');
+    Route::delete('/checklistenvorlagen/{vorlage}', [Admin\ChecklistenvorlageController::class, 'vorlageLoeschen'])->name('checklistenvorlagen.loeschen');
+    Route::post('/checklistenvorlagen/{vorlage}/anwenden', [Admin\ChecklistenvorlageController::class, 'anwenden'])->name('checklistenvorlagen.anwenden');
     Route::post('/checklistenvorlagen/{vorlage}/eintraege', [Admin\ChecklistenvorlageController::class, 'store'])->name('checklistenvorlagen.store');
     Route::delete('/checklistenvorlagen/eintraege/{eintrag}', [Admin\ChecklistenvorlageController::class, 'destroy'])->name('checklistenvorlagen.destroy');
+
+    Route::get('/ablage', [Admin\AblageController::class, 'index'])->name('ablage.index');
+    Route::post('/ablage', [Admin\AblageController::class, 'ordnerAnlegen'])->name('ablage.anlegen');
+    Route::get('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'index'])->name('ablage.ordner');
+    Route::post('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'ordnerAnlegen'])->name('ablage.ordner.anlegen');
+    Route::put('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'ordnerAendern'])->name('ablage.ordner.aendern');
+    Route::delete('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'ordnerLoeschen'])->name('ablage.ordner.loeschen');
+    Route::post('/ablage/ordner/{ordner}/dateien', [Admin\AblageController::class, 'hochladen'])->name('ablage.hochladen');
+    Route::get('/ablage/datei/{media}', [Admin\AblageController::class, 'datei'])->name('ablage.datei');
+    Route::delete('/ablage/datei/{media}', [Admin\AblageController::class, 'dateiLoeschen'])->name('ablage.datei.loeschen');
+
+    Route::resource('protokolle', Admin\ProtokollController::class)->parameters(['protokolle' => 'protokoll']);
+    Route::post('/protokolle/{protokoll}/aufgabe', [Admin\ProtokollController::class, 'aufgabe'])->name('protokolle.aufgabe');
 
     Route::get('/kalender', [Admin\KalenderController::class, 'index'])->name('kalender.index');
     Route::post('/termine', [Admin\KalenderController::class, 'store'])->name('termine.store');

@@ -15,6 +15,8 @@
         'Team' => [
             ['Aufgaben & Checkliste', 'admin.aufgaben.index', 'admin.aufgaben.*'],
             ['Kalender', 'admin.kalender.index', 'admin.kalender.*'],
+            ['Protokolle', 'admin.protokolle.index', 'admin.protokolle.*'],
+            ['Ablage', 'admin.ablage.index', 'admin.ablage.*'],
             ['Personen', 'admin.personen.index', 'admin.personen.index|admin.personen.show|admin.personen.edit|admin.personen.create'],
             ['Datenschutz: Inaktive', 'admin.personen.inaktive', 'admin.personen.inaktive'],
         ],

@@ -4,14 +4,18 @@ namespace App\Http\Controllers\Portal;
 
 use App\Domain\Teilnahme\Actions\Absagen;
 use App\Enums\EinteilungStatus;
+use App\Http\Controllers\Admin\AblageController;
 use App\Http\Controllers\Controller;
 use App\Models\Boerse;
 use App\Models\Kategorie;
+use App\Models\Ordner;
 use App\Models\Teilnahme;
 use DomainException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /** Persönliche Übersicht für Verkäufer und Helfer. */
 class PortalController extends Controller
@@ -36,10 +40,30 @@ class PortalController extends Controller
             'schichten' => $person->einteilungen()->where('status', EinteilungStatus::Zugesagt)
                 ->whereHas('schicht', fn ($q) => $q->where('beginn', '>=', today()))
                 ->with('schicht')->get(),
+            'unterlagen' => self::darfUnterlagenSehen($request)
+                ? Ordner::query()->where('fuer_helfer', true)->with('media')->orderBy('name')->get()
+                : collect(),
             'fruehere' => $person->teilnahmen()->with(['boerse', 'abrechnung'])
                 ->when($teilnahme, fn ($q) => $q->whereKeyNot($teilnahme->id))
                 ->whereHas('abrechnung')->get()->sortByDesc(fn ($t) => $t->boerse->verkaufstag),
         ]);
+    }
+
+    /** Datei aus einem für Helfer freigegebenen Ordner – nur für Personen mit Schicht oder Teilnahme. */
+    public function unterlage(Request $request, Media $media): BinaryFileResponse
+    {
+        $ordner = $media->model;
+        abort_unless($ordner instanceof Ordner && $ordner->sichtbarFuerHelfer() && self::darfUnterlagenSehen($request), 404);
+
+        return AblageController::ausliefern($media, $request->boolean('vorschau'));
+    }
+
+    public static function darfUnterlagenSehen(Request $request): bool
+    {
+        $person = $request->user();
+
+        return $person->roles()->exists()
+            || $person->einteilungen()->where('status', EinteilungStatus::Zugesagt)->whereHas('schicht', fn ($q) => $q->where('beginn', '>=', today()->subDays(7)))->exists();
     }
 
     public function absagen(Request $request, Absagen $absagen): RedirectResponse

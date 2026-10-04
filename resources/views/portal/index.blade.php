@@ -140,6 +140,20 @@
         </div>
     @endif
 
+    @if ($unterlagen->isNotEmpty())
+        <div class="mt-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-stone-200">
+            <h2>Unterlagen für Helfer</h2>
+            @foreach ($unterlagen as $ordner)
+                <p class="mt-3 font-medium">{{ $ordner->name }}</p>
+                @forelse ($ordner->media as $m)
+                    <a href="{{ route('portal.unterlage', $m) }}" target="_blank" class="block py-1 text-sm">{{ str_starts_with($m->mime_type, 'image/') ? '🖼' : '📄' }} {{ $m->file_name }}</a>
+                @empty
+                    <p class="text-sm text-stone-500">Noch nichts hinterlegt.</p>
+                @endforelse
+            @endforeach
+        </div>
+    @endif
+
     @if ($fruehere->isNotEmpty())
         <div class="mt-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-stone-200">
             <h2>Frühere Börsen</h2>

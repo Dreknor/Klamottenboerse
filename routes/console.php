@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Ablage\NextcloudImport;
 use App\Domain\Kommunikation\ImapPostfach;
 use App\Domain\Kommunikation\MailplanAusfuehren;
 use App\Domain\Kommunikation\Postausgang;
@@ -46,6 +47,21 @@ Artisan::command('datenschutz:inaktive', function (InaktiveBereinigen $bereinige
     $ergebnis = $bereinigen();
     $this->info("{$ergebnis['angeschrieben']} Person(en) angeschrieben, {$ergebnis['geloescht']} gelöscht.");
 })->purpose('Schreibt seit 24 Monaten inaktive Personen an und löscht sie nach Ablauf der Frist');
+
+Artisan::command('nextcloud:import {--url= : WebDAV-Adresse, z. B. https://cloud.example.org/remote.php/dav/files/benutzer} {--benutzer=} {--bilder= : Ordner mit Bildern} {--protokolle= : Ordner mit Protokollen}', function () {
+    $passwort = env('NEXTCLOUD_PASSWORT') ?: $this->secret('Nextcloud-Passwort (am besten ein App-Passwort)');
+    $import = new NextcloudImport((string) $this->option('url'), (string) $this->option('benutzer'), (string) $passwort);
+
+    if ($this->option('bilder')) {
+        $import->bilder($this->option('bilder'));
+    }
+    if ($this->option('protokolle')) {
+        $import->protokolle($this->option('protokolle'));
+    }
+
+    $z = $import->zaehler;
+    $this->info("{$z['bilder']} Bilder, {$z['protokolle']} Protokolle (Text), {$z['dateien']} Protokoll-Dateien übernommen; {$z['uebersprungen']} bereits vorhanden.");
+})->purpose('Übernimmt einmalig Bilder und Protokolle aus der Nextcloud (WebDAV)');
 
 Schedule::command('mails:versenden')->everyMinute()->withoutOverlapping();
 Schedule::command('mailplan:ausfuehren')->everyTenMinutes()->withoutOverlapping();
