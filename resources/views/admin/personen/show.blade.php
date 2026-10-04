@@ -3,6 +3,7 @@
         @if ($person->email)
             <form method="post" action="{{ route('admin.personen.login-link', $person) }}">@csrf<x-ui.knopf art="sekundaer">Portal-Link senden</x-ui.knopf></form>
         @endif
+        <x-ui.knopf art="sekundaer" :href="route('admin.rundnachricht.create', ['person' => [$person->id]])">Nachricht schreiben</x-ui.knopf>
         <x-ui.knopf art="sekundaer" :href="route('admin.personen.edit', $person)">Bearbeiten</x-ui.knopf>
     </x-ui.kopf>
 

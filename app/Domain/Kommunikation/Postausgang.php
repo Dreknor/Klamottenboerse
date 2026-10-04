@@ -2,6 +2,7 @@
 
 namespace App\Domain\Kommunikation;
 
+use App\Domain\Push\Push;
 use App\Enums\NachrichtStatus;
 use App\Models\Boerse;
 use App\Models\Mailvorlage;
@@ -44,7 +45,7 @@ class Postausgang
 
         $platzhalter = Platzhalter::fuer($person, $boerse, $daten);
 
-        return Nachricht::create([
+        $nachricht = Nachricht::create([
             'person_id' => $person->id,
             'boerse_id' => $boerse?->id,
             'mailplan_eintrag_id' => $mailplanEintragId,
@@ -54,6 +55,52 @@ class Postausgang
             'inhalt' => Platzhalter::ersetzen($mailvorlage->inhalt, $platzhalter),
             'status' => NachrichtStatus::Wartend,
         ]);
+
+        // Erinnerungen u. ä. zusätzlich aufs Handy – nur wer Push eingeschaltet hat
+        if ($mailvorlage->push) {
+            Push::einplanen($person, $nachricht->betreff, $nachricht->inhalt, self::pushZiel($vorlage, $platzhalter));
+        }
+
+        return $nachricht;
+    }
+
+    /**
+     * Freie Nachricht, z. B. an Gruppen. Platzhalter wie {vorname} werden ersetzt.
+     * Per E-Mail (wenn vorhanden) und auf Wunsch zusätzlich als Push.
+     *
+     * @return array{mail: bool, push: bool}
+     */
+    public static function freiEinplanen(Person $person, string $betreff, string $text, ?Boerse $boerse, bool $mail = true, bool $push = false): array
+    {
+        $platzhalter = Platzhalter::fuer($person, $boerse);
+        $betreff = Platzhalter::ersetzen($betreff, $platzhalter);
+        $text = Platzhalter::ersetzen($text, $platzhalter);
+
+        $nachricht = $mail && filled($person->email) && ! $person->loeschung_angefragt_at
+            ? Nachricht::create([
+                'person_id' => $person->id, 'boerse_id' => $boerse?->id, 'typ' => 'rundnachricht', 'email' => $person->email,
+                'betreff' => $betreff, 'inhalt' => $text, 'status' => NachrichtStatus::Wartend,
+            ])
+            : null;
+
+        $gepusht = $push && Push::einplanen($person, $betreff, $text, self::pushZiel('rundnachricht', $platzhalter)) !== null;
+
+        return ['mail' => $nachricht !== null, 'push' => $gepusht];
+    }
+
+    /**
+     * Wohin führt ein Tipp auf die Push-Nachricht? Team-Erinnerungen ins Backend,
+     * alles andere direkt (angemeldet) ins Portal.
+     *
+     * @param  array<string, string>  $platzhalter
+     */
+    private static function pushZiel(string $typ, array $platzhalter): string
+    {
+        if (str_starts_with($typ, 'aufgabe')) {
+            return route('admin.aufgaben.index');
+        }
+
+        return $platzhalter['portal_link'] ?? url('/');
     }
 
     /** Wie viele Mails dürfen jetzt noch raus, ohne das Stundenlimit zu überschreiten? */

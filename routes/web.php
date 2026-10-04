@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\PasswortController;
 use App\Http\Controllers\Kasse\KasseController;
 use App\Http\Controllers\Portal;
 use App\Http\Controllers\Public;
+use App\Http\Controllers\PushController;
 use App\Http\Controllers\Tablet\TabletController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +61,13 @@ Route::post('/passwort-neu', [PasswortController::class, 'update'])->middleware(
 Route::get('/portal/login/{person:uuid}', [Portal\PortalLoginController::class, 'login'])->middleware('signed')->name('portal.login');
 Route::get('/portal/link', [Portal\PortalLoginController::class, 'create'])->name('portal.link');
 Route::post('/portal/link', [Portal\PortalLoginController::class, 'store'])->middleware('throttle:5,1');
+
+// Push-Nachrichten auf diesem Gerät (Portal und Backend)
+Route::middleware('auth')->prefix('push')->name('push.')->group(function () {
+    Route::post('/abo', [PushController::class, 'speichern'])->name('speichern');
+    Route::delete('/abo', [PushController::class, 'loeschen'])->name('loeschen');
+    Route::post('/test', [PushController::class, 'test'])->middleware('throttle:5,1')->name('test');
+});
 
 Route::middleware('auth')->prefix('portal')->name('portal.')->group(function () {
     Route::get('/', [Portal\PortalController::class, 'index'])->name('index');
@@ -126,6 +134,10 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::delete('/reservierungen/{reservierung}', [Admin\ReservierungController::class, 'destroy'])->name('reservierungen.destroy');
     Route::post('/reservierungen/{reservierung}/freigeben', [Admin\ReservierungController::class, 'freigeben'])->name('reservierungen.freigeben');
     Route::delete('/reservierungen/{reservierung}/freigeben', [Admin\ReservierungController::class, 'freigabeZuruecknehmen'])->name('reservierungen.freigabe-zuruecknehmen');
+
+    Route::get('/nachricht', [Admin\RundnachrichtController::class, 'create'])->name('rundnachricht.create');
+    Route::post('/nachricht/vorschau', [Admin\RundnachrichtController::class, 'vorschau'])->name('rundnachricht.vorschau');
+    Route::post('/nachricht', [Admin\RundnachrichtController::class, 'store'])->name('rundnachricht.store');
 
     Route::get('/personen/suche', [Admin\PersonController::class, 'suche'])->name('personen.suche');
     Route::resource('personen', Admin\PersonController::class)->except(['destroy'])->parameters(['personen' => 'person']);

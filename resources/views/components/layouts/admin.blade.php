@@ -34,8 +34,9 @@
                 ['Datenschutz: Inaktive', 'admin.personen.inaktive', 'admin.personen.inaktive'],
             ]],
         ],
-        'E-Mail' => [
+        'Nachrichten' => [
             ['Posteingang', 'admin.posteingang.index', 'admin.posteingang.*'],
+            ['Nachricht schreiben', 'admin.rundnachricht.create', 'admin.rundnachricht.*'],
             ['Mailplan & Versand', 'admin.mailplan.index', 'admin.mailplan.*|admin.postausgang.*|admin.mailvorlagen.*', [
                 ['Mailplan', 'admin.mailplan.index', 'admin.mailplan.*'],
                 ['Postausgang', 'admin.postausgang.index', 'admin.postausgang.*'],
@@ -66,6 +67,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#FF6900">
+    <link rel="apple-touch-icon" href="/images/icon-192.png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $titel ? $titel.' – ' : '' }}Klamottenbörse Orga</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])

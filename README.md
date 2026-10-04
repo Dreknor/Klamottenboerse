@@ -79,3 +79,20 @@ vendor/bin/pint
 
 Aufbau: Fachlogik in `app/Domain/<Bereich>` (eine Klasse je Vorgang), Models in `app/Models`,
 Beträge immer als ganze Cent (`App\Support\Geld`).
+
+## Push-Nachrichten
+
+- Personen schalten Push selbst ein: im Verkäuferportal bzw. unter „Mein Konto“ (Team).
+- Funktioniert nur über **HTTPS**. Auf dem iPhone muss die Seite vorher „Zum Home-Bildschirm“ hinzugefügt werden.
+- Die Schlüssel (VAPID) werden beim ersten Aufruf automatisch erzeugt und in den Einstellungen gespeichert.
+- Welche Mails zusätzlich als Push rausgehen, steht je Mailvorlage („Zusätzlich als Push-Nachricht“).
+- Versand: `php artisan push:versenden` läuft jede Minute über den Scheduler.
+
+## Fehlerprotokoll und Updates ohne SSH
+
+- Warnungen und Fehler landen zusätzlich in der Datenbank: Backend → System & Fehler → Fehlerprotokoll.
+- Updates: Backend → System & Fehler → „Nach Updates suchen“ / „Update jetzt installieren“
+  (Wartungsmodus, `git pull --ff-only`, `composer install` nur bei geänderter composer.lock, `migrate`, Caches leeren).
+  Die gebauten Assets (`public/build`) liegen im Repository – auf dem Server wird kein Node gebraucht.
+  Vor dem Push also immer `npm run build` ausführen.
+- Für Hoster mit anderem PHP-/Composer-Aufruf: `UPDATE_PHP`, `UPDATE_COMPOSER`, `UPDATE_BRANCH` in der `.env`.

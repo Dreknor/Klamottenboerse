@@ -4,15 +4,16 @@
     'hilfe' => null,
     'springen' => false,      // true: Treffer öffnet die Person (Schnellsuche)
     'angemeldetSperren' => false, // true: wer bei der aktuellen Börse schon dabei ist, ist nicht wählbar
+    'mehrfach' => false,      // true: jede Auswahl löst nur das Ereignis person-gewaehlt aus (Liste führt der Aufrufer)
     'platzhalter' => 'Name, E-Mail, Telefon oder Nummer tippen …',
 ])
 @php $id = 'ps-'.\Illuminate\Support\Str::random(6); @endphp
 <div {{ $attributes->merge(['class' => 'relative']) }}
-     x-data="personenSuche({ url: @js(route('admin.personen.suche')), springen: @js($springen), sperren: @js($angemeldetSperren) })"
+     x-data="personenSuche({ url: @js(route('admin.personen.suche')), springen: @js($springen), sperren: @js($angemeldetSperren), mehrfach: @js($mehrfach) })"
      @click.outside="offen = false" @keydown.escape="offen = false">
     @if ($label)<label for="{{ $id }}" class="mb-1 block text-sm font-medium">{{ $label }}</label>@endif
 
-    @unless ($springen)
+    @unless ($springen || $mehrfach)
         <input type="hidden" name="{{ $name }}" :value="gewaehlt?.id ?? ''">
         <div x-show="gewaehlt" x-cloak class="flex items-center justify-between gap-2 rounded-lg border border-marke-300 bg-marke-50 px-3 py-2">
             <span><strong x-text="gewaehlt?.name"></strong> <span class="text-sm text-stone-600" x-text="gewaehlt?.email"></span></span>
@@ -20,7 +21,7 @@
         </div>
     @endunless
 
-    <div @unless ($springen) x-show="!gewaehlt" @endunless class="relative">
+    <div @unless ($springen || $mehrfach) x-show="!gewaehlt" @endunless class="relative">
         <input id="{{ $id }}" x-ref="eingabe" x-model="q" @input="eingabe()" @focus="treffer.length && (offen = true)"
                @keydown.arrow-down.prevent="runter()" @keydown.arrow-up.prevent="hoch()" @keydown.enter.prevent="enter()"
                type="search" autocomplete="off" class="feld" placeholder="{{ $platzhalter }}"

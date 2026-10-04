@@ -9,6 +9,11 @@
                 <x-ui.feld name="betreff" label="Betreff" :wert="$vorlage->betreff" required />
                 <x-ui.feld name="inhalt" label="Text" typ="textarea" :wert="$vorlage->inhalt" rows="16" required
                            hilfe="**fett**, Aufzählungen mit „- “ und Links als [Text](Adresse) sind möglich." />
+                <label class="flex items-start gap-2 text-sm">
+                    <input type="hidden" name="push" value="0">
+                    <input type="checkbox" name="push" value="1" class="mt-0.5" @checked($vorlage->push)>
+                    <span>Zusätzlich als Push-Nachricht – an alle, die Push auf ihrem Handy eingeschaltet haben (gut für Erinnerungen).</span>
+                </label>
                 <x-ui.knopf>Speichern</x-ui.knopf>
             </form>
         </x-ui.karte>

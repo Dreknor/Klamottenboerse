@@ -1,0 +1,4 @@
+# Minimale OpenSSL-Konfiguration fuer die Erzeugung der Push-Schluessel (Windows findet sonst keine).
+[ req ]
+distinguished_name = req_distinguished_name
+[ req_distinguished_name ]

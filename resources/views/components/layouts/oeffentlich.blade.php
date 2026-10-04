@@ -5,6 +5,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#FF6900">
+    <link rel="apple-touch-icon" href="/images/icon-192.png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $titel ? $titel.' – ' : '' }}{{ $verein }}</title>
     <meta name="description" content="{{ $beschreibung ?? 'Sortierter Kindersachenflohmarkt zugunsten des Ev. Kinderhauses Radebeul – organisiert von ehrenamtlichen Eltern.' }}">

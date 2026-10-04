@@ -10,6 +10,7 @@ enum Zielgruppe: string
     case Warteliste = 'warteliste';
     case Helfer = 'helfer';
     case VerkaeuferUndHelfer = 'verkaeufer_und_helfer';
+    case Team = 'team';
 
     public function label(): string
     {
@@ -20,6 +21,7 @@ enum Zielgruppe: string
             self::Warteliste => 'Warteliste dieser Börse',
             self::Helfer => 'Helfer dieser Börse',
             self::VerkaeuferUndHelfer => 'Verkäufer und Helfer dieser Börse',
+            self::Team => 'Alle Team-Mitglieder',
         };
     }
 }

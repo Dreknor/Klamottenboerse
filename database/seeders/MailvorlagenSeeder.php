@@ -197,10 +197,14 @@ dein Klamottenbörsen-Team
 TXT],
     ];
 
+    /** Diese Mails gehen zusätzlich als Push an Personen, die Push-Nachrichten eingeschaltet haben. */
+    public const MIT_PUSH = ['erinnerung_verkaeufer', 'erinnerung_helfer', 'warteliste_angebot', 'aufgabe_erinnerung', 'nummer_zugeteilt'];
+
     public function run(): void
     {
         foreach (self::VORLAGEN as $schluessel => [$name, $betreff, $inhalt]) {
-            Mailvorlage::firstOrCreate(['schluessel' => $schluessel], compact('name', 'betreff', 'inhalt'));
+            $push = in_array($schluessel, self::MIT_PUSH, true);
+            Mailvorlage::firstOrCreate(['schluessel' => $schluessel], compact('name', 'betreff', 'inhalt', 'push'));
         }
     }
 }

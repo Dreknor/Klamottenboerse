@@ -9,4 +9,6 @@
             <x-ui.knopf>Passwort ändern</x-ui.knopf>
         </form>
     </x-ui.karte>
+
+    <x-push-schalter class="mt-6 max-w-lg" text="Erinnerungen an fällige Aufgaben und Rundnachrichten ans Team zusätzlich aufs Handy oder den PC." />
 </x-layouts.admin>

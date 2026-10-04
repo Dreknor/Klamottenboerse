@@ -100,6 +100,7 @@ class MailplanAusfuehren
                 ->where('boerse_id', $boerse->id)->where('status', TeilnahmeStatus::Warteliste->value))->get(),
             Zielgruppe::Helfer => $helfer(),
             Zielgruppe::VerkaeuferUndHelfer => $verkaeufer()->merge($helfer())->unique('id')->values(),
+            Zielgruppe::Team => Person::query()->tap($mitMail)->whereHas('roles')->get(),
         };
     }
 

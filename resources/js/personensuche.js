@@ -2,7 +2,7 @@
 // Pfeiltasten + Enter wählen aus. Entweder füllt sie ein verstecktes Formularfeld (Auswahl)
 // oder springt direkt zur Person (Schnellsuche in der Seitenleiste).
 
-export function personenSuche({ url, springen = false, sperren = false, gewaehlt = null }) {
+export function personenSuche({ url, springen = false, sperren = false, mehrfach = false, gewaehlt = null }) {
     return {
         q: '',
         treffer: [],
@@ -53,7 +53,7 @@ export function personenSuche({ url, springen = false, sperren = false, gewaehlt
                 window.location = person.url;
                 return;
             }
-            this.gewaehlt = person;
+            if (!mehrfach) this.gewaehlt = person;
             this.q = '';
             this.treffer = [];
             this.offen = false;

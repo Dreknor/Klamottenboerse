@@ -8,6 +8,8 @@
         </div>
     </div>
 
+    <x-push-schalter class="mb-6" />
+
     @if (! $teilnahme)
         <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-stone-200">
             <p>Du bist für die nächste Börse noch nicht als Verkäufer angemeldet.</p>

@@ -39,6 +39,7 @@ class MailvorlageController extends Controller
             'name' => ['required', 'string', 'max:120'],
             'betreff' => ['required', 'string', 'max:190'],
             'inhalt' => ['required', 'string', 'max:20000'],
+            'push' => ['nullable', 'boolean'],
         ]));
 
         return back()->with('erfolg', 'Vorlage gespeichert. Die Vorschau zeigt den neuen Text.');

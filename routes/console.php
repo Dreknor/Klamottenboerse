@@ -6,6 +6,7 @@ use App\Domain\Kommunikation\MailplanAusfuehren;
 use App\Domain\Kommunikation\Postausgang;
 use App\Domain\Orga\AufgabenErinnern;
 use App\Domain\Personen\InaktiveBereinigen;
+use App\Domain\Push\Push;
 use App\Domain\Teilnahme\Actions\WartelisteNachruecken;
 use App\Models\Boerse;
 use App\Models\Fehler;
@@ -65,6 +66,11 @@ Artisan::command('nextcloud:import {--url= : WebDAV-Adresse, z. B. https://cloud
     $this->info("{$z['bilder']} Bilder, {$z['protokolle']} Protokolle (Text), {$z['dateien']} Protokoll-Dateien übernommen; {$z['uebersprungen']} bereits vorhanden.");
 })->purpose('Übernimmt einmalig Bilder und Protokolle aus der Nextcloud (WebDAV)');
 
+Artisan::command('push:versenden', function () {
+    $this->info(Push::versenden().' Push-Nachricht(en) zugestellt.');
+})->purpose('Versendet wartende Push-Nachrichten');
+
+Schedule::command('push:versenden')->everyMinute()->withoutOverlapping();
 Schedule::command('mails:versenden')->everyMinute()->withoutOverlapping();
 Schedule::command('mailplan:ausfuehren')->everyTenMinutes()->withoutOverlapping();
 Schedule::command('warteliste:nachruecken')->everyFifteenMinutes()->withoutOverlapping();
