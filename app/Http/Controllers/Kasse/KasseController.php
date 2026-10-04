@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Kasse;
 
 use App\Domain\Kasse\BonErfassen;
+use App\Enums\BoerseStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Boerse;
 use App\Models\Bon;
@@ -54,6 +55,9 @@ class KasseController extends Controller
         ]);
 
         $boerse = $this->boerse();
+        if ($boerse->status === BoerseStatus::Abgeschlossen) {
+            return response()->json(['message' => 'Diese Börse ist abgeschlossen'], 422);
+        }
 
         try {
             $bon = $erfassen($boerse, $this->schicht($request, $boerse, $daten['kasse'] ?? null), $daten);

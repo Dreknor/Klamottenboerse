@@ -1,4 +1,7 @@
 <x-layouts.tablet :titel="'Kasse · '.$boerse->titel" :zurueck="auth()->user()->istOrga() ? route('admin.dashboard') : null">
+    @if ($boerse->status === \App\Enums\BoerseStatus::Abgeschlossen)
+        <div class="mb-4 rounded-xl bg-red-600 px-4 py-3 font-medium text-white">Diese Börse ist abgeschlossen – hier kann nicht mehr kassiert werden.</div>
+    @endif
     <div x-data="kasse({ datenUrl: '{{ route('kasse.daten') }}', syncUrl: '{{ route('kasse.sync') }}', stornoUrl: '{{ route('kasse.storno', '__UUID__') }}', boerseId: {{ $boerse->id }} })" class="grid gap-4 lg:grid-cols-5">
 
         {{-- Statusleiste --}}
