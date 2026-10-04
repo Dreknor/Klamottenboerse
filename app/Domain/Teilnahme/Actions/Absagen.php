@@ -4,6 +4,7 @@ namespace App\Domain\Teilnahme\Actions;
 
 use App\Domain\Kommunikation\Postausgang;
 use App\Enums\TeilnahmeStatus;
+use App\Models\Nummernreservierung;
 use App\Models\Teilnahme;
 use DomainException;
 
@@ -45,6 +46,13 @@ class Absagen
 
         if ($mailSenden && $teilnahme->person) {
             Postausgang::einplanen($teilnahme->person, 'absage_bestaetigt', $teilnahme->boerse, ['nummer' => (string) $alteNummer]);
+        }
+
+        // Reservierte Nummer wird für diese Börse frei – sonst bliebe der Platz blockiert.
+        if ($teilnahme->person_id) {
+            Nummernreservierung::query()->gueltigFuer($teilnahme->boerse)
+                ->where('person_id', $teilnahme->person_id)->get()
+                ->each(fn (Nummernreservierung $r) => $r->freigebenFuer($teilnahme->boerse, 'Absage'));
         }
 
         ($this->nachruecken)($teilnahme->boerse);

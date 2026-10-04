@@ -1,5 +1,5 @@
 <x-layouts.admin titel="Reservierungen">
-    <x-ui.kopf titel="Fest reservierte Nummern" unter="Reservierte Nummern bekommt nur die jeweilige Person. Alle anderen Nummern vergibt das System nach dem Prinzip „wer zuerst kommt“." />
+    <x-ui.kopf titel="Fest reservierte Nummern" unter="Reservierte Nummern bekommt nur die jeweilige Person. „Nur diesmal freigeben“ gibt die Nummer für die aktuelle Börse frei (z. B. wenn jemand nicht kommt) – bei einer Absage passiert das automatisch." />
 
     <div class="grid gap-6 lg:grid-cols-3">
         <x-ui.karte titel="Neue Reservierung">
@@ -29,14 +29,29 @@
                     <tr class="bg-stone-50"><td class="font-mono font-semibold">{{ $boerse->kinderhaus_nummer }}</td><td>Kinderhaus</td><td>immer</td><td>feste Nummer, ohne Spende</td><td></td></tr>
                 @endif
                 @forelse ($reservierungen as $r)
-                    <tr>
+                    @php $frei = $boerse && $r->istFreigegebenFuer($boerse); @endphp
+                    <tr class="{{ $frei ? 'bg-amber-50' : '' }}">
                         <td class="font-mono font-semibold">{{ $r->nummer }}</td>
                         <td><a href="{{ route('admin.personen.show', $r->person) }}">{{ $r->person->name }}</a></td>
-                        <td>{{ $r->boerse?->titel ?? 'dauerhaft' }}</td>
+                        <td>
+                            {{ $r->boerse?->titel ?? 'dauerhaft' }}
+                            @if ($frei)<span class="block text-xs text-amber-800">für {{ $boerse->titel }} freigegeben ({{ $r->freigaben->firstWhere('id', $boerse->id)->pivot->grund }})</span>@endif
+                        </td>
                         <td>{{ $r->grund }}</td>
-                        <td class="text-right">
-                            <form method="post" action="{{ route('admin.reservierungen.destroy', $r) }}" onsubmit="return confirm('Reservierung aufheben?')">
-                                @csrf @method('delete')<button class="text-red-700 hover:underline">Aufheben</button>
+                        <td class="whitespace-nowrap text-right">
+                            @if ($boerse && $r->boerse_id === null)
+                                @if ($frei)
+                                    <form method="post" action="{{ route('admin.reservierungen.freigabe-zuruecknehmen', $r) }}" class="inline">
+                                        @csrf @method('delete')<button class="text-sm text-marke-700 hover:underline">Wieder reservieren</button>
+                                    </form>
+                                @else
+                                    <form method="post" action="{{ route('admin.reservierungen.freigeben', $r) }}" class="inline" onsubmit="return confirm('Nummer {{ $r->nummer }} nur für {{ $boerse->titel }} freigeben? Die Reservierung bleibt für spätere Börsen bestehen.')">
+                                        @csrf<button class="text-sm text-marke-700 hover:underline">Nur diesmal freigeben</button>
+                                    </form>
+                                @endif
+                            @endif
+                            <form method="post" action="{{ route('admin.reservierungen.destroy', $r) }}" class="ml-3 inline" onsubmit="return confirm('Reservierung der Nummer {{ $r->nummer }} für {{ $r->person->name }} ganz aufheben?')">
+                                @csrf @method('delete')<button class="text-sm text-red-700 hover:underline">Ganz aufheben</button>
                             </form>
                         </td>
                     </tr>

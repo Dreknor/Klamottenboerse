@@ -51,7 +51,7 @@ class PersonController extends Controller
     public function show(Person $person): View
     {
         return view('admin.personen.show', [
-            'person' => $person->load(['teilnahmen.boerse', 'teilnahmen.abrechnung', 'einteilungen.schicht.boerse', 'reservierungen', 'notizen.autor', 'roles']),
+            'person' => $person->load(['teilnahmen.boerse', 'teilnahmen.abrechnung', 'einteilungen.schicht.boerse', 'reservierungen.boerse', 'notizen.autor', 'roles']),
             'nachrichten' => Nachricht::query()->where('person_id', $person->id)->latest()->limit(20)->get(),
             'posteingang' => Posteingang::query()->where('person_id', $person->id)->latest('empfangen_at')->limit(20)->get(),
             'aktivitaeten' => Activity::query()

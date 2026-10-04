@@ -108,6 +108,8 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::get('/reservierungen', [Admin\ReservierungController::class, 'index'])->name('reservierungen.index');
     Route::post('/reservierungen', [Admin\ReservierungController::class, 'store'])->name('reservierungen.store');
     Route::delete('/reservierungen/{reservierung}', [Admin\ReservierungController::class, 'destroy'])->name('reservierungen.destroy');
+    Route::post('/reservierungen/{reservierung}/freigeben', [Admin\ReservierungController::class, 'freigeben'])->name('reservierungen.freigeben');
+    Route::delete('/reservierungen/{reservierung}/freigeben', [Admin\ReservierungController::class, 'freigabeZuruecknehmen'])->name('reservierungen.freigabe-zuruecknehmen');
 
     Route::resource('personen', Admin\PersonController::class)->except(['destroy'])->parameters(['personen' => 'person']);
     Route::post('/personen/{person}/notizen', [Admin\PersonController::class, 'notiz'])->name('personen.notiz');

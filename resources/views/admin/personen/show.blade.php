@@ -23,9 +23,14 @@
                 @endforelse
                 </tbody>
             </table>
-            @if ($person->reservierungen->isNotEmpty())
-                <p class="mt-3 text-sm">Reservierte Nummer(n): <strong>{{ $person->reservierungen->pluck('nummer')->implode(', ') }}</strong></p>
-            @endif
+            @foreach ($person->reservierungen as $r)
+                <div class="mt-3 flex items-center justify-between rounded-lg bg-stone-50 px-3 py-2 text-sm">
+                    <span>Reservierte Nummer <strong>{{ $r->nummer }}</strong> ({{ $r->boerse?->titel ?? 'dauerhaft' }})</span>
+                    <form method="post" action="{{ route('admin.reservierungen.destroy', $r) }}" onsubmit="return confirm('Reservierung der Nummer {{ $r->nummer }} aufheben?')">
+                        @csrf @method('delete')<button class="text-red-700 hover:underline">Aufheben</button>
+                    </form>
+                </div>
+            @endforeach
         </x-ui.karte>
 
         <x-ui.karte titel="Schichten als Helfer">
