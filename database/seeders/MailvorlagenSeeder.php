@@ -32,6 +32,8 @@ Die Nummern werden in der Reihenfolge der Anmeldung vergeben. Ort: {ort}.
 
 Viele Grüße
 dein Klamottenbörsen-Team
+
+Du möchtest keine Infos mehr zu künftigen Börsen? [Hier abbestellen]({abbestellen_link})
 TXT],
         'nummer_zugeteilt' => ['Nummer zugeteilt', 'Deine Verkäufernummer {nummer} für die Klamottenbörse', <<<'TXT'
 Hallo {vorname},

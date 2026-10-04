@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\NurMitPasswort;
 use App\Http\Middleware\NurOrga;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'orga' => NurOrga::class,
+            'passwort' => NurMitPasswort::class,
         ]);
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('portal*') ? route('portal.link') : route('login'));
     })

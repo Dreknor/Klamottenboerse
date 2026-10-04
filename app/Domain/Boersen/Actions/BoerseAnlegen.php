@@ -30,7 +30,8 @@ class BoerseAnlegen
     public function __invoke(array $daten, bool $mitStandardMailplan = true, bool $mitCheckliste = true): Boerse
     {
         return DB::transaction(function () use ($daten, $mitStandardMailplan, $mitCheckliste) {
-            $boerse = Boerse::create($daten + ['status' => BoerseStatus::Planung]);
+            // refresh(): Standardwerte der Datenbank (Nummernbereich, Blockgröße …) laden
+            $boerse = Boerse::create($daten + ['status' => BoerseStatus::Planung])->refresh();
 
             $this->kinderhausNummerAnlegen($boerse);
 

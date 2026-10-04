@@ -45,6 +45,28 @@ class Boerse extends Model
         ];
     }
 
+    /** Vorbelegung für eine ganz neue Börse (typische Zeiten der bisherigen Börsen). */
+    public static function vorschlag(): self
+    {
+        $tag = today()->addWeeks(10)->next(CarbonInterface::SATURDAY);
+
+        return new self([
+            'titel' => 'Klamottenbörse',
+            'verkaufstag' => $tag,
+            'anmeldung_kinderhaus_ab' => $tag->copy()->subDays(35)->setTime(18, 0),
+            'anmeldung_ab' => $tag->copy()->subDays(28)->setTime(18, 0),
+            'anlieferung_beginn' => $tag->copy()->subDay()->setTime(14, 30),
+            'anlieferung_ende' => $tag->copy()->subDay()->setTime(17, 30),
+            'verkauf_beginn' => $tag->copy()->setTime(9, 0),
+            'verkauf_ende' => $tag->copy()->setTime(12, 0),
+            'abholung_beginn' => $tag->copy()->setTime(17, 0),
+            'abholung_ende' => $tag->copy()->setTime(18, 30),
+            'nummer_von' => 200, 'nummer_bis' => 599, 'blockgroesse' => 100, 'block_toleranz' => 5,
+            'kapazitaet' => 240, 'kinderhaus_nummer' => 600, 'provision_promille' => 250,
+            'rundung_cent' => 10, 'angebot_stunden' => 48,
+        ]);
+    }
+
     public function ort(): BelongsTo
     {
         return $this->belongsTo(Ort::class);
@@ -142,8 +164,9 @@ class Boerse extends Model
     public function bloecke(): array
     {
         $bloecke = [];
-        for ($start = $this->nummer_von; $start <= $this->nummer_bis; $start += $this->blockgroesse) {
-            $bloecke[$start] = [$start, min($start + $this->blockgroesse - 1, $this->nummer_bis)];
+        $groesse = max(1, (int) $this->blockgroesse);
+        for ($start = (int) $this->nummer_von; $start <= (int) $this->nummer_bis; $start += $groesse) {
+            $bloecke[$start] = [$start, min($start + $groesse - 1, (int) $this->nummer_bis)];
         }
 
         return $bloecke;

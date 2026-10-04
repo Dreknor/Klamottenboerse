@@ -2,8 +2,8 @@
 
 namespace App\Domain\Kasse;
 
-use App\Models\Bon;
 use App\Models\Boerse;
+use App\Models\Bon;
 use App\Models\Kassenschicht;
 use App\Models\Teilnahme;
 use Carbon\CarbonImmutable;

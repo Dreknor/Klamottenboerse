@@ -27,6 +27,7 @@ class Platzhalter
         'max_teile' => 'Maximale Teile je Verkäufer',
         'provision' => 'Spendenanteil in Prozent',
         'portal_link' => 'Persönlicher Link zum Verkäuferportal',
+        'abbestellen_link' => 'Link, um künftige Info-Mails abzubestellen',
         'anmelde_link' => 'Link zum Anmeldeformular',
         'helfer_link' => 'Link zur Helferliste',
         'verein' => 'Name der Klamottenbörse',
@@ -49,6 +50,7 @@ class Platzhalter
                 'vorname' => $person->vorname,
                 'nachname' => $person->nachname,
                 'portal_link' => URL::temporarySignedRoute('portal.login', now()->addDays(60), ['person' => $person->uuid]),
+                'abbestellen_link' => URL::signedRoute('infomails.abbestellen', ['person' => $person->uuid]),
             ];
         }
 
@@ -61,8 +63,8 @@ class Platzhalter
                 'ort' => trim(($boerse->ort?->name ?? '').', '.($boerse->ort?->adresse ?? ''), ', '),
                 'anlieferung' => self::zeitraum($boerse->anlieferung_beginn, $boerse->anlieferung_ende),
                 'abholung' => self::zeitraum($boerse->abholung_beginn, $boerse->abholung_ende),
-                'anmeldung_ab' => $boerse->anmeldung_ab?->locale('de')->isoFormat('D. MMMM YYYY, H:mm [Uhr]') ?? '',
-                'anmeldung_kinderhaus_ab' => $boerse->anmeldung_kinderhaus_ab?->locale('de')->isoFormat('D. MMMM YYYY, H:mm [Uhr]') ?? '',
+                'anmeldung_ab' => self::zeitpunkt($boerse->anmeldung_ab),
+                'anmeldung_kinderhaus_ab' => self::zeitpunkt($boerse->anmeldung_kinderhaus_ab),
                 'max_teile' => (string) ($boerse->max_teile ?? ''),
                 'provision' => rtrim(rtrim(number_format($boerse->provision_promille / 10, 1, ',', ''), '0'), ','),
             ];
@@ -75,6 +77,16 @@ class Platzhalter
     public static function ersetzen(string $text, array $werte): string
     {
         return preg_replace_callback('/\{([a-z_]+)\}/', fn ($m) => $werte[$m[1]] ?? $m[0], $text);
+    }
+
+    /** "18. Februar 2027, 18:00 Uhr" – ohne Uhrzeit, wenn keine angegeben ist (00:00). */
+    public static function zeitpunkt($wert): string
+    {
+        if (! $wert) {
+            return '';
+        }
+
+        return $wert->locale('de')->isoFormat($wert->format('H:i') === '00:00' ? 'D. MMMM YYYY' : 'D. MMMM YYYY, H:mm [Uhr]');
     }
 
     private static function zeitraum($von, $bis, bool $mitTag = true): string

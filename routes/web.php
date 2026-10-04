@@ -27,6 +27,7 @@ Route::middleware('signed')->group(function () {
     Route::post('/teilnahme/{teilnahme}/angebot', [Public\TeilnahmeLinkController::class, 'annehmen']);
     Route::get('/helfen/absage/{einteilung}', [Public\HelferController::class, 'absage'])->name('helfer.absage');
     Route::post('/helfen/absage/{einteilung}', [Public\HelferController::class, 'absagen']);
+    Route::get('/info-mails/{person:uuid}/abbestellen', [Public\InfoMailsController::class, 'abbestellen'])->name('infomails.abbestellen');
 });
 
 Route::get('/helfen', [Public\HelferController::class, 'index'])->name('helfer.index');
@@ -68,14 +69,14 @@ Route::middleware('auth')->prefix('portal')->name('portal.')->group(function () 
 | Kasse und Tablet-Modus (Annahme, Rückpacken, Ausgabe)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:admin|orga|kasse'])->prefix('kasse')->name('kasse.')->group(function () {
+Route::middleware(['auth', 'passwort', 'role:admin|orga|kasse'])->prefix('kasse')->name('kasse.')->group(function () {
     Route::get('/', [KasseController::class, 'index'])->name('index');
     Route::get('/daten', [KasseController::class, 'daten'])->name('daten');
     Route::post('/bons', [KasseController::class, 'sync'])->name('sync');
     Route::post('/bons/{bon:uuid}/storno', [KasseController::class, 'storno'])->name('storno');
 });
 
-Route::middleware(['auth', 'role:admin|orga|annahme'])->prefix('tablet')->name('tablet.')->group(function () {
+Route::middleware(['auth', 'passwort', 'role:admin|orga|annahme'])->prefix('tablet')->name('tablet.')->group(function () {
     Route::get('/', [TabletController::class, 'index'])->name('index');
     Route::get('/annahme', [TabletController::class, 'annahme'])->name('annahme');
     Route::post('/annahme/{teilnahme}', [TabletController::class, 'annehmen'])->name('annehmen');
