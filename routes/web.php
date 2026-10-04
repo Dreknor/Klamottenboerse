@@ -84,6 +84,11 @@ Route::middleware(['auth', 'passwort', 'role:admin|orga|kasse'])->prefix('kasse'
     Route::get('/', [KasseController::class, 'index'])->name('index');
     Route::get('/daten', [KasseController::class, 'daten'])->name('daten');
     Route::get('/token', fn () => response()->json(['token' => csrf_token()]))->name('token');
+    Route::get('/warenkorb', [KasseController::class, 'warenkorb'])->name('warenkorb');
+    Route::post('/warenkorb', [KasseController::class, 'hinzufuegen'])->name('warenkorb.hinzufuegen');
+    Route::delete('/warenkorb', [KasseController::class, 'leeren'])->name('warenkorb.leeren');
+    Route::delete('/warenkorb/{uuid}', [KasseController::class, 'entfernen'])->name('warenkorb.entfernen');
+    Route::post('/warenkorb/abschliessen', [KasseController::class, 'abschliessen'])->name('warenkorb.abschliessen');
     Route::post('/bons', [KasseController::class, 'sync'])->name('sync');
     Route::post('/bons/{bon:uuid}/storno', [KasseController::class, 'storno'])->name('storno');
 });

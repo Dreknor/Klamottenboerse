@@ -55,15 +55,50 @@ class Nummernvergabe
         $bloecke = $this->boerse->bloecke();
         uksort($bloecke, fn ($a, $b) => [$belegung[$a], $a] <=> [$belegung[$b], $b]);
 
-        foreach ($bloecke as [$von, $bis]) {
-            for ($nummer = $von; $nummer <= $bis; $nummer++) {
-                if ($istFrei($nummer)) {
-                    return $nummer;
+        // Im schwächsten 100er-Block den schwächsten Zehner wählen, dort die niedrigste freie Nummer.
+        foreach (array_keys($bloecke) as $blockStart) {
+            $zehnerBelegung = $this->zehnerbelegung($blockStart);
+            $zehner = $this->boerse->zehner($blockStart);
+            uksort($zehner, fn ($a, $b) => [$zehnerBelegung[$a], $a] <=> [$zehnerBelegung[$b], $b]);
+
+            foreach ($zehner as [$von, $bis]) {
+                for ($nummer = $von; $nummer <= $bis; $nummer++) {
+                    if ($istFrei($nummer)) {
+                        return $nummer;
+                    }
                 }
             }
         }
 
         return null;
+    }
+
+    /**
+     * Belegte Nummern je Zehner eines Blocks; noch nicht genutzte Reservierungen zählen mit.
+     *
+     * @return array<int, int> Zehnerstart => Anzahl
+     */
+    public function zehnerbelegung(int $blockStart): array
+    {
+        $belegung = array_fill_keys(array_keys($this->boerse->zehner($blockStart)), 0);
+
+        foreach ($this->alleBelegten() as $nummer) {
+            $zehner = intdiv($nummer, 10) * 10;
+            if (array_key_exists($zehner, $belegung) && $this->boerse->blockVon($nummer) === $blockStart) {
+                $belegung[$zehner]++;
+            }
+        }
+
+        return $belegung;
+    }
+
+    /** @return Collection<int, int> Belegte und reservierte Nummern ohne Kinderhaus-Nummer */
+    private function alleBelegten(): Collection
+    {
+        return $this->belegteNummern()
+            ->merge($this->reservierungen()->pluck('nummer'))
+            ->unique()
+            ->reject(fn ($n) => $n === $this->boerse->kinderhaus_nummer);
     }
 
     /** Hat die Person (noch) Anspruch auf einen Platz? Reservierte Personen immer. */
@@ -89,10 +124,7 @@ class Nummernvergabe
     {
         $belegung = array_fill_keys(array_keys($this->boerse->bloecke()), 0);
 
-        $this->belegteNummern()
-            ->merge($this->reservierungen()->pluck('nummer'))
-            ->unique()
-            ->reject(fn ($n) => $n === $this->boerse->kinderhaus_nummer)
+        $this->alleBelegten()
             ->each(function (int $nummer) use (&$belegung) {
                 $block = $this->boerse->blockVon($nummer);
                 if ($block !== null) {

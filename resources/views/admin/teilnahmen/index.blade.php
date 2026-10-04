@@ -36,15 +36,8 @@
             </details>
         </x-ui.karte>
 
-        <x-ui.karte titel="Blockausgleich">
-            @php $ziel = $boerse->zielProBlock(); @endphp
-            @foreach ($blockbelegung as $start => $anzahl)
-                <div class="flex items-center justify-between py-1">
-                    <span>{{ $start }}–{{ min($start + $boerse->blockgroesse - 1, $boerse->nummer_bis) }}</span>
-                    <x-ui.abzeichen :farbe="abs($anzahl - $ziel) <= $boerse->block_toleranz ? 'emerald' : 'amber'">{{ $anzahl }} / {{ $ziel }}</x-ui.abzeichen>
-                </div>
-            @endforeach
-            <p class="mt-2 text-xs text-stone-500">Neue Nummern gehen automatisch in den schwächsten Block. Zum Umverteilen in der Liste „Nummer ändern“ nutzen – der Verkäufer wird informiert.</p>
+        <x-ui.karte titel="Nummern je 100er-Block">
+            <x-nummernbloecke :boerse="$boerse" />
         </x-ui.karte>
     </div>
 

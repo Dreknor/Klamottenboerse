@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Domain\Teilnahme\Nummernvergabe;
 use App\Enums\NachrichtStatus;
 use App\Enums\TeilnahmeStatus;
 use App\Http\Controllers\Controller;
@@ -37,7 +36,6 @@ class DashboardController extends Controller
             'status' => $status,
             'belegt' => $boerse->belegteNummern(),
             'warteliste' => (int) ($status[TeilnahmeStatus::Warteliste->value] ?? 0),
-            'blockbelegung' => (new Nummernvergabe($boerse))->blockbelegung(),
             'aufgabenOffen' => $aufgaben->whereNull('erledigt_at'),
             'aufgabenErledigt' => $aufgaben->whereNotNull('erledigt_at')->count(),
             'schichtenSoll' => $schichten->sum('soll'),

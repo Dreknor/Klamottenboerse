@@ -9,7 +9,7 @@ use App\Support\Geld;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-/** Freiwillige Artikelerfassung im Portal – Grundlage für Etiketten mit Barcode. */
+/** Freiwillige Artikelerfassung im Portal – Grundlage für Etiketten mit QR-Code. */
 class ArtikelController extends Controller
 {
     public function store(Request $request): RedirectResponse

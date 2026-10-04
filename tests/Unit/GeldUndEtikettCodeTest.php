@@ -1,7 +1,7 @@
 <?php
 
 use App\Domain\Kommunikation\Platzhalter;
-use App\Support\Barcode;
+use App\Support\EtikettCode;
 use App\Support\Geld;
 
 it('liest Beträge in Cent ein', function (string $eingabe, int $cent) {
@@ -31,13 +31,13 @@ it('zerlegt Beträge in möglichst wenige Scheine und Münzen', function () {
     expect(Geld::stueckelung(8770))->toBe([5000 => 1, 2000 => 1, 1000 => 1, 500 => 1, 200 => 1, 50 => 1, 20 => 1]);
 });
 
-it('kodiert und liest den Etiketten-Barcode', function () {
-    $code = Barcode::kodieren(215, 7, 450);
+it('kodiert und liest den Etiketten-QR-Code', function () {
+    $code = EtikettCode::kodieren(215, 7, 450);
 
     expect($code)->toBe('21500700450')
-        ->and(Barcode::lesen($code))->toBe(['nummer' => 215, 'artikel' => 7, 'preis_cent' => 450])
-        ->and(Barcode::lesen('abc'))->toBeNull()
-        ->and(Barcode::lesen('2150070045'))->toBeNull();
+        ->and(EtikettCode::lesen($code))->toBe(['nummer' => 215, 'artikel' => 7, 'preis_cent' => 450])
+        ->and(EtikettCode::lesen('abc'))->toBeNull()
+        ->and(EtikettCode::lesen('2150070045'))->toBeNull();
 });
 
 it('lässt Zeilen mit nur leeren Platzhaltern weg', function () {

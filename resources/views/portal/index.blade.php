@@ -66,7 +66,7 @@
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <h2>Artikel und Etiketten <span class="text-sm font-normal text-stone-500">(freiwillig)</span></h2>
-                        <p class="text-sm text-stone-600">Handschriftliche Etiketten sind genauso in Ordnung. Wer hier erfasst, bekommt Etiketten mit Barcode – das geht an der Kasse schneller.
+                        <p class="text-sm text-stone-600">Handschriftliche Etiketten sind genauso in Ordnung. Wer hier erfasst, bekommt Etiketten mit QR-Code – das geht an der Kasse schneller.
                             @if ($b->max_teile) Maximal {{ $b->max_teile }} Teile. @endif</p>
                     </div>
                     <div class="flex flex-wrap gap-2">

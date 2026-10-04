@@ -113,7 +113,7 @@ class TabletController extends Controller
         return Boerse::aktuelle() ?? abort(404, 'Es gibt keine aktuelle Börse.');
     }
 
-    /** Suche nach Nummer (auch per Barcode vom Kistenzettel) oder Name. */
+    /** Suche nach Nummer (auch per QR-Code vom Kistenzettel) oder Name. */
     private function suchen(Boerse $boerse, string $suche): Collection
     {
         $suche = trim($suche);

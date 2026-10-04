@@ -6,7 +6,6 @@ use App\Domain\Teilnahme\Actions\Absagen;
 use App\Domain\Teilnahme\Actions\Anmelden;
 use App\Domain\Teilnahme\Actions\NummerAendern;
 use App\Domain\Teilnahme\Actions\WartelisteNachruecken;
-use App\Domain\Teilnahme\Nummernvergabe;
 use App\Enums\KinderhausBezug;
 use App\Enums\TeilnahmeStatus;
 use App\Http\Controllers\Controller;
@@ -51,7 +50,6 @@ class TeilnahmeController extends Controller
             'boerse' => $boerse,
             'teilnahmen' => $teilnahmen,
             'statusAnzahl' => $boerse->teilnahmen()->where('ist_kinderhaus', false)->selectRaw('status, count(*) as anzahl')->groupBy('status')->pluck('anzahl', 'status'),
-            'blockbelegung' => (new Nummernvergabe($boerse))->blockbelegung(),
             'treffer' => $treffer,
         ]);
     }

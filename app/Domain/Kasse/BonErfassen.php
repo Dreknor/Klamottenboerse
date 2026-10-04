@@ -6,6 +6,7 @@ use App\Models\Boerse;
 use App\Models\Bon;
 use App\Models\Kassenschicht;
 use App\Models\Teilnahme;
+use App\Models\WarenkorbPosition;
 use Carbon\CarbonImmutable;
 use DomainException;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 class BonErfassen
 {
     /**
-     * @param  array{uuid:string, erstellt_am:string, positionen: array<int, array{nummer:int, artikel:int, preis_cent:int}>}  $daten
+     * @param  array{uuid:string, erstellt_am:string, positionen: array<int, array{nummer:int, artikel:int, preis_cent:int, uuid?:string}>}  $daten
      */
     public function __invoke(Boerse $boerse, ?Kassenschicht $schicht, array $daten): Bon
     {
@@ -39,6 +40,7 @@ class BonErfassen
             }
 
             return [
+                'uuid' => $position['uuid'] ?? null,
                 'teilnahme_id' => $teilnahme->id,
                 'artikel_id' => $teilnahme->artikel()->where('laufnummer', $position['artikel'])->value('id'),
                 'artikelnummer' => (int) $position['artikel'],
@@ -60,6 +62,9 @@ class BonErfassen
                 'erstellt_am_geraet' => CarbonImmutable::parse($daten['erstellt_am'])->setTimezone(config('app.timezone')),
             ]);
             $bon->positionen()->createMany($positionen->all());
+
+            // Diese Artikel sind bezahlt – aus dem gemeinsamen Warenkorb entfernen (auch nach Offline-Verkauf).
+            WarenkorbPosition::query()->whereIn('uuid', $positionen->pluck('uuid')->filter())->delete();
 
             return $bon;
         });

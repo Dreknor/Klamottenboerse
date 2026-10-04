@@ -1,43 +1,39 @@
-// Kamera-Scan für QR-Codes und Barcodes über die BarcodeDetector-Schnittstelle des Browsers
-// (Chrome/Edge auf Android und Desktop). Fehlt sie, bleibt das Eingabefeld – ein Handscanner
-// funktioniert dort wie eine Tastatur.
+// Kamera-Scan für QR-Codes (Tablet: Annahme, Rückpacken, Ausgabe). Nutzt die Bibliothek qr-scanner,
+// die auf allen Geräten funktioniert (auch Windows und iPhone). Ein Handscanner funktioniert
+// zusätzlich wie eine Tastatur im Suchfeld.
+
+import QrScanner from 'qr-scanner';
 
 export function scanner({ ziel }) {
     return {
-        verfuegbar: 'BarcodeDetector' in window && !!navigator.mediaDevices?.getUserMedia,
+        verfuegbar: !!navigator.mediaDevices?.getUserMedia,
         aktiv: false,
-        stream: null,
+        _scanner: null,
 
         async starten() {
-            if (!this.verfuegbar) return;
-            const detector = new window.BarcodeDetector({ formats: ['qr_code', 'code_128', 'ean_13'] });
-            this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+            if (this._scanner) return this.stoppen();
             this.aktiv = true;
             await this.$nextTick();
-            const video = this.$refs.video;
-            video.srcObject = this.stream;
-            await video.play();
-
-            const suchen = async () => {
-                if (!this.aktiv) return;
-                const treffer = await detector.detect(video).catch(() => []);
-                if (treffer.length) {
-                    this.stoppen();
-                    const feld = document.querySelector(ziel);
-                    feld.value = treffer[0].rawValue;
-                    feld.dispatchEvent(new Event('input'));
-                    feld.form ? feld.form.requestSubmit() : feld.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-                    return;
-                }
-                requestAnimationFrame(suchen);
-            };
-            suchen();
+            this._scanner = new QrScanner(this.$refs.video, (ergebnis) => {
+                this.stoppen();
+                const feld = document.querySelector(ziel);
+                feld.value = ergebnis.data;
+                feld.dispatchEvent(new Event('input'));
+                feld.form ? feld.form.requestSubmit() : feld.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+            }, { returnDetailedScanResult: true, highlightScanRegion: true, preferredCamera: 'environment' });
+            try {
+                await this._scanner.start();
+            } catch {
+                this.stoppen();
+                alert('Kamera nicht verfügbar. Bitte Zugriff erlauben oder Nummer eintippen.');
+            }
         },
 
         stoppen() {
+            this._scanner?.stop();
+            this._scanner?.destroy();
+            this._scanner = null;
             this.aktiv = false;
-            this.stream?.getTracks().forEach((t) => t.stop());
-            this.stream = null;
         },
     };
 }

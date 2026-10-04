@@ -3,10 +3,10 @@
 namespace App\Support;
 
 /**
- * Barcode-Inhalt der Artikeletiketten: 11 Ziffern = Nummer (3) + Artikel (3) + Preis in Cent (5).
+ * Inhalt des QR-Codes auf den Artikeletiketten: 11 Ziffern = Nummer (3) + Artikel (3) + Preis in Cent (5).
  * Beispiel: 21500700450 → Verkäufer 215, Artikel 7, 4,50 €.
  */
-final class Barcode
+final class EtikettCode
 {
     public static function kodieren(int $nummer, int $artikel, int $preisCent): string
     {

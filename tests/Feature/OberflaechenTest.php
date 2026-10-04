@@ -109,7 +109,7 @@ it('erfasst Artikel im Portal und erzeugt Etiketten und Kistenzettel als PDF', f
         ->assertRedirect();
 
     expect($teilnahme->artikel()->pluck('laufnummer')->all())->toBe([1, 2])
-        ->and($teilnahme->artikel()->first()->barcode())->toBe(sprintf('%03d00100550', $teilnahme->nummer));
+        ->and($teilnahme->artikel()->first()->etikettCode())->toBe(sprintf('%03d00100550', $teilnahme->nummer));
 
     $this->get(route('portal.index'))->assertOk()->assertSee('Matschhose');
     $this->get(route('portal.etiketten'))->assertOk()->assertHeader('content-type', 'application/pdf');

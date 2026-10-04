@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Support\Barcode;
+use App\Support\EtikettCode;
 use App\Support\Geld;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,12 +27,12 @@ class Artikel extends Model
     }
 
     /**
-     * Inhalt des Barcodes: Nummer (3) + Artikel (3) + Preis in Cent (5), z. B. 21500700450.
+     * Inhalt des QR-Codes: Nummer (3) + Artikel (3) + Preis in Cent (5), z. B. 21500700450.
      * So liest die Kasse Nummer, Artikel und Preis auch ohne Netz direkt vom Etikett.
      */
-    public function barcode(): string
+    public function etikettCode(): string
     {
-        return Barcode::kodieren($this->teilnahme->nummer, $this->laufnummer, $this->preis_cent);
+        return EtikettCode::kodieren($this->teilnahme->nummer, $this->laufnummer, $this->preis_cent);
     }
 
     public function preis(): string

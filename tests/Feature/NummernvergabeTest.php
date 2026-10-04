@@ -124,3 +124,20 @@ it('meldet dieselbe Person nicht doppelt an', function () {
     expect($zweite->id)->toBe($erste->id)
         ->and($boerse->teilnahmen()->where('person_id', $person->id)->count())->toBe(1);
 });
+
+it('richtet die Blöcke an den Hundertern aus, auch wenn der Bereich bei 201 beginnt', function () {
+    $boerse = neueBoerse(['nummer_von' => 201, 'nummer_bis' => 599]);
+
+    expect($boerse->bloecke())->toBe([200 => [201, 299], 300 => [300, 399], 400 => [400, 499], 500 => [500, 599]])
+        ->and(array_keys($boerse->zehner(200)))->toBe([200, 210, 220, 230, 240, 250, 260, 270, 280, 290])
+        ->and($boerse->zehner(200)[200])->toBe([201, 209]);
+});
+
+it('verteilt neue Nummern innerhalb eines Blocks gleichmäßig auf die Zehner', function () {
+    $boerse = neueBoerse(['nummer_von' => 200, 'nummer_bis' => 299, 'kapazitaet' => 100]);
+
+    $nummern = collect(range(1, 12))->map(fn () => app(Anmelden::class)($boerse, Person::factory()->create(), mailSenden: false)->nummer);
+
+    expect($nummern->all())->toBe([200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 201, 211])
+        ->and((new Nummernvergabe($boerse))->zehnerbelegung(200)[200])->toBe(2);
+});

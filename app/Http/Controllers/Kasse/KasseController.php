@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Kasse;
 
 use App\Domain\Kasse\BonErfassen;
 use App\Domain\Kasse\Stornieren;
+use App\Domain\Kasse\Warenkorb;
 use App\Enums\BoerseStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Boerse;
@@ -17,6 +18,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
+/**
+ * Kasse: Der offene Einkauf liegt in der Datenbank (je Konto), damit z. B. am Handy gescannt
+ * und am PC kassiert werden kann. Ohne Netz arbeitet die Kasse lokal weiter und gleicht später ab.
+ */
 class KasseController extends Controller
 {
     public function index(): View
@@ -43,6 +48,68 @@ class KasseController extends Controller
         ]);
     }
 
+    /** Stand des gemeinsamen Warenkorbs – wird von allen Geräten des Kontos regelmäßig abgefragt. */
+    public function warenkorb(Request $request): JsonResponse
+    {
+        return response()->json($this->stand($this->korb($request)));
+    }
+
+    public function hinzufuegen(Request $request): JsonResponse
+    {
+        $daten = $request->validate([
+            'uuid' => ['required', 'uuid'],
+            'nummer' => ['required', 'integer', 'min:1', 'max:999'],
+            'artikel' => ['required', 'integer', 'min:0', 'max:999'],
+            'preis_cent' => ['required', 'integer'],
+        ]);
+        if ($fehler = $this->gesperrt()) {
+            return $fehler;
+        }
+
+        $korb = $this->korb($request);
+        try {
+            $ergebnis = $korb->hinzufuegen($daten['uuid'], $daten['nummer'], $daten['artikel'], $daten['preis_cent']);
+        } catch (DomainException $e) {
+            return response()->json(['message' => $e->getMessage()] + $this->stand($korb), 422);
+        }
+
+        return response()->json(['warnungen' => $ergebnis['warnungen']] + $this->stand($korb), 201);
+    }
+
+    public function entfernen(Request $request, string $uuid): JsonResponse
+    {
+        $korb = $this->korb($request);
+        $korb->entfernen($uuid);
+
+        return response()->json($this->stand($korb));
+    }
+
+    public function leeren(Request $request): JsonResponse
+    {
+        $korb = $this->korb($request);
+        $korb->leeren();
+
+        return response()->json($this->stand($korb));
+    }
+
+    public function abschliessen(Request $request): JsonResponse
+    {
+        $daten = $request->validate(['bon_uuid' => ['required', 'uuid'], 'kasse' => ['nullable', 'string', 'max:40']]);
+        if ($fehler = $this->gesperrt()) {
+            return $fehler;
+        }
+
+        $korb = $this->korb($request);
+        try {
+            $bon = $korb->abschliessen($this->schicht($request, $this->boerse(), $daten['kasse'] ?? null), $daten['bon_uuid']);
+        } catch (DomainException $e) {
+            return response()->json(['message' => $e->getMessage()] + $this->stand($korb), 422);
+        }
+
+        return response()->json(['bon' => ['uuid' => $bon->uuid, 'summe_cent' => $bon->summe_cent]] + $this->stand($korb), 201);
+    }
+
+    /** Offline abgeschlossene Bons nachträglich speichern (idempotent über die UUID). */
     public function sync(Request $request, BonErfassen $erfassen): JsonResponse
     {
         $daten = $request->validate([
@@ -50,16 +117,16 @@ class KasseController extends Controller
             'erstellt_am' => ['required', 'date'],
             'kasse' => ['nullable', 'string', 'max:40'],
             'positionen' => ['required', 'array', 'min:1', 'max:200'],
+            'positionen.*.uuid' => ['nullable', 'uuid'],
             'positionen.*.nummer' => ['required', 'integer'],
             'positionen.*.artikel' => ['required', 'integer', 'min:0'],
             'positionen.*.preis_cent' => ['required', 'integer', 'min:1', 'max:99999'],
         ]);
-
-        $boerse = $this->boerse();
-        if ($boerse->status === BoerseStatus::Abgeschlossen) {
-            return response()->json(['message' => 'Diese Börse ist abgeschlossen'], 422);
+        if ($fehler = $this->gesperrt()) {
+            return $fehler;
         }
 
+        $boerse = $this->boerse();
         try {
             $bon = $erfassen($boerse, $this->schicht($request, $boerse, $daten['kasse'] ?? null), $daten);
         } catch (DomainException $e) {
@@ -80,6 +147,31 @@ class KasseController extends Controller
         }
 
         return response()->json(['ok' => true]);
+    }
+
+    private function korb(Request $request): Warenkorb
+    {
+        return new Warenkorb($request->user(), $this->boerse());
+    }
+
+    /** @return array{positionen: list<array>, summe_cent:int, letzter_bon: ?array} */
+    private function stand(Warenkorb $korb): array
+    {
+        $positionen = $korb->positionen();
+        $bon = $korb->letzterBon();
+
+        return [
+            'positionen' => $positionen->map->alsArray()->values()->all(),
+            'summe_cent' => (int) $positionen->sum('preis_cent'),
+            'letzter_bon' => $bon ? ['uuid' => $bon->uuid, 'summe_cent' => $bon->summe_cent, 'um' => $bon->created_at->format('H:i'), 'storniert' => $bon->storniert_at !== null] : null,
+        ];
+    }
+
+    private function gesperrt(): ?JsonResponse
+    {
+        return $this->boerse()->status === BoerseStatus::Abgeschlossen
+            ? response()->json(['message' => 'Diese Börse ist abgeschlossen.'], 422)
+            : null;
     }
 
     private function boerse(): Boerse

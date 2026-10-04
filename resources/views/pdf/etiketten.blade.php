@@ -6,30 +6,34 @@
     /* A4, 3 × 8 Etiketten à 70 × 37 mm (gängige Bögen, z. B. 3475) – auch auf Normalpapier zum Ausschneiden */
     @page { margin: 0; }
     body { margin: 0; font-family: DejaVu Sans, sans-serif; color: #000; }
-    table { border-collapse: collapse; table-layout: fixed; margin: 0; page-break-after: always; }
-    table:last-child { page-break-after: auto; }
-    td { width: 70mm; height: 37mm; padding: 2mm 3mm; vertical-align: top; overflow: hidden; border: 0.1mm dashed #bbb; }
-    .kopf { font-size: 15pt; font-weight: bold; }
-    .preis { float: right; font-size: 15pt; font-weight: bold; }
-    .text { font-size: 8pt; height: 8mm; overflow: hidden; margin-top: 1mm; }
-    .code { margin-top: 1mm; text-align: center; }
-    .code img { height: 11mm; width: 60mm; }
-    .klein { font-size: 6.5pt; text-align: center; }
+    table.bogen { border-collapse: collapse; table-layout: fixed; margin: 0; page-break-after: always; }
+    table.bogen:last-child { page-break-after: auto; }
+    td.etikett { width: 70mm; height: 37mm; padding: 2.5mm 3mm; vertical-align: top; overflow: hidden; border: 0.1mm dashed #bbb; }
+    .qr { width: 27mm; height: 27mm; }
+    .text { padding-left: 2mm; vertical-align: top; }
+    .kopf { font-size: 16pt; font-weight: bold; line-height: 1.1; }
+    .preis { font-size: 16pt; font-weight: bold; margin-top: 1.5mm; }
+    .beschreibung { font-size: 7.5pt; margin-top: 1.5mm; height: 9mm; overflow: hidden; }
 </style>
 </head>
 <body>
 @foreach ($etiketten->chunk(24) as $seite)
-    <table>
+    <table class="bogen">
         @foreach ($seite->chunk(3) as $reihe)
             <tr>
                 @foreach ($reihe as $e)
-                    <td>
-                        <div><span class="preis">{{ $e['preis'] }}</span><span class="kopf">{{ $e['nummer'] }}-{{ $e['laufnummer'] }}</span></div>
-                        <div class="text">{{ $e['beschreibung'] }}@if ($e['groesse']) · Gr. {{ $e['groesse'] }}@endif</div>
-                        <div class="code"><img src="data:image/png;base64,{{ $e['barcode'] }}" alt=""></div>
+                    <td class="etikett">
+                        <table><tr>
+                            <td><img class="qr" src="{{ $e['qr'] }}" alt=""></td>
+                            <td class="text">
+                                <div class="kopf">{{ $e['nummer'] }}-{{ $e['laufnummer'] }}</div>
+                                <div class="preis">{{ $e['preis'] }}</div>
+                                <div class="beschreibung">{{ $e['beschreibung'] }}@if ($e['groesse']) · Gr. {{ $e['groesse'] }}@endif</div>
+                            </td>
+                        </tr></table>
                     </td>
                 @endforeach
-                @for ($i = $reihe->count(); $i < 3; $i++)<td></td>@endfor
+                @for ($i = $reihe->count(); $i < 3; $i++)<td class="etikett"></td>@endfor
             </tr>
         @endforeach
     </table>

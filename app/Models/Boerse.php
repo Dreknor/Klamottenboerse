@@ -165,11 +165,31 @@ class Boerse extends Model
     {
         $bloecke = [];
         $groesse = max(1, (int) $this->blockgroesse);
-        for ($start = (int) $this->nummer_von; $start <= (int) $this->nummer_bis; $start += $groesse) {
-            $bloecke[$start] = [$start, min($start + $groesse - 1, (int) $this->nummer_bis)];
+        $von = (int) $this->nummer_von;
+        $bis = (int) $this->nummer_bis;
+
+        // An den Hundertern ausgerichtet: Bereich 201–599 ergibt 200er (201–299), 300er, 400er, 500er
+        for ($start = intdiv($von, $groesse) * $groesse; $start <= $bis; $start += $groesse) {
+            $bloecke[$start] = [max($start, $von), min($start + $groesse - 1, $bis)];
         }
 
         return $bloecke;
+    }
+
+    /**
+     * Die Zehner eines Blocks, z. B. für den 200er-Block [200 => [201, 209], 210 => [210, 219], ...].
+     *
+     * @return array<int, array{0:int, 1:int}>
+     */
+    public function zehner(int $blockStart): array
+    {
+        [$von, $bis] = $this->bloecke()[$blockStart] ?? [0, -1];
+        $zehner = [];
+        for ($start = intdiv($von, 10) * 10; $start <= $bis; $start += 10) {
+            $zehner[$start] = [max($start, $von), min($start + 9, $bis)];
+        }
+
+        return $zehner;
     }
 
     public function blockVon(int $nummer): ?int

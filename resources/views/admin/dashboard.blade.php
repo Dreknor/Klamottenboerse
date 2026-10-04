@@ -49,19 +49,7 @@
         </x-ui.karte>
 
         <x-ui.karte titel="Nummern je 100er-Block">
-            @php $ziel = $boerse->zielProBlock(); @endphp
-            <p class="mb-3 text-sm text-stone-500">Ziel: {{ $ziel }} je Block (± {{ $boerse->block_toleranz }})</p>
-            @foreach ($blockbelegung as $start => $anzahl)
-                @php
-                    $abweichung = abs($anzahl - $ziel);
-                    $farbe = $abweichung <= $boerse->block_toleranz ? 'bg-emerald-500' : 'bg-amber-500';
-                @endphp
-                <div class="mb-2">
-                    <div class="flex justify-between text-sm"><span>{{ $start }}er</span><span>{{ $anzahl }}</span></div>
-                    <div class="h-2 rounded bg-stone-100"><div class="h-2 rounded {{ $farbe }}" style="width: {{ min(100, $ziel ? $anzahl / $ziel * 100 : 0) }}%"></div></div>
-                </div>
-            @endforeach
-            <p class="mt-3 text-sm text-stone-500">Nummer {{ $boerse->kinderhaus_nummer }}: Kinderhaus (fest, ohne Spende)</p>
+            <x-nummernbloecke :boerse="$boerse" />
         </x-ui.karte>
     </div>
 

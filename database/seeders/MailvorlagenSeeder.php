@@ -46,7 +46,7 @@ du bist dabei! Deine Verkäufernummer für die Klamottenbörse am {datum} lautet
 - Ort: {ort}
 - Maximal {max_teile} Teile
 
-Wenn du möchtest, kannst du deine Artikel im [Verkäuferportal]({portal_link}) erfassen und Etiketten mit Barcode drucken. Handschriftliche Etiketten sind genauso in Ordnung.
+Wenn du möchtest, kannst du deine Artikel im [Verkäuferportal]({portal_link}) erfassen und Etiketten mit QR-Code drucken. Handschriftliche Etiketten sind genauso in Ordnung.
 
 {provision} % des Erlöses gehen als Spende an das Kinderhaus.
 
