@@ -1,39 +1,65 @@
 @props(['titel' => null])
 @php
+    /*
+     | Navigation: wenige Hauptpunkte. Zusammengehörige Seiten hängen als „Reiter“ an einem Punkt
+     | und werden oben auf der Seite umgeschaltet. Eintrag: [Text, Route, Routen-Muster, Reiter?, nurAdmin?]
+     */
     $navigation = [
-        'Börse' => [
-            ['Übersicht', 'admin.dashboard', 'admin.dashboard'],
-            ['Verkäufer & Nummern', 'admin.teilnahmen.index', 'admin.teilnahmen.*'],
-            ['Reservierungen', 'admin.reservierungen.index', 'admin.reservierungen.*'],
+        'Diese Börse' => [
+            ['Verkäufer & Nummern', 'admin.teilnahmen.index', 'admin.teilnahmen.*|admin.reservierungen.*', [
+                ['Verkäufer & Nummern', 'admin.teilnahmen.index', 'admin.teilnahmen.*'],
+                ['Reservierte Nummern', 'admin.reservierungen.index', 'admin.reservierungen.*'],
+            ]],
             ['Helfer & Schichten', 'admin.schichten.index', 'admin.schichten.*'],
-            ['Verkäufe & Stornos', 'admin.verkaeufe.index', 'admin.verkaeufe.*'],
-            ['Abrechnung', 'admin.abrechnung.index', 'admin.abrechnung.*'],
-            ['Statistik', 'admin.statistik.index', 'admin.statistik.*'],
-            ['Feedback', 'admin.feedback.index', 'admin.feedback.*'],
-            ['Börsen verwalten', 'admin.boersen.index', 'admin.boersen.*'],
+            ['Verkauf & Abrechnung', 'admin.verkaeufe.index', 'admin.verkaeufe.*|admin.abrechnung.*', [
+                ['Verkäufe & Stornos', 'admin.verkaeufe.index', 'admin.verkaeufe.*'],
+                ['Abrechnung & Auszahlung', 'admin.abrechnung.index', 'admin.abrechnung.*'],
+            ]],
+            ['Auswertung', 'admin.statistik.index', 'admin.statistik.*|admin.feedback.*', [
+                ['Statistik', 'admin.statistik.index', 'admin.statistik.*'],
+                ['Feedback', 'admin.feedback.index', 'admin.feedback.*'],
+            ]],
         ],
         'Team' => [
-            ['Aufgaben & Checkliste', 'admin.aufgaben.index', 'admin.aufgaben.*'],
-            ['Kalender', 'admin.kalender.index', 'admin.kalender.*'],
-            ['Protokolle', 'admin.protokolle.index', 'admin.protokolle.*'],
-            ['Ablage', 'admin.ablage.index', 'admin.ablage.*'],
-            ['Personen', 'admin.personen.index', 'admin.personen.index|admin.personen.show|admin.personen.edit|admin.personen.create'],
-            ['Datenschutz: Inaktive', 'admin.personen.inaktive', 'admin.personen.inaktive'],
+            ['Aufgaben & Kalender', 'admin.aufgaben.index', 'admin.aufgaben.*|admin.kalender.*', [
+                ['Aufgaben & Checkliste', 'admin.aufgaben.index', 'admin.aufgaben.*'],
+                ['Kalender', 'admin.kalender.index', 'admin.kalender.*'],
+            ]],
+            ['Protokolle & Ablage', 'admin.protokolle.index', 'admin.protokolle.*|admin.ablage.*', [
+                ['Protokolle', 'admin.protokolle.index', 'admin.protokolle.*'],
+                ['Ablage', 'admin.ablage.index', 'admin.ablage.*'],
+            ]],
+            ['Personen', 'admin.personen.index', 'admin.personen.*', [
+                ['Alle Personen', 'admin.personen.index', 'admin.personen.index|admin.personen.show|admin.personen.edit|admin.personen.create'],
+                ['Datenschutz: Inaktive', 'admin.personen.inaktive', 'admin.personen.inaktive'],
+            ]],
         ],
-        'Kommunikation' => [
+        'E-Mail' => [
             ['Posteingang', 'admin.posteingang.index', 'admin.posteingang.*'],
-            ['Mailplan', 'admin.mailplan.index', 'admin.mailplan.*'],
-            ['Postausgang', 'admin.postausgang.index', 'admin.postausgang.*'],
-            ['Mailvorlagen', 'admin.mailvorlagen.index', 'admin.mailvorlagen.*'],
+            ['Mailplan & Versand', 'admin.mailplan.index', 'admin.mailplan.*|admin.postausgang.*|admin.mailvorlagen.*', [
+                ['Mailplan', 'admin.mailplan.index', 'admin.mailplan.*'],
+                ['Postausgang', 'admin.postausgang.index', 'admin.postausgang.*'],
+                ['Mailvorlagen', 'admin.mailvorlagen.index', 'admin.mailvorlagen.*'],
+            ]],
         ],
-        'Website' => [
-            ['Seiten & Menü', 'admin.seiten.index', 'admin.seiten.*'],
-        ],
-        'Vor Ort' => [
-            ['Kasse', 'kasse.index', 'kasse.*'],
-            ['Tablet: Annahme & Ausgabe', 'tablet.index', 'tablet.*'],
+        'Verwaltung' => [
+            ['Börsen anlegen & kopieren', 'admin.boersen.index', 'admin.boersen.*'],
+            ['Website', 'admin.seiten.index', 'admin.seiten.*'],
+            ['Team & Rechte', 'admin.team.index', 'admin.team.*', null, true],
+            ['Einstellungen', 'admin.einstellungen.edit', 'admin.einstellungen.*', null, true],
+            ['System & Fehler', 'admin.system.index', 'admin.system.*|admin.fehler.*', [
+                ['Zustand & Updates', 'admin.system.index', 'admin.system.*'],
+                ['Fehlerprotokoll', 'admin.fehler.index', 'admin.fehler.*'],
+            ], true],
         ],
     ];
+
+    $istAdmin = auth()->user()->hasRole('admin');
+    $aktiv = fn (string $muster) => request()->routeIs(...explode('|', $muster));
+    $zaehler = ['admin.posteingang.index' => $offenePost, 'admin.system.index' => $offeneFehler];
+
+    // Reiter des aktiven Punkts (falls er mehrere Seiten bündelt)
+    $reiter = collect($navigation)->flatten(1)->first(fn ($e) => ! empty($e[3]) && $aktiv($e[2]))[3] ?? null;
 @endphp
 <!DOCTYPE html>
 <html lang="de">
@@ -47,14 +73,14 @@
 <body x-data="{ menu: false }">
 <div class="min-h-screen lg:flex">
     {{-- Seitenleiste --}}
-    <aside class="fixed inset-y-0 left-0 z-30 w-64 -translate-x-full overflow-y-auto border-r border-stone-200 bg-white transition lg:static lg:translate-x-0"
-           :class="menu && 'translate-x-0'">
-        <div class="border-b border-stone-200 px-4 py-4">
+    <aside class="fixed inset-y-0 left-0 z-30 flex w-64 -translate-x-full flex-col border-r border-stone-200 bg-white transition lg:sticky lg:top-0 lg:h-screen lg:translate-x-0"
+           :class="menu && 'translate-x-0'" aria-label="Hauptnavigation">
+        <div class="space-y-3 border-b border-stone-200 px-4 py-4">
             <a href="{{ route('admin.dashboard') }}" class="block text-lg font-bold text-marke-700 no-underline">Klamottenbörse</a>
-            <form method="post" action="{{ route('admin.boerse.wechseln') }}" class="mt-3">
+            <form method="post" action="{{ route('admin.boerse.wechseln') }}">
                 @csrf
-                <label for="boerse-wechsler" class="text-xs font-medium uppercase tracking-wide text-stone-500">Aktuelle Börse</label>
-                <select id="boerse-wechsler" name="boerse_id" class="feld mt-1 py-1.5 text-sm" onchange="this.form.submit()">
+                <label for="boerse-wechsler" class="sr-only">Börse wählen</label>
+                <select id="boerse-wechsler" name="boerse_id" class="feld py-1.5 text-sm font-medium" onchange="this.form.submit()">
                     @forelse ($alleBoersen as $b)
                         <option value="{{ $b->id }}" @selected($aktuelleBoerse?->id === $b->id)>{{ $b->titel }}</option>
                     @empty
@@ -62,38 +88,60 @@
                     @endforelse
                 </select>
             </form>
+            <x-ui.personen-auswahl :springen="true" label="" platzhalter="🔍 Person oder Nummer suchen" class="text-sm" />
         </div>
-        <nav class="px-2 py-3 text-sm">
+
+        <nav class="flex-1 overflow-y-auto px-2 py-3 text-sm">
+            <a href="{{ route('admin.dashboard') }}"
+               class="flex rounded-lg px-2 py-1.5 no-underline {{ $aktiv('admin.dashboard') ? 'bg-marke-50 font-medium text-marke-800' : 'text-stone-700 hover:bg-stone-100' }}">Übersicht</a>
+
+            <div class="mt-2 grid grid-cols-2 gap-2 px-1">
+                <a href="{{ route('kasse.index') }}" class="rounded-lg bg-marke-600 px-2 py-2 text-center font-medium text-white no-underline hover:bg-marke-700">Kasse</a>
+                <a href="{{ route('tablet.index') }}" class="rounded-lg border border-marke-300 px-2 py-2 text-center font-medium text-marke-800 no-underline hover:bg-marke-50">Annahme</a>
+            </div>
+
             @foreach ($navigation as $gruppe => $eintraege)
-                <p class="mt-3 px-2 text-xs font-medium uppercase tracking-wide text-stone-400">{{ $gruppe }}</p>
-                @foreach ($eintraege as [$text, $route, $muster])
-                    @php $aktiv = request()->routeIs(...explode('|', $muster)); $ziel = route($route); @endphp
-                    <a href="{{ $ziel }}"
-                       class="mt-0.5 flex items-center justify-between rounded-lg px-2 py-1.5 no-underline {{ $aktiv ? 'bg-marke-50 font-medium text-marke-800' : 'text-stone-700 hover:bg-stone-100' }}">
+                @php $eintraege = array_filter($eintraege, fn ($e) => $istAdmin || empty($e[4])); @endphp
+                @continue(! $eintraege)
+                <p class="mt-4 px-2 text-xs font-medium uppercase tracking-wide text-stone-400">{{ $gruppe }}</p>
+                @foreach ($eintraege as $e)
+                    @php [$text, $route, $muster] = $e; $istAktiv = $aktiv($muster); @endphp
+                    <a href="{{ route($route) }}" @if ($istAktiv) aria-current="page" @endif
+                       class="mt-0.5 flex items-center justify-between rounded-lg px-2 py-1.5 no-underline {{ $istAktiv ? 'bg-marke-50 font-medium text-marke-800' : 'text-stone-700 hover:bg-stone-100' }}">
                         <span>{{ $text }}</span>
-                        @if ($route === 'admin.posteingang.index' && $offenePost > 0)
-                            <x-ui.abzeichen farbe="red">{{ $offenePost }}</x-ui.abzeichen>
+                        @if (($zaehler[$route] ?? 0) > 0)
+                            <x-ui.abzeichen farbe="red">{{ $zaehler[$route] }}</x-ui.abzeichen>
                         @endif
                     </a>
                 @endforeach
             @endforeach
-            @role('admin')
-                <a href="{{ route('admin.einstellungen.edit') }}" class="mt-4 block rounded-lg px-2 py-1.5 text-stone-700 no-underline hover:bg-stone-100">Einstellungen</a>
-            @endrole
         </nav>
+
         <div class="border-t border-stone-200 px-4 py-3 text-sm text-stone-600">
             <a href="{{ route('admin.konto.edit') }}" class="block truncate text-stone-700 no-underline hover:underline">{{ auth()->user()->name }} · Mein Konto</a>
-            <form method="post" action="{{ route('logout') }}">@csrf<button class="text-marke-700 hover:underline">Abmelden</button></form>
+            <div class="flex justify-between">
+                <form method="post" action="{{ route('logout') }}">@csrf<button class="text-marke-700 hover:underline">Abmelden</button></form>
+                <a href="{{ url('/') }}" class="text-stone-500 no-underline hover:underline" target="_blank">Website ↗</a>
+            </div>
         </div>
     </aside>
     <div class="fixed inset-0 z-20 bg-black/30 lg:hidden" x-show="menu" x-cloak @click="menu = false"></div>
 
-    <div class="flex-1">
+    <div class="min-w-0 flex-1">
         <header class="sticky top-0 z-10 flex items-center gap-3 border-b border-stone-200 bg-white px-4 py-3 lg:hidden">
             <button type="button" class="rounded-lg border border-stone-300 px-3 py-1.5" @click="menu = true" aria-label="Menü öffnen">☰</button>
-            <span class="font-semibold">{{ $aktuelleBoerse?->titel ?? 'Klamottenbörse' }}</span>
+            <span class="truncate font-semibold">{{ $aktuelleBoerse?->titel ?? 'Klamottenbörse' }}</span>
         </header>
         <main class="mx-auto max-w-6xl px-4 py-6 lg:px-8">
+            @if ($reiter)
+                <nav class="-mt-2 mb-6 flex gap-1 overflow-x-auto overflow-y-hidden border-b border-stone-200 text-sm" aria-label="Unterseiten">
+                    @foreach ($reiter as [$text, $route, $muster])
+                        @php $istAktiv = $aktiv($muster); @endphp
+                        <a href="{{ route($route) }}" @if ($istAktiv) aria-current="page" @endif
+                           class="-mb-px whitespace-nowrap border-b-2 px-3 py-2 no-underline {{ $istAktiv ? 'border-marke-600 font-medium text-marke-800' : 'border-transparent text-stone-600 hover:border-stone-300 hover:text-stone-900' }}">{{ $text }}</a>
+                    @endforeach
+                </nav>
+            @endif
             <x-ui.flash />
             {{ $slot }}
         </main>

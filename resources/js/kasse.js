@@ -268,23 +268,62 @@ export function kasse({ urls, boerseId }) {
             this.$nextTick(() => this.$refs.nummer?.focus());
         },
 
-        async stornieren() {
+        // Artikel korrigieren: raus aus dem Warenkorb, zurück in die Eingabefelder.
+        bearbeiten(uuid) {
+            const p = this.positionen.find((x) => x.uuid === uuid);
+            if (!p) return;
+            if (this.nummer || this.artikel || this.preis) {
+                this.hinweis('Bitte erst den angefangenen Artikel hinzufügen oder die Felder leeren.');
+                return;
+            }
+            this.modus = 'erfassen';
+            this.entfernen(uuid);
+            this.nummer = String(p.nummer);
+            this.artikel = String(p.artikel);
+            this.preis = (p.preis_cent / 100).toFixed(2).replace('.', ',');
+            this.$nextTick(() => {
+                this.$refs.preis.focus();
+                this.$refs.preis.select();
+            });
+        },
+
+        // Letzten Einkauf korrigieren: Bon wird storniert, die Artikel kommen zurück in den Warenkorb.
+        async zurueckholen() {
             if (!this.letzterBon) return;
-            const grund = prompt('Grund für den Storno (z. B. Kunde hat zurückgegeben):');
-            if (!grund) return;
+            if (this.positionen.length) {
+                this.hinweis('Bitte erst den aktuellen Einkauf abschließen oder verwerfen.');
+                return;
+            }
+            if (!confirm('Letzten Einkauf wieder öffnen? Die Artikel kommen zurück in den Warenkorb – danach neu abkassieren.')) return;
+
             const uuid = this.letzterBon.uuid;
-            if (this.offeneBons.some((b) => b.uuid === uuid)) {
+            const offline = this.offeneBons.find((b) => b.uuid === uuid);
+            if (offline) {
+                // noch nicht übertragen: einfach lokal zurücklegen
                 this.offeneBons = this.offeneBons.filter((b) => b.uuid !== uuid);
+                offline.positionen.forEach((p) => {
+                    const position = { ...p, uuid: neueUuid(), wartet: true };
+                    this.positionen.push(position);
+                    this.warteschlange.push({ art: 'hinzufuegen', position });
+                });
                 this.speichern();
+                this.abgleichen();
             } else {
-                const antwort = await this.anfrage('POST', urls.storno.replace('__UUID__', uuid), { grund });
-                if (!antwort?.ok) {
-                    this.hinweis('Storno nicht möglich (offline?). Bitte Orga-Team holen.');
+                const antwort = await this.anfrage('POST', urls.zurueckholen.replace('__UUID__', uuid));
+                if (!antwort) {
+                    this.hinweis('Ohne Verbindung geht das nicht. Bitte gleich noch einmal versuchen.');
                     return;
                 }
+                const stand = await antwort.json();
+                if (!antwort.ok) {
+                    this.hinweis(stand.message ?? 'Einkauf kann nicht bearbeitet werden. Bitte Orga-Team holen.');
+                    return;
+                }
+                this.uebernehmen(stand);
             }
-            this.hinweis('Letzter Einkauf wurde storniert.', 'warnung');
             this.letzterBon = null;
+            this.modus = 'erfassen';
+            this.hinweis('Einkauf ist wieder im Warenkorb – Artikel mit ✎ korrigieren, dann neu bezahlen.', 'warnung');
         },
 
         // ---------- Abgleich mit dem Server ----------
@@ -332,7 +371,9 @@ export function kasse({ urls, boerseId }) {
             const wartend = this.warteschlange.filter((o) => o.art === 'hinzufuegen').map((o) => o.position);
             const entfernt = this.warteschlange.filter((o) => o.art === 'entfernen').map((o) => o.uuid);
             this.positionen = [...wartend, ...stand.positionen.filter((p) => !entfernt.includes(p.uuid) && !wartend.some((w) => w.uuid === p.uuid))];
-            if (stand.letzter_bon && stand.letzter_bon.uuid !== this.letzterBon?.uuid) {
+            if (!stand.letzter_bon && this.letzterBon && !this.offeneBons.some((b) => b.uuid === this.letzterBon.uuid)) {
+                this.letzterBon = null; // auf einem anderen Gerät wieder geöffnet
+            } else if (stand.letzter_bon && stand.letzter_bon.uuid !== this.letzterBon?.uuid) {
                 this.letzterBon = { ...stand.letzter_bon, wechselgeld: null };
                 if (this.modus === 'bezahlen' && !this.positionen.length) this.modus = 'erfassen';
             }

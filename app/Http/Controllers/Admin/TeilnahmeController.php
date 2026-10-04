@@ -38,19 +38,10 @@ class TeilnahmeController extends Controller
             ->orderByRaw('nummer is null')->orderBy('nummer')->orderBy('wartelisten_position')
             ->paginate(100)->withQueryString();
 
-        $treffer = $request->filled('person_suche')
-            ? Person::query()->where(fn ($q) => $q->where('nachname', 'like', '%'.$request->query('person_suche').'%')
-                ->orWhere('vorname', 'like', '%'.$request->query('person_suche').'%')
-                ->orWhere('email', 'like', '%'.$request->query('person_suche').'%'))
-                ->whereDoesntHave('teilnahmen', fn ($q) => $q->where('boerse_id', $boerse->id)->where('status', '!=', TeilnahmeStatus::Abgesagt->value))
-                ->limit(10)->get()
-            : collect();
-
         return view('admin.teilnahmen.index', [
             'boerse' => $boerse,
             'teilnahmen' => $teilnahmen,
             'statusAnzahl' => $boerse->teilnahmen()->where('ist_kinderhaus', false)->selectRaw('status, count(*) as anzahl')->groupBy('status')->pluck('anzahl', 'status'),
-            'treffer' => $treffer,
         ]);
     }
 

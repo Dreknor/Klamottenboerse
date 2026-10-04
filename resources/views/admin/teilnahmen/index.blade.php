@@ -5,21 +5,11 @@
 
     <div class="mb-6 grid gap-6 lg:grid-cols-3">
         <x-ui.karte titel="Verkäufer manuell anmelden" class="lg:col-span-2">
-            <form method="get" class="mb-3 flex gap-2">
-                <input name="person_suche" value="{{ request('person_suche') }}" class="feld" placeholder="Bekannte Person suchen (Name oder E-Mail)">
-                <x-ui.knopf art="sekundaer">Suchen</x-ui.knopf>
+            <form method="post" action="{{ route('admin.teilnahmen.store') }}" x-data @person-gewaehlt="$nextTick(() => $el.requestSubmit())">
+                @csrf
+                <x-ui.personen-auswahl label="Bekannte Person anmelden" :angemeldet-sperren="true"
+                                       hilfe="Tippen, dann Person anklicken – sie wird sofort angemeldet und bekommt eine Nummer (sofern frei)." />
             </form>
-            @foreach ($treffer as $person)
-                <form method="post" action="{{ route('admin.teilnahmen.store') }}" class="flex items-center justify-between border-b border-stone-100 py-2">
-                    @csrf
-                    <input type="hidden" name="person_id" value="{{ $person->id }}">
-                    <span>{{ $person->name }} <span class="text-sm text-stone-500">{{ $person->email }}</span></span>
-                    <x-ui.knopf groesse="klein">Anmelden</x-ui.knopf>
-                </form>
-            @endforeach
-            @if (request('person_suche') && $treffer->isEmpty())
-                <p class="text-sm text-stone-500">Keine passende Person ohne Anmeldung gefunden.</p>
-            @endif
 
             <details class="mt-3" @if ($errors->any()) open @endif>
                 <summary class="cursor-pointer text-sm font-medium text-marke-700">Neue Person anlegen und anmelden</summary>

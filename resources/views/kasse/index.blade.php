@@ -4,7 +4,7 @@
         'warenkorb' => route('kasse.warenkorb'),
         'abschliessen' => route('kasse.warenkorb.abschliessen'),
         'sync' => route('kasse.sync'),
-        'storno' => route('kasse.storno', '__UUID__'),
+        'zurueckholen' => route('kasse.zurueckholen', '__UUID__'),
         'token' => route('kasse.token'),
     ];
 @endphp
@@ -79,7 +79,7 @@
                 <template x-if="letzterBon?.wechselgeld !== null && letzterBon?.wechselgeld !== undefined">
                     <span>, Wechselgeld <span x-text="euro(letzterBon.wechselgeld)"></span></span>
                 </template>
-                · <button type="button" class="text-red-700 underline" @click="stornieren()">stornieren</button>
+                · <button type="button" class="text-marke-700 underline" @click="zurueckholen()">Einkauf bearbeiten</button>
             </p>
         </div>
 
@@ -95,7 +95,8 @@
                         <span class="font-mono" x-text="p.nummer + '-' + p.artikel"></span>
                         <span class="flex items-center gap-3">
                             <span x-text="euro(p.preis_cent)"></span>
-                            <button type="button" class="rounded bg-red-50 px-2 text-red-700" @click="entfernen(p.uuid)" aria-label="Entfernen">✕</button>
+                            <button type="button" class="rounded bg-stone-100 px-2 py-0.5 text-stone-700 hover:bg-stone-200" @click="bearbeiten(p.uuid)"
+                                    :aria-label="'Artikel ' + p.nummer + '-' + p.artikel + ' bearbeiten'" title="Zurück in die Eingabe">✎</button>
                         </span>
                     </li>
                 </template>

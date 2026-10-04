@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Domain\Teilnahme\Actions\WartelisteNachruecken;
 use App\Http\Controllers\Controller;
 use App\Models\Nummernreservierung;
-use App\Models\Person;
 use App\Support\BoerseKontext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +18,6 @@ class ReservierungController extends Controller
         return view('admin.reservierungen.index', [
             'boerse' => $kontext->get(),
             'reservierungen' => Nummernreservierung::query()->with(['person', 'boerse', 'freigaben'])->orderBy('nummer')->get(),
-            'personen' => Person::query()->orderBy('nachname')->orderBy('vorname')->get(['id', 'vorname', 'nachname', 'email']),
         ]);
     }
 

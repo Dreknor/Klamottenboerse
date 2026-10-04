@@ -6,11 +6,6 @@ use App\Models\Person;
 use App\Models\WarenkorbPosition;
 use Illuminate\Support\Str;
 
-function kassierer(): Person
-{
-    return tap(Person::factory()->create())->assignRole('kasse');
-}
-
 it('teilt den Warenkorb zwischen Handy und PC desselben Kontos', function () {
     $boerse = neueBoerse(['verkaufstag' => today()->toDateString()]);
     $v = app(Anmelden::class)($boerse, Person::factory()->create(), mailSenden: false);
@@ -70,4 +65,40 @@ it('entfernt offline verkaufte Artikel aus dem Warenkorb, sobald der Bon übertr
         'positionen' => [['uuid' => $uuid, 'nummer' => $v->nummer, 'artikel' => 2, 'preis_cent' => 300]]])->assertCreated();
 
     expect(WarenkorbPosition::count())->toBe(0)->and(Bon::count())->toBe(1);
+});
+
+it('holt den letzten Einkauf zum Bearbeiten in den Warenkorb zurück', function () {
+    $boerse = neueBoerse(['verkaufstag' => today()->toDateString()]);
+    $v = app(Anmelden::class)($boerse, Person::factory()->create(), mailSenden: false);
+    $als = $this->actingAs(kassierer())->withSession(['login_art' => 'passwort']);
+
+    foreach ([[1, 200], [2, 350]] as [$artikel, $preis]) {
+        $als->postJson(route('kasse.warenkorb.hinzufuegen'), ['uuid' => (string) Str::uuid(), 'nummer' => $v->nummer, 'artikel' => $artikel, 'preis_cent' => $preis]);
+    }
+    $bonUuid = (string) Str::uuid();
+    $als->postJson(route('kasse.warenkorb.abschliessen'), ['bon_uuid' => $bonUuid])->assertCreated();
+
+    $als->postJson(route('kasse.zurueckholen', $bonUuid))
+        ->assertOk()->assertJsonCount(2, 'positionen')->assertJsonPath('summe_cent', 550)->assertJsonPath('letzter_bon', null);
+
+    expect(Bon::sole()->storniert_at)->not->toBeNull();
+
+    // erneut abkassieren ergibt einen neuen, gültigen Bon
+    $als->postJson(route('kasse.warenkorb.abschliessen'), ['bon_uuid' => (string) Str::uuid()])->assertCreated();
+    expect(Bon::query()->whereNull('storniert_at')->sole()->summe_cent)->toBe(550);
+});
+
+it('holt keinen Einkauf zurück, solange der Warenkorb nicht leer ist', function () {
+    $boerse = neueBoerse(['verkaufstag' => today()->toDateString()]);
+    $v = app(Anmelden::class)($boerse, Person::factory()->create(), mailSenden: false);
+    $als = $this->actingAs(kassierer())->withSession(['login_art' => 'passwort']);
+
+    $als->postJson(route('kasse.warenkorb.hinzufuegen'), ['uuid' => (string) Str::uuid(), 'nummer' => $v->nummer, 'artikel' => 1, 'preis_cent' => 100]);
+    $bonUuid = (string) Str::uuid();
+    $als->postJson(route('kasse.warenkorb.abschliessen'), ['bon_uuid' => $bonUuid]);
+    $als->postJson(route('kasse.warenkorb.hinzufuegen'), ['uuid' => (string) Str::uuid(), 'nummer' => $v->nummer, 'artikel' => 2, 'preis_cent' => 100]);
+
+    $als->postJson(route('kasse.zurueckholen', $bonUuid))->assertStatus(422)
+        ->assertJsonPath('message', 'Bitte erst den aktuellen Einkauf abschließen oder leeren.');
+    expect(Bon::sole()->storniert_at)->toBeNull();
 });

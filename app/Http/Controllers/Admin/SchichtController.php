@@ -23,7 +23,6 @@ class SchichtController extends Controller
         return view('admin.schichten.index', [
             'boerse' => $boerse,
             'schichten' => $boerse->schichten()->with(['einteilungen' => fn ($q) => $q->with('person')->orderBy('status')])->get()->groupBy(fn ($s) => $s->beginn->isoFormat('dddd, D. MMMM')),
-            'personen' => Person::query()->orderBy('nachname')->get(['id', 'vorname', 'nachname', 'email']),
         ]);
     }
 

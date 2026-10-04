@@ -8,7 +8,9 @@ use App\Domain\Orga\AufgabenErinnern;
 use App\Domain\Personen\InaktiveBereinigen;
 use App\Domain\Teilnahme\Actions\WartelisteNachruecken;
 use App\Models\Boerse;
+use App\Models\Fehler;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schedule;
 
 /*
@@ -69,3 +71,7 @@ Schedule::command('warteliste:nachruecken')->everyFifteenMinutes()->withoutOverl
 Schedule::command('posteingang:abrufen')->everyFiveMinutes()->withoutOverlapping();
 Schedule::command('aufgaben:erinnern')->dailyAt('07:00');
 Schedule::command('datenschutz:inaktive')->dailyAt('03:00');
+Schedule::command('model:prune', ['--model' => [Fehler::class]])->dailyAt('03:30');
+
+// Herzschlag: zeigt im Backend (System), ob der Cron-Job läuft
+Schedule::call(fn () => Cache::forever('system.scheduler', now()->toIso8601String()))->everyMinute()->name('herzschlag');

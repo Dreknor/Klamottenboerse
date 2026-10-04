@@ -103,11 +103,38 @@ class Warenkorb
         });
     }
 
+    /**
+     * Einkauf korrigieren: Der Bon wird storniert und seine Artikel kommen zurück in den Warenkorb.
+     * Dort lassen sie sich bearbeiten; danach wird ganz normal neu abkassiert.
+     */
+    public function bonZurueckholen(Bon $bon): void
+    {
+        if ($bon->boerse_id !== $this->boerse->id || $bon->storniert_at) {
+            throw new DomainException('Dieser Einkauf kann nicht mehr bearbeitet werden.');
+        }
+        if ($this->positionen()->isNotEmpty()) {
+            throw new DomainException('Bitte erst den aktuellen Einkauf abschließen oder leeren.');
+        }
+
+        DB::transaction(function () use ($bon) {
+            $positionen = $bon->positionen()->whereNull('storniert_at')->with('teilnahme:id,nummer')->get();
+            app(Stornieren::class)->bon($bon, 'zur Korrektur in den Warenkorb zurückgeholt');
+
+            foreach ($positionen as $p) {
+                WarenkorbPosition::create([
+                    'uuid' => (string) Str::uuid(), 'person_id' => $this->person->id, 'boerse_id' => $this->boerse->id,
+                    'nummer' => $p->teilnahme->nummer, 'artikel' => $p->artikelnummer, 'preis_cent' => $p->preis_cent,
+                ]);
+            }
+        });
+    }
+
     /** Der letzte Bon dieses Kontos (für die Anzeige auf allen Geräten). */
     public function letzterBon(): ?Bon
     {
         return Bon::query()->where('boerse_id', $this->boerse->id)
             ->whereHas('kassenschicht', fn ($q) => $q->where('person_id', $this->person->id))
+            ->whereNull('storniert_at')
             ->where('created_at', '>=', now()->subMinutes(15))
             ->latest('id')->first();
     }

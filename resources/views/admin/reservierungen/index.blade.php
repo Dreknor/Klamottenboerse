@@ -5,15 +5,7 @@
         <x-ui.karte titel="Neue Reservierung">
             <form method="post" action="{{ route('admin.reservierungen.store') }}" class="space-y-4">
                 @csrf
-                <div>
-                    <label for="person_id" class="mb-1 block text-sm font-medium">Person</label>
-                    <select id="person_id" name="person_id" class="feld" required>
-                        <option value="">Bitte wählen …</option>
-                        @foreach ($personen as $p)
-                            <option value="{{ $p->id }}">{{ $p->nachname }}, {{ $p->vorname }} {{ $p->email ? '('.$p->email.')' : '' }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <x-ui.personen-auswahl />
                 <x-ui.feld name="nummer" label="Nummer" typ="number" required />
                 <x-ui.feld name="grund" label="Grund (optional)" hilfe="z. B. Orga-Team, langjährige Helferin" />
                 <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="dauerhaft" value="1" checked> Dauerhaft (für alle künftigen Börsen)</label>

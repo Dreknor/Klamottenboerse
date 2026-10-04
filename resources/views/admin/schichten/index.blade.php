@@ -26,13 +26,10 @@
                     </ul>
                     <button type="button" class="mt-3 text-sm text-marke-700 hover:underline" @click="neu = !neu">+ Helfer manuell eintragen</button>
                     <div x-show="neu" x-cloak class="mt-3 space-y-3 border-t border-stone-100 pt-3">
-                        <form method="post" action="{{ route('admin.schichten.helfer', $schicht) }}" class="flex gap-2">
+                        <form method="post" action="{{ route('admin.schichten.helfer', $schicht) }}" class="flex items-end gap-2"
+                              x-data @person-gewaehlt="$nextTick(() => $el.requestSubmit())">
                             @csrf
-                            <select name="person_id" class="feld" required>
-                                <option value="">Bekannte Person wählen …</option>
-                                @foreach ($personen as $p)<option value="{{ $p->id }}">{{ $p->nachname }}, {{ $p->vorname }}</option>@endforeach
-                            </select>
-                            <x-ui.knopf groesse="klein">Eintragen</x-ui.knopf>
+                            <x-ui.personen-auswahl label="Bekannte Person" class="flex-1" />
                         </form>
                         <form method="post" action="{{ route('admin.schichten.helfer', $schicht) }}" class="grid grid-cols-2 gap-2">
                             @csrf

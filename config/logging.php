@@ -1,5 +1,6 @@
 <?php
 
+use App\Logging\DatenbankLogger;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -54,8 +55,15 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => explode(',', (string) env('LOG_STACK', 'single')),
+            'channels' => explode(',', (string) env('LOG_STACK', 'single,datenbank')),
             'ignore_exceptions' => false,
+        ],
+
+        // Warnungen und Fehler zusätzlich in die Datenbank (Backend → System → Fehlerprotokoll)
+        'datenbank' => [
+            'driver' => 'custom',
+            'via' => DatenbankLogger::class,
+            'level' => env('LOG_DATENBANK_LEVEL', 'warning'),
         ],
 
         'single' => [

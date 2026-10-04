@@ -6,6 +6,26 @@
         <x-ui.knopf art="sekundaer" :href="route('admin.personen.edit', $person)">Bearbeiten</x-ui.knopf>
     </x-ui.kopf>
 
+    @role('admin')
+        <x-ui.karte titel="Team-Zugang" class="mb-6">
+            <form method="post" action="{{ route('admin.team.update', $person) }}" class="flex flex-wrap items-end gap-x-6 gap-y-2">
+                @csrf @method('put')
+                @foreach (\Database\Seeders\GrunddatenSeeder::ROLLEN as $rolle => $text)
+                    <label class="flex items-start gap-2 text-sm">
+                        <input type="checkbox" name="rollen[]" value="{{ $rolle }}" class="mt-0.5" @checked($person->hasRole($rolle))>
+                        <span>{{ $text }}</span>
+                    </label>
+                @endforeach
+                <x-ui.knopf groesse="klein">{{ $person->roles->isEmpty() ? 'Ins Team aufnehmen' : 'Rechte speichern' }}</x-ui.knopf>
+            </form>
+            @if ($person->roles->isNotEmpty() && $person->email)
+                <form method="post" action="{{ route('admin.team.passwort-link', $person) }}" class="mt-3 text-sm">@csrf
+                    <button class="text-marke-700 hover:underline">{{ $person->password ? 'Link zum Passwort-Zurücksetzen schicken' : 'Einladung zum Passwort-Setzen schicken' }}</button>
+                </form>
+            @endif
+        </x-ui.karte>
+    @endrole
+
     <div class="grid gap-6 lg:grid-cols-2">
         <x-ui.karte titel="Teilnahmen als Verkäufer">
             <table class="tabelle">

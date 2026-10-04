@@ -4,14 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Domain\Kommunikation\Postausgang;
 use App\Domain\Personen\InaktiveBereinigen;
+use App\Domain\Personen\PersonenSuche;
 use App\Domain\Personen\PersonLoeschen;
 use App\Enums\KinderhausBezug;
+use App\Enums\TeilnahmeStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Nachricht;
 use App\Models\Person;
 use App\Models\Posteingang;
 use App\Models\Teilnahme;
+use App\Support\BoerseKontext;
 use Database\Seeders\GrunddatenSeeder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -21,20 +25,38 @@ use Spatie\Activitylog\Models\Activity;
 
 class PersonController extends Controller
 {
-    public function index(Request $request): View
+    /** Alle Personen auf einmal – die Live-Suche filtert direkt im Browser. */
+    public function index(BoerseKontext $kontext): View
     {
-        $suche = trim((string) $request->query('suche'));
+        $boerse = $kontext->get();
+        $nummern = $boerse ? $boerse->teilnahmen()->where('status', '!=', TeilnahmeStatus::Abgesagt->value)->pluck('nummer', 'person_id') : collect();
 
         return view('admin.personen.index', [
+            'boerse' => $boerse,
             'personen' => Person::query()
-                ->with('roles')
+                ->with('roles:id,name')
                 ->withCount('teilnahmen')
-                ->when($suche !== '', fn ($q) => $q->where(fn ($w) => $w->where('nachname', 'like', "%{$suche}%")
-                    ->orWhere('vorname', 'like', "%{$suche}%")->orWhere('email', 'like', "%{$suche}%")->orWhere('telefon', 'like', "%{$suche}%")))
-                ->when($request->query('rolle'), fn ($q, $rolle) => $q->role($rolle))
                 ->orderBy('nachname')->orderBy('vorname')
-                ->paginate(50)->withQueryString(),
+                ->get(['id', 'vorname', 'nachname', 'email', 'telefon', 'kinderhaus_bezug'])
+                ->map(fn (Person $p) => [
+                    'id' => $p->id,
+                    'name' => $p->nachname.', '.$p->vorname,
+                    'email' => $p->email,
+                    'telefon' => $p->telefon,
+                    'kinderhaus' => $p->kinderhaus_bezug->hatVorlauf() ? $p->kinderhaus_bezug->label() : '',
+                    'boersen' => $p->teilnahmen_count,
+                    'rollen' => $p->roles->pluck('name')->all(),
+                    'angemeldet' => $nummern->has($p->id),
+                    'nummer' => $nummern->get($p->id),
+                    'url' => route('admin.personen.show', $p->id),
+                ]),
         ]);
+    }
+
+    /** JSON für Live-Suchfelder (Personenauswahl, Schnellsuche in der Seitenleiste). */
+    public function suche(Request $request, PersonenSuche $suche, BoerseKontext $kontext): JsonResponse
+    {
+        return response()->json($suche->suchen((string) $request->query('q'), $kontext->get()));
     }
 
     public function create(): View

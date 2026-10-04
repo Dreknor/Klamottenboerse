@@ -1,19 +1,11 @@
 <?php
 
-use App\Domain\Boersen\Actions\BoerseAnlegen;
 use App\Domain\Teilnahme\Actions\Anmelden;
 use App\Domain\Teilnahme\Nummernvergabe;
 use App\Enums\TeilnahmeStatus;
-use App\Models\Boerse;
 use App\Models\Nummernreservierung;
 use App\Models\Person;
 use App\Models\Teilnahme;
-use Database\Factories\BoerseFactory;
-
-function neueBoerse(array $werte = []): Boerse
-{
-    return app(BoerseAnlegen::class)((new BoerseFactory)->anmeldungOffen()->raw($werte));
-}
 
 function vergangeneTeilnahme(Person $person, int $nummer): void
 {

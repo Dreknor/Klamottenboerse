@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Kasse;
 
 use App\Domain\Kasse\BonErfassen;
-use App\Domain\Kasse\Stornieren;
 use App\Domain\Kasse\Warenkorb;
 use App\Enums\BoerseStatus;
 use App\Http\Controllers\Controller;
@@ -136,17 +135,17 @@ class KasseController extends Controller
         return response()->json(['uuid' => $bon->uuid, 'summe_cent' => $bon->summe_cent], 201);
     }
 
-    public function storno(Request $request, Bon $bon, Stornieren $stornieren): JsonResponse
+    /** Letzten Einkauf korrigieren: Bon stornieren, Artikel zurück in den Warenkorb. */
+    public function zurueckholen(Request $request, Bon $bon): JsonResponse
     {
-        $grund = $request->validate(['grund' => ['required', 'string', 'max:190']])['grund'];
-
+        $korb = $this->korb($request);
         try {
-            $stornieren->bon($bon, $grund);
+            $korb->bonZurueckholen($bon);
         } catch (DomainException $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
+            return response()->json(['message' => $e->getMessage()] + $this->stand($korb), 422);
         }
 
-        return response()->json(['ok' => true]);
+        return response()->json($this->stand($korb));
     }
 
     private function korb(Request $request): Warenkorb

@@ -90,7 +90,7 @@ Route::middleware(['auth', 'passwort', 'role:admin|orga|kasse'])->prefix('kasse'
     Route::delete('/warenkorb/{uuid}', [KasseController::class, 'entfernen'])->name('warenkorb.entfernen');
     Route::post('/warenkorb/abschliessen', [KasseController::class, 'abschliessen'])->name('warenkorb.abschliessen');
     Route::post('/bons', [KasseController::class, 'sync'])->name('sync');
-    Route::post('/bons/{bon:uuid}/storno', [KasseController::class, 'storno'])->name('storno');
+    Route::post('/bons/{bon:uuid}/zurueckholen', [KasseController::class, 'zurueckholen'])->name('zurueckholen');
 });
 
 Route::middleware(['auth', 'passwort', 'role:admin|orga|annahme'])->prefix('tablet')->name('tablet.')->group(function () {
@@ -127,6 +127,7 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::post('/reservierungen/{reservierung}/freigeben', [Admin\ReservierungController::class, 'freigeben'])->name('reservierungen.freigeben');
     Route::delete('/reservierungen/{reservierung}/freigeben', [Admin\ReservierungController::class, 'freigabeZuruecknehmen'])->name('reservierungen.freigabe-zuruecknehmen');
 
+    Route::get('/personen/suche', [Admin\PersonController::class, 'suche'])->name('personen.suche');
     Route::resource('personen', Admin\PersonController::class)->except(['destroy'])->parameters(['personen' => 'person']);
     Route::post('/personen/{person}/notizen', [Admin\PersonController::class, 'notiz'])->name('personen.notiz');
     Route::post('/personen/{person}/login-link', [Admin\PersonController::class, 'loginLink'])->name('personen.login-link');
@@ -217,6 +218,23 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
 
     Route::get('/einstellungen', [Admin\EinstellungenController::class, 'edit'])->name('einstellungen.edit');
     Route::put('/einstellungen', [Admin\EinstellungenController::class, 'update'])->name('einstellungen.update');
+
+    // Nur Admins: Team & Rechte, Fehlerprotokoll, Updates
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/team', [Admin\TeamController::class, 'index'])->name('team.index');
+        Route::post('/team', [Admin\TeamController::class, 'store'])->name('team.store');
+        Route::put('/team/{person}', [Admin\TeamController::class, 'update'])->name('team.update');
+        Route::delete('/team/{person}', [Admin\TeamController::class, 'destroy'])->name('team.destroy');
+        Route::post('/team/{person}/passwort-link', [Admin\TeamController::class, 'passwortLink'])->name('team.passwort-link');
+
+        Route::get('/system', [Admin\SystemController::class, 'index'])->name('system.index');
+        Route::post('/system/update/pruefen', [Admin\SystemController::class, 'pruefen'])->name('system.pruefen');
+        Route::post('/system/update', [Admin\SystemController::class, 'update'])->name('system.update');
+        Route::get('/system/fehler', [Admin\FehlerController::class, 'index'])->name('fehler.index');
+        Route::get('/system/fehler/{fehler}', [Admin\FehlerController::class, 'show'])->name('fehler.show');
+        Route::post('/system/fehler/{fehler}/erledigt', [Admin\FehlerController::class, 'erledigt'])->name('fehler.erledigt');
+        Route::delete('/system/fehler', [Admin\FehlerController::class, 'leeren'])->name('fehler.leeren');
+    });
 });
 
 /*
