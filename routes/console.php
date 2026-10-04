@@ -1,8 +1,48 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
+use App\Domain\Kommunikation\ImapPostfach;
+use App\Domain\Kommunikation\MailplanAusfuehren;
+use App\Domain\Kommunikation\Postausgang;
+use App\Domain\Orga\AufgabenErinnern;
+use App\Domain\Teilnahme\Actions\WartelisteNachruecken;
+use App\Models\Boerse;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+/*
+| Alle automatischen Abläufe. Auf dem Server genügt ein Cron-Eintrag:
+|   * * * * * cd /pfad/zur/app && php artisan schedule:run >> /dev/null 2>&1
+*/
+
+Artisan::command('mails:versenden', function () {
+    $this->info(Postausgang::versendeFaellige().' Mail(s) versendet.');
+})->purpose('Versendet wartende Mails im Rahmen des Stundenlimits');
+
+Artisan::command('mailplan:ausfuehren', function () {
+    $this->info((new MailplanAusfuehren)().' Mail(s) aus dem Mailplan eingeplant.');
+})->purpose('Plant fällige Mails aus dem Mailplan aller Börsen ein');
+
+Artisan::command('warteliste:nachruecken', function (WartelisteNachruecken $nachruecken) {
+    $angebote = Boerse::query()->offen()->where('verkaufstag', '>=', today())->get()
+        ->sum(fn (Boerse $boerse) => $nachruecken($boerse));
+    $this->info("{$angebote} Angebot(e) an die Warteliste verschickt.");
+})->purpose('Beendet abgelaufene Angebote und bietet freie Plätze der Warteliste an');
+
+Artisan::command('posteingang:abrufen', function () {
+    if (! ImapPostfach::istKonfiguriert()) {
+        $this->warn('IMAP ist nicht eingerichtet.');
+
+        return;
+    }
+    $this->info((new ImapPostfach)->abrufen().' neue Mail(s) abgerufen.');
+})->purpose('Ruft neue Mails aus dem IMAP-Postfach ab');
+
+Artisan::command('aufgaben:erinnern', function () {
+    $this->info((new AufgabenErinnern)().' Erinnerung(en) eingeplant.');
+})->purpose('Erinnert Zuständige an fällige Aufgaben');
+
+Schedule::command('mails:versenden')->everyMinute()->withoutOverlapping();
+Schedule::command('mailplan:ausfuehren')->everyTenMinutes()->withoutOverlapping();
+Schedule::command('warteliste:nachruecken')->everyFifteenMinutes()->withoutOverlapping();
+Schedule::command('posteingang:abrufen')->everyFiveMinutes()->withoutOverlapping();
+Schedule::command('aufgaben:erinnern')->dailyAt('07:00');
