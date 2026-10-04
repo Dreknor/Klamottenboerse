@@ -24,7 +24,11 @@ class PortalLoginController extends Controller
             $request->session()->put('login_art', 'link');
         }
 
-        $person->forceFill(['letzte_aktivitaet_at' => now(), 'email_verified_at' => $person->email_verified_at ?? now()])->save();
+        $person->forceFill([
+            'letzte_aktivitaet_at' => now(),
+            'inaktiv_angeschrieben_at' => null,
+            'email_verified_at' => $person->email_verified_at ?? now(),
+        ])->save();
 
         return redirect()->route('portal.index');
     }

@@ -68,6 +68,9 @@ Route::middleware('auth')->prefix('portal')->name('portal.')->group(function () 
     Route::get('/etiketten', [Portal\DruckController::class, 'etiketten'])->name('etiketten');
     Route::get('/kistenzettel', [Portal\DruckController::class, 'kistenzettel'])->name('kistenzettel');
     Route::post('/absage', [Portal\PortalController::class, 'absagen'])->name('absage');
+    Route::get('/meine-daten', [Portal\DatenController::class, 'index'])->name('daten');
+    Route::get('/meine-daten/export', [Portal\DatenController::class, 'export'])->name('daten.export');
+    Route::post('/meine-daten/loeschen', [Portal\DatenController::class, 'loeschen'])->name('daten.loeschen');
     Route::post('/abmelden', [Portal\PortalLoginController::class, 'destroy'])->name('abmelden');
 });
 
@@ -119,6 +122,8 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::resource('personen', Admin\PersonController::class)->except(['destroy'])->parameters(['personen' => 'person']);
     Route::post('/personen/{person}/notizen', [Admin\PersonController::class, 'notiz'])->name('personen.notiz');
     Route::post('/personen/{person}/login-link', [Admin\PersonController::class, 'loginLink'])->name('personen.login-link');
+    Route::delete('/personen/{person}', [Admin\PersonController::class, 'destroy'])->name('personen.destroy');
+    Route::get('/datenschutz/inaktive', [Admin\PersonController::class, 'inaktive'])->name('personen.inaktive');
 
     Route::get('/schichten', [Admin\SchichtController::class, 'index'])->name('schichten.index');
     Route::post('/schichten', [Admin\SchichtController::class, 'store'])->name('schichten.store');

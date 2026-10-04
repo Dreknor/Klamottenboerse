@@ -2,7 +2,10 @@
 <x-layouts.oeffentlich titel="Mein Portal">
     <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1>Hallo {{ $person->vorname }}!</h1>
-        <form method="post" action="{{ route('portal.abmelden') }}">@csrf<button class="text-sm text-stone-600 hover:underline">Abmelden</button></form>
+        <div class="flex items-center gap-4 text-sm">
+            <a href="{{ route('portal.daten') }}">Meine Daten</a>
+            <form method="post" action="{{ route('portal.abmelden') }}">@csrf<button class="text-stone-600 hover:underline">Abmelden</button></form>
+        </div>
     </div>
 
     @if (! $teilnahme)

@@ -4,6 +4,7 @@ use App\Domain\Kommunikation\ImapPostfach;
 use App\Domain\Kommunikation\MailplanAusfuehren;
 use App\Domain\Kommunikation\Postausgang;
 use App\Domain\Orga\AufgabenErinnern;
+use App\Domain\Personen\InaktiveBereinigen;
 use App\Domain\Teilnahme\Actions\WartelisteNachruecken;
 use App\Models\Boerse;
 use Illuminate\Support\Facades\Artisan;
@@ -41,8 +42,14 @@ Artisan::command('aufgaben:erinnern', function () {
     $this->info((new AufgabenErinnern)().' Erinnerung(en) eingeplant.');
 })->purpose('Erinnert Zuständige an fällige Aufgaben');
 
+Artisan::command('datenschutz:inaktive', function (InaktiveBereinigen $bereinigen) {
+    $ergebnis = $bereinigen();
+    $this->info("{$ergebnis['angeschrieben']} Person(en) angeschrieben, {$ergebnis['geloescht']} gelöscht.");
+})->purpose('Schreibt seit 24 Monaten inaktive Personen an und löscht sie nach Ablauf der Frist');
+
 Schedule::command('mails:versenden')->everyMinute()->withoutOverlapping();
 Schedule::command('mailplan:ausfuehren')->everyTenMinutes()->withoutOverlapping();
 Schedule::command('warteliste:nachruecken')->everyFifteenMinutes()->withoutOverlapping();
 Schedule::command('posteingang:abrufen')->everyFiveMinutes()->withoutOverlapping();
 Schedule::command('aufgaben:erinnern')->dailyAt('07:00');
+Schedule::command('datenschutz:inaktive')->dailyAt('03:00');

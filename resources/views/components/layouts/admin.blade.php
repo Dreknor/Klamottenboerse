@@ -14,7 +14,8 @@
         'Team' => [
             ['Aufgaben & Checkliste', 'admin.aufgaben.index', 'admin.aufgaben.*'],
             ['Kalender', 'admin.kalender.index', 'admin.kalender.*'],
-            ['Personen', 'admin.personen.index', 'admin.personen.*'],
+            ['Personen', 'admin.personen.index', 'admin.personen.index|admin.personen.show|admin.personen.edit|admin.personen.create'],
+            ['Datenschutz: Inaktive', 'admin.personen.inaktive', 'admin.personen.inaktive'],
         ],
         'Kommunikation' => [
             ['Posteingang', 'admin.posteingang.index', 'admin.posteingang.*'],
@@ -63,7 +64,7 @@
             @foreach ($navigation as $gruppe => $eintraege)
                 <p class="mt-3 px-2 text-xs font-medium uppercase tracking-wide text-stone-400">{{ $gruppe }}</p>
                 @foreach ($eintraege as [$text, $route, $muster])
-                    @php $aktiv = request()->routeIs($muster); $ziel = route($route); @endphp
+                    @php $aktiv = request()->routeIs(...explode('|', $muster)); $ziel = route($route); @endphp
                     <a href="{{ $ziel }}"
                        class="mt-0.5 flex items-center justify-between rounded-lg px-2 py-1.5 no-underline {{ $aktiv ? 'bg-marke-50 font-medium text-marke-800' : 'text-stone-700 hover:bg-stone-100' }}">
                         <span>{{ $text }}</span>

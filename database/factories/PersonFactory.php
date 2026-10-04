@@ -23,6 +23,7 @@ class PersonFactory extends Factory
             'kinderhaus_bezug' => KinderhausBezug::Keiner,
             'email_verified_at' => now(),
             'info_mails_erlaubt_at' => now(),
+            'remember_token' => null,
         ];
     }
 

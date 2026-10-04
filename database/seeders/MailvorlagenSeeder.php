@@ -171,6 +171,20 @@ diese Aufgaben sind bald fällig:
 
 [Zu meinen Aufgaben]({aufgaben_link})
 TXT],
+        'inaktiv_loeschung' => ['Löschung wegen Inaktivität', 'Möchtest du weiter bei der Klamottenbörse dabei sein?', <<<'TXT'
+Hallo {vorname},
+
+du warst seit über zwei Jahren nicht mehr bei der Klamottenbörse dabei. Damit wir keine Daten unnötig aufbewahren, löschen wir deinen Eintrag am **{frist}**.
+
+Du möchtest weiter informiert werden? Dann klick einfach hier – das genügt:
+
+[Ja, ich bleibe dabei]({portal_link})
+
+Wenn du nichts tust, löschen wir deine Daten automatisch.
+
+Viele Grüße
+dein Klamottenbörsen-Team
+TXT],
         'login_link' => ['Login-Link', 'Dein Link zum Verkäuferportal', <<<'TXT'
 Hallo {vorname},
 

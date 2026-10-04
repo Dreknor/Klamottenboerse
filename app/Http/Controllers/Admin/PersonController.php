@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Domain\Kommunikation\Postausgang;
+use App\Domain\Personen\InaktiveBereinigen;
+use App\Domain\Personen\PersonLoeschen;
 use App\Enums\KinderhausBezug;
 use App\Http\Controllers\Controller;
 use App\Models\Nachricht;
@@ -92,6 +94,36 @@ class PersonController extends Controller
         Postausgang::senden($nachricht);
 
         return back()->with('erfolg', 'Link zum Portal wurde verschickt.');
+    }
+
+    public function destroy(Request $request, Person $person, PersonLoeschen $loeschen): RedirectResponse
+    {
+        $request->validate(['bestaetigung' => ['required', 'in:'.$person->nachname]], [
+            'bestaetigung.in' => 'Zur Sicherheit bitte den Nachnamen genau so eintippen.',
+        ]);
+
+        if ($person->is($request->user())) {
+            return back()->with('fehler', 'Du kannst dich nicht selbst löschen.');
+        }
+        if (PersonLoeschen::hatOffeneVorgaenge($person)) {
+            return back()->with('fehler', 'Diese Person nimmt gerade an einer Börse teil. Bitte erst die Teilnahme absagen oder nach der Abrechnung löschen.');
+        }
+
+        $loeschen($person, 'vom Orga-Team gelöscht');
+
+        return redirect()->route('admin.personen.index')->with('erfolg', 'Person gelöscht. Verkaufszahlen bleiben ohne Namen erhalten.');
+    }
+
+    /** Übersicht für das Löschkonzept: wer gilt als inaktiv, wer wurde angeschrieben. */
+    public function inaktive(InaktiveBereinigen $bereinigen): View
+    {
+        return view('admin.personen.inaktive', [
+            'kandidaten' => $bereinigen->inaktive()->whereNull('inaktiv_angeschrieben_at')->orderBy('nachname')->get(),
+            'angeschrieben' => $bereinigen->inaktive()->whereNotNull('inaktiv_angeschrieben_at')->orderBy('inaktiv_angeschrieben_at')->get(),
+            'beantragt' => Person::query()->whereNotNull('loeschung_angefragt_at')->orderBy('loeschung_angefragt_at')->get(),
+            'frist' => InaktiveBereinigen::FRIST_TAGE,
+            'monate' => InaktiveBereinigen::MONATE,
+        ]);
     }
 
     /** @return array<string, mixed> */

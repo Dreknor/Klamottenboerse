@@ -81,4 +81,13 @@
             @endforeach
         </x-ui.karte>
     @endif
+    <details class="mt-6 rounded-xl border border-red-200 bg-white p-5">
+        <summary class="cursor-pointer font-medium text-red-800">Person löschen</summary>
+        <p class="mt-3 text-sm text-stone-700">Löscht Kontaktdaten, Mails, Notizen, Schichten und Reservierungen. Verkaufs- und Abrechnungszahlen bleiben ohne Namen erhalten. Das kann nicht rückgängig gemacht werden.</p>
+        <form method="post" action="{{ route('admin.personen.destroy', $person) }}" class="mt-3 flex flex-wrap items-end gap-3">
+            @csrf @method('delete')
+            <x-ui.feld name="bestaetigung" :label="'Zur Bestätigung den Nachnamen „'.$person->nachname.'“ eintippen'" autocomplete="off" />
+            <x-ui.knopf art="gefahr">Endgültig löschen</x-ui.knopf>
+        </form>
+    </details>
 </x-layouts.admin>
