@@ -78,7 +78,7 @@
             @endrole
         </nav>
         <div class="border-t border-stone-200 px-4 py-3 text-sm text-stone-600">
-            <p class="truncate">{{ auth()->user()->name }}</p>
+            <a href="{{ route('admin.konto.edit') }}" class="block truncate text-stone-700 no-underline hover:underline">{{ auth()->user()->name }} · Mein Konto</a>
             <form method="post" action="{{ route('logout') }}">@csrf<button class="text-marke-700 hover:underline">Abmelden</button></form>
         </div>
     </aside>

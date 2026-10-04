@@ -32,6 +32,7 @@ class Person extends Authenticatable
             'info_mails_erlaubt_at' => 'datetime',
             'letzte_aktivitaet_at' => 'datetime',
             'loeschung_angefragt_at' => 'datetime',
+            'inaktiv_angeschrieben_at' => 'datetime',
             'password' => 'hashed',
         ];
     }

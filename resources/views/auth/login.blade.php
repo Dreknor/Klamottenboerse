@@ -7,6 +7,7 @@
                 <x-ui.feld name="password" label="Passwort" typ="password" autocomplete="current-password" required />
                 <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="merken" value="1"> Angemeldet bleiben</label>
                 <x-ui.knopf class="w-full">Anmelden</x-ui.knopf>
+                <p class="text-center text-sm"><a href="{{ route('password.request') }}">Passwort vergessen?</a></p>
             </form>
         </x-ui.karte>
         <p class="mt-4 text-center text-sm text-stone-600">

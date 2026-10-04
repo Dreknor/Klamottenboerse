@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\PasswortController;
 use App\Http\Controllers\Kasse\KasseController;
 use App\Http\Controllers\Portal;
 use App\Http\Controllers\Public;
@@ -46,6 +47,10 @@ Route::post('/feedback/{token}', [Public\FeedbackController::class, 'store'])->n
 Route::get('/login', [LoginController::class, 'create'])->name('login');
 Route::post('/login', [LoginController::class, 'store'])->middleware('throttle:10,1');
 Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+Route::get('/passwort-vergessen', [PasswortController::class, 'create'])->name('password.request');
+Route::post('/passwort-vergessen', [PasswortController::class, 'store'])->middleware('throttle:5,1')->name('password.email');
+Route::get('/passwort-neu/{token}', [PasswortController::class, 'edit'])->name('password.reset');
+Route::post('/passwort-neu', [PasswortController::class, 'update'])->middleware('throttle:10,1')->name('password.update');
 
 /*
 |--------------------------------------------------------------------------
@@ -164,6 +169,9 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::get('/seiten', [Admin\SeiteController::class, 'index'])->name('seiten.index');
     Route::get('/seiten/{seite}', [Admin\SeiteController::class, 'edit'])->name('seiten.edit');
     Route::put('/seiten/{seite}', [Admin\SeiteController::class, 'update'])->name('seiten.update');
+
+    Route::get('/konto', [Admin\KontoController::class, 'edit'])->name('konto.edit');
+    Route::put('/konto/passwort', [Admin\KontoController::class, 'passwort'])->name('konto.passwort');
 
     Route::get('/einstellungen', [Admin\EinstellungenController::class, 'edit'])->name('einstellungen.edit');
     Route::put('/einstellungen', [Admin\EinstellungenController::class, 'update'])->name('einstellungen.update');
