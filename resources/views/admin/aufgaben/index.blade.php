@@ -1,6 +1,8 @@
 <x-layouts.admin titel="Aufgaben">
     <x-ui.kopf titel="Aufgaben & Checkliste" unter="Zuständige werden {{ \App\Support\Einstellungen::get('erinnerung_aufgaben_tage') }} Tage vor Fälligkeit per Mail erinnert.">
-        <x-ui.knopf art="sekundaer" :href="route('admin.checklistenvorlagen.index')">Checklisten-Vorlage bearbeiten</x-ui.knopf>
+        @if (auth()->user()->istOrga())
+            <x-ui.knopf art="sekundaer" :href="route('admin.checklistenvorlagen.index')">Checklisten-Vorlage bearbeiten</x-ui.knopf>
+        @endif
     </x-ui.kopf>
 
     <div class="mb-4 flex flex-wrap gap-2 text-sm">

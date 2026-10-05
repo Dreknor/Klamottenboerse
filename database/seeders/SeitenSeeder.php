@@ -132,7 +132,31 @@ MD],
         ];
     }
 
+    /** Inhalt wie das frühere Infoblatt aus V1 – wird auch als PDF „Wichtige Infos für Verkäufer“ gedruckt. */
     public const VERKAEUFER_INFO = [
+        ['typ' => 'termin', 'titel' => 'Termine der nächsten Börse'],
+        ['typ' => 'text', 'titel' => 'Annahme und Abholung',
+            'text' => "**Kisten abgeben:** {anlieferung} ({ort}).\n\n**Abholen:** {abholung}. Restware und Erlös gibt es nur zusammen: Der Erlös wird bar ausgezahlt, wenn du deine Kisten abholst. Nicht abgeholte Kisten bleiben unbeaufsichtigt im Saal."],
+        ['typ' => 'liste', 'titel' => 'Was wir verkaufen', 'eintraege' => [
+            'saisonabhängige Kinderbekleidung ab Größe 74/80',
+            'Schuhe, Gummistiefel und Matschkleidung',
+            'Kinderwagen, Kindersitze, Laufgitter, Kinderbetten und Tragehilfen',
+            'Spielzeug, Bücher und Fahrzeuge',
+        ]],
+        ['typ' => 'hinweis', 'titel' => 'Maximal {max_teile} Teile je Verkäufer', 'farbe' => 'orange',
+            'text' => 'So können mehr Familien mitmachen. Bitte **keine** Erwachsenenkleidung und keine Plüschtiere. Schuhe nur neuwertig und höchstens **4 Paar** (Gummistiefel mitgezählt).'],
+        ['typ' => 'text', 'titel' => 'Etiketten und Preise',
+            'text' => "Jedes Teil braucht ein gut sichtbares Etikett mit **Verkäufernummer, laufender Artikelnummer und Preis**, gern auch mit Größe – z. B. *215-7 · 4,50 € · Gr. 98*.\n\nHängeware wie Jacken, Regensachen und Kleider bitte mit **zwei Etiketten** (innen und außen) – die äußeren gehen beim Durchschauen schnell ab. Tipp: Malerkrepp hält gut und lässt sich gut beschreiben.\n\nPreise bitte **ab 0,50 € und nur in 0,50-€-Schritten** – das erleichtert Kasse und Wechselgeld.\n\nWer mag, erfasst die Artikel im Portal und druckt Etiketten mit QR-Code – das geht an der Kasse schneller. Vor Ort können wir nichts ausdrucken."],
+        ['typ' => 'hinweis', 'titel' => 'Bitte in einer stabilen Kiste', 'farbe' => 'orange',
+            'text' => 'Die Artikel müssen in einer **stapelbaren, stabilen Kiste** abgegeben werden, außen gut sichtbar mit deiner Verkäufernummer (den Kistenzettel findest du im Portal). Keine Plastiktüten, Reisetaschen, Wäschekörbe oder Windelkartons.'],
+        ['typ' => 'text', 'titel' => 'Gut zu wissen',
+            'text' => "Artikel, die wir für schwer verkäuflich halten, dürfen wir in der Kiste lassen.\n\nWährend des Verkaufs achten wir so gut es geht auf deine Sachen. Diebstähle können wir trotzdem nicht ganz verhindern und keine Haftung für fehlende Artikel übernehmen.\n\n**{provision} % deines Erlöses gehen als Spende an das Evangelische Kinderhaus Radebeul.**"],
+        ['typ' => 'knopf', 'text' => 'Infoblatt als PDF', 'ziel' => 'infoblatt'],
+        ['typ' => 'knopf', 'text' => 'Jetzt anmelden', 'ziel' => 'anmeldung'],
+    ];
+
+    /** Vorheriger Stand – Seiten mit genau diesem Inhalt werden auf VERKAEUFER_INFO aktualisiert. */
+    public const VERKAEUFER_INFO_ALT = [
         ['typ' => 'termin', 'titel' => 'Termine der nächsten Börse'],
         ['typ' => 'text', 'titel' => 'Annahme und Abholung',
             'text' => "Die Kisten nehmen wir am Tag vor dem Verkauf an ({anlieferung}). Restware und Erlös gibt es am Verkaufstag ({abholung}).\n\nOrt und Uhrzeiten stehen auch in der Mail mit deiner Verkäufernummer."],

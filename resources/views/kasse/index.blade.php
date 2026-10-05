@@ -8,7 +8,8 @@
         'token' => route('kasse.token'),
     ];
 @endphp
-<x-layouts.tablet :titel="'Kasse · '.$boerse->titel" :zurueck="auth()->user()->istOrga() ? route('admin.dashboard') : null">
+<x-layouts.tablet :titel="'Kasse · '.$boerse->titel" :zurueck="auth()->user()->istOrga() ? route('admin.dashboard') : route('admin.aufgaben.index')"
+                   :zurueck-text="auth()->user()->istOrga() ? 'Zurück' : 'Team-Bereich'">
     @if ($boerse->status === \App\Enums\BoerseStatus::Abgeschlossen)
         <div class="mb-4 rounded-xl bg-red-600 px-4 py-3 font-medium text-white">Diese Börse ist abgeschlossen – hier kann nicht mehr kassiert werden.</div>
     @endif

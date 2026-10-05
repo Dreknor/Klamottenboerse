@@ -56,7 +56,12 @@
         ],
     ];
 
-    $istAdmin = auth()->user()->hasRole('admin');
+    $ich = auth()->user();
+    $istAdmin = $ich->hasRole('admin');
+    $istOrga = $ich->istOrga();
+    // Für alle Team-Mitglieder (auch nur Kasse/Annahme) sichtbar
+    $teamRouten = ['admin.aufgaben.index', 'admin.protokolle.index', 'admin.statistik.index'];
+    $startseite = $istOrga ? route('admin.dashboard') : route('admin.aufgaben.index');
     $aktiv = fn (string $muster) => request()->routeIs(...explode('|', $muster));
     $zaehler = ['admin.posteingang.index' => $offenePost, 'admin.system.index' => $offeneFehler];
 
@@ -81,7 +86,7 @@
     <aside class="fixed inset-y-0 left-0 z-30 flex w-64 -translate-x-full flex-col border-r border-stone-200 bg-white transition lg:sticky lg:top-0 lg:h-screen lg:translate-x-0"
            :class="menu && 'translate-x-0'" aria-label="Hauptnavigation">
         <div class="space-y-3 border-b border-stone-200 px-4 py-4">
-            <a href="{{ route('admin.dashboard') }}" class="block text-lg font-bold text-marke-700 no-underline">Klamottenbörse</a>
+            <a href="{{ $startseite }}" class="block text-lg font-bold text-marke-700 no-underline">Klamottenbörse</a>
             <form method="post" action="{{ route('admin.boerse.wechseln') }}">
                 @csrf
                 <label for="boerse-wechsler" class="sr-only">Börse wählen</label>
@@ -93,20 +98,27 @@
                     @endforelse
                 </select>
             </form>
-            <x-ui.personen-auswahl :springen="true" label="" platzhalter="🔍 Person oder Nummer suchen" class="text-sm" />
+            @if ($istOrga)
+                <x-ui.personen-auswahl :springen="true" label="" platzhalter="🔍 Person oder Nummer suchen" class="text-sm" />
+            @endif
         </div>
 
         <nav class="flex-1 overflow-y-auto px-2 py-3 text-sm">
-            <a href="{{ route('admin.dashboard') }}"
-               class="flex rounded-lg px-2 py-1.5 no-underline {{ $aktiv('admin.dashboard') ? 'bg-marke-50 font-medium text-marke-800' : 'text-stone-700 hover:bg-stone-100' }}">Übersicht</a>
+            @if ($istOrga)
+                <a href="{{ route('admin.dashboard') }}"
+                   class="flex rounded-lg px-2 py-1.5 no-underline {{ $aktiv('admin.dashboard') ? 'bg-marke-50 font-medium text-marke-800' : 'text-stone-700 hover:bg-stone-100' }}">Übersicht</a>
+            @endif
 
-            <div class="mt-2 grid grid-cols-2 gap-2 px-1">
-                <a href="{{ route('kasse.index') }}" class="rounded-lg bg-marke-600 px-2 py-2 text-center font-medium text-white no-underline hover:bg-marke-700">Kasse</a>
-                <a href="{{ route('tablet.index') }}" class="rounded-lg border border-marke-300 px-2 py-2 text-center font-medium text-marke-800 no-underline hover:bg-marke-50">Annahme</a>
-            </div>
+            @php $mitKasse = $ich->hasAnyRole(['admin', 'orga', 'kasse']); $mitAnnahme = $ich->hasAnyRole(['admin', 'orga', 'annahme']); @endphp
+            @if ($mitKasse || $mitAnnahme)
+                <div class="mt-2 grid grid-cols-2 gap-2 px-1">
+                    @if ($mitKasse)<a href="{{ route('kasse.index') }}" class="rounded-lg bg-marke-600 px-2 py-2 text-center font-medium text-white no-underline hover:bg-marke-700">Kasse</a>@endif
+                    @if ($mitAnnahme)<a href="{{ route('tablet.index') }}" class="rounded-lg border border-marke-300 px-2 py-2 text-center font-medium text-marke-800 no-underline hover:bg-marke-50">Annahme</a>@endif
+                </div>
+            @endif
 
             @foreach ($navigation as $gruppe => $eintraege)
-                @php $eintraege = array_filter($eintraege, fn ($e) => $istAdmin || empty($e[4])); @endphp
+                @php $eintraege = array_filter($eintraege, fn ($e) => ($istAdmin || empty($e[4])) && ($istOrga || in_array($e[1], $teamRouten, true))); @endphp
                 @continue(! $eintraege)
                 <p class="mt-4 px-2 text-xs font-medium uppercase tracking-wide text-stone-400">{{ $gruppe }}</p>
                 @foreach ($eintraege as $e)

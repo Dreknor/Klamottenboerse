@@ -1,4 +1,4 @@
-@props(['titel' => null, 'zurueck' => null])
+@props(['titel' => null, 'zurueck' => null, 'zurueckText' => 'Zurück'])
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -15,7 +15,7 @@
 <header class="flex items-center justify-between gap-3 border-b-4 border-marke-500 bg-stone-900 px-4 py-3 text-white">
     <div class="flex items-center gap-3">
         @if ($zurueck)
-            <a href="{{ $zurueck }}" class="rounded-lg bg-white/10 px-4 py-2 text-white no-underline">← Zurück</a>
+            <a href="{{ $zurueck }}" class="rounded-lg bg-white/10 px-4 py-2 text-white no-underline">← {{ $zurueckText }}</a>
         @endif
         <span class="text-xl font-semibold">{{ $titel }}</span>
     </div>

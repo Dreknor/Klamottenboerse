@@ -23,7 +23,7 @@ final class Bausteine
         'kopf' => ['Kopfbereich mit Logo', ['titel' => '', 'text' => '', 'logo' => true]],
     ];
 
-    public const KNOPF_ZIELE = ['anmeldung' => 'Anmeldung', 'helfer' => 'Helferliste', 'portal' => 'Mein Portal', 'url' => 'Eigene Adresse'];
+    public const KNOPF_ZIELE = ['anmeldung' => 'Anmeldung', 'helfer' => 'Helferliste', 'portal' => 'Mein Portal', 'infoblatt' => 'Infoblatt für Verkäufer (PDF)', 'url' => 'Eigene Adresse'];
 
     /** @return array<string, string> */
     public static function auswahl(): array

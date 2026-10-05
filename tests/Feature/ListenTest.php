@@ -48,3 +48,10 @@ it('füllt die Standard-Belehrung mit den Daten der Börse', function () {
 
     expect($text)->toContain('zwischen 14:00 und 15:30 Uhr')->not->toContain('{');
 });
+
+it('erzeugt das Infoblatt für Verkäufer aus der Website-Seite', function () {
+    $boerse = neueBoerse(['verkaufstag' => now()->addMonth()->toDateString()]);
+
+    $this->get(route('infoblatt'))->assertOk()->assertHeader('content-type', 'application/pdf');
+    orgaMitBoerse($this, $boerse)->get(route('admin.listen.infoblatt'))->assertOk()->assertHeader('content-type', 'application/pdf');
+});

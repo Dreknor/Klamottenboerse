@@ -85,6 +85,12 @@ class Person extends Authenticatable
             ->value('teilnahmen.nummer');
     }
 
+    /** Team-Mitglied = irgendeine Rolle (Admin, Orga, Kasse, Annahme). */
+    public function istTeam(): bool
+    {
+        return $this->roles->isNotEmpty();
+    }
+
     public function istOrga(): bool
     {
         return $this->hasAnyRole(['admin', 'orga']);

@@ -22,9 +22,11 @@ class SeitenKontext
     /** @var Collection<int, Media> */
     private Collection $bilder;
 
-    public function __construct(?Seite $seite = null)
+    /** @param  Boerse|null  $boerse  feste Börse (z. B. für das Infoblatt im Backend), sonst die nächste offene */
+    public function __construct(?Seite $seite = null, ?Boerse $boerse = null)
     {
-        $this->boerse = Boerse::query()->offen()->where('verkaufstag', '>=', today())->orderBy('verkaufstag')->with('ort')->first();
+        $this->boerse = $boerse?->loadMissing('ort')
+            ?? Boerse::query()->offen()->where('verkaufstag', '>=', today())->orderBy('verkaufstag')->with('ort')->first();
         $this->infos = Platzhalter::fuer(null, $this->boerse);
         $this->freieSchichten = $this->boerse
             ? $this->boerse->schichten()->withCount('zusagen')->get()->sum(fn ($s) => max(0, $s->soll - $s->zusagen_count))
@@ -56,6 +58,7 @@ class SeitenKontext
         return match ($block['ziel'] ?? 'anmeldung') {
             'helfer' => route('helfer.index'),
             'portal' => route('portal.index'),
+            'infoblatt' => route('infoblatt'),
             'url' => $block['url'] ?: route('start'),
             default => route('anmeldung.create'),
         };

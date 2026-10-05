@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Domain\Kommunikation\Platzhalter;
+use App\Domain\Website\Infoblatt;
 use App\Enums\EinteilungStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Boerse;
@@ -78,6 +79,12 @@ class ListenController extends Controller
             ->with(['einteilungen' => fn ($q) => $q->where('status', EinteilungStatus::Zugesagt)->with('person')])->get();
 
         return $this->pdf('pdf.helferliste', $boerse, 'Helferliste', ['schichten' => $schichten]);
+    }
+
+    /** Infoblatt „Wichtige Infos für Verkäufer“ – Inhalt aus der Website-Seite, Daten der gewählten Börse. */
+    public function infoblatt(BoerseKontext $kontext): Response
+    {
+        return Infoblatt::pdf($kontext->getOrFail());
     }
 
     /** @return Collection<int, Teilnahme> */

@@ -3,6 +3,7 @@
     <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1>Hallo {{ $person->vorname }}!</h1>
         <div class="flex items-center gap-4 text-sm">
+            <a href="{{ route('infoblatt') }}" target="_blank">Infoblatt (PDF)</a>
             <a href="{{ route('portal.daten') }}">Meine Daten</a>
             <form method="post" action="{{ route('portal.abmelden') }}">@csrf<button class="text-stone-600 hover:underline">Abmelden</button></form>
         </div>

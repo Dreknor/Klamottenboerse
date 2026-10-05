@@ -32,7 +32,7 @@ class AufgabeController extends Controller
             'boerse' => $boerse,
             'ansicht' => $ansicht,
             'aufgaben' => $aufgaben,
-            'team' => Person::role(['admin', 'orga'])->orderBy('vorname')->get(),
+            'team' => Person::query()->whereHas('roles')->orderBy('vorname')->get(),
         ]);
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Website\Infoblatt;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswortController;
@@ -112,12 +113,44 @@ Route::middleware(['auth', 'passwort', 'role:admin|orga|annahme'])->prefix('tabl
 
 /*
 |--------------------------------------------------------------------------
+| Team-Bereich: für alle mit einer Rolle (auch Kasse/Annahme) – Aufgaben, Kalender,
+| Protokolle, Ablage, Auswertung, eigenes Konto
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'team'])->prefix('admin')->name('admin.')->group(function () {
+    Route::post('/boerse-wechseln', [Admin\DashboardController::class, 'wechseln'])->name('boerse.wechseln');
+    Route::get('/aufgaben', [Admin\AufgabeController::class, 'index'])->name('aufgaben.index');
+    Route::post('/aufgaben', [Admin\AufgabeController::class, 'store'])->name('aufgaben.store');
+    Route::put('/aufgaben/{aufgabe}', [Admin\AufgabeController::class, 'update'])->name('aufgaben.update');
+    Route::post('/aufgaben/{aufgabe}/erledigt', [Admin\AufgabeController::class, 'erledigt'])->name('aufgaben.erledigt');
+    Route::delete('/aufgaben/{aufgabe}', [Admin\AufgabeController::class, 'destroy'])->name('aufgaben.destroy');
+    Route::get('/ablage', [Admin\AblageController::class, 'index'])->name('ablage.index');
+    Route::post('/ablage', [Admin\AblageController::class, 'ordnerAnlegen'])->name('ablage.anlegen');
+    Route::get('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'index'])->name('ablage.ordner');
+    Route::post('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'ordnerAnlegen'])->name('ablage.ordner.anlegen');
+    Route::put('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'ordnerAendern'])->name('ablage.ordner.aendern');
+    Route::delete('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'ordnerLoeschen'])->name('ablage.ordner.loeschen');
+    Route::post('/ablage/ordner/{ordner}/dateien', [Admin\AblageController::class, 'hochladen'])->name('ablage.hochladen');
+    Route::get('/ablage/datei/{media}', [Admin\AblageController::class, 'datei'])->name('ablage.datei');
+    Route::delete('/ablage/datei/{media}', [Admin\AblageController::class, 'dateiLoeschen'])->name('ablage.datei.loeschen');
+    Route::resource('protokolle', Admin\ProtokollController::class)->parameters(['protokolle' => 'protokoll']);
+    Route::post('/protokolle/{protokoll}/aufgabe', [Admin\ProtokollController::class, 'aufgabe'])->name('protokolle.aufgabe');
+    Route::get('/kalender', [Admin\KalenderController::class, 'index'])->name('kalender.index');
+    Route::post('/termine', [Admin\KalenderController::class, 'store'])->name('termine.store');
+    Route::delete('/termine/{termin}', [Admin\KalenderController::class, 'destroy'])->name('termine.destroy');
+    Route::get('/statistik', [Admin\StatistikController::class, 'index'])->name('statistik.index');
+    Route::get('/feedback', [Admin\FeedbackController::class, 'index'])->name('feedback.index');
+    Route::get('/konto', [Admin\KontoController::class, 'edit'])->name('konto.edit');
+    Route::put('/konto/passwort', [Admin\KontoController::class, 'passwort'])->name('konto.passwort');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Orga-Backend
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
-    Route::post('/boerse-wechseln', [Admin\DashboardController::class, 'wechseln'])->name('boerse.wechseln');
 
     Route::resource('boersen', Admin\BoerseController::class)->except(['show', 'destroy'])->parameters(['boersen' => 'boerse']);
     Route::post('/boersen/{boerse}/abschliessen', [Admin\BoerseController::class, 'abschliessen'])->name('boersen.abschliessen');
@@ -134,6 +167,7 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::get('/listen/belehrungen.pdf', [Admin\ListenController::class, 'belehrungen'])->name('listen.belehrungen');
     Route::get('/listen/abstreichliste.pdf', [Admin\ListenController::class, 'abstreichliste'])->name('listen.abstreichliste');
     Route::get('/listen/helfer.pdf', [Admin\ListenController::class, 'helferliste'])->name('listen.helferliste');
+    Route::get('/listen/infoblatt.pdf', [Admin\ListenController::class, 'infoblatt'])->name('listen.infoblatt');
 
     Route::get('/reservierungen', [Admin\ReservierungController::class, 'index'])->name('reservierungen.index');
     Route::post('/reservierungen', [Admin\ReservierungController::class, 'store'])->name('reservierungen.store');
@@ -158,34 +192,12 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::post('/schichten/{schicht}/helfer', [Admin\SchichtController::class, 'helferEintragen'])->name('schichten.helfer');
     Route::delete('/einteilungen/{einteilung}', [Admin\SchichtController::class, 'helferEntfernen'])->name('einteilungen.destroy');
 
-    Route::get('/aufgaben', [Admin\AufgabeController::class, 'index'])->name('aufgaben.index');
-    Route::post('/aufgaben', [Admin\AufgabeController::class, 'store'])->name('aufgaben.store');
-    Route::put('/aufgaben/{aufgabe}', [Admin\AufgabeController::class, 'update'])->name('aufgaben.update');
-    Route::post('/aufgaben/{aufgabe}/erledigt', [Admin\AufgabeController::class, 'erledigt'])->name('aufgaben.erledigt');
-    Route::delete('/aufgaben/{aufgabe}', [Admin\AufgabeController::class, 'destroy'])->name('aufgaben.destroy');
     Route::get('/checklistenvorlagen', [Admin\ChecklistenvorlageController::class, 'index'])->name('checklistenvorlagen.index');
     Route::post('/checklistenvorlagen', [Admin\ChecklistenvorlageController::class, 'vorlageAnlegen'])->name('checklistenvorlagen.anlegen');
     Route::delete('/checklistenvorlagen/{vorlage}', [Admin\ChecklistenvorlageController::class, 'vorlageLoeschen'])->name('checklistenvorlagen.loeschen');
     Route::post('/checklistenvorlagen/{vorlage}/anwenden', [Admin\ChecklistenvorlageController::class, 'anwenden'])->name('checklistenvorlagen.anwenden');
     Route::post('/checklistenvorlagen/{vorlage}/eintraege', [Admin\ChecklistenvorlageController::class, 'store'])->name('checklistenvorlagen.store');
     Route::delete('/checklistenvorlagen/eintraege/{eintrag}', [Admin\ChecklistenvorlageController::class, 'destroy'])->name('checklistenvorlagen.destroy');
-
-    Route::get('/ablage', [Admin\AblageController::class, 'index'])->name('ablage.index');
-    Route::post('/ablage', [Admin\AblageController::class, 'ordnerAnlegen'])->name('ablage.anlegen');
-    Route::get('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'index'])->name('ablage.ordner');
-    Route::post('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'ordnerAnlegen'])->name('ablage.ordner.anlegen');
-    Route::put('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'ordnerAendern'])->name('ablage.ordner.aendern');
-    Route::delete('/ablage/ordner/{ordner}', [Admin\AblageController::class, 'ordnerLoeschen'])->name('ablage.ordner.loeschen');
-    Route::post('/ablage/ordner/{ordner}/dateien', [Admin\AblageController::class, 'hochladen'])->name('ablage.hochladen');
-    Route::get('/ablage/datei/{media}', [Admin\AblageController::class, 'datei'])->name('ablage.datei');
-    Route::delete('/ablage/datei/{media}', [Admin\AblageController::class, 'dateiLoeschen'])->name('ablage.datei.loeschen');
-
-    Route::resource('protokolle', Admin\ProtokollController::class)->parameters(['protokolle' => 'protokoll']);
-    Route::post('/protokolle/{protokoll}/aufgabe', [Admin\ProtokollController::class, 'aufgabe'])->name('protokolle.aufgabe');
-
-    Route::get('/kalender', [Admin\KalenderController::class, 'index'])->name('kalender.index');
-    Route::post('/termine', [Admin\KalenderController::class, 'store'])->name('termine.store');
-    Route::delete('/termine/{termin}', [Admin\KalenderController::class, 'destroy'])->name('termine.destroy');
 
     Route::get('/mailvorlagen', [Admin\MailvorlageController::class, 'index'])->name('mailvorlagen.index');
     Route::get('/mailvorlagen/{mailvorlage}', [Admin\MailvorlageController::class, 'edit'])->name('mailvorlagen.edit');
@@ -216,9 +228,6 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::post('/einnahmen', [Admin\AbrechnungController::class, 'einnahmeSpeichern'])->name('einnahmen.store');
     Route::delete('/einnahmen/{einnahme}', [Admin\AbrechnungController::class, 'einnahmeLoeschen'])->name('einnahmen.destroy');
 
-    Route::get('/statistik', [Admin\StatistikController::class, 'index'])->name('statistik.index');
-    Route::get('/feedback', [Admin\FeedbackController::class, 'index'])->name('feedback.index');
-
     Route::get('/seiten', [Admin\SeiteController::class, 'index'])->name('seiten.index');
     Route::post('/seiten', [Admin\SeiteController::class, 'store'])->name('seiten.store');
     Route::get('/seiten/{seite}', [Admin\SeiteController::class, 'edit'])->name('seiten.edit');
@@ -230,9 +239,6 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::put('/seiten/{seite}/einstellungen', [Admin\SeiteController::class, 'einstellungen'])->name('seiten.einstellungen');
     Route::post('/seiten/{seite}/bilder', [Admin\SeiteController::class, 'bildHochladen'])->name('seiten.bild');
     Route::delete('/seiten/{seite}/bilder/{media}', [Admin\SeiteController::class, 'bildLoeschen'])->name('seiten.bild.loeschen');
-
-    Route::get('/konto', [Admin\KontoController::class, 'edit'])->name('konto.edit');
-    Route::put('/konto/passwort', [Admin\KontoController::class, 'passwort'])->name('konto.passwort');
 
     Route::get('/einstellungen', [Admin\EinstellungenController::class, 'edit'])->name('einstellungen.edit');
     Route::put('/einstellungen', [Admin\EinstellungenController::class, 'update'])->name('einstellungen.update');
@@ -254,6 +260,9 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
         Route::delete('/system/fehler', [Admin\FehlerController::class, 'leeren'])->name('fehler.leeren');
     });
 });
+
+// Infoblatt für Verkäufer als PDF (aus der Seite „Verkäufer-Info“, öffentlich)
+Route::get('/verkaeufer-info.pdf', fn () => Infoblatt::pdf())->name('infoblatt');
 
 /*
 |--------------------------------------------------------------------------

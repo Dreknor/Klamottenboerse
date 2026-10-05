@@ -28,6 +28,12 @@
             <x-ui.knopf :href="route('admin.listen.abstreichliste')" target="_blank" class="mt-4">Drucken</x-ui.knopf>
         </x-ui.karte>
 
+        <x-ui.karte titel="Infoblatt für Verkäufer">
+            <p class="text-sm text-stone-600">„Wichtige Infos für Verkäufer“ mit Terminen, Regeln für Etiketten und Kisten. Der Inhalt kommt aus der Website-Seite
+                <a href="{{ route('admin.seiten.index') }}">Verkäufer-Info</a> – Änderungen dort stehen automatisch auch im Infoblatt.</p>
+            <x-ui.knopf :href="route('admin.listen.infoblatt')" target="_blank" class="mt-4">Drucken</x-ui.knopf>
+        </x-ui.karte>
+
         <x-ui.karte titel="Helferliste">
             <p class="text-sm text-stone-600">Alle Schichten mit eingetragenen Helfern und Telefonnummern, fehlende Helfer sind markiert.</p>
             <x-ui.knopf :href="route('admin.listen.helferliste')" target="_blank" class="mt-4">Drucken</x-ui.knopf>
