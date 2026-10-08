@@ -54,3 +54,23 @@ it('lässt das Orga-Team Kategorien pflegen und bei Personen erfassen', function
     expect($person->kategorien()->pluck('name')->all())->toBe(['Faschingskostüme']);
     teamAdmin($this)->get(route('admin.personen.show', $person))->assertSee('Faschingskostüme');
 });
+
+it('benennt Gruppen um, legt sie zusammen und ändert ihre Reihenfolge', function () {
+    teamAdmin($this)->get(route('admin.kategorien.index'))->assertOk()->assertSee('Gruppen speichern');
+
+    teamAdmin($this)->put(route('admin.kategorien.gruppen'), ['gruppen' => [
+        ['alt' => 'Kleidung', 'name' => 'Kinderkleidung', 'position' => 2],
+        ['alt' => 'Weiteres', 'name' => 'Alles andere', 'position' => 1],
+    ]])->assertSessionHas('erfolg');
+
+    expect(Kategorie::query()->sortiert()->pluck('gruppe')->unique()->values()->all())->toBe(['Alles andere', 'Kinderkleidung'])
+        ->and(Kategorie::query()->sortiert()->first()->name)->toBe('Schuhe')
+        ->and(Kategorie::auswahl()->keys()->all())->toBe(['Alles andere', 'Kinderkleidung']);
+
+    // Gleicher Name = zusammenlegen
+    teamAdmin($this)->put(route('admin.kategorien.gruppen'), ['gruppen' => [
+        ['alt' => 'Alles andere', 'name' => 'Angebot', 'position' => 1],
+        ['alt' => 'Kinderkleidung', 'name' => 'Angebot', 'position' => 2],
+    ]]);
+    expect(Kategorie::query()->distinct()->pluck('gruppe')->all())->toBe(['Angebot']);
+});

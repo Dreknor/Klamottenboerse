@@ -223,6 +223,7 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
 
     Route::get('/kategorien', [Admin\KategorieController::class, 'index'])->name('kategorien.index');
     Route::post('/kategorien', [Admin\KategorieController::class, 'store'])->name('kategorien.store');
+    Route::put('/kategorien/gruppen', [Admin\KategorieController::class, 'gruppen'])->name('kategorien.gruppen');
     Route::put('/kategorien/{kategorie}', [Admin\KategorieController::class, 'update'])->name('kategorien.update');
     Route::delete('/kategorien/{kategorie}', [Admin\KategorieController::class, 'destroy'])->name('kategorien.destroy');
 

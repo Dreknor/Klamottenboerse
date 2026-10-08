@@ -37,7 +37,8 @@ class KategorieController extends Controller
             'artikel' => $artikel,
             'verkaeuferGesamt' => $teilnahmen->count(),
             'ohneAngabe' => $ohneAngabe,
-            'gruppen' => Kategorie::query()->distinct()->orderBy('gruppe')->pluck('gruppe'),
+            // in der Reihenfolge, in der sie bei der Anmeldung erscheinen
+            'gruppen' => Kategorie::query()->sortiert()->pluck('gruppe')->unique()->values(),
         ]);
     }
 
@@ -56,6 +57,48 @@ class KategorieController extends Controller
         ]);
 
         return back()->with('erfolg', "„{$kategorie->name}“ gespeichert.");
+    }
+
+    /**
+     * Gruppen umbenennen und sortieren. Gruppen haben keine eigene Tabelle – sie ergeben sich aus den
+     * Kategorien. Umbenennen ändert alle Kategorien der Gruppe (gleicher Name = zusammenführen),
+     * die Reihenfolge wird über die Sortierung der Kategorien hergestellt.
+     */
+    public function gruppen(Request $request): RedirectResponse
+    {
+        $daten = $request->validate([
+            'gruppen' => ['required', 'array'],
+            'gruppen.*.alt' => ['required', 'string'],
+            'gruppen.*.name' => ['required', 'string', 'max:60'],
+            'gruppen.*.position' => ['nullable', 'integer'],
+        ], ['gruppen.*.name.required' => 'Jede Gruppe braucht einen Namen.']);
+
+        DB::transaction(function () use ($daten) {
+            $gruppen = collect($daten['gruppen'])->values()
+                ->map(fn ($g, $i) => ['alt' => $g['alt'], 'name' => trim($g['name']), 'position' => $g['position'] ?? $i + 1, 'index' => $i])
+                ->sortBy([['position', 'asc'], ['index', 'asc']]);
+
+            $kategorien = Kategorie::query()->sortiert()->get();
+            $sortierung = 0;
+            $neueReihenfolge = [];
+            foreach ($gruppen as $g) {
+                $neueReihenfolge[$g['name']] ??= [];
+                array_push($neueReihenfolge[$g['name']], ...$kategorien->where('gruppe', $g['alt'])->all());
+            }
+            // Kategorien in Gruppen, die im Formular fehlten (z. B. gerade angelegt), hinten anhängen
+            $erfasst = collect($neueReihenfolge)->flatten()->pluck('id');
+            foreach ($kategorien->whereNotIn('id', $erfasst) as $k) {
+                $neueReihenfolge[$k->gruppe][] = $k;
+            }
+
+            foreach ($neueReihenfolge as $name => $liste) {
+                foreach ($liste as $kategorie) {
+                    $kategorie->update(['gruppe' => $name, 'sortierung' => $sortierung += 10]);
+                }
+            }
+        });
+
+        return back()->with('erfolg', 'Gruppen gespeichert.');
     }
 
     public function destroy(Kategorie $kategorie): RedirectResponse

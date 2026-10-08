@@ -17,6 +17,26 @@
         </x-ui.karte>
     @endif
 
+    <x-ui.karte titel="Gruppen" class="mb-6">
+        <p class="mb-3 text-sm text-stone-600">Bei der Anmeldung stehen die Kategorien unter diesen Überschriften – in dieser Reihenfolge. Gibst du zwei Gruppen denselben Namen, werden sie zusammengelegt.</p>
+        <form method="post" action="{{ route('admin.kategorien.gruppen') }}">
+            @csrf @method('put')
+            <div class="space-y-2">
+                @foreach ($gruppen as $i => $gruppe)
+                    <div class="flex flex-wrap items-center gap-2">
+                        <input type="hidden" name="gruppen[{{ $i }}][alt]" value="{{ $gruppe }}">
+                        <input name="gruppen[{{ $i }}][position]" value="{{ $i + 1 }}" type="number" min="1" class="feld w-16 py-1" aria-label="Reihenfolge von {{ $gruppe }}" title="Reihenfolge">
+                        <input name="gruppen[{{ $i }}][name]" value="{{ $gruppe }}" class="feld w-64 py-1" required aria-label="Name der Gruppe {{ $gruppe }}">
+                        <span class="text-sm text-stone-500">{{ $kategorien->where('gruppe', $gruppe)->count() }} Kategorien</span>
+                    </div>
+                @endforeach
+            </div>
+            @error('gruppen.*.name')<p class="mt-1 text-sm text-red-700">{{ $message }}</p>@enderror
+            <x-ui.knopf groesse="klein" class="mt-3">Gruppen speichern</x-ui.knopf>
+        </form>
+        <p class="mt-3 text-xs text-stone-500">Neue Gruppe: unten eine Kategorie anlegen (oder eine bestehende bearbeiten) und dabei einen neuen Gruppennamen eintippen. Eine Gruppe verschwindet, sobald keine Kategorie mehr darin ist.</p>
+    </x-ui.karte>
+
     <x-ui.karte titel="Liste pflegen">
         <div class="overflow-x-auto">
             <table class="tabelle">
