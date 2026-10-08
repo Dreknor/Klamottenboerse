@@ -36,8 +36,8 @@
                 <h1>Wichtige Infos für Verkäufer</h1>
                 <div class="unter">{{ $k->boerse?->titel }}@if ($k->boerse) · {{ $k->infos['datum'] }}@endif</div>
             </td>
-            @if (is_file(public_path('images/logo-schriftzug.png')))
-                <td style="text-align: right;"><img src="{{ public_path('images/logo-schriftzug.png') }}" alt=""></td>
+            @if ($logo = \App\Support\PdfBild::datenUri(public_path('images/logo-schriftzug.png')))
+                <td style="text-align: right;"><img src="{{ $logo }}" alt=""></td>
             @endif
         </tr>
     </table>
