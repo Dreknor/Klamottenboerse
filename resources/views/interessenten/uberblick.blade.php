@@ -197,6 +197,7 @@
                                     </td>
                                     <td>
                                         {{$interessent->vorname}}
+                                        @include('vermerke._badge', ['interessent' => $interessent])
                                     </td>
                                     <td>
                                         {{$interessent->mail}}

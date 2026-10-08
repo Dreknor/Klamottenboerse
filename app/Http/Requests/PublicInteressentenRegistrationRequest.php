@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Services\Angebotskategorien;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
 class PublicInteressentenRegistrationRequest extends FormRequest
@@ -31,6 +33,8 @@ class PublicInteressentenRegistrationRequest extends FormRequest
             'mail' => 'required|email|max:255|unique:interessenten,mail',
             'telefon' => 'nullable|string|max:30',
             'handy' => 'nullable|string|max:30',
+            'angebotskategorien' => 'nullable|array',
+            'angebotskategorien.*' => ['string', Rule::in(Angebotskategorien::keys())],
             // Honeypot field: must stay empty. Real users never see or fill it.
             'website' => 'prohibited',
         ];

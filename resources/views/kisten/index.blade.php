@@ -42,6 +42,8 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Kisten einchecken</button>
                         </form>
+                        <a href="#vermerkModal" data-toggle="modal" class="btn btn-outline-warning btn-sm mt-3">Vorfall zu Verkäufer erfassen</a>
+                        <p class="small text-muted mt-1">z. B. Kisten nicht gebracht, Termin verpasst, defekte Ware</p>
                     </div>
 
                     <div class="col-md-7">
@@ -75,9 +77,10 @@
                                     <td>
                                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data={{ urlencode(route('kisten.scan', $kiste->qr_token)) }}" alt="QR-Code Kiste {{ $kiste->kistennummer }}" width="60" height="60">
                                     </td>
-                                    <td>
+                                    <td class="text-nowrap">
+                                        <a href="#vermerkModal" data-toggle="modal" data-vknummer="{{ $kiste->vknummer->vknummer ?? '' }}" class="btn btn-sm btn-outline-warning" title="Vorfall erfassen" aria-label="Vorfall zu VK {{ $kiste->vknummer->vknummer ?? '' }} erfassen">!</a>
                                         @if(!$kiste->istAbgeholt())
-                                            <form action="{{ route('kisten.checkout', $kiste->id) }}" method="post">
+                                            <form action="{{ route('kisten.checkout', $kiste->id) }}" method="post" class="d-inline">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-success">Check-out</button>
                                             </form>
@@ -92,4 +95,5 @@
             </div>
         </div>
     </div>
+    @include('vermerke._modal', ['quelle' => \App\Model\VerkaeuferVermerk::QUELLE_KISTEN])
 @endsection

@@ -65,7 +65,11 @@ class WartelisteNachruecken extends Command
             ->whereNull('bestaetigt_at')
             ->orderBy('created_at')
             ->with('Interessent')
-            ->get();
+            ->get()
+            // Verkäufer mit schlechter Reputation bekommen keine automatischen
+            // Angebote mehr; sie bleiben auf der Warteliste (= Nummer angefragt)
+            // und das Orga-Team entscheidet händisch über eine Vergabe.
+            ->reject(fn (Warteliste $eintrag) => $eintrag->Interessent && $eintrag->Interessent->istAutomatischeVergabeGesperrt());
 
         $vergeben = 0;
 

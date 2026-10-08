@@ -32,6 +32,7 @@ class InteressentenController extends Controller
 
         $Interressenten = $this->interessentenRepository->all();
         $Interressenten->load('warteliste');
+        $Interressenten->loadSum(['vermerke as reputation_punkte' => fn ($q) => $q->wirksam()], 'punkte');
 
         return view('interessenten.uberblick', [
             'interessenten' => $Interressenten,
@@ -87,7 +88,7 @@ class InteressentenController extends Controller
      */
     public function show(Interessenten $interessent, $mailbox='INBOX')
     {
-        $interessent->load('bisherige_vknummen', 'bisherige_vknummen.klamottenboerse', 'bisherige_vknummen.aktuelleKlamottenboerse');
+        $interessent->load('bisherige_vknummen', 'bisherige_vknummen.klamottenboerse', 'bisherige_vknummen.aktuelleKlamottenboerse', 'vermerke.vknummer', 'vermerke.erfasstVon');
 
         $letzteVKnummern = $interessent->bisherige_vknummen;
 

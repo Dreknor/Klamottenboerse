@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreVerkaufsartikelRequest;
 use App\Model\Interessenten;
 use App\Model\Verkaufsartikel;
+use App\Services\Angebotskategorien;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class VerkaeuferPortalController extends Controller
 {
@@ -85,6 +87,26 @@ class VerkaeuferPortalController extends Controller
         return redirect()
             ->route('verkaeuferPortal.index', ['uuid' => $uuid])
             ->with('success', 'Artikel wurde entfernt.');
+    }
+
+    /**
+     * Verkäufer gibt an, was er überwiegend mitbringt (für die Orga-Planung).
+     */
+    public function kategorien(string $uuid, Request $request)
+    {
+        $interessent = $this->findInteressentOrFail($uuid);
+
+        $daten = $request->validate([
+            'angebotskategorien' => 'nullable|array',
+            'angebotskategorien.*' => ['string', Rule::in(Angebotskategorien::keys())],
+        ]);
+
+        $interessent->angebotskategorien = array_values($daten['angebotskategorien'] ?? []);
+        $interessent->save();
+
+        return redirect()
+            ->route('verkaeuferPortal.index', ['uuid' => $uuid])
+            ->with('success', 'Deine Angaben wurden gespeichert.');
     }
 
     public function etiketten(string $uuid)

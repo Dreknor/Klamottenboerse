@@ -84,6 +84,7 @@
                         <ul id="menu-interessenten" hidden>
                             <li><a href="{{url('interessenten')}}"><span class="lbl">Übersicht</span></a></li>
                             <li><a href="{{ route('interessenten.inaktive-verkaeufer') }}"><span class="lbl">Inaktive Verk&auml;ufer</span></a></li>
+                            <li><a href="{{ route('vermerke.index') }}"><span class="lbl">Reputation</span></a></li>
                             <li><a href="{{url('interessenten/create')}}"><span class="lbl">Anlegen</span></a></li>
                         </ul>
                     </li>
@@ -97,6 +98,7 @@
                             <li><a href="{{url('vknummern')}}"><span class="lbl">Verkäufernummern</span></a></li>
                             <li><a href="{{url('helfertermine')}}"><span class="lbl">Helfer</span></a></li>
                             <li><a href="{{url('kisten')}}"><span class="lbl">Kisten Check-in/-out</span></a></li>
+                            <li><a href="{{ route('angebote.index') }}"><span class="lbl">Angebots&uuml;bersicht</span></a></li>
                         </ul>
                     </li>
                     <li class="with-sub">
@@ -118,6 +120,8 @@
                         </button>
                             <ul id="menu-settings" hidden>
                                 <li><a href="{{url('mailvorlagen')}}"><span class="lbl">Mail-Vorlagen</span></a></li>
+                                <li><a href="{{ route('einstellungen.reputation') }}"><span class="lbl">Reputation: Punkte &amp; Schwellen</span></a></li>
+                                <li><a href="{{ route('einstellungen.kategorien') }}"><span class="lbl">Angebotskategorien</span></a></li>
                                 <li><a href="{{url('mail-protokoll/anmeldung-moeglich')}}"><span class="lbl">Mail-Protokoll</span></a></li>
                                 <li><a href="{{url('audit-log')}}"><span class="lbl">Audit-Log</span></a></li>
                                 <li><a href="{{url('import')}}"><span class="lbl">Import von Kasse</span></a></li>
@@ -141,6 +145,14 @@
                                 <i class="glyphicon glyphicon-list-alt"></i>
                                 <span class="lbl">
                                     Verlauf
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('vermerke.create') }}">
+                                <i class="glyphicon glyphicon-flag"></i>
+                                <span class="lbl">
+                                    Vorfall erfassen
                                 </span>
                             </a>
                         </li>

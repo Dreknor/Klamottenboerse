@@ -10,6 +10,9 @@ use App\Http\Controllers\Kasse\VerlaufController;
 use App\Http\Controllers\PublicRegistrationController;
 use App\Http\Controllers\SelfServiceDeletionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AngebotsuebersichtController;
+use App\Http\Controllers\EinstellungenController;
+use App\Http\Controllers\VermerkeController;
 use App\Http\Controllers\VerkaeuferPortalController;
 use App\Http\Controllers\WartelistenAngebotController;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +61,7 @@ Route::group(['middleware' => ['throttle:30,1']], function () {
     Route::post('/verkaeufer/{uuid}/artikel', [VerkaeuferPortalController::class, 'store'])->name('verkaeuferPortal.store');
     Route::delete('/verkaeufer/{uuid}/artikel/{artikel}', [VerkaeuferPortalController::class, 'destroy'])->name('verkaeuferPortal.destroy');
     Route::get('/verkaeufer/{uuid}/etiketten', [VerkaeuferPortalController::class, 'etiketten'])->name('verkaeuferPortal.etiketten');
+    Route::post('/verkaeufer/{uuid}/kategorien', [VerkaeuferPortalController::class, 'kategorien'])->name('verkaeuferPortal.kategorien');
 });
 
 //Automatisches Wartelisten-Nachrücken: Bestätigungslink per Token (kein Login nötig)
@@ -71,7 +75,31 @@ Route::group(['middleware' => ['auth']], function (){
 
 } );
 
+//Verkäufer-Reputation: Schnellerfassung von Vermerken (Kasse und Verwaltung)
+Route::group(['middleware' => ['auth', 'isKasseOderVerwaltung']], function () {
+    Route::get('/vermerke/erfassen', [VermerkeController::class, 'create'])->name('vermerke.create');
+    Route::post('/vermerke', [VermerkeController::class, 'store'])->name('vermerke.store');
+});
+
 Route::group(['middleware' => ['auth', 'isVerwaltung']], function () {
+
+    //Verkäufer-Reputation
+    Route::get('/vermerke', [VermerkeController::class, 'index'])->name('vermerke.index');
+    Route::delete('/vermerke/{vermerk}', [VermerkeController::class, 'destroy'])->name('vermerke.destroy');
+    Route::put('/interessenten/{interessent}/vergabemodus', [VermerkeController::class, 'vergabemodus'])->name('vermerke.vergabemodus');
+
+    //Teaminterne Einstellungen: Reputation (Punkte, Schwellen) und Angebotskategorien
+    Route::get('/einstellungen/reputation', [EinstellungenController::class, 'reputation'])->name('einstellungen.reputation');
+    Route::put('/einstellungen/reputation', [EinstellungenController::class, 'schwellenSpeichern'])->name('einstellungen.reputation.schwellen');
+    Route::post('/einstellungen/reputation/typen', [EinstellungenController::class, 'typAnlegen'])->name('einstellungen.reputation.typ.store');
+    Route::put('/einstellungen/reputation/typen/{typ}', [EinstellungenController::class, 'typAktualisieren'])->name('einstellungen.reputation.typ.update');
+    Route::get('/einstellungen/kategorien', [EinstellungenController::class, 'kategorien'])->name('einstellungen.kategorien');
+    Route::post('/einstellungen/kategorien', [EinstellungenController::class, 'kategorieAnlegen'])->name('einstellungen.kategorien.store');
+    Route::put('/einstellungen/kategorien/{kategorie}', [EinstellungenController::class, 'kategorieAktualisieren'])->name('einstellungen.kategorien.update');
+
+    //Angebotsübersicht (Kategorien der Verkäufer + erfasste Artikel)
+    Route::get('/angebote', [AngebotsuebersichtController::class, 'index'])->name('angebote.index');
+    Route::put('/interessenten/{interessent}/angebotskategorien', [AngebotsuebersichtController::class, 'update'])->name('angebote.update');
 
     //Helfer
     Route::get('/helfertermine', [\App\Http\Controllers\AppointmentController::class, 'create'])->name('helfertermine');

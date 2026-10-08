@@ -363,6 +363,67 @@
             </div>
             <div class="card">
                 <div class="card-header">
+                    Reputation
+                    <span class="pull-right">
+                        {{ $interessent->reputationPunkte() }} Pkt.
+                        @include('vermerke._badge', ['interessent' => $interessent])
+                    </span>
+                </div>
+                <div class="card-body">
+                    @if ($interessent->istAutomatischeVergabeGesperrt())
+                        <div class="alert alert-danger small">
+                            Keine automatische Nummernvergabe: Eine VK-Nummer kann nur angefragt (Warteliste)
+                            und händisch durch das Orga-Team vergeben werden.
+                        </div>
+                    @endif
+                    @if ($interessent->vermerke->isNotEmpty())
+                        <ul class="list-group mb-3">
+                            @foreach ($interessent->vermerke->sortByDesc('created_at') as $vermerk)
+                                <li class="list-group-item small">
+                                    <form method="post" action="{{ route('vermerke.destroy', $vermerk->id) }}" class="pull-right" onsubmit="return confirm('Vermerk wirklich entfernen?')">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="btn btn-sm btn-link text-danger p-0" aria-label="Vermerk entfernen">&times;</button>
+                                    </form>
+                                    {{ $vermerk->created_at->format('d.m.Y') }} –
+                                    <b>{{ $vermerk->typLabel }}</b> ({{ $vermerk->punkte }} Pkt.)
+                                    @if ($vermerk->vknummer) · VK {{ $vermerk->vknummer->vknummer }} @endif
+                                    @if ($vermerk->bemerkung)<br>{{ $vermerk->bemerkung }}@endif
+                                    <br><span class="text-muted">erfasst von {{ optional($vermerk->erfasstVon)->name ?? 'unbekannt' }} @if($vermerk->quelle) ({{ $vermerk->quelle }}) @endif</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-muted small">Keine Vermerke.</p>
+                    @endif
+
+                    <details>
+                        <summary>Vorfall erfassen</summary>
+                        <form method="post" action="{{ route('vermerke.store') }}" class="mt-2">
+                            @include('vermerke._form', ['interessentId' => $interessent->id, 'quelle' => \App\Model\VerkaeuferVermerk::QUELLE_VERWALTUNG, 'prefix' => 'vermerkInteressent'])
+                            <button type="submit" class="btn btn-warning btn-sm btn-block">Vermerk speichern</button>
+                        </form>
+                    </details>
+                    <hr>
+                    <label class="small mb-1">Vergabemodus</label>
+                    @include('vermerke._vergabemodus', ['interessent' => $interessent])
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    Angebot des Verkäufers
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{ route('angebote.update', $interessent->id) }}">
+                        @csrf
+                        @method('put')
+                        @include('angebote._kategorien', ['ausgewaehlt' => $interessent->angebotskategorien ?? []])
+                        <button type="submit" class="btn btn-sm btn-secondary btn-block">speichern</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
                     Übersicht Verkäufernummern
                 </div>
                 <div class="card-body">

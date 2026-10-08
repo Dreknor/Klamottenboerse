@@ -52,6 +52,7 @@
                     </div>
                     <div class="card-footer">
                         <input type="submit" name="submit"  class="btn btn-success" value="buchen">
+                        <a href="#vermerkModal" data-toggle="modal" class="btn btn-outline-warning float-right" title="z. B. defekte Ware, Kisten fehlen">Vorfall zu Verkäufer melden</a>
                     </div>
 
 
@@ -105,6 +106,7 @@
         </div>
     </div>
 </div>
+@include('vermerke._modal', ['quelle' => \App\Model\VerkaeuferVermerk::QUELLE_KASSE])
 @section('js')
     <script src="{{ asset('js/offline-kasse.js') }}?v={{ @filemtime(public_path('js/offline-kasse.js')) ?: 1 }}"></script>
 @endsection

@@ -20,6 +20,19 @@
             </div>
         @endif
 
+        <details class="mt-3" @if (empty($interessent->angebotskategorien)) open @endif>
+            <summary><b>Was bringst du überwiegend mit?</b>
+                @if (!empty($interessent->angebotskategorien))
+                    <span class="text-muted small">({{ implode(', ', $interessent->angebotskategorienLabels()) }})</span>
+                @endif
+            </summary>
+            <form method="post" action="{{ route('verkaeuferPortal.kategorien', ['uuid' => $uuid]) }}" class="mt-2">
+                @csrf
+                @include('angebote._kategorien', ['ausgewaehlt' => $interessent->angebotskategorien ?? []])
+                <button type="submit" class="btn btn-sm btn-secondary">Angaben speichern</button>
+            </form>
+        </details>
+
         <h5 class="mt-4">Neuen Artikel erfassen</h5>
         <form method="post" action="{{ route('verkaeuferPortal.store', ['uuid' => $uuid]) }}" class="row g-2">
             @csrf
@@ -29,7 +42,14 @@
             </div>
             <div class="form-group col-md-3">
                 <label for="kategorie">Kategorie</label>
-                <input type="text" name="kategorie" id="kategorie" class="form-control" value="{{ old('kategorie') }}">
+                <select name="kategorie" id="kategorie" class="form-control">
+                    <option value="">– nach Größe –</option>
+                    @foreach (\App\Model\Angebotskategorie::aktive() as $key => $kat)
+                        @unless ($kat->hatGroessenbereich())
+                            <option value="{{ $key }}" @selected(old('kategorie') === $key)>{{ $kat->label }}</option>
+                        @endunless
+                    @endforeach
+                </select>
             </div>
             <div class="form-group col-md-2">
                 <label for="groesse">Größe</label>
@@ -61,7 +81,7 @@
                     <tr>
                         <td>{{ $vknummer->vknummer }}-{{ $a->artikelnummer }}</td>
                         <td>{{ $a->beschreibung }}</td>
-                        <td>{{ $a->kategorie }}</td>
+                        <td>{{ optional(\App\Model\Angebotskategorie::alle()->get($a->kategorie))->label ?? $a->kategorie }}</td>
                         <td>{{ $a->groesse }}</td>
                         <td>{{ number_format($a->preis, 2) }} €</td>
                         <td>

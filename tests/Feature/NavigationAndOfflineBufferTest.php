@@ -5,12 +5,15 @@ namespace Tests\Feature;
 use App\Model\User;
 use App\Model\Interessenten;
 use App\Model\VKnummer;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\ViewErrorBag;
 use Tests\TestCase;
 
 class NavigationAndOfflineBufferTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();

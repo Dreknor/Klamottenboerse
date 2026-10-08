@@ -64,6 +64,12 @@
                 <input type="text" name="handy" id="handy" class="form-control" value="{{ old('handy') }}">
             </div>
 
+            <div class="form-group">
+                <label class="d-block">Was bringst du voraussichtlich überwiegend mit? (optional, Mehrfachauswahl)</label>
+                <small class="form-text text-muted mb-2">Das hilft uns bei der Planung von Tischen und Helfern. Du kannst die Angabe später im Verkäufer-Portal ändern.</small>
+                @include('angebote._kategorien', ['ausgewaehlt' => []])
+            </div>
+
             <button type="submit" class="app-button">Registrieren</button>
         </form>
     </div>

@@ -30,6 +30,7 @@ class PublicRegistrationController extends Controller
             'telefon' => $request->input('telefon'),
             'handy' => $request->input('handy'),
             'registration_source' => 'self-service',
+            'angebotskategorien' => array_values($request->input('angebotskategorien', [])),
         ]);
 
         $verificationUrl = URL::temporarySignedRoute(
