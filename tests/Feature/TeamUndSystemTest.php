@@ -117,6 +117,21 @@ it('bricht das Update ab, wenn auf dem Server Dateien geändert wurden', functio
     Process::assertDidntRun(fn ($p) => in_array('pull', (array) $p->command, true));
 });
 
+it('setzt auf dem Server neu gebaute Assets zurück, statt das Update abzubrechen', function () {
+    Process::fake([
+        '*status --porcelain*' => Process::result(" M package-lock.json\n D public/build/assets/app-jhCEvyLk.css\n M public/build/manifest.json\n"),
+        '*rev-parse HEAD*' => Process::sequence()->push(Process::result('aaa111'))->push(Process::result('bbb222')),
+        '*diff --name-only*' => Process::result(''),
+        '*' => Process::result('ok'),
+    ]);
+
+    alsAdmin($this)->post(route('admin.system.update'), ['bestaetigung' => '1'])->assertSessionHas('erfolg');
+
+    expect(SystemUpdate::sole()->status)->toBe('erfolgreich');
+    Process::assertRan(fn ($p) => (array) $p->command === [config('system.git'), 'checkout', '--', 'package-lock.json', 'public/build/assets/app-jhCEvyLk.css', 'public/build/manifest.json']);
+    Process::assertRan(fn ($p) => in_array('pull', (array) $p->command, true));
+});
+
 it('verschickt eine Testmail und meldet das Ergebnis', function () {
     alsAdmin($this)->get(route('admin.system.index'))->assertOk()->assertSee('Testmail senden');
 

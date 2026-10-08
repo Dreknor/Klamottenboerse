@@ -90,9 +90,7 @@ class Update
         try {
             $geaendert = $this->git(['status', '--porcelain', '--untracked-files=no']);
             $this->protokoll($update, 'git status', $geaendert);
-            if (trim($geaendert->output()) !== '') {
-                throw new RuntimeException('Auf dem Server wurden Dateien direkt geändert. Update abgebrochen, damit nichts verloren geht.');
-            }
+            $this->erzeugteDateienZuruecksetzen($update, $this->geaenderteDateien($geaendert->output()));
 
             Artisan::call('down', ['--retry' => 30, '--refresh' => 15]);
             $wartung = true;
@@ -147,6 +145,45 @@ class Update
     private function notiz(SystemUpdate $update, string $text): void
     {
         $update->update(['ausgabe' => ltrim($update->ausgabe."\n\n[".now()->format('H:i:s').'] '.$text)]);
+    }
+
+    /**
+     * Dateien, die nur durch „npm install“/„npm run build“ auf dem Server entstehen, kommen ohnehin
+     * fertig aus dem Repository – sie werden zurückgesetzt statt das Update abzubrechen.
+     * Alles andere könnte eine echte Änderung sein: dann lieber abbrechen und erklären.
+     *
+     * @param  list<string>  $dateien
+     */
+    private function erzeugteDateienZuruecksetzen(SystemUpdate $update, array $dateien): void
+    {
+        if ($dateien === []) {
+            return;
+        }
+
+        $andere = array_values(array_filter($dateien, fn ($datei) => ! self::istErzeugt($datei)));
+        if ($andere !== []) {
+            throw new RuntimeException('Auf dem Server wurden Dateien direkt geändert: '.implode(', ', $andere).'. '
+                .'Update abgebrochen, damit nichts verloren geht. Werden die Änderungen nicht gebraucht, '
+                .'per SSH im Projektordner „git checkout -- '.implode(' ', $andere).'“ ausführen und das Update erneut starten.');
+        }
+
+        $this->schritt($update, 'git checkout (erzeugte Dateien zurücksetzen)', $this->git(['checkout', '--', ...$dateien]));
+        // neu gebaute, nicht versionierte Assets würden sonst „git pull“ blockieren
+        $this->schritt($update, 'git clean public/build', $this->git(['clean', '-f', '--', 'public/build']));
+    }
+
+    public static function istErzeugt(string $datei): bool
+    {
+        return $datei === 'package-lock.json' || str_starts_with($datei, 'public/build/');
+    }
+
+    /** @return list<string> Pfade aus „git status --porcelain“ */
+    private function geaenderteDateien(string $ausgabe): array
+    {
+        return collect(preg_split('/\R/', $ausgabe))
+            ->filter(fn ($zeile) => strlen(trim($zeile)) > 3)
+            ->map(fn ($zeile) => trim(str_contains($zeile, ' -> ') ? Str::after($zeile, ' -> ') : substr($zeile, 3), ' "'))
+            ->values()->all();
     }
 
     private function git(array $argumente): ProcessResult
