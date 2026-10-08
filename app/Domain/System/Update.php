@@ -68,7 +68,7 @@ class Update
             return compact('commit', 'datum', 'text');
         })->values()->all();
 
-        Cache::put('system.update.pruefung', ['zeit' => now(), 'commits' => $commits], now()->addDay());
+        Cache::put('system.update.pruefung', ['zeit' => now()->toIso8601String(), 'commits' => $commits], now()->addDay());
 
         return ['fehler' => null, 'commits' => $commits];
     }

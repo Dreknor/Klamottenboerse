@@ -25,10 +25,18 @@ class SystemController extends Controller
     {
         $herzschlag = Cache::get('system.scheduler');
 
+        // Zeitpunkt liegt als Text im Cache – Objekte entpackt Laravel dort nicht (cache.serializable_classes)
+        $pruefung = Cache::get('system.update.pruefung');
+        if (! is_array($pruefung) || ! is_string($pruefung['zeit'] ?? null)) {
+            $pruefung = null;
+        } else {
+            $pruefung['zeit'] = Carbon::parse($pruefung['zeit']);
+        }
+
         return view('admin.system.index', [
             'version' => Update::verfuegbar() ? $update->version() : null,
             'updateMoeglich' => Update::verfuegbar(),
-            'pruefung' => Cache::get('system.update.pruefung'),
+            'pruefung' => $pruefung,
             'updates' => SystemUpdate::query()->with('person')->latest()->limit(10)->get(),
             'scheduler' => $herzschlag ? Carbon::parse($herzschlag) : null,
             'pruefungen' => $this->pruefungen(),
