@@ -20,7 +20,10 @@
         <div class="flex flex-wrap items-center gap-3 text-sm lg:col-span-5">
             <span class="rounded-full px-3 py-1" :class="online ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'" x-text="online ? 'Online · Warenkorb wird mit deinen anderen Geräten abgeglichen' : 'Offline – Verkauf läuft trotzdem weiter'"></span>
             <span class="rounded-full bg-amber-100 px-3 py-1 text-amber-900" x-show="ungesendet" x-cloak x-text="ungesendet + ' Änderung(en) noch nicht übertragen'"></span>
-            <label class="ml-auto flex items-center gap-2">Kasse:
+            {{-- Schnellzugang Reputation – übernimmt die gerade eingetippte Nummer, öffnet sich in neuem Tab (Kasse läuft weiter) --}}
+            <a :href="@js(route('vermerk.schnell', ['quelle' => 'kasse'])) + '&nummer=' + encodeURIComponent((nummer || '').replace(/\D.*$/, ''))"
+               target="_blank" class="ml-auto rounded-full bg-stone-800 px-3 py-1 text-white no-underline">⚑ Vermerk</a>
+            <label class="flex items-center gap-2">Kasse:
                 <input class="feld w-32 py-1" x-model="kassenname" @change="localStorage.setItem('kasse.name', kassenname)" placeholder="Kasse 1">
             </label>
         </div>

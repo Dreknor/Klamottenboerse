@@ -16,6 +16,10 @@ class Einstellungen
         'absender_name' => 'Klamottenbörse',
         'mail_max_pro_stunde' => 55,
         'erinnerung_aufgaben_tage' => 2,
+        // Reputation: Punkte aus Vermerken der letzten X Monate
+        'reputation_warnung_ab' => 2,
+        'reputation_sperre_ab' => 5,
+        'reputation_zeitraum_monate' => 24,
     ];
 
     /** Pflichtangaben für Impressum und Datenschutzerklärung (Platzhalter => Beschreibung). */

@@ -1,4 +1,4 @@
-@props(['titel' => null, 'zurueck' => null, 'zurueckText' => 'Zurück'])
+@props(['titel' => null, 'zurueck' => null, 'zurueckText' => 'Zurück', 'vermerk' => null])
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -21,7 +21,13 @@
         @endif
         <span class="text-xl font-semibold">{{ $titel }}</span>
     </div>
-    <span class="text-sm text-stone-300">{{ auth()->user()?->name }}</span>
+    <div class="flex items-center gap-3">
+        @if ($vermerk)
+            {{-- Schnellzugang Reputation: Kiste fehlt, Termin verpasst, defekte Ware … --}}
+            <a href="{{ route('vermerk.schnell', ['quelle' => $vermerk, 'zurueck' => url()->full()]) }}" class="rounded-lg bg-white/10 px-4 py-2 text-white no-underline">⚑ Vermerk</a>
+        @endif
+        <span class="text-sm text-stone-300">{{ auth()->user()?->name }}</span>
+    </div>
 </header>
 <main class="mx-auto max-w-5xl p-4">
     <x-ui.flash />

@@ -1,5 +1,5 @@
 @php use App\Support\Geld; @endphp
-<x-layouts.tablet titel="Ausgabe" :zurueck="route('tablet.index')">
+<x-layouts.tablet vermerk="ausgabe" titel="Ausgabe" :zurueck="route('tablet.index')">
     <p class="mb-3 text-stone-600">{{ $ausgezahlt }} ausgegeben · {{ $offen }} warten noch</p>
 
     @include('tablet._suche', ['label' => 'Nummer (Kistenzettel scannen) oder Name'])

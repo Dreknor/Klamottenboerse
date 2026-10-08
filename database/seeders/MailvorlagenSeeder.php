@@ -65,6 +65,26 @@ Sobald ein Platz frei wird, schicken wir dir automatisch ein Angebot per Mail.
 Viele Grüße
 dein Klamottenbörsen-Team
 TXT],
+        'nummer_angefragt' => ['Nummer angefragt', 'Deine Anfrage für die Klamottenbörse am {datum}', <<<'TXT'
+Hallo {vorname},
+
+danke für deine Anmeldung zur Klamottenbörse am {datum}. Deine Verkäufernummer vergibt das Orga-Team diesmal persönlich.
+
+Wir melden uns per Mail bei dir, sobald wir über deine Anfrage entschieden haben.
+
+Viele Grüße
+dein Klamottenbörsen-Team
+TXT],
+        'anfrage_abgelehnt' => ['Anfrage abgelehnt', 'Deine Anfrage für die Klamottenbörse am {datum}', <<<'TXT'
+Hallo {vorname},
+
+leider können wir dir für die Klamottenbörse am {datum} keine Verkäufernummer geben.
+
+Bei Fragen antworte gern einfach auf diese Mail.
+
+Viele Grüße
+dein Klamottenbörsen-Team
+TXT],
         'warteliste_angebot' => ['Angebot von der Warteliste', 'Ein Platz ist frei geworden – Nummer {nummer}', <<<'TXT'
 Hallo {vorname},
 

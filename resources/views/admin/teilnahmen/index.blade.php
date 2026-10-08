@@ -31,6 +31,13 @@
         </x-ui.karte>
     </div>
 
+    @if (($statusAnzahl['angefragt'] ?? 0) > 0 && request('status') !== 'angefragt')
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-amber-900">
+            <span>{{ $statusAnzahl['angefragt'] }} Nummern-Anfrage(n) warten auf eure Entscheidung (Verkäufer mit schlechter Reputation).</span>
+            <x-ui.knopf groesse="klein" art="sekundaer" :href="route('admin.teilnahmen.index', ['status' => 'angefragt'])">Anfragen ansehen</x-ui.knopf>
+        </div>
+    @endif
+
     <x-ui.karte>
         <form method="get" class="mb-4 flex flex-wrap gap-2">
             <input name="suche" value="{{ request('suche') }}" class="feld max-w-xs" placeholder="Nummer oder Name">
@@ -53,6 +60,7 @@
                         <td>
                             @if ($t->person)
                                 <a href="{{ route('admin.personen.show', $t->person) }}">{{ $t->person->name }}</a>
+                                <x-reputation :person="$t->person" />
                                 <span class="block text-xs text-stone-500">{{ $t->person->email ?? $t->person->telefon }}</span>
                             @else
                                 <span class="font-medium">Kinderhaus</span> <span class="text-xs text-stone-500">(ohne Spende)</span>
@@ -68,7 +76,18 @@
                         <td>{{ $t->artikel_count ?: '–' }}</td>
                         <td>{{ $t->kisten_count ?: '–' }}</td>
                         <td class="whitespace-nowrap">
-                            @unless ($t->ist_kinderhaus || $t->status === \App\Enums\TeilnahmeStatus::Abgesagt)
+                            @if ($t->status === \App\Enums\TeilnahmeStatus::Angefragt)
+                                <form method="post" action="{{ route('admin.teilnahmen.anfrage.vergeben', $t) }}" class="inline">
+                                    @csrf<button class="font-medium text-emerald-700 hover:underline">Nummer vergeben</button>
+                                </form>
+                                <form method="post" action="{{ route('admin.teilnahmen.anfrage.ablehnen', $t) }}" class="ml-3 inline" onsubmit="return confirm('Anfrage von {{ $t->person?->name }} ablehnen? Die Person bekommt eine Mail.')">
+                                    @csrf<button class="text-red-700 hover:underline">Ablehnen</button>
+                                </form>
+                            @endif
+                            @if ($t->person)
+                                <a href="{{ route('admin.vermerke.create', ['person' => $t->person->id]) }}" class="ml-3 text-stone-600 hover:underline">Vermerk</a>
+                            @endif
+                            @unless ($t->ist_kinderhaus || in_array($t->status, [\App\Enums\TeilnahmeStatus::Abgesagt, \App\Enums\TeilnahmeStatus::Angefragt], true))
                                 @if ($t->hatNummer())
                                     <button type="button" class="text-marke-700 hover:underline" @click="aendern = !aendern">Nummer ändern</button>
                                 @endif

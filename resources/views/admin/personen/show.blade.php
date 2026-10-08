@@ -77,6 +77,51 @@
             @endforelse
         </x-ui.karte>
 
+        @php
+            $punkte = \App\Domain\Reputation\Reputation::punkte($person);
+            $status = \App\Domain\Reputation\Reputation::status($person);
+        @endphp
+        <x-ui.karte titel="Reputation & Vermerke" id="vermerke">
+            <x-slot:aktionen>
+                <x-ui.knopf groesse="klein" art="sekundaer" :href="route('admin.vermerke.create', ['person' => $person->id])">Vermerk erfassen</x-ui.knopf>
+            </x-slot:aktionen>
+            <p class="mb-3">
+                <strong class="tabular-nums">{{ $punkte }} {{ $punkte === 1 ? 'Punkt' : 'Punkte' }}</strong>
+                <span class="text-sm text-stone-500">(letzte {{ \App\Domain\Reputation\Reputation::zeitraumMonate() }} Monate)</span> ·
+                @if ($status === 'gesperrt')
+                    <x-ui.abzeichen farbe="red">Nummer nur händisch</x-ui.abzeichen>
+                @elseif ($status === 'warnung')
+                    <x-ui.abzeichen farbe="amber">Hinweis</x-ui.abzeichen>
+                @else
+                    <x-ui.abzeichen farbe="emerald">automatische Nummernvergabe</x-ui.abzeichen>
+                @endif
+            </p>
+            <form method="post" action="{{ route('admin.personen.nummernvergabe', $person) }}" class="mb-4 flex flex-wrap items-end gap-2">
+                @csrf @method('put')
+                <label class="text-sm">
+                    <span class="mb-1 block font-medium">Nummernvergabe</span>
+                    <select name="nummernvergabe" class="feld py-1">
+                        <option value="" @selected(! $person->nummernvergabe)>nach Punkten (Standard)</option>
+                        <option value="haendisch" @selected($person->nummernvergabe === 'haendisch')>immer nur händisch</option>
+                        <option value="frei" @selected($person->nummernvergabe === 'frei')>trotz Punkten automatisch</option>
+                    </select>
+                </label>
+                <x-ui.knopf groesse="klein" art="sekundaer">Festlegen</x-ui.knopf>
+            </form>
+            @forelse ($person->vermerke as $v)
+                <div class="flex items-start justify-between gap-2 border-b border-stone-100 py-2 last:border-0 {{ $v->istWirksam() ? '' : 'text-stone-400' }}">
+                    <div>
+                        <p>{{ $v->art }} <span class="text-sm tabular-nums">({{ $v->punkte }})</span></p>
+                        @if ($v->bemerkung)<p class="text-sm text-stone-600">{{ $v->bemerkung }}</p>@endif
+                        <p class="text-xs text-stone-500">{{ $v->created_at->format('d.m.Y') }} · {{ $v->boerse?->titel }} · {{ \App\Models\Vermerk::QUELLEN[$v->quelle] ?? $v->quelle }} · {{ $v->erfasser?->name }}{{ $v->istWirksam() ? '' : ' · zählt nicht mehr' }}</p>
+                    </div>
+                    <form method="post" action="{{ route('admin.vermerke.destroy', $v) }}" onsubmit="return confirm('Vermerk löschen?')">@csrf @method('delete')<button class="text-sm text-stone-500 hover:text-red-700">Löschen</button></form>
+                </div>
+            @empty
+                <p class="text-stone-500">Keine Vermerke.</p>
+            @endforelse
+        </x-ui.karte>
+
         <x-ui.karte titel="Notizen">
             <form method="post" action="{{ route('admin.personen.notiz', $person) }}" class="mb-4 space-y-2">
                 @csrf

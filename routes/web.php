@@ -10,6 +10,7 @@ use App\Http\Controllers\Portal;
 use App\Http\Controllers\Public;
 use App\Http\Controllers\PushController;
 use App\Http\Controllers\Tablet\TabletController;
+use App\Http\Controllers\VermerkController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -106,6 +107,12 @@ Route::middleware(['auth', 'passwort', 'role:admin|orga|kasse'])->prefix('kasse'
     Route::post('/bons/{bon:uuid}/zurueckholen', [KasseController::class, 'zurueckholen'])->name('zurueckholen');
 });
 
+// Schnellerfassung von Vermerken (Reputation) – von Kasse, Annahme, Rückpacken und Ausgabe aus
+Route::middleware(['auth', 'passwort', 'role:admin|orga|kasse|annahme'])->group(function () {
+    Route::get('/vermerk', [VermerkController::class, 'schnell'])->name('vermerk.schnell');
+    Route::post('/vermerk', [VermerkController::class, 'schnellSpeichern'])->middleware('throttle:30,1')->name('vermerk.speichern');
+});
+
 Route::middleware(['auth', 'passwort', 'role:admin|orga|annahme'])->prefix('tablet')->name('tablet.')->group(function () {
     Route::get('/', [TabletController::class, 'index'])->name('index');
     Route::get('/annahme', [TabletController::class, 'annahme'])->name('annahme');
@@ -163,6 +170,8 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::post('/verkaeufer', [Admin\TeilnahmeController::class, 'store'])->name('teilnahmen.store');
     Route::post('/verkaeufer/{teilnahme}/absagen', [Admin\TeilnahmeController::class, 'absagen'])->name('teilnahmen.absagen');
     Route::post('/verkaeufer/{teilnahme}/nummer', [Admin\TeilnahmeController::class, 'nummer'])->name('teilnahmen.nummer');
+    Route::post('/verkaeufer/{teilnahme}/anfrage/vergeben', [Admin\TeilnahmeController::class, 'anfrageVergeben'])->name('teilnahmen.anfrage.vergeben');
+    Route::post('/verkaeufer/{teilnahme}/anfrage/ablehnen', [Admin\TeilnahmeController::class, 'anfrageAblehnen'])->name('teilnahmen.anfrage.ablehnen');
     Route::post('/verkaeufer/nachruecken', [Admin\TeilnahmeController::class, 'nachruecken'])->name('teilnahmen.nachruecken');
     Route::post('/verkaeufer/{teilnahme}/notizen', [Admin\TeilnahmeController::class, 'notiz'])->name('teilnahmen.notiz');
 
@@ -202,6 +211,15 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::post('/checklistenvorlagen/{vorlage}/anwenden', [Admin\ChecklistenvorlageController::class, 'anwenden'])->name('checklistenvorlagen.anwenden');
     Route::post('/checklistenvorlagen/{vorlage}/eintraege', [Admin\ChecklistenvorlageController::class, 'store'])->name('checklistenvorlagen.store');
     Route::delete('/checklistenvorlagen/eintraege/{eintrag}', [Admin\ChecklistenvorlageController::class, 'destroy'])->name('checklistenvorlagen.destroy');
+
+    Route::get('/vermerke', [VermerkController::class, 'index'])->name('vermerke.index');
+    Route::get('/vermerke/neu', [VermerkController::class, 'create'])->name('vermerke.create');
+    Route::post('/vermerke', [VermerkController::class, 'store'])->name('vermerke.store');
+    Route::delete('/vermerke/{vermerk}', [VermerkController::class, 'destroy'])->name('vermerke.destroy');
+    Route::put('/personen/{person}/nummernvergabe', [VermerkController::class, 'vergabe'])->name('personen.nummernvergabe');
+    Route::post('/vermerk-arten', [VermerkController::class, 'artSpeichern'])->name('vermerk-arten.store');
+    Route::put('/vermerk-arten/{art}', [VermerkController::class, 'artSpeichern'])->name('vermerk-arten.update');
+    Route::put('/reputation/schwellen', [VermerkController::class, 'schwellen'])->name('reputation.schwellen');
 
     Route::get('/kategorien', [Admin\KategorieController::class, 'index'])->name('kategorien.index');
     Route::post('/kategorien', [Admin\KategorieController::class, 'store'])->name('kategorien.store');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Domain\Teilnahme\Actions\Absagen;
+use App\Domain\Teilnahme\Actions\AnfrageEntscheiden;
 use App\Domain\Teilnahme\Actions\Anmelden;
 use App\Domain\Teilnahme\Actions\NummerAendern;
 use App\Domain\Teilnahme\Actions\WartelisteNachruecken;
@@ -27,7 +28,7 @@ class TeilnahmeController extends Controller
         $suche = trim((string) $request->query('suche'));
 
         $teilnahmen = $boerse->teilnahmen()
-            ->with(['person', 'notizen'])
+            ->with(['person' => fn ($q) => $q->mitReputation(), 'notizen'])
             ->withCount(['artikel', 'kisten'])
             ->when($status, fn ($q) => $q->where('status', $status))
             ->when(! $status, fn ($q) => $q->where('status', '!=', TeilnahmeStatus::Abgesagt->value))
@@ -65,9 +66,11 @@ class TeilnahmeController extends Controller
 
         $teilnahme = $anmelden($boerse, $person, 'orga', $request->boolean('mail', true));
 
-        return redirect()->route('admin.teilnahmen.index')->with('erfolg', $teilnahme->status === TeilnahmeStatus::Zugeteilt
-            ? "{$person->name} hat die Nummer {$teilnahme->nummer} erhalten."
-            : "{$person->name} steht auf der Warteliste (Platz {$teilnahme->wartelisten_position}).");
+        return redirect()->route('admin.teilnahmen.index')->with('erfolg', match ($teilnahme->status) {
+            TeilnahmeStatus::Zugeteilt => "{$person->name} hat die Nummer {$teilnahme->nummer} erhalten.",
+            TeilnahmeStatus::Warteliste => "{$person->name} steht auf der Warteliste (Platz {$teilnahme->wartelisten_position}).",
+            default => "{$person->name}: {$teilnahme->status->label()}.",
+        });
     }
 
     public function absagen(Teilnahme $teilnahme, Absagen $absagen): RedirectResponse
@@ -100,6 +103,28 @@ class TeilnahmeController extends Controller
         $teilnahme->notizen()->create(['text' => $daten['text'], 'autor_id' => $request->user()->id]);
 
         return back()->with('erfolg', 'Notiz gespeichert.');
+    }
+
+    public function anfrageVergeben(Teilnahme $teilnahme, AnfrageEntscheiden $entscheiden): RedirectResponse
+    {
+        try {
+            $teilnahme = $entscheiden->vergeben($teilnahme);
+        } catch (DomainException $e) {
+            return back()->with('fehler', $e->getMessage());
+        }
+
+        return back()->with('erfolg', "{$teilnahme->person?->name} hat die Nummer {$teilnahme->nummer} erhalten.");
+    }
+
+    public function anfrageAblehnen(Teilnahme $teilnahme, AnfrageEntscheiden $entscheiden): RedirectResponse
+    {
+        try {
+            $entscheiden->ablehnen($teilnahme);
+        } catch (DomainException $e) {
+            return back()->with('fehler', $e->getMessage());
+        }
+
+        return back()->with('erfolg', 'Anfrage abgelehnt. Die Person bekommt eine Mail.');
     }
 
     public function nachruecken(BoerseKontext $kontext, WartelisteNachruecken $nachruecken): RedirectResponse

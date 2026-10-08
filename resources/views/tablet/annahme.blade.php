@@ -1,4 +1,4 @@
-<x-layouts.tablet titel="Annahme" :zurueck="route('tablet.index')">
+<x-layouts.tablet vermerk="annahme" titel="Annahme" :zurueck="route('tablet.index')">
     <p class="mb-3 text-stone-600">{{ $angeliefert }} von {{ $gesamt }} Nummern angeliefert</p>
 
     @include('tablet._suche', ['label' => 'Nummer (vom Kistenzettel scannen) oder Name'])
@@ -10,9 +10,12 @@
                     <p class="text-4xl font-bold">{{ $t->nummer }}</p>
                     <p class="text-xl">{{ $t->anzeigeName() }}</p>
                 </div>
-                @if ($t->angeliefert_at)
-                    <span class="rounded-full bg-emerald-100 px-3 py-1 text-emerald-800">angenommen {{ $t->angeliefert_at->format('H:i') }}</span>
-                @endif
+                <div class="flex flex-wrap items-center gap-2">
+                    @if ($t->angeliefert_at)
+                        <span class="rounded-full bg-emerald-100 px-3 py-1 text-emerald-800">angenommen {{ $t->angeliefert_at->format('H:i') }}</span>
+                    @endif
+                    <a href="{{ route('vermerk.schnell', ['quelle' => 'annahme', 'nummer' => $t->nummer, 'zurueck' => url()->full()]) }}" class="rounded-lg bg-stone-200 px-3 py-1 text-base text-stone-800 no-underline">⚑ Vermerk</a>
+                </div>
             </div>
             <form method="post" action="{{ route('tablet.annehmen', $t) }}" class="mt-4 grid gap-3 md:grid-cols-4 md:items-end" x-data="{ kisten: {{ max(1, $t->kisten()->count()) }} }">
                 @csrf

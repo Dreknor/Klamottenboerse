@@ -30,8 +30,9 @@
                 ['Protokolle', 'admin.protokolle.index', 'admin.protokolle.*'],
                 ['Ablage', 'admin.ablage.index', 'admin.ablage.*'],
             ]],
-            ['Personen', 'admin.personen.index', 'admin.personen.*', [
+            ['Personen', 'admin.personen.index', 'admin.personen.*|admin.vermerke.*', [
                 ['Alle Personen', 'admin.personen.index', 'admin.personen.index|admin.personen.show|admin.personen.edit|admin.personen.create'],
+                ['Reputation & Vermerke', 'admin.vermerke.index', 'admin.vermerke.*'],
                 ['Datenschutz: Inaktive', 'admin.personen.inaktive', 'admin.personen.inaktive'],
             ]],
         ],

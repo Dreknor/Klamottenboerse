@@ -3,6 +3,7 @@
 namespace App\Domain\Teilnahme\Actions;
 
 use App\Domain\Kommunikation\Postausgang;
+use App\Domain\Reputation\Reputation;
 use App\Domain\Teilnahme\Links;
 use App\Domain\Teilnahme\Nummernvergabe;
 use App\Enums\TeilnahmeStatus;
@@ -36,6 +37,18 @@ class WartelisteNachruecken
                     ->orderBy('wartelisten_position')
                     ->with('person')
                     ->first();
+
+                // Schlechte Reputation: kein automatisches Angebot – wird zur Anfrage ans Orga-Team
+                while ($naechste?->person && Reputation::automatischGesperrt($naechste->person)) {
+                    $naechste->update(['status' => TeilnahmeStatus::Angefragt, 'wartelisten_position' => null]);
+                    activity()->performedOn($naechste)->log('Nicht automatisch nachgerückt (Reputation) – Anfrage ans Orga-Team');
+
+                    $naechste = $boerse->teilnahmen()
+                        ->where('status', TeilnahmeStatus::Warteliste)
+                        ->orderBy('wartelisten_position')
+                        ->with('person')
+                        ->first();
+                }
 
                 if (! $naechste) {
                     return null;

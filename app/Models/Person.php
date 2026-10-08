@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\KinderhausBezug;
 use App\Enums\TeilnahmeStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -60,6 +61,17 @@ class Person extends Authenticatable
     public function kategorien(): BelongsToMany
     {
         return $this->belongsToMany(Kategorie::class, 'kategorie_person');
+    }
+
+    public function vermerke(): HasMany
+    {
+        return $this->hasMany(Vermerk::class)->latest();
+    }
+
+    /** Lädt die Reputationspunkte für Listen gleich mit (eine Abfrage statt einer je Person). */
+    public function scopeMitReputation(Builder $query): void
+    {
+        $query->withSum(['vermerke as reputation_punkte' => fn ($q) => $q->wirksam()], 'punkte');
     }
 
     public function reservierungen(): HasMany

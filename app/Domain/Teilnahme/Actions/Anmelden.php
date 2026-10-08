@@ -3,6 +3,7 @@
 namespace App\Domain\Teilnahme\Actions;
 
 use App\Domain\Kommunikation\Postausgang;
+use App\Domain\Reputation\Reputation;
 use App\Domain\Teilnahme\Links;
 use App\Domain\Teilnahme\Nummernvergabe;
 use App\Enums\TeilnahmeStatus;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 /**
  * Meldet eine Person als Verkäufer an. Wer zuerst kommt, bekommt eine Nummer – egal, ob er
  * schon einmal verkauft hat. Ist kein Platz frei, kommt die Person auf die Warteliste.
+ * Bei schlechter Reputation gibt es keine automatische Nummer, nur eine Anfrage ans Orga-Team.
+ * Meldet das Orga-Team selbst an (Quelle „orga“), ist das eine bewusste Entscheidung – dann gilt die Sperre nicht.
  */
 class Anmelden
 {
@@ -39,6 +42,13 @@ class Anmelden
                 'abgesagt_at' => null,
                 'angebot_bis' => null,
             ]);
+
+            if ($quelle !== 'orga' && Reputation::automatischGesperrt($person)) {
+                $teilnahme->fill(['nummer' => null, 'status' => TeilnahmeStatus::Angefragt, 'wartelisten_position' => null]);
+                $teilnahme->save();
+
+                return [$teilnahme, true];
+            }
 
             $vergabe = new Nummernvergabe($boerse);
             $nummer = $vergabe->hatPlatzFuer($person) ? $vergabe->naechsteNummer($person) : null;
@@ -67,17 +77,21 @@ class Anmelden
             return $teilnahme;
         }
 
-        $zugeteilt = $teilnahme->status === TeilnahmeStatus::Zugeteilt;
+        [$vorlage, $protokoll] = match ($teilnahme->status) {
+            TeilnahmeStatus::Zugeteilt => ['nummer_zugeteilt', 'Nummer zugeteilt'],
+            TeilnahmeStatus::Angefragt => ['nummer_angefragt', 'Nummer angefragt (Reputation: händische Vergabe)'],
+            default => ['warteliste', 'Auf Warteliste gesetzt'],
+        };
 
         if ($mailSenden) {
-            Postausgang::einplanen($person, $zugeteilt ? 'nummer_zugeteilt' : 'warteliste', $boerse, [
+            Postausgang::einplanen($person, $vorlage, $boerse, [
                 'absage_link' => Links::absage($teilnahme),
             ]);
         }
 
         activity()->performedOn($teilnahme)
             ->withProperties(['nummer' => $teilnahme->nummer, 'quelle' => $quelle])
-            ->log($zugeteilt ? 'Nummer zugeteilt' : 'Auf Warteliste gesetzt');
+            ->log($protokoll);
 
         return $teilnahme;
     }

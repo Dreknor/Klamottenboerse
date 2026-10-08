@@ -1,4 +1,4 @@
-<x-layouts.tablet titel="Rückpacken" :zurueck="route('tablet.index')">
+<x-layouts.tablet vermerk="rueckpacken" titel="Rückpacken" :zurueck="route('tablet.index')">
     @include('tablet._suche', ['label' => 'Verkäufernummer', 'name' => 'nummer', 'inputmode' => 'numeric'])
 
     @if ($teilnahme)

@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum TeilnahmeStatus: string
 {
+    case Angefragt = 'angefragt';
     case Warteliste = 'warteliste';
     case Angeboten = 'angeboten';
     case Zugeteilt = 'zugeteilt';
@@ -15,6 +16,7 @@ enum TeilnahmeStatus: string
     public function label(): string
     {
         return match ($this) {
+            self::Angefragt => 'Nummer angefragt',
             self::Warteliste => 'Warteliste',
             self::Angeboten => 'Nummer angeboten',
             self::Zugeteilt => 'Nummer zugeteilt',
@@ -28,7 +30,7 @@ enum TeilnahmeStatus: string
     public function farbe(): string
     {
         return match ($this) {
-            self::Warteliste, self::Angeboten => 'amber',
+            self::Angefragt, self::Warteliste, self::Angeboten => 'amber',
             self::Zugeteilt => 'sky',
             self::Angeliefert => 'indigo',
             self::Abgerechnet, self::Ausgezahlt => 'emerald',
