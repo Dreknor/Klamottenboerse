@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\NichtInDemo;
 use App\Http\Middleware\NurMitPasswort;
 use App\Http\Middleware\NurOrga;
 use App\Http\Middleware\NurTeam;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'orga' => NurOrga::class,
             'team' => NurTeam::class,
+            'nicht-in-demo' => NichtInDemo::class,
             'passwort' => NurMitPasswort::class,
         ]);
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('portal*') ? route('portal.link') : route('login'));

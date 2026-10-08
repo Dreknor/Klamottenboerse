@@ -73,6 +73,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if (\App\Support\Demo::aktiv())<meta name="robots" content="noindex, nofollow">@endif
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#FF6900">
     <link rel="apple-touch-icon" href="/images/icon-192.png">
@@ -81,6 +82,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body x-data="{ menu: false }">
+<x-demo-hinweis />
 <div class="min-h-screen lg:flex">
     {{-- Seitenleiste --}}
     <aside class="fixed inset-y-0 left-0 z-30 flex w-64 -translate-x-full flex-col border-r border-stone-200 bg-white transition lg:sticky lg:top-0 lg:h-screen lg:translate-x-0"

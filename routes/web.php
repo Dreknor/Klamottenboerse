@@ -4,6 +4,7 @@ use App\Domain\Website\Infoblatt;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswortController;
+use App\Http\Controllers\DemoController;
 use App\Http\Controllers\Kasse\KasseController;
 use App\Http\Controllers\Portal;
 use App\Http\Controllers\Public;
@@ -49,6 +50,9 @@ Route::post('/feedback/{token}', [Public\FeedbackController::class, 'store'])->n
 Route::get('/login', [LoginController::class, 'create'])->name('login');
 Route::post('/login', [LoginController::class, 'store'])->middleware('throttle:10,1');
 Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+// Nur in der Demo: Anmelden per Klick in einer Rolle
+Route::post('/demo/anmelden/{rolle}', [DemoController::class, 'anmelden'])->middleware('throttle:30,1')->name('demo.anmelden');
+
 Route::get('/passwort-vergessen', [PasswortController::class, 'create'])->name('password.request');
 Route::post('/passwort-vergessen', [PasswortController::class, 'store'])->middleware('throttle:5,1')->name('password.email');
 Route::get('/passwort-neu/{token}', [PasswortController::class, 'edit'])->name('password.reset');
@@ -252,8 +256,9 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
         Route::post('/team/{person}/passwort-link', [Admin\TeamController::class, 'passwortLink'])->name('team.passwort-link');
 
         Route::get('/system', [Admin\SystemController::class, 'index'])->name('system.index');
-        Route::post('/system/update/pruefen', [Admin\SystemController::class, 'pruefen'])->name('system.pruefen');
-        Route::post('/system/update', [Admin\SystemController::class, 'update'])->name('system.update');
+        Route::post('/system/update/pruefen', [Admin\SystemController::class, 'pruefen'])->middleware('nicht-in-demo')->name('system.pruefen');
+        Route::post('/system/update', [Admin\SystemController::class, 'update'])->middleware('nicht-in-demo')->name('system.update');
+        Route::post('/system/demo-zuruecksetzen', [DemoController::class, 'zuruecksetzen'])->name('demo.zuruecksetzen');
         Route::get('/system/fehler', [Admin\FehlerController::class, 'index'])->name('fehler.index');
         Route::get('/system/fehler/{fehler}', [Admin\FehlerController::class, 'show'])->name('fehler.show');
         Route::post('/system/fehler/{fehler}/erledigt', [Admin\FehlerController::class, 'erledigt'])->name('fehler.erledigt');

@@ -14,6 +14,7 @@ use App\Models\Person;
 use App\Models\Schicht;
 use App\Models\Teilnahme;
 use App\Support\Belehrung;
+use App\Support\Demo;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection;
@@ -46,6 +47,12 @@ class V1Import extends Command
 
     public function handle(): int
     {
+        if (Demo::aktiv()) {
+            $this->error('In der Demo werden keine echten Daten importiert.');
+
+            return self::FAILURE;
+        }
+
         $this->v1 = DB::connection('v1');
 
         try {

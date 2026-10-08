@@ -96,3 +96,33 @@ Beträge immer als ganze Cent (`App\Support\Geld`).
   Die gebauten Assets (`public/build`) liegen im Repository – auf dem Server wird kein Node gebraucht.
   Vor dem Push also immer `npm run build` ausführen.
 - Für Hoster mit anderem PHP-/Composer-Aufruf: `UPDATE_PHP`, `UPDATE_COMPOSER`, `UPDATE_BRANCH` in der `.env`.
+
+## Demo zum Ausprobieren (für das Team)
+
+Eine eigene Installation – z. B. `demo.klamottenboerse.de` – mit **eigener Datenbank und eigenem Verzeichnis**,
+niemals die echte Installation umschalten.
+
+1. Code wie üblich auschecken, `composer install`, `.env` anlegen (eigene Datenbank!) und zusätzlich:
+   ```
+   DEMO_MODUS=true
+   DEMO_ZURUECKSETZEN_UM=03:15
+   ```
+   Mailversand (SMTP) wie in der echten Installation einrichten – Mails sollen ja ankommen.
+2. Einmalig füllen: `php artisan migrate --force && php artisan demo:zuruecksetzen`
+3. Cron wie üblich (`schedule:run` jede Minute) – setzt die Demo jede Nacht zurück.
+
+Was die Demo macht:
+
+- Anmeldeseite mit Knöpfen „als Admin / Orga-Team / Kasse / Annahme / Verkäuferin“ – kein Passwort nötig.
+- Gelbes Band oben: Demo, Daten erfunden, nächtliches Zurücksetzen.
+- Alle Beispielpersonen haben Adressen auf `example.org/.com/.net` – an sie geht **nie** eine Mail.
+  Wer sich selbst mit echter Adresse anmeldet (als Verkäufer, Helfer, ins Team eingeladen), bekommt die Mails
+  wirklich – mit „[DEMO]“ im Betreff. Push-Nachrichten funktionieren ebenfalls.
+- Abgeschaltet: Software-Updates, Import aus V1/Nextcloud, Abruf des echten IMAP-Postfachs.
+- Für Suchmaschinen gesperrt (noindex).
+- Admins können unter System & Fehler jederzeit „Demo jetzt zurücksetzen“.
+
+Lokal lässt sich die Demo getrennt von den Entwicklungsdaten starten (eigene Datenbank und eigener Storage-Ordner):
+```
+DB_DATABASE=klamottenboerse_demo DEMO_MODUS=true LARAVEL_STORAGE_PATH=$PWD/storage-demo php artisan serve --port=8078
+```

@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if (\App\Support\Demo::aktiv())<meta name="robots" content="noindex, nofollow">@endif
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#FF6900">
     <link rel="apple-touch-icon" href="/images/icon-192.png">
@@ -17,6 +18,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="flex min-h-screen flex-col">
+<x-demo-hinweis />
 <a href="#inhalt" class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:rounded focus:bg-white focus:px-3 focus:py-2">Zum Inhalt springen</a>
 <header class="border-b border-stone-200 bg-white" x-data="{ menu: false }">
     <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">

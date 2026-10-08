@@ -1,6 +1,17 @@
 <x-layouts.admin titel="System">
     <x-ui.kopf titel="System" unter="Zustand der Installation, Fehler und Updates – ohne SSH." />
 
+    @if (\App\Support\Demo::aktiv())
+        <x-ui.karte titel="Demo zurücksetzen" class="mb-6 border-amber-300 bg-amber-50">
+            <p class="text-sm">Setzt alle Daten auf frische Beispieldaten zurück – passiert sonst jede Nacht um {{ config('demo.zuruecksetzen_um') }} Uhr automatisch.
+                Alle Testenden werden dabei abgemeldet. Updates sind in der Demo abgeschaltet.</p>
+            <form method="post" action="{{ route('admin.demo.zuruecksetzen') }}" class="mt-3" onsubmit="return confirm('Alle Demo-Daten jetzt zurücksetzen?')">
+                @csrf
+                <x-ui.knopf>Jetzt zurücksetzen</x-ui.knopf>
+            </form>
+        </x-ui.karte>
+    @endif
+
     <div class="grid gap-6 lg:grid-cols-2">
         <x-ui.karte titel="Zustand">
             <ul class="divide-y divide-stone-100">

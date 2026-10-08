@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if (\App\Support\Demo::aktiv())<meta name="robots" content="noindex, nofollow">@endif
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#FF6900">
     <link rel="apple-touch-icon" href="/images/icon-192.png">
@@ -12,6 +13,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-stone-100 text-lg">
+<x-demo-hinweis />
 <header class="flex items-center justify-between gap-3 border-b-4 border-marke-500 bg-stone-900 px-4 py-3 text-white">
     <div class="flex items-center gap-3">
         @if ($zurueck)

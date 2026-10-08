@@ -8,9 +8,12 @@ use App\Models\Fehler;
 use App\Models\Posteingang;
 use App\Models\Seite;
 use App\Support\BoerseKontext;
+use App\Support\Demo;
 use Carbon\Carbon;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Mail\Events\MessageSending;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +29,19 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::shouldBeStrict(! $this->app->isProduction());
         Carbon::setLocale('de');
+
+        // Demo: echte Mails an die Adressen der Testenden – mit [DEMO] im Betreff.
+        // Die erfundenen Beispielpersonen (example.org usw.) bekommen nie etwas.
+        Event::listen(MessageSending::class, function (MessageSending $ereignis) {
+            if (! Demo::aktiv()) {
+                return;
+            }
+            $empfaenger = array_map(fn ($a) => $a->getAddress(), $ereignis->message->getTo());
+            if ($empfaenger === [] || collect($empfaenger)->every(fn ($a) => Demo::istBeispieladresse($a))) {
+                return false;
+            }
+            $ereignis->message->subject('[DEMO] '.$ereignis->message->getSubject());
+        });
 
         // Admins dürfen alles.
         Gate::before(fn ($person) => $person->hasRole('admin') ? true : null);

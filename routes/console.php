@@ -10,6 +10,7 @@ use App\Domain\Push\Push;
 use App\Domain\Teilnahme\Actions\WartelisteNachruecken;
 use App\Models\Boerse;
 use App\Models\Fehler;
+use App\Support\Demo;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schedule;
@@ -34,6 +35,11 @@ Artisan::command('warteliste:nachruecken', function (WartelisteNachruecken $nach
 })->purpose('Beendet abgelaufene Angebote und bietet freie Plätze der Warteliste an');
 
 Artisan::command('posteingang:abrufen', function () {
+    if (Demo::aktiv()) {
+        $this->warn('In der Demo wird kein echtes Postfach abgerufen.');
+
+        return;
+    }
     if (! ImapPostfach::istKonfiguriert()) {
         $this->warn('IMAP ist nicht eingerichtet.');
 
@@ -52,6 +58,11 @@ Artisan::command('datenschutz:inaktive', function (InaktiveBereinigen $bereinige
 })->purpose('Schreibt seit 24 Monaten inaktive Personen an und löscht sie nach Ablauf der Frist');
 
 Artisan::command('nextcloud:import {--url= : WebDAV-Adresse, z. B. https://cloud.example.org/remote.php/dav/files/benutzer} {--benutzer=} {--bilder= : Ordner mit Bildern} {--protokolle= : Ordner mit Protokollen}', function () {
+    if (Demo::aktiv()) {
+        $this->error('In der Demo werden keine echten Daten importiert.');
+
+        return;
+    }
     $passwort = env('NEXTCLOUD_PASSWORT') ?: $this->secret('Nextcloud-Passwort (am besten ein App-Passwort)');
     $import = new NextcloudImport((string) $this->option('url'), (string) $this->option('benutzer'), (string) $passwort);
 
@@ -69,6 +80,20 @@ Artisan::command('nextcloud:import {--url= : WebDAV-Adresse, z. B. https://cloud
 Artisan::command('push:versenden', function () {
     $this->info(Push::versenden().' Push-Nachricht(en) zugestellt.');
 })->purpose('Versendet wartende Push-Nachrichten');
+
+Artisan::command('demo:zuruecksetzen', function () {
+    if (! Demo::aktiv()) {
+        $this->error('Nur im Demo-Modus (DEMO_MODUS=true) – sonst wären alle echten Daten weg.');
+
+        return 1;
+    }
+    Demo::zuruecksetzen();
+    $this->info('Demo zurückgesetzt: frische Beispieldaten.');
+})->purpose('Setzt die Demo-Installation auf frische Beispieldaten zurück');
+
+if (Demo::aktiv()) {
+    Schedule::command('demo:zuruecksetzen')->dailyAt(config('demo.zuruecksetzen_um'));
+}
 
 Schedule::command('push:versenden')->everyMinute()->withoutOverlapping();
 Schedule::command('mails:versenden')->everyMinute()->withoutOverlapping();

@@ -8,6 +8,7 @@ use App\Models\Boerse;
 use App\Models\Mailvorlage;
 use App\Models\Nachricht;
 use App\Models\Person;
+use App\Support\Demo;
 use App\Support\Einstellungen;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -143,6 +144,12 @@ class Postausgang
 
     public static function senden(Nachricht $nachricht): bool
     {
+        if (Demo::aktiv() && Demo::istBeispieladresse($nachricht->email)) {
+            $nachricht->update(['status' => NachrichtStatus::Versendet, 'fehler' => 'Demo: erfundene Beispielperson – nicht zugestellt']);
+
+            return true;
+        }
+
         try {
             Mail::to($nachricht->email)->send(new VorlagenMail($nachricht->betreff, $nachricht->inhalt));
             $nachricht->update(['status' => NachrichtStatus::Versendet, 'versendet_at' => now(), 'fehler' => null]);
