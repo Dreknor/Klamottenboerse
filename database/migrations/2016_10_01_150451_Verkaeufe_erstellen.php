@@ -20,9 +20,14 @@ class VerkaeufeErstellen extends Migration
                 $table->float('summe');
                 $table->timestamps();
 
-                $table->foreign('user_id')
-                    ->references('id')
-                    ->on('users');
+                // Auf einer frischen Datenbank existiert "users" hier noch nicht
+                // (wird erst 2022_02_04 angelegt); der Fremdschlüssel wird dann in
+                // 2022_02_04_202859_add_user_foreign_keys_to_kasse_tables nachgeholt.
+                if (Schema::hasTable('users')) {
+                    $table->foreign('user_id')
+                        ->references('id')
+                        ->on('users');
+                }
             });
         }
 
@@ -38,9 +43,8 @@ class VerkaeufeErstellen extends Migration
                     ->references('id')
                     ->on('verkaeufe');
 
-                $table->foreign('vknummer')
-                    ->references('vknummer')
-                    ->on('vknummern');
+                // Kein Fremdschlüssel auf vknummern.vknummer: die Nummer ist je
+                // Klamottenbörse vergeben und daher dort weder eindeutig noch indiziert.
 
             });
         }
