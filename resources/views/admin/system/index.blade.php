@@ -23,6 +23,17 @@
                     </li>
                 @endforeach
             </ul>
+
+            <form method="post" action="{{ route('admin.system.testmail') }}" class="mt-4 border-t border-stone-100 pt-4">
+                @csrf
+                <label for="testmail" class="font-medium">Mailversand testen</label>
+                <p class="text-sm text-stone-600">Schickt sofort eine Testmail und zeigt an, ob es geklappt hat – und wenn nicht, warum.</p>
+                <div class="mt-2 flex flex-wrap gap-2">
+                    <input id="testmail" name="email" type="email" required class="feld max-w-xs" value="{{ old('email', auth()->user()->email) }}">
+                    <x-ui.knopf art="sekundaer">Testmail senden</x-ui.knopf>
+                </div>
+                <p class="mt-1 text-xs text-stone-500">Versand {{ \App\Domain\Kommunikation\Testmail::versandweg() }}</p>
+            </form>
         </x-ui.karte>
 
         <x-ui.karte titel="Fehlerprotokoll">

@@ -1,11 +1,15 @@
 <?php
 
+use App\Domain\Kommunikation\VorlagenMail;
 use App\Domain\Teilnahme\Actions\Anmelden;
+use App\Enums\NachrichtStatus;
 use App\Models\Fehler;
+use App\Models\Nachricht;
 use App\Models\Person;
 use App\Models\SystemUpdate;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Process;
 
@@ -111,4 +115,19 @@ it('bricht das Update ab, wenn auf dem Server Dateien geändert wurden', functio
 
     expect(SystemUpdate::sole()->status)->toBe('fehlgeschlagen');
     Process::assertDidntRun(fn ($p) => in_array('pull', (array) $p->command, true));
+});
+
+it('verschickt eine Testmail und meldet das Ergebnis', function () {
+    alsAdmin($this)->get(route('admin.system.index'))->assertOk()->assertSee('Testmail senden');
+
+    // In den Tests ist MAIL_MAILER=array – das verschickt nichts und wird erklärt
+    alsAdmin($this)->post(route('admin.system.testmail'), ['email' => 'test@example.de'])
+        ->assertSessionHas('fehler', fn ($text) => str_contains($text, 'MAIL_MAILER=array'));
+
+    config(['mail.default' => 'smtp']);
+    Mail::fake();
+    alsAdmin($this)->post(route('admin.system.testmail'), ['email' => 'test@example.de'])
+        ->assertSessionHas('erfolg', fn ($text) => str_contains($text, 'angenommen'));
+    Mail::assertSent(VorlagenMail::class, fn ($mail) => $mail->hasTo('test@example.de'));
+    expect(Nachricht::query()->where('typ', 'testmail')->value('status'))->toBe(NachrichtStatus::Versendet);
 });

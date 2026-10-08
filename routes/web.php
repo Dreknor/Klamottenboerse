@@ -261,6 +261,7 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
         Route::get('/system', [Admin\SystemController::class, 'index'])->name('system.index');
         Route::post('/system/update/pruefen', [Admin\SystemController::class, 'pruefen'])->middleware('nicht-in-demo')->name('system.pruefen');
         Route::post('/system/update', [Admin\SystemController::class, 'update'])->middleware('nicht-in-demo')->name('system.update');
+        Route::post('/system/testmail', [Admin\SystemController::class, 'testmail'])->middleware('throttle:10,1')->name('system.testmail');
         Route::post('/system/demo-zuruecksetzen', [DemoController::class, 'zuruecksetzen'])->name('demo.zuruecksetzen');
         Route::get('/system/fehler', [Admin\FehlerController::class, 'index'])->name('fehler.index');
         Route::get('/system/fehler/{fehler}', [Admin\FehlerController::class, 'show'])->name('fehler.show');

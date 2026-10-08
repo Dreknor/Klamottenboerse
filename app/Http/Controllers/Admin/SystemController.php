@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Domain\Kommunikation\ImapPostfach;
+use App\Domain\Kommunikation\Testmail;
 use App\Domain\System\Update;
 use App\Enums\NachrichtStatus;
 use App\Http\Controllers\Controller;
@@ -68,6 +69,15 @@ class SystemController extends Controller
         return $ergebnis->status === 'erfolgreich'
             ? back()->with('erfolg', 'Update installiert.')
             : back()->with('fehler', 'Das Update ist fehlgeschlagen – die Seite läuft mit dem bisherigen Stand weiter. Details stehen im Protokoll unten.');
+    }
+
+    /** Schickt sofort eine Testmail – zeigt direkt, ob der Mailversand funktioniert und wenn nicht, warum. */
+    public function testmail(Request $request): RedirectResponse
+    {
+        $daten = $request->validate(['email' => ['required', 'email']], ['email.email' => 'Bitte eine gültige E-Mail-Adresse eingeben.']);
+        $ergebnis = Testmail::senden($daten['email']);
+
+        return back()->withInput()->with($ergebnis['ok'] ? 'erfolg' : 'fehler', $ergebnis['text']);
     }
 
     /** @return list<array{titel: string, ok: bool|null, text: string}> */

@@ -4,6 +4,7 @@ use App\Domain\Ablage\NextcloudImport;
 use App\Domain\Kommunikation\ImapPostfach;
 use App\Domain\Kommunikation\MailplanAusfuehren;
 use App\Domain\Kommunikation\Postausgang;
+use App\Domain\Kommunikation\Testmail;
 use App\Domain\Orga\AufgabenErinnern;
 use App\Domain\Personen\InaktiveBereinigen;
 use App\Domain\Push\Push;
@@ -23,6 +24,13 @@ use Illuminate\Support\Facades\Schedule;
 Artisan::command('mails:versenden', function () {
     $this->info(Postausgang::versendeFaellige().' Mail(s) versendet.');
 })->purpose('Versendet wartende Mails im Rahmen des Stundenlimits');
+
+Artisan::command('mail:test {email : Empfängeradresse}', function (string $email) {
+    $ergebnis = Testmail::senden($email);
+    $ergebnis['ok'] ? $this->info($ergebnis['text']) : $this->error($ergebnis['text']);
+
+    return $ergebnis['ok'] ? 0 : 1;
+})->purpose('Schickt sofort eine Testmail und zeigt, ob der Mailversand funktioniert');
 
 Artisan::command('mailplan:ausfuehren', function () {
     $this->info((new MailplanAusfuehren)().' Mail(s) aus dem Mailplan eingeplant.');
