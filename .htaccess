@@ -1,0 +1,23 @@
+# Leitet alle Anfragen in das public-Verzeichnis um – für Server, deren
+# Document Root auf das Projektverzeichnis statt auf public/ zeigt.
+# Besser ist es, den Document Root direkt auf public/ zu setzen.
+
+<IfModule mod_negotiation.c>
+    Options -MultiViews -Indexes
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Authorization-Header weiterreichen
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Alles nach public/ umleiten (dort übernimmt public/.htaccess)
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Ohne mod_rewrite nichts außerhalb von public/ ausliefern
+<IfModule !mod_rewrite.c>
+    Require all denied
+</IfModule>
