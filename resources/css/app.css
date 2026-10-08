@@ -26,6 +26,10 @@
 @layer components {
     .feld { @apply block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-base shadow-sm focus:border-marke-500 focus:ring-2 focus:ring-marke-200 focus:outline-none; }
     .tabelle { @apply min-w-full divide-y divide-stone-200 text-sm; }
+    /* Eingegangene Mails als Text: Zeilenumbrüche behalten, Zitate („> …“) abgesetzt */
+    .mail-text { @apply whitespace-pre-wrap break-words leading-relaxed; }
+    .mail-text a { @apply text-marke-700 underline; }
+    .mail-zitat { @apply my-1 border-l-4 border-stone-200 pl-3 text-stone-500; }
     .tabelle th { @apply px-3 py-2 text-left font-medium text-stone-500; }
     .tabelle td { @apply px-3 py-2 align-top; }
 

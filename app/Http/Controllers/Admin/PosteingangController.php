@@ -15,6 +15,7 @@ use App\Support\BoerseKontext;
 use App\Support\Fehlermeldung;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Throwable;
@@ -56,6 +57,7 @@ class PosteingangController extends Controller
         if (! $mail->gelesen_at) {
             $mail->update(['gelesen_at' => now()]);
         }
+        (new ImapPostfach)->htmlNachladen($mail);
 
         $boerse = $kontext->get();
         $antwortText = '';
@@ -67,6 +69,7 @@ class PosteingangController extends Controller
 
         return view('admin.posteingang.show', [
             'mail' => $mail->load('person'),
+            'bilderLaden' => $request->boolean('bilder'),
             'boerse' => $boerse,
             'teilnahme' => $mail->person && $boerse ? $boerse->teilnahmen()->where('person_id', $mail->person_id)->first() : null,
             'vorlagen' => Mailvorlage::query()->orderBy('name')->pluck('name', 'id'),
@@ -117,6 +120,21 @@ class PosteingangController extends Controller
         Posteingang::query()->where('von_email', $mail->von_email)->whereNull('person_id')->update(['person_id' => $person->id]);
 
         return back()->with('erfolg', "Zugeordnet: {$person->name}.");
+    }
+
+    /** Alle offenen Mails (bzw. alle Treffer der aktuellen Suche) auf einmal erledigen – z. B. beim Start mit einem vollen Postfach. */
+    public function alleErledigt(Request $request): RedirectResponse
+    {
+        $suche = $request->string('suche')->trim()->toString();
+
+        $anzahl = Posteingang::query()->offen()
+            ->when($suche !== '', fn ($q) => $q->where(fn ($w) => $w->where('von_email', 'like', "%{$suche}%")
+                ->orWhere('von_name', 'like', "%{$suche}%")->orWhere('betreff', 'like', "%{$suche}%")))
+            ->update(['erledigt_at' => now(), 'gelesen_at' => DB::raw('coalesce(gelesen_at, CURRENT_TIMESTAMP)')]);
+
+        activity()->causedBy($request->user())->withProperties(['anzahl' => $anzahl, 'suche' => $suche])->log('Posteingang: alle als erledigt markiert');
+
+        return redirect()->route('admin.posteingang.index')->with('erfolg', $anzahl === 1 ? '1 Mail als erledigt markiert.' : "{$anzahl} Mails als erledigt markiert.");
     }
 
     public function status(Request $request, Posteingang $mail): RedirectResponse

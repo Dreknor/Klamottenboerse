@@ -14,7 +14,25 @@
     <div class="grid gap-6 lg:grid-cols-3">
         <div class="space-y-6 lg:col-span-2">
             <x-ui.karte>
-                <div class="whitespace-pre-line break-words">{{ $mail->text }}</div>
+                @if (filled($mail->html))
+                    @if (! $bilderLaden && \App\Domain\Kommunikation\Mailinhalt::hatExterneBilder($mail->html))
+                        <p class="mb-3 flex flex-wrap items-center gap-2 rounded-lg bg-stone-100 px-3 py-2 text-sm text-stone-600">
+                            Bilder aus dem Internet sind zum Schutz der Privatsphäre ausgeblendet.
+                            <a href="{{ request()->fullUrlWithQuery(['bilder' => 1]) }}">Bilder anzeigen</a>
+                        </p>
+                    @endif
+                    {{-- Abgeschottet: keine Skripte, keine Formulare; Links öffnen in neuem Tab --}}
+                    <iframe title="Inhalt der Mail" class="block min-h-48 w-full rounded border-0"
+                            sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                            srcdoc="{{ \App\Domain\Kommunikation\Mailinhalt::htmlDokument($mail->html, $bilderLaden) }}"
+                            onload="this.style.height = (this.contentDocument.documentElement.scrollHeight + 8) + 'px'"></iframe>
+                    <details class="mt-3 text-sm text-stone-500">
+                        <summary class="cursor-pointer">Als reinen Text anzeigen</summary>
+                        <div class="mail-text mt-2 text-stone-800">{{ \App\Domain\Kommunikation\Mailinhalt::textAlsHtml((string) $mail->text) }}</div>
+                    </details>
+                @else
+                    <div class="mail-text">{{ \App\Domain\Kommunikation\Mailinhalt::textAlsHtml((string) $mail->text) }}</div>
+                @endif
                 @if ($mail->anhaenge)
                     <p class="mt-4 border-t border-stone-100 pt-3 text-sm text-stone-500">
                         Anhänge (im Postfach abrufbar): {{ collect($mail->anhaenge)->pluck('name')->implode(', ') }}

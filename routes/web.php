@@ -218,6 +218,7 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
 
     Route::get('/posteingang', [Admin\PosteingangController::class, 'index'])->name('posteingang.index');
     Route::post('/posteingang/abrufen', [Admin\PosteingangController::class, 'abrufen'])->name('posteingang.abrufen');
+    Route::post('/posteingang/alle-erledigt', [Admin\PosteingangController::class, 'alleErledigt'])->name('posteingang.alle-erledigt');
     Route::get('/posteingang/{mail}', [Admin\PosteingangController::class, 'show'])->name('posteingang.show');
     Route::post('/posteingang/{mail}/antworten', [Admin\PosteingangController::class, 'antworten'])->name('posteingang.antworten');
     Route::post('/posteingang/{mail}/zuordnen', [Admin\PosteingangController::class, 'zuordnen'])->name('posteingang.zuordnen');

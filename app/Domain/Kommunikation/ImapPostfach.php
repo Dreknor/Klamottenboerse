@@ -6,6 +6,7 @@ use App\Models\Person;
 use App\Models\Posteingang;
 use Illuminate\Support\Str;
 use RuntimeException;
+use Throwable;
 use Webklex\PHPIMAP\Client;
 use Webklex\PHPIMAP\ClientManager;
 use Webklex\PHPIMAP\Message;
@@ -72,14 +73,37 @@ class ImapPostfach
         $message?->move($zielordner, true);
     }
 
+    /**
+     * Für Mails, die vor der HTML-Speicherung abgerufen wurden: HTML einmalig vom Server holen.
+     * Ein leerer Text merkt sich „schon nachgesehen, gibt keins“.
+     */
+    public function htmlNachladen(Posteingang $mail): void
+    {
+        if ($mail->html !== null || $mail->ordner === MailpitPostfach::ORDNER || ! self::istKonfiguriert()) {
+            return;
+        }
+
+        try {
+            $message = $this->client()->getFolderByPath($mail->ordner)?->query()->leaveUnread()->getMessageByUid($mail->uid);
+            $html = $message?->hasHTMLBody() ? (string) $message->getHTMLBody() : '';
+        } catch (Throwable $e) {
+            report($e);
+
+            return; // dann eben nur der Text – beim nächsten Öffnen neuer Versuch
+        }
+
+        $mail->update(['html' => $html]);
+    }
+
     private function uebernehmen(Message $message, string $ordner): Posteingang
     {
         $absender = $message->getFrom()->first();
         $email = Str::lower((string) ($absender->mail ?? ''));
 
-        $text = $message->hasTextBody()
-            ? $message->getTextBody()
-            : trim(html_entity_decode(strip_tags($message->getHTMLBody())));
+        $html = $message->hasHTMLBody() ? (string) $message->getHTMLBody() : null;
+        $text = $message->hasTextBody() && trim((string) $message->getTextBody()) !== ''
+            ? (string) $message->getTextBody()
+            : Mailinhalt::textAusHtml((string) $html);
 
         $anhaenge = [];
         foreach ($message->getAttachments() as $anhang) {
@@ -94,6 +118,7 @@ class ImapPostfach
             'von_name' => $absender->personal ?? null,
             'betreff' => Str::limit((string) $message->getSubject(), 250),
             'text' => $text,
+            'html' => filled($html) ? $html : null,
             'anhaenge' => $anhaenge ?: null,
             'empfangen_at' => $message->getDate()->toDate() ?? now(),
             'person_id' => Person::query()->where('email', $email)->value('id'),

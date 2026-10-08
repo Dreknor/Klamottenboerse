@@ -16,6 +16,14 @@
             <a href="{{ route('admin.posteingang.index', ['ansicht' => $wert]) }}" class="rounded-full px-3 py-1 no-underline {{ $ansicht === $wert ? 'bg-marke-600 text-white' : 'bg-white text-stone-700 ring-1 ring-stone-300' }}">{{ $text }}</a>
         @endforeach
         <form method="get" class="ml-auto"><input type="hidden" name="ansicht" value="{{ $ansicht }}"><input name="suche" value="{{ request('suche') }}" class="feld py-1" placeholder="Suchen …"></form>
+        @if ($ansicht === 'offen' && $mails->total() > 0)
+            <form method="post" action="{{ route('admin.posteingang.alle-erledigt') }}"
+                  onsubmit="return confirm('{{ request('suche') ? 'Alle '.$mails->total().' gefundenen Mails' : 'Alle '.$mails->total().' offenen Mails' }} als erledigt markieren? Sie bleiben unter „Erledigt“ erhalten.')">
+                @csrf
+                <input type="hidden" name="suche" value="{{ request('suche') }}">
+                <x-ui.knopf art="sekundaer" groesse="klein">{{ request('suche') ? 'Treffer' : 'Alle' }} als erledigt markieren ({{ $mails->total() }})</x-ui.knopf>
+            </form>
+        @endif
     </div>
 
     <x-ui.karte class="p-0">
