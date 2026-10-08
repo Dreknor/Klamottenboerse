@@ -10,6 +10,7 @@ use App\Models\Nachricht;
 use App\Models\Person;
 use App\Support\Demo;
 use App\Support\Einstellungen;
+use App\Support\Fehlermeldung;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
@@ -156,7 +157,7 @@ class Postausgang
 
             return true;
         } catch (Throwable $e) {
-            $nachricht->update(['status' => NachrichtStatus::Fehler, 'fehler' => $e->getMessage()]);
+            $nachricht->update(['status' => NachrichtStatus::Fehler, 'fehler' => Fehlermeldung::mitDetails($e)]);
             report($e);
 
             return false;

@@ -6,6 +6,7 @@ use App\Enums\NachrichtStatus;
 use App\Models\Nachricht;
 use App\Models\Person;
 use App\Models\Posteingang;
+use App\Support\Fehlermeldung;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -46,7 +47,7 @@ class AntwortSenden
             $mail->update(['beantwortet_at' => now(), 'gelesen_at' => $mail->gelesen_at ?? now()]);
             activity()->performedOn($mail)->causedBy($autor)->log('Mail beantwortet');
         } catch (\Throwable $e) {
-            $nachricht->update(['status' => NachrichtStatus::Fehler, 'fehler' => $e->getMessage()]);
+            $nachricht->update(['status' => NachrichtStatus::Fehler, 'fehler' => Fehlermeldung::mitDetails($e)]);
             report($e);
         }
 

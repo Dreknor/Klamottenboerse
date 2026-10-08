@@ -12,6 +12,7 @@ use App\Models\Nachricht;
 use App\Models\Person;
 use App\Models\Posteingang;
 use App\Support\BoerseKontext;
+use App\Support\Fehlermeldung;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -44,7 +45,7 @@ class PosteingangController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->with('fehler', 'Postfach konnte nicht abgerufen werden: '.$e->getMessage());
+            return back()->with('fehler', 'Postfach konnte nicht abgerufen werden. '.(Fehlermeldung::bekannt($e) ?? 'Bitte die IMAP-Zugangsdaten in der Datei .env auf dem Server prüfen.'));
         }
 
         return back()->with('erfolg', $neu ? "{$neu} neue Mail(s) abgerufen." : 'Keine neuen Mails.');

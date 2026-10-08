@@ -9,9 +9,12 @@ use App\Models\Posteingang;
 use App\Models\Seite;
 use App\Support\BoerseKontext;
 use App\Support\Demo;
+use App\Support\Grunddaten;
 use Carbon\Carbon;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Events\MigrationsEnded;
+use Illuminate\Database\Events\NoPendingMigrations;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -29,6 +32,13 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::shouldBeStrict(! $this->app->isProduction());
         Carbon::setLocale('de');
+
+        // Nach jedem „migrate“ (Installation, Online-Update) fehlende Rollen und Standardvorlagen ergänzen
+        Event::listen([MigrationsEnded::class, NoPendingMigrations::class], function (MigrationsEnded|NoPendingMigrations $ereignis) {
+            if ($ereignis->method === 'up') {
+                Grunddaten::sicherstellen();
+            }
+        });
 
         // Demo: echte Mails an die Adressen der Testenden – mit [DEMO] im Betreff.
         // Die erfundenen Beispielpersonen (example.org usw.) bekommen nie etwas.

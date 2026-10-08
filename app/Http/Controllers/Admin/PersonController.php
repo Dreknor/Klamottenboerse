@@ -113,7 +113,9 @@ class PersonController extends Controller
         if (! $nachricht) {
             return back()->with('fehler', 'Diese Person hat keine E-Mail-Adresse.');
         }
-        Postausgang::senden($nachricht);
+        if (! Postausgang::senden($nachricht)) {
+            return back()->with('fehler', 'Der Link konnte nicht verschickt werden: '.$nachricht->fehler);
+        }
 
         return back()->with('erfolg', 'Link zum Portal wurde verschickt.');
     }
