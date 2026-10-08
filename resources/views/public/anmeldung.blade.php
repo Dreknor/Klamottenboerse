@@ -32,6 +32,7 @@
                     'familie' => 'Ja, unser Kind geht ins Kinderhaus',
                     'mitarbeiter' => 'Ja, ich arbeite im Kinderhaus',
                 ]" />
+                <x-kategorien-auswahl class="rounded-lg border border-stone-200 p-4" />
                 <label class="flex items-start gap-2"><input type="checkbox" name="info_mails" value="1" class="mt-1" @checked(old('info_mails', true))> <span>Ich möchte per Mail erfahren, wenn die Anmeldung für künftige Börsen startet. (Jederzeit abbestellbar)</span></label>
                 <label class="flex items-start gap-2"><input type="checkbox" name="datenschutz" value="1" class="mt-1" required> <span>Ich bin einverstanden, dass meine Angaben für die Organisation der Klamottenbörse gespeichert werden.</span></label>
                 <x-ui.knopf groesse="gross" class="w-full">Anmeldung absenden</x-ui.knopf>

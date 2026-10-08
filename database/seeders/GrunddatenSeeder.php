@@ -36,9 +36,21 @@ class GrunddatenSeeder extends Seeder
         ['Feedback auswerten und Nachbesprechung', 'Nachbereitung', 14],
     ];
 
+    /** Was Verkäufer überwiegend mitbringen: [Name, Gruppe, Größe von, Größe bis] – wie in V1. */
     public const KATEGORIEN = [
-        'Oberteile', 'Hosen und Röcke', 'Kleider', 'Jacken und Matschkleidung', 'Schuhe',
-        'Spielzeug', 'Bücher', 'Fahrzeuge', 'Kinderwagen und Sitze', 'Möbel und Betten', 'Sonstiges',
+        ['Kleidung Gr. 50–68', 'Kleidung', 0, 68],
+        ['Kleidung Gr. 74–92', 'Kleidung', 69, 92],
+        ['Kleidung Gr. 98–116', 'Kleidung', 93, 116],
+        ['Kleidung Gr. 122–140', 'Kleidung', 117, 140],
+        ['Kleidung Gr. 146–176', 'Kleidung', 141, 999],
+        ['Umstandsmode', 'Kleidung', null, null],
+        ['Schuhe', 'Weiteres', null, null],
+        ['Spielzeug & Spiele', 'Weiteres', null, null],
+        ['Bücher & Medien', 'Weiteres', null, null],
+        ['Babyausstattung', 'Weiteres', null, null],
+        ['Kinderwagen, Fahrzeuge & Großteile', 'Weiteres', null, null],
+        ['Sport & Outdoor', 'Weiteres', null, null],
+        ['Sonstiges', 'Weiteres', null, null],
     ];
 
     public function run(): void
@@ -47,8 +59,10 @@ class GrunddatenSeeder extends Seeder
             Role::findOrCreate($rolle, 'web');
         }
 
-        foreach (self::KATEGORIEN as $i => $name) {
-            Kategorie::firstOrCreate(['name' => $name], ['sortierung' => $i]);
+        foreach (self::KATEGORIEN as $i => [$name, $gruppe, $von, $bis]) {
+            Kategorie::firstOrCreate(['name' => $name], [
+                'gruppe' => $gruppe, 'groesse_von' => $von, 'groesse_bis' => $bis, 'sortierung' => ($i + 1) * 10,
+            ]);
         }
 
         if (Checklistenvorlage::query()->doesntExist()) {

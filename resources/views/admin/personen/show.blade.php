@@ -29,6 +29,15 @@
 
     <div class="grid gap-6 lg:grid-cols-2">
         <x-ui.karte titel="Teilnahmen als Verkäufer">
+            <p class="mb-3 text-sm">
+                <span class="text-stone-500">Bringt überwiegend mit:</span>
+                @forelse ($person->kategorien->sortBy('sortierung') as $k)
+                    <x-ui.abzeichen>{{ $k->name }}</x-ui.abzeichen>
+                @empty
+                    <span class="text-stone-500">keine Angabe</span> ·
+                    <a href="{{ route('admin.personen.edit', $person) }}">ergänzen</a>
+                @endforelse
+            </p>
             <table class="tabelle">
                 <thead><tr><th>Börse</th><th>Nr.</th><th>Status</th><th>Auszahlung</th></tr></thead>
                 <tbody>

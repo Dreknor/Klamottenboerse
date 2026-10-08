@@ -6,6 +6,7 @@ use App\Enums\KinderhausBezug;
 use App\Enums\TeilnahmeStatus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -53,6 +54,12 @@ class Person extends Authenticatable
     public function teilnahmen(): HasMany
     {
         return $this->hasMany(Teilnahme::class);
+    }
+
+    /** Was die Person als Verkäufer überwiegend mitbringt. */
+    public function kategorien(): BelongsToMany
+    {
+        return $this->belongsToMany(Kategorie::class, 'kategorie_person');
     }
 
     public function reservierungen(): HasMany

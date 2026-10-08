@@ -46,6 +46,7 @@
         ],
         'Verwaltung' => [
             ['Börsen anlegen & kopieren', 'admin.boersen.index', 'admin.boersen.*'],
+            ['Kategorien', 'admin.kategorien.index', 'admin.kategorien.*'],
             ['Website', 'admin.seiten.index', 'admin.seiten.*'],
             ['Team & Rechte', 'admin.team.index', 'admin.team.*', null, true],
             ['Einstellungen', 'admin.einstellungen.edit', 'admin.einstellungen.*', null, true],

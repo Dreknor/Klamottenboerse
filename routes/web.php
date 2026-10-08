@@ -203,6 +203,11 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::post('/checklistenvorlagen/{vorlage}/eintraege', [Admin\ChecklistenvorlageController::class, 'store'])->name('checklistenvorlagen.store');
     Route::delete('/checklistenvorlagen/eintraege/{eintrag}', [Admin\ChecklistenvorlageController::class, 'destroy'])->name('checklistenvorlagen.destroy');
 
+    Route::get('/kategorien', [Admin\KategorieController::class, 'index'])->name('kategorien.index');
+    Route::post('/kategorien', [Admin\KategorieController::class, 'store'])->name('kategorien.store');
+    Route::put('/kategorien/{kategorie}', [Admin\KategorieController::class, 'update'])->name('kategorien.update');
+    Route::delete('/kategorien/{kategorie}', [Admin\KategorieController::class, 'destroy'])->name('kategorien.destroy');
+
     Route::get('/mailvorlagen', [Admin\MailvorlageController::class, 'index'])->name('mailvorlagen.index');
     Route::get('/mailvorlagen/neu', [Admin\MailvorlageController::class, 'create'])->name('mailvorlagen.create');
     Route::post('/mailvorlagen', [Admin\MailvorlageController::class, 'store'])->name('mailvorlagen.store');

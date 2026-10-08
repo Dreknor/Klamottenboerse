@@ -67,6 +67,7 @@ class PersonController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $person = Person::create($this->validiert($request));
+        $this->kategorienSpeichern($request, $person);
         $this->rollenUndPasswort($request, $person);
 
         return redirect()->route('admin.personen.show', $person)->with('erfolg', 'Person angelegt.');
@@ -75,7 +76,7 @@ class PersonController extends Controller
     public function show(Person $person): View
     {
         return view('admin.personen.show', [
-            'person' => $person->load(['teilnahmen.boerse', 'teilnahmen.abrechnung', 'teilnahmen.notizen', 'einteilungen.schicht.boerse', 'reservierungen.boerse', 'notizen.autor', 'roles']),
+            'person' => $person->load(['kategorien', 'teilnahmen.boerse', 'teilnahmen.abrechnung', 'teilnahmen.notizen', 'einteilungen.schicht.boerse', 'reservierungen.boerse', 'notizen.autor', 'roles']),
             'nachrichten' => Nachricht::query()->where('person_id', $person->id)->latest()->limit(20)->get(),
             'posteingang' => Posteingang::query()->where('person_id', $person->id)->latest('empfangen_at')->limit(20)->get(),
             'aktivitaeten' => Activity::query()
@@ -94,6 +95,7 @@ class PersonController extends Controller
     public function update(Request $request, Person $person): RedirectResponse
     {
         $person->update($this->validiert($request, $person));
+        $this->kategorienSpeichern($request, $person);
         $this->rollenUndPasswort($request, $person);
 
         return redirect()->route('admin.personen.show', $person)->with('erfolg', 'Gespeichert.');
@@ -166,6 +168,15 @@ class PersonController extends Controller
         unset($daten['info_mails']);
 
         return $daten;
+    }
+
+    private function kategorienSpeichern(Request $request, Person $person): void
+    {
+        if (! $request->has('kategorien_gesendet')) {
+            return; // Formular ohne Kategorien-Auswahl (z. B. keine Kategorien angelegt)
+        }
+        $daten = $request->validate(['kategorien' => ['nullable', 'array'], 'kategorien.*' => ['integer', 'exists:kategorien,id']]);
+        $person->kategorien()->sync($daten['kategorien'] ?? []);
     }
 
     private function rollenUndPasswort(Request $request, Person $person): void

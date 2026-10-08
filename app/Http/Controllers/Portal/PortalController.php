@@ -36,7 +36,7 @@ class PortalController extends Controller
             'boerse' => $boerse,
             'teilnahme' => $teilnahme?->load(['artikel.kategorie', 'abrechnung', 'kisten']),
             'verkauft' => $verkauft,
-            'kategorien' => Kategorie::query()->orderBy('sortierung')->pluck('name', 'id'),
+            'kategorien' => Kategorie::query()->aktiv()->sortiert()->pluck('name', 'id'),
             'schichten' => $person->einteilungen()->where('status', EinteilungStatus::Zugesagt)
                 ->whereHas('schicht', fn ($q) => $q->where('beginn', '>=', today()))
                 ->with('schicht')->get(),

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Portal;
 use App\Enums\TeilnahmeStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Artikel;
+use App\Models\Kategorie;
 use App\Support\Geld;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,12 +41,15 @@ class ArtikelController extends Controller
             return back()->withInput()->with('fehler', "Es sind höchstens {$max} Teile erlaubt.");
         }
 
+        // Ohne gewählte Kategorie: Kleidung über die Größe zuordnen (z. B. „86“ → Gr. 74–92)
+        $kategorieId = $daten['kategorie_id'] ?? Kategorie::fuerGroesse($daten['groesse'] ?? null)?->id;
+
         $naechste = (int) Artikel::withTrashed()->where('teilnahme_id', $teilnahme->id)->max('laufnummer');
         for ($i = 1; $i <= $anzahl; $i++) {
             $teilnahme->artikel()->create([
                 'laufnummer' => $naechste + $i,
                 'beschreibung' => $daten['beschreibung'],
-                'kategorie_id' => $daten['kategorie_id'] ?? null,
+                'kategorie_id' => $kategorieId,
                 'groesse' => $daten['groesse'] ?? null,
                 'preis_cent' => $preis,
             ]);

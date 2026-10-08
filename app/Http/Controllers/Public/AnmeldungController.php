@@ -49,6 +49,8 @@ class AnmeldungController extends Controller
             'telefon' => ['nullable', 'string', 'max:50'],
             'kinderhaus_bezug' => ['required', Rule::enum(KinderhausBezug::class)],
             'info_mails' => ['nullable', 'boolean'],
+            'kategorien' => ['nullable', 'array'],
+            'kategorien.*' => ['integer', Rule::exists('kategorien', 'id')->where('aktiv', true)],
             'datenschutz' => ['accepted'],
         ], ['datenschutz.accepted' => 'Bitte stimme der Verarbeitung deiner Daten zu.']);
 
@@ -63,6 +65,11 @@ class AnmeldungController extends Controller
             ]);
         } elseif ($person->kinderhaus_bezug === KinderhausBezug::Keiner && $daten['kinderhaus_bezug'] !== KinderhausBezug::Keiner->value) {
             $person->update(['kinderhaus_bezug' => $daten['kinderhaus_bezug']]);
+        }
+
+        // Angaben aus der aktuellen Anmeldung gelten – leer gelassen, bleiben frühere Angaben erhalten
+        if (! empty($daten['kategorien'])) {
+            $person->kategorien()->sync($daten['kategorien']);
         }
 
         if ($request->boolean('info_mails') && ! $person->info_mails_erlaubt_at) {

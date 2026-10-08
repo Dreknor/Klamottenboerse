@@ -21,6 +21,10 @@
             </div>
         </x-ui.karte>
 
+        <x-ui.karte titel="Angebot als Verkäufer">
+            <x-kategorien-auswahl :ausgewaehlt="$person->exists ? $person->kategorien->pluck('id')->all() : []" legende="Bringt überwiegend mit" hilfe="" />
+        </x-ui.karte>
+
         @role('admin')
             <x-ui.karte titel="Zugang zum Team-Bereich">
                 <p class="mb-3 text-sm text-stone-600">Verkäufer und Helfer brauchen keine Rolle – sie kommen per Link ins Portal.</p>
