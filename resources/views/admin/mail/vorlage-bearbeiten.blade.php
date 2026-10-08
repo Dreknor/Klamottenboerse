@@ -1,5 +1,14 @@
 <x-layouts.admin :titel="$vorlage->name">
-    <x-ui.kopf :titel="'Vorlage: '.$vorlage->name" />
+    <x-ui.kopf :titel="'Vorlage: '.$vorlage->name">
+        <x-ui.knopf art="sekundaer" :href="route('admin.mailvorlagen.index')">Alle Vorlagen</x-ui.knopf>
+        @unless ($vorlage->istStandard())
+            <form method="post" action="{{ route('admin.mailvorlagen.destroy', $vorlage) }}"
+                  onsubmit="return confirm('Vorlage löschen? Einträge im Mailplan, die sie verwenden, werden ebenfalls entfernt.')">
+                @csrf @method('delete')
+                <x-ui.knopf art="gefahr">Löschen</x-ui.knopf>
+            </form>
+        @endunless
+    </x-ui.kopf>
 
     <div class="grid gap-6 lg:grid-cols-2">
         <x-ui.karte titel="Text bearbeiten">

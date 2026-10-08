@@ -4,6 +4,7 @@ use App\Domain\Abrechnung\AbrechnungBerechnen;
 use App\Domain\Teilnahme\Actions\Anmelden;
 use App\Enums\TeilnahmeStatus;
 use App\Models\Bon;
+use App\Models\Mailvorlage;
 use App\Models\Nachricht;
 use App\Models\Person;
 use App\Models\Schicht;
@@ -29,7 +30,7 @@ it('zeigt alle Backend-Seiten ohne Fehler', function () {
 
     $seiten = ['admin.dashboard', 'admin.boersen.index', 'admin.boersen.create', 'admin.teilnahmen.index', 'admin.reservierungen.index',
         'admin.personen.index', 'admin.personen.create', 'admin.schichten.index', 'admin.aufgaben.index', 'admin.checklistenvorlagen.index',
-        'admin.kalender.index', 'admin.mailvorlagen.index', 'admin.mailplan.index', 'admin.postausgang.index', 'admin.posteingang.index',
+        'admin.kalender.index', 'admin.mailvorlagen.index', 'admin.mailvorlagen.create', 'admin.mailplan.index', 'admin.postausgang.index', 'admin.posteingang.index',
         'admin.abrechnung.index', 'admin.abrechnung.auszahlungsplan', 'admin.statistik.index', 'admin.feedback.index'];
 
     $admin = tap(orga())->assignRole('admin');
@@ -186,4 +187,22 @@ it('liefert der Kasse einen frischen Sicherheits-Token und den Service Worker', 
     $this->actingAs($kasse)->withSession(['login_art' => 'passwort'])
         ->getJson(route('kasse.token'))->assertOk()->assertJsonStructure(['token']);
     expect(file_get_contents(public_path('kasse-sw.js')))->toContain("const SEITE = '/kasse'");
+});
+
+it('legt eigene Mailvorlagen an und löscht nur diese', function () {
+    alsOrga($this)->post(route('admin.mailvorlagen.store'), ['name' => 'Dank an Helfer', 'betreff' => 'Danke, {vorname}!', 'inhalt' => 'Hallo {vorname}, danke!'])
+        ->assertRedirect();
+    alsOrga($this)->post(route('admin.mailvorlagen.store'), ['name' => 'Dank an Helfer', 'betreff' => 'Nochmal', 'inhalt' => 'Text'])
+        ->assertRedirect();
+
+    $eigene = Mailvorlage::query()->where('schluessel', 'eigen_dank_an_helfer')->firstOrFail();
+    expect(Mailvorlage::query()->where('schluessel', 'eigen_dank_an_helfer_2')->exists())->toBeTrue();
+    alsOrga($this)->get(route('admin.mailvorlagen.edit', $eigene))->assertOk()->assertSee('Löschen');
+
+    $standard = Mailvorlage::query()->where('schluessel', 'nummer_zugeteilt')->firstOrFail();
+    alsOrga($this)->delete(route('admin.mailvorlagen.destroy', $standard));
+    alsOrga($this)->delete(route('admin.mailvorlagen.destroy', $eigene))->assertRedirect(route('admin.mailvorlagen.index'));
+
+    expect(Mailvorlage::query()->whereKey($standard->id)->exists())->toBeTrue()
+        ->and(Mailvorlage::query()->whereKey($eigene->id)->exists())->toBeFalse();
 });

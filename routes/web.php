@@ -204,8 +204,11 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::delete('/checklistenvorlagen/eintraege/{eintrag}', [Admin\ChecklistenvorlageController::class, 'destroy'])->name('checklistenvorlagen.destroy');
 
     Route::get('/mailvorlagen', [Admin\MailvorlageController::class, 'index'])->name('mailvorlagen.index');
+    Route::get('/mailvorlagen/neu', [Admin\MailvorlageController::class, 'create'])->name('mailvorlagen.create');
+    Route::post('/mailvorlagen', [Admin\MailvorlageController::class, 'store'])->name('mailvorlagen.store');
     Route::get('/mailvorlagen/{mailvorlage}', [Admin\MailvorlageController::class, 'edit'])->name('mailvorlagen.edit');
     Route::put('/mailvorlagen/{mailvorlage}', [Admin\MailvorlageController::class, 'update'])->name('mailvorlagen.update');
+    Route::delete('/mailvorlagen/{mailvorlage}', [Admin\MailvorlageController::class, 'destroy'])->name('mailvorlagen.destroy');
     Route::get('/mailplan', [Admin\MailplanController::class, 'index'])->name('mailplan.index');
     Route::post('/mailplan', [Admin\MailplanController::class, 'store'])->name('mailplan.store');
     Route::post('/mailplan/{eintrag}/umschalten', [Admin\MailplanController::class, 'umschalten'])->name('mailplan.umschalten');
