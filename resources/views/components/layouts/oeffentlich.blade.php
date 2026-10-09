@@ -17,13 +17,13 @@
     <link rel="icon" href="{{ asset('images/logo-640.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="flex min-h-screen flex-col">
+<body class="oeffentlich flex min-h-screen flex-col">
 <x-demo-hinweis />
 <a href="#inhalt" class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:rounded focus:bg-white focus:px-3 focus:py-2">Zum Inhalt springen</a>
 <header class="border-b border-stone-200 bg-white" x-data="{ menu: false }">
     <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
         <a href="{{ route('start') }}" class="shrink-0" aria-label="Zur Startseite">
-            <img src="{{ asset('images/logo-schriftzug.png') }}" alt="Klamottenbörse des Evangelischen Kinderhauses" class="h-10 w-auto sm:h-12" width="480" height="99">
+            <img src="{{ asset('images/logo-schriftzug.png') }}" alt="Klamottenbörse des Evangelischen Kinderhauses" class="h-14 w-auto sm:h-16" width="480" height="170">
         </a>
         <button type="button" class="rounded-lg border border-stone-300 px-3 py-1.5 sm:hidden" @click="menu = !menu" :aria-expanded="menu" aria-label="Menü">☰</button>
         <nav class="hidden gap-5 text-sm font-medium sm:flex" aria-label="Hauptmenü">

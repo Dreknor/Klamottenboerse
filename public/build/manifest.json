@@ -1,4 +1,36 @@
 {
+  "node_modules/@fontsource-variable/fredoka/files/fredoka-hebrew-wght-normal.woff2": {
+    "file": "assets/fredoka-hebrew-wght-normal-DdnsCkLr.woff2",
+    "src": "node_modules/@fontsource-variable/fredoka/files/fredoka-hebrew-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/fredoka/files/fredoka-latin-ext-wght-normal.woff2": {
+    "file": "assets/fredoka-latin-ext-wght-normal-CYrqKuxd.woff2",
+    "src": "node_modules/@fontsource-variable/fredoka/files/fredoka-latin-ext-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2": {
+    "file": "assets/fredoka-latin-wght-normal-DM6njrJ3.woff2",
+    "src": "node_modules/@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/nunito/files/nunito-cyrillic-ext-wght-normal.woff2": {
+    "file": "assets/nunito-cyrillic-ext-wght-normal-D4X5GqEv.woff2",
+    "src": "node_modules/@fontsource-variable/nunito/files/nunito-cyrillic-ext-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/nunito/files/nunito-cyrillic-wght-normal.woff2": {
+    "file": "assets/nunito-cyrillic-wght-normal-CY6AOgYE.woff2",
+    "src": "node_modules/@fontsource-variable/nunito/files/nunito-cyrillic-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/nunito/files/nunito-latin-ext-wght-normal.woff2": {
+    "file": "assets/nunito-latin-ext-wght-normal-CXYtwYOx.woff2",
+    "src": "node_modules/@fontsource-variable/nunito/files/nunito-latin-ext-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2": {
+    "file": "assets/nunito-latin-wght-normal-BzFMHfZw.woff2",
+    "src": "node_modules/@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/nunito/files/nunito-vietnamese-wght-normal.woff2": {
+    "file": "assets/nunito-vietnamese-wght-normal-U01xdrZh.woff2",
+    "src": "node_modules/@fontsource-variable/nunito/files/nunito-vietnamese-wght-normal.woff2"
+  },
   "node_modules/qr-scanner/qr-scanner-worker.min.js": {
     "file": "assets/qr-scanner-worker.min-CJaXo3yu.js",
     "name": "qr-scanner-worker.min",
@@ -6,13 +38,23 @@
     "isDynamicEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-Da8X4H9g.css",
+    "file": "assets/app-BkWxwRhq.css",
     "name": "app",
     "names": [
       "app.css"
     ],
     "src": "resources/css/app.css",
-    "isEntry": true
+    "isEntry": true,
+    "assets": [
+      "assets/nunito-cyrillic-ext-wght-normal-D4X5GqEv.woff2",
+      "assets/nunito-cyrillic-wght-normal-CY6AOgYE.woff2",
+      "assets/nunito-vietnamese-wght-normal-U01xdrZh.woff2",
+      "assets/nunito-latin-ext-wght-normal-CXYtwYOx.woff2",
+      "assets/nunito-latin-wght-normal-BzFMHfZw.woff2",
+      "assets/fredoka-hebrew-wght-normal-DdnsCkLr.woff2",
+      "assets/fredoka-latin-ext-wght-normal-CYrqKuxd.woff2",
+      "assets/fredoka-latin-wght-normal-DM6njrJ3.woff2"
+    ]
   },
   "resources/js/app.js": {
     "file": "assets/app-DuQyqJXQ.js",

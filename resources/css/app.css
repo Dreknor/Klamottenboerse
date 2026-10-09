@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+/* Schriften der öffentlichen Seite – selbst gehostet, damit keine Anfragen an Google gehen */
+@import '@fontsource-variable/nunito/wght.css';
+@import '@fontsource-variable/fredoka/wght.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,9 +9,15 @@
 @theme {
     --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     /* Orange des Logos (#FF6900) für Akzente und Flächen; dunklere Stufen für Text und Knöpfe (Kontrast nach WCAG AA) */
+    /* Öffentliche Seite: runde, freundliche Schriften passend zum handgeschriebenen Logo */
+    --font-text: 'Nunito Variable', var(--font-sans);
+    --font-titel: 'Fredoka Variable', 'Nunito Variable', var(--font-sans);
     --color-marke-50: #fff5ec;
     --color-marke-100: #ffe2c7;
     --color-marke-200: #ffc999;
+    /* Öffentliche Seite: runde, freundliche Schriften passend zum handgeschriebenen Logo */
+    --font-text: 'Nunito Variable', var(--font-sans);
+    --font-titel: 'Fredoka Variable', 'Nunito Variable', var(--font-sans);
     --color-marke-500: #ff6900;
     --color-marke-600: #c24e00;
     --color-marke-700: #a33f00;
@@ -21,6 +30,10 @@
     h1 { @apply text-2xl font-semibold text-stone-900; }
     h2 { @apply text-lg font-semibold text-stone-900; }
     a { @apply text-marke-700; }
+
+    /* Öffentliche Seite (Layout „oeffentlich“): Fließtext in Nunito, Überschriften in Fredoka */
+    .oeffentlich { @apply font-text; }
+    .oeffentlich :is(h1, h2, h3) { @apply font-titel; }
 }
 
 @layer components {

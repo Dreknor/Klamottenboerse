@@ -1,7 +1,7 @@
 <section class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-stone-200">
     <div class="grid items-center gap-6 p-6 md:p-10 {{ $b['logo'] ? 'md:grid-cols-5' : '' }}">
         <div class="{{ $b['logo'] ? 'md:col-span-3' : '' }}">
-            <h1 class="text-3xl leading-tight md:text-4xl">{{ $k->zeile($b['titel']) }}</h1>
+            <h1 class="hyphens-auto text-3xl leading-tight md:text-4xl">{{ $k->zeile($b['titel']) }}</h1>
             @if ($b['text'])<div class="inhalt mt-3 text-lg">{!! $k->text($b['text']) !!}</div>@endif
             @if ($k->boerse)
                 <div class="mt-6 rounded-xl bg-marke-50 p-4 ring-1 ring-marke-100">
@@ -19,7 +19,7 @@
         </div>
         @if ($b['logo'])
             <div class="md:col-span-2">
-                <img src="{{ asset('images/logo-640.png') }}" alt="Zeichnung: Ein Kind hängt kopfüber an einer Wäscheleine zwischen Kinderkleidung" class="mx-auto w-full max-w-sm" width="640" height="494">
+                <img src="{{ asset('images/logo-640.png') }}" alt="Zeichnung: Zwei Kinder hängen an einer Wäscheleine zwischen Kinderkleidung und einem Stoffhasen" class="mx-auto w-full max-w-sm" width="640" height="386">
             </div>
         @endif
     </div>
