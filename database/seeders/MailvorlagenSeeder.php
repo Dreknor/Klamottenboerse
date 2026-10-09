@@ -35,6 +35,90 @@ dein Klamottenbörsen-Team
 
 Du möchtest keine Infos mehr zu künftigen Börsen? [Hier abbestellen]({abbestellen_link})
 TXT],
+        'anmeldung_vorankuendigung' => ['Vorankündigung', 'Save the date: Klamottenbörse am {datum}', <<<'TXT'
+Hallo {vorname},
+
+die nächste Klamottenbörse steht fest – merk dir den Termin schon mal vor:
+
+- Verkaufstag: {datum}
+- Verkauf: {verkauf}
+- Ort: {ort}
+- Anmeldung für Kinderhaus-Familien ab: {anmeldung_kinderhaus_ab}
+- Anmeldung für alle ab: {anmeldung_ab}
+
+Die Verkäufernummern werden in der Reihenfolge der Anmeldung vergeben. Zum Start schicken wir dir den Link zur Anmeldung.
+
+Jetzt ist die beste Zeit, die Kleiderschränke durchzusehen: Gesucht ist gut erhaltene Kinderkleidung, Spielzeug und Zubehör.
+Pro Verkäufer sind maximal {max_teile} Teile möglich.
+
+Viele Grüße
+dein Klamottenbörsen-Team
+
+Du möchtest keine Infos mehr zu künftigen Börsen? [Hier abbestellen]({abbestellen_link})
+TXT],
+        'helfer_gesucht' => ['Helfer gesucht', 'Hilfst du mit? Für die Klamottenbörse am {datum} suchen wir noch Helfer', <<<'TXT'
+Hallo {vorname},
+
+schön, dass du als Verkäufer/in dabei bist! Damit die Börse klappt, brauchen wir viele helfende Hände – beim Aufbau, an der Annahme, beim Sortieren, an der Kasse und beim Abbau.
+
+Schon eine Schicht von ein, zwei Stunden hilft uns sehr. Hier siehst du alle Schichten und kannst dich direkt eintragen:
+
+[Zur Helferliste]({helfer_link})
+
+Bist du schon eingetragen? Dann vielen Dank – diese Mail kannst du ignorieren.
+
+Viele Grüße
+dein Klamottenbörsen-Team
+TXT],
+        'warteliste_stand' => ['Warteliste: Stand kurz vor der Börse', 'Deine Warteliste für die Klamottenbörse am {datum}', <<<'TXT'
+Hallo {vorname},
+
+kurzer Zwischenstand: Bisher ist für die Klamottenbörse am {datum} leider kein Platz für dich frei geworden.
+
+Bis kurz vor der Annahme ({anlieferung}) kann sich noch etwas tun – dann bekommst du sofort ein Angebot per Mail. Danach rückt niemand mehr nach.
+
+Wir würden uns freuen, wenn du trotzdem vorbeischaust – zum Stöbern beim Verkauf ({verkauf}) oder als Helfer/in: [Zur Helferliste]({helfer_link})
+
+Bei der nächsten Börse informieren wir dich wieder rechtzeitig zum Anmeldestart.
+
+Viele Grüße
+dein Klamottenbörsen-Team
+TXT],
+        'annahme_morgen' => ['Annahme morgen', 'Morgen ist Annahme – deine Nummer {nummer}', <<<'TXT'
+Hallo {vorname},
+
+morgen geht es los! Hier alles Wichtige auf einen Blick:
+
+- Annahme deiner Kiste: {anlieferung}
+- Ort: {ort}
+- Deine Nummer: **{nummer}**
+
+Kurze Checkliste:
+
+- Alle Artikel mit Etikett und deiner Nummer versehen
+- Kiste außen gut sichtbar mit deiner Nummer beschriftet
+- Kistenzettel ausgedruckt (falls du das [Verkäuferportal]({portal_link}) nutzt)
+- Maximal {max_teile} Teile
+
+Abholung von Restware und Erlös: {abholung}
+
+Falls du doch nicht kommen kannst, sag bitte jetzt noch ab: [Teilnahme absagen]({absage_link})
+
+Bis morgen!
+dein Klamottenbörsen-Team
+TXT],
+        'abholung_heute' => ['Abholung heute', 'Heute ist Klamottenbörse – denk an die Abholung', <<<'TXT'
+Hallo {vorname},
+
+heute ist Klamottenbörse! Wir drücken deinen Sachen die Daumen.
+
+Bitte denk an die Abholung von Restware und Erlös: **{abholung}** ({ort}). Bring zur Abholung deine Nummer **{nummer}** mit.
+
+Bitte sei pünktlich – nach der Abholzeit bauen wir ab.
+
+Viele Grüße
+dein Klamottenbörsen-Team
+TXT],
         'nummer_zugeteilt' => ['Nummer zugeteilt', 'Deine Verkäufernummer {nummer} für die Klamottenbörse', <<<'TXT'
 Hallo {vorname},
 
@@ -140,9 +224,13 @@ TXT],
         'erinnerung_helfer' => ['Erinnerung Helfer', 'Danke, dass du hilfst – deine Schicht bei der Klamottenbörse', <<<'TXT'
 Hallo {vorname},
 
-danke, dass du bei der Klamottenbörse am {datum} hilfst! Deine Schicht(en) findest du in deiner [Übersicht]({portal_link}).
+danke, dass du bei der Klamottenbörse am {datum} hilfst! Du bist eingetragen für:
+
+{schichten}
 
 Ort: {ort}
+
+Bitte sei ein paar Minuten vor Schichtbeginn da. Alle Infos findest du auch in deiner [Übersicht]({portal_link}).
 
 Viele Grüße
 dein Klamottenbörsen-Team
@@ -156,6 +244,18 @@ Falls etwas dazwischenkommt: [Schicht absagen]({helfer_absage_link})
 
 Viele Grüße
 dein Klamottenbörsen-Team
+TXT],
+        'helfer_abgesagt' => ['Helfer hat abgesagt (an das Team)', 'Absage: {helfer} – {schicht}', <<<'TXT'
+Hallo {vorname},
+
+**{helfer}** hat die Schicht für die Klamottenbörse am {datum} abgesagt:
+
+- Schicht: {schicht}
+- Jetzt besetzt: {besetzung}
+
+Bitte schaut, ob ihr Ersatz findet: [Zu den Schichten]({schichten_link})
+
+Diese Mail geht automatisch an das Orga-Team.
 TXT],
         'ergebnis' => ['Ergebnis', 'Dein Ergebnis der Klamottenbörse', <<<'TXT'
 Hallo {vorname},
@@ -218,7 +318,8 @@ TXT],
     ];
 
     /** Diese Mails gehen zusätzlich als Push an Personen, die Push-Nachrichten eingeschaltet haben. */
-    public const MIT_PUSH = ['erinnerung_verkaeufer', 'erinnerung_helfer', 'warteliste_angebot', 'aufgabe_erinnerung', 'nummer_zugeteilt'];
+    public const MIT_PUSH = ['erinnerung_verkaeufer', 'erinnerung_helfer', 'warteliste_angebot', 'aufgabe_erinnerung', 'nummer_zugeteilt',
+        'annahme_morgen', 'abholung_heute', 'helfer_abgesagt'];
 
     public function run(): void
     {

@@ -235,6 +235,7 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::delete('/mailvorlagen/{mailvorlage}', [Admin\MailvorlageController::class, 'destroy'])->name('mailvorlagen.destroy');
     Route::get('/mailplan', [Admin\MailplanController::class, 'index'])->name('mailplan.index');
     Route::post('/mailplan', [Admin\MailplanController::class, 'store'])->name('mailplan.store');
+    Route::post('/mailplan/standard', [Admin\MailplanController::class, 'standardWiederherstellen'])->name('mailplan.standard');
     Route::post('/mailplan/{eintrag}/umschalten', [Admin\MailplanController::class, 'umschalten'])->name('mailplan.umschalten');
     Route::delete('/mailplan/{eintrag}', [Admin\MailplanController::class, 'destroy'])->name('mailplan.destroy');
     Route::get('/postausgang', [Admin\MailplanController::class, 'postausgang'])->name('postausgang.index');

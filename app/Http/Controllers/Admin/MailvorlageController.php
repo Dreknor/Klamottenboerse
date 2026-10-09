@@ -44,6 +44,8 @@ class MailvorlageController extends Controller
         $beispiel = Platzhalter::fuer($request->user(), $kontext->get(), [
             'absage_link' => '#', 'angebot_link' => '#', 'angebot_bis' => 'Montag, 12. Oktober, 18:00 Uhr',
             'feedback_link' => '#', 'bestaetigen_link' => '#', 'aufgaben' => '- Beispielaufgabe', 'aufgaben_link' => '#',
+            'helfer' => 'Hanna Hilft', 'schicht' => 'Kasse, Samstag, 10. Oktober, 9:00–11:00 Uhr', 'besetzung' => '2 von 3', 'schichten_link' => '#',
+            'schichten' => '- Kasse, Samstag, 10. Oktober, 9:00–11:00 Uhr ([absagen](#))',
         ]);
 
         return view('admin.mail.vorlage-bearbeiten', [

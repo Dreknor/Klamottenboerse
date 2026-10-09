@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Domain\Schichten\HelferAbsagen;
 use App\Domain\Schichten\HelferEintragen;
-use App\Enums\EinteilungStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Boerse;
 use App\Models\Einteilung;
@@ -61,10 +61,9 @@ class HelferController extends Controller
         return view('public.helfer-absage', ['einteilung' => $einteilung->load('schicht', 'person'), 'erledigt' => false]);
     }
 
-    public function absagen(Einteilung $einteilung): View
+    public function absagen(Einteilung $einteilung, HelferAbsagen $absagen): View
     {
-        $einteilung->update(['status' => EinteilungStatus::Abgesagt]);
-        activity()->performedOn($einteilung)->log('Helfer hat Schicht abgesagt');
+        $absagen($einteilung);
 
         return view('public.helfer-absage', ['einteilung' => $einteilung->load('schicht', 'person'), 'erledigt' => true]);
     }

@@ -34,6 +34,7 @@ class Platzhalter
         'abbestellen_link' => 'Link, um künftige Info-Mails abzubestellen',
         'anmelde_link' => 'Link zum Anmeldeformular',
         'helfer_link' => 'Link zur Helferliste',
+        'schichten' => 'Eigene Schichten mit Absage-Link (nur in der Helfer-Erinnerung)',
         'verein' => 'Name der Klamottenbörse',
     ];
 

@@ -102,6 +102,10 @@ class Postausgang
             return route('admin.aufgaben.index');
         }
 
+        if ($typ === 'helfer_abgesagt') {
+            return route('admin.schichten.index');
+        }
+
         return $platzhalter['portal_link'] ?? url('/');
     }
 

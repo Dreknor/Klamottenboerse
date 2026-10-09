@@ -206,3 +206,21 @@ it('legt eigene Mailvorlagen an und löscht nur diese', function () {
     expect(Mailvorlage::query()->whereKey($standard->id)->exists())->toBeTrue()
         ->and(Mailvorlage::query()->whereKey($eigene->id)->exists())->toBeFalse();
 });
+
+it('benachrichtigt das Orga-Team, wenn ein Helfer absagt – auch bei doppeltem Klick nur einmal', function () {
+    $boerse = neueBoerse();
+    $orga = admin();
+    $schicht = Schicht::create(['boerse_id' => $boerse->id, 'bereich' => 'Kasse', 'beginn' => $boerse->verkaufstag->copy()->setTime(9, 0),
+        'ende' => $boerse->verkaufstag->copy()->setTime(11, 0), 'soll' => 2]);
+    $helfer = Person::factory()->create(['vorname' => 'Hanna', 'nachname' => 'Hilft']);
+    $einteilung = $schicht->einteilungen()->create(['person_id' => $helfer->id]);
+
+    $link = URL::signedRoute('helfer.absage', ['einteilung' => $einteilung->id]);
+    $this->post($link)->assertOk();
+    $this->post($link)->assertOk();
+
+    $mail = Nachricht::query()->where('typ', 'helfer_abgesagt')->sole();
+    expect($mail->person_id)->toBe($orga->id)
+        ->and($mail->betreff)->toContain('Hanna Hilft')->toContain('Kasse')
+        ->and($mail->inhalt)->toContain('0 von 2');
+});

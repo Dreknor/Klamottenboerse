@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Domain\Boersen\Actions\BoerseAnlegen;
 use App\Domain\Kommunikation\Postausgang;
 use App\Enums\Bezugsdatum;
 use App\Enums\NachrichtStatus;
@@ -44,6 +45,17 @@ class MailplanController extends Controller
         $kontext->getOrFail()->mailplan()->create($daten + ['aktiv' => true]);
 
         return back()->with('erfolg', 'Mail in den Plan aufgenommen.');
+    }
+
+    public function standardWiederherstellen(BoerseKontext $kontext, BoerseAnlegen $anlegen): RedirectResponse
+    {
+        $boerse = $kontext->getOrFail();
+        $anzahl = $anlegen->standardMailplan($boerse);
+        activity()->performedOn($boerse)->withProperties(['anzahl' => $anzahl])->log('Standard-Mailplan wiederhergestellt');
+
+        return back()->with('erfolg', $anzahl
+            ? "Standard-Mailplan wiederhergestellt: {$anzahl} Mail(s) ergänzt oder zurückgesetzt."
+            : 'Der Standard-Mailplan ist bereits vollständig.');
     }
 
     public function umschalten(MailplanEintrag $eintrag): RedirectResponse

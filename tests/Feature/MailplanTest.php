@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Boersen\Actions\BoerseAnlegen;
 use App\Domain\Boersen\Actions\BoerseKopieren;
 use App\Domain\Kommunikation\MailplanAusfuehren;
 use App\Domain\Kommunikation\Postausgang;
@@ -10,12 +11,13 @@ use App\Models\Nachricht;
 use App\Models\Person;
 use App\Models\Schicht;
 use App\Support\Einstellungen;
+use Database\Seeders\MailvorlagenSeeder;
 use Illuminate\Support\Facades\Mail;
 
 it('legt für neue Börsen Standard-Mailplan und Checkliste an', function () {
     $boerse = neueBoerse();
 
-    expect($boerse->mailplan()->count())->toBe(5)
+    expect($boerse->mailplan()->count())->toBe(count(BoerseAnlegen::STANDARD_MAILPLAN))
         ->and($boerse->aufgaben()->count())->toBeGreaterThan(10)
         ->and($boerse->aufgaben()->orderBy('faellig_am')->first()->faellig_am->toDateString())
         ->toBe($boerse->verkaufstag->copy()->subDays(90)->toDateString());
@@ -86,8 +88,49 @@ it('kopiert eine Börse mit verschobenen Terminen, Schichten und Mailplan', func
         ->and($neu->max_teile)->toBe(50)
         ->and($neu->anlieferung_beginn->equalTo($alt->anlieferung_beginn->copy()->addDays(182)))->toBeTrue()
         ->and($neu->schichten()->sole()->soll)->toBe(4)
-        ->and($neu->mailplan()->count())->toBe(5)
+        ->and($neu->mailplan()->count())->toBe($alt->mailplan()->count())
         ->and($neu->mailplan()->where('aktiv', false)->count())->toBe(1)
         ->and($neu->aufgaben()->count())->toBe($alt->aufgaben()->count())
         ->and($neu->kinderhausTeilnahme->nummer)->toBe(600);
+});
+
+it('hat für jede Mail im Standard-Mailplan eine Standardvorlage', function () {
+    $schluessel = collect(BoerseAnlegen::STANDARD_MAILPLAN)->pluck(0)->unique();
+
+    expect($schluessel->diff(array_keys(MailvorlagenSeeder::VORLAGEN))->all())->toBe([]);
+});
+
+it('nennt Helfern in der Erinnerung ihre eigenen Schichten', function () {
+    $boerse = neueBoerse();
+    $helfer = Person::factory()->create();
+    $kasse = Schicht::create(['boerse_id' => $boerse->id, 'bereich' => 'Kasse', 'beginn' => now()->addDay()->setTime(9, 0), 'ende' => now()->addDay()->setTime(11, 0)]);
+    Schicht::create(['boerse_id' => $boerse->id, 'bereich' => 'Abbau', 'beginn' => now()->addDay()->setTime(13, 0), 'ende' => now()->addDay()->setTime(14, 0)]);
+    $kasse->einteilungen()->create(['person_id' => $helfer->id]);
+
+    $eintrag = $boerse->mailplan()->whereHas('vorlage', fn ($q) => $q->where('schluessel', 'erinnerung_helfer'))->sole();
+    (new MailplanAusfuehren)->eintragAusfuehren($eintrag);
+
+    $inhalt = Nachricht::query()->where('typ', 'erinnerung_helfer')->sole()->inhalt;
+    expect($inhalt)->toContain('Kasse')->toContain('9:00–11:00 Uhr')->not->toContain('Abbau');
+});
+
+it('stellt den Standard-Mailplan einer bestehenden Börse wieder her, ohne Verschicktes und Eigenes anzufassen', function () {
+    $boerse = neueBoerse();
+    $plan = $boerse->mailplan()->with('vorlage')->get()->keyBy(fn ($e) => $e->vorlage->schluessel.'|'.$e->zielgruppe->value);
+
+    $plan['abholung_heute|verkaeufer']->delete();
+    $plan['annahme_morgen|verkaeufer']->update(['aktiv' => false, 'versatz_tage' => -3]);
+    $plan['feedback|verkaeufer_und_helfer']->update(['versatz_tage' => 5, 'eingeplant_at' => now()]);
+    $eigene = $boerse->mailplan()->create(['mailvorlage_id' => $plan['feedback|verkaeufer_und_helfer']->mailvorlage_id,
+        'zielgruppe' => 'team', 'bezugsdatum' => 'verkaufstag', 'versatz_tage' => 1, 'aktiv' => false]);
+
+    alsAdmin($this)->withSession(['boerse_id' => $boerse->id])
+        ->post(route('admin.mailplan.standard'))->assertSessionHas('erfolg');
+
+    expect($boerse->mailplan()->count())->toBe(count(BoerseAnlegen::STANDARD_MAILPLAN) + 1)
+        ->and($plan['annahme_morgen|verkaeufer']->fresh())->aktiv->toBeTrue()->versatz_tage->toBe(-1)
+        ->and($plan['feedback|verkaeufer_und_helfer']->fresh()->versatz_tage)->toBe(5)
+        ->and($eigene->fresh()->aktiv)->toBeFalse();
+
+    expect(app(BoerseAnlegen::class)->standardMailplan($boerse))->toBe(0);
 });

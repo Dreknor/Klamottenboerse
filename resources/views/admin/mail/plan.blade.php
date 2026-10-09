@@ -40,6 +40,15 @@
         </div>
     </x-ui.karte>
 
+    <x-ui.karte titel="Standard-Mailplan" class="mt-6">
+        <form method="post" action="{{ route('admin.mailplan.standard') }}" class="flex flex-wrap items-center justify-between gap-3"
+              onsubmit="return confirm('Standard-Mailplan wiederherstellen? Fehlende Standard-Mails werden ergänzt, noch nicht verschickte bekommen wieder ihren Standardtermin und werden aktiviert.')">
+            @csrf
+            <p class="text-sm text-stone-600">Ergänzt fehlende Standard-Mails und setzt noch nicht verschickte auf ihren Standardtermin zurück. Verschickte und eigene Mails bleiben unverändert.</p>
+            <x-ui.knopf art="sekundaer">Standard wiederherstellen</x-ui.knopf>
+        </form>
+    </x-ui.karte>
+
     <x-ui.karte titel="Mail hinzufügen" class="mt-6">
         <form method="post" action="{{ route('admin.mailplan.store') }}" class="grid gap-3 md:grid-cols-5 md:items-end">
             @csrf

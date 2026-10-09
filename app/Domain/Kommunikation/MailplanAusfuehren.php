@@ -114,6 +114,17 @@ class MailplanAusfuehren
             $daten['absage_link'] = Links::absage($teilnahme);
         }
 
+        if ($schluessel === 'erinnerung_helfer') {
+            $daten['schichten'] = $person->einteilungen()
+                ->where('status', EinteilungStatus::Zugesagt->value)
+                ->whereHas('schicht', fn ($s) => $s->where('boerse_id', $boerse->id))
+                ->with('schicht')->get()
+                ->sortBy('schicht.beginn')
+                ->map(fn ($e) => '- '.$e->schicht->bereich.', '.$e->schicht->beginn->locale('de')->isoFormat('dddd, D. MMMM, H:mm')
+                    .'–'.$e->schicht->ende->format('H:i').' Uhr ([absagen]('.Links::helferAbsage($e).'))')
+                ->implode("\n");
+        }
+
         if ($schluessel === 'feedback') {
             $feedback = Feedback::firstOrCreate(
                 ['boerse_id' => $boerse->id, 'person_id' => $person->id, 'rolle' => $teilnahme ? 'verkaeufer' : 'helfer'],
