@@ -14,7 +14,8 @@
     <meta name="description" content="{{ $beschreibung ?? 'Sortierter Kindersachenflohmarkt zugunsten des Ev. Kinderhauses Radebeul – organisiert von ehrenamtlichen Eltern.' }}">
     <meta property="og:title" content="{{ $titel ?? $verein }}">
     <meta property="og:image" content="{{ asset('images/logo-640.png') }}">
-    <link rel="icon" href="{{ asset('images/logo-640.png') }}">
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" href="/images/favicon-64.png" type="image/png" sizes="64x64">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="oeffentlich flex min-h-screen flex-col">
