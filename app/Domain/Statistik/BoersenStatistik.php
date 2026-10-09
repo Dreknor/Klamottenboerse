@@ -5,6 +5,8 @@ namespace App\Domain\Statistik;
 use App\Enums\EinteilungStatus;
 use App\Enums\TeilnahmeStatus;
 use App\Models\Boerse;
+use App\Models\Kategorie;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 /** Kennzahlen einer Börse – Grundlage für Statistik, Vergleich und Spendenbericht. */
@@ -44,13 +46,6 @@ class BoersenStatistik
             ->map(fn ($liste) => (int) $liste->sum('preis_cent'))
             ->sortKeys();
 
-        $nachBlock = [];
-        foreach ((clone $positionen)->where('teilnahmen.ist_kinderhaus', false)->get(['teilnahmen.nummer', 'bonpositionen.preis_cent']) as $p) {
-            $block = $boerse->blockVon((int) $p->nummer);
-            $nachBlock[$block] = ($nachBlock[$block] ?? 0) + (int) $p->preis_cent;
-        }
-        ksort($nachBlock);
-
         return [
             'verkaeufer' => $verkaeufer,
             'verkaeufer_mit_verkauf' => $mitVerkauf,
@@ -72,7 +67,93 @@ class BoersenStatistik
             'feedback_anzahl' => $boerse->feedback()->whereNotNull('beantwortet_at')->count(),
             'feedback_schnitt' => $boerse->feedback()->whereNotNull('bewertung')->avg('bewertung'),
             'nach_stunde' => $nachStunde->all(),
-            'nach_block' => $nachBlock,
+            'nach_kategorie' => self::nachKategorie($boerse, clone $positionen),
+            'nach_groesse' => self::nachGroesse(clone $positionen),
         ];
+    }
+
+    /**
+     * Umsatz, verkaufte Artikel und Verkaufsquote je Kategorie (in der Reihenfolge der Kategorienliste).
+     * Positionen ohne erfasstes Etikett (Nummer/Preis von Hand in der Kasse) stehen am Ende.
+     *
+     * @return list<array{name:string, gruppe:?string, umsatz:int, verkauft:int, erfasst:int, quote:?float}>
+     */
+    private static function nachKategorie(Boerse $boerse, Builder $positionen): array
+    {
+        $verkauft = $positionen->leftJoin('artikel', 'artikel.id', '=', 'bonpositionen.artikel_id')
+            ->selectRaw("CASE WHEN bonpositionen.artikel_id IS NULL THEN 'ohne' ELSE COALESCE(artikel.kategorie_id, 0) END AS schluessel")
+            ->selectRaw('SUM(bonpositionen.preis_cent) AS umsatz, COUNT(*) AS anzahl')
+            ->groupBy('schluessel')->get()->keyBy('schluessel');
+
+        $erfasst = DB::table('artikel')->join('teilnahmen', 'teilnahmen.id', '=', 'artikel.teilnahme_id')
+            ->where('teilnahmen.boerse_id', $boerse->id)->whereNull('artikel.deleted_at')
+            ->selectRaw('COALESCE(artikel.kategorie_id, 0) AS schluessel, COUNT(*) AS anzahl')
+            ->groupBy('schluessel')->pluck('anzahl', 'schluessel');
+
+        $zeilen = [];
+        $zeile = function (string $schluessel, string $name, ?string $gruppe) use ($verkauft, $erfasst, &$zeilen) {
+            $v = $verkauft->get($schluessel);
+            $anzahlErfasst = (int) ($erfasst[$schluessel] ?? 0);
+            if (! $v && ! $anzahlErfasst) {
+                return;
+            }
+            $anzahlVerkauft = (int) ($v->anzahl ?? 0);
+            $zeilen[] = [
+                'name' => $name,
+                'gruppe' => $gruppe,
+                'umsatz' => (int) ($v->umsatz ?? 0),
+                'verkauft' => $anzahlVerkauft,
+                'erfasst' => $anzahlErfasst,
+                'quote' => $anzahlErfasst > 0 ? round(min($anzahlVerkauft, $anzahlErfasst) / $anzahlErfasst * 100, 1) : null,
+            ];
+        };
+
+        foreach (Kategorie::query()->sortiert()->get() as $kategorie) {
+            $zeile((string) $kategorie->id, $kategorie->name, $kategorie->gruppe);
+        }
+        $zeile('0', 'Ohne Kategorie', null);
+        $zeile('ohne', 'Ohne erfasstes Etikett', null);
+
+        return $zeilen;
+    }
+
+    /**
+     * Umsatz und verkaufte Artikel je Größenangabe. Die Angaben sind Freitext, daher vereinheitlicht
+     * („Gr. 86 / 92“ → „86/92“) und nach der ersten Zahl sortiert; Angaben ohne Zahl (S, M, L …) folgen.
+     *
+     * @return array<string, array{umsatz:int, verkauft:int}>
+     */
+    private static function nachGroesse(Builder $positionen): array
+    {
+        $liste = $positionen->join('artikel', 'artikel.id', '=', 'bonpositionen.artikel_id')
+            ->whereNotNull('artikel.groesse')->where('artikel.groesse', '!=', '')
+            ->get(['artikel.groesse', 'bonpositionen.preis_cent']);
+
+        $nachGroesse = [];
+        foreach ($liste as $p) {
+            $groesse = self::groesseVereinheitlichen($p->groesse);
+            if ($groesse === '') {
+                continue;
+            }
+            $nachGroesse[$groesse]['umsatz'] = ($nachGroesse[$groesse]['umsatz'] ?? 0) + (int) $p->preis_cent;
+            $nachGroesse[$groesse]['verkauft'] = ($nachGroesse[$groesse]['verkauft'] ?? 0) + 1;
+        }
+
+        uksort($nachGroesse, function ($a, $b) {
+            $zahlA = preg_match('/\d+/', $a, $m) ? (int) $m[0] : PHP_INT_MAX;
+            $zahlB = preg_match('/\d+/', $b, $m) ? (int) $m[0] : PHP_INT_MAX;
+
+            return [$zahlA, strnatcasecmp($a, $b)] <=> [$zahlB, 0];
+        });
+
+        return $nachGroesse;
+    }
+
+    public static function groesseVereinheitlichen(string $groesse): string
+    {
+        $groesse = preg_replace('/^\s*(gr(ö|oe)(ß|ss)e|gr\.?)\s*/iu', '', $groesse);
+        $groesse = preg_replace('/\s*[\/\-–]\s*/u', '/', $groesse);
+
+        return mb_strtoupper(trim(preg_replace('/\s+/', ' ', $groesse)));
     }
 }
