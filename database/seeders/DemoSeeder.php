@@ -12,6 +12,7 @@ use App\Enums\BoerseStatus;
 use App\Enums\TeilnahmeStatus;
 use App\Models\Boerse;
 use App\Models\Feedback;
+use App\Models\FeedbackFrage;
 use App\Models\Ort;
 use App\Models\Person;
 use App\Models\Posteingang;
@@ -169,13 +170,19 @@ class DemoSeeder extends Seeder
             ]);
         }
 
+        [$bewertung, $gut, $besser] = FeedbackFrage::query()->sortiert()->limit(3)->pluck('id')->all();
         foreach ($alt->teilnahmen()->with('person')->whereNotNull('person_id')->limit(12)->get() as $i => $t) {
-            Feedback::create([
+            $feedback = Feedback::create([
                 'boerse_id' => $alt->id, 'person_id' => $t->person_id, 'rolle' => 'verkaeufer', 'token' => Str::random(40),
-                'bewertung' => [5, 4, 5, 3, 5, 4][$i % 6], 'beantwortet_at' => now()->subMonths(5),
-                'gut' => ['Super organisiert!', 'Schnelle Abrechnung', 'Nette Helfer', null][$i % 4],
-                'besser' => [null, 'Mehr Platz für Schuhe', 'Früher Einlass für Schwangere', null][$i % 4],
+                'beantwortet_at' => now()->subMonths(5),
             ]);
+            $feedback->antworten()->create(['feedback_frage_id' => $bewertung, 'zahl' => [5, 4, 5, 3, 5, 4][$i % 6]]);
+            foreach ([$gut => ['Super organisiert!', 'Schnelle Abrechnung', 'Nette Helfer', null][$i % 4],
+                $besser => [null, 'Mehr Platz für Schuhe', 'Früher Einlass für Schwangere', null][$i % 4]] as $frage => $text) {
+                if ($text) {
+                    $feedback->antworten()->create(['feedback_frage_id' => $frage, 'text' => $text]);
+                }
+            }
         }
     }
 

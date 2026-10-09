@@ -5,6 +5,7 @@ use App\Domain\Teilnahme\Actions\Anmelden;
 use App\Enums\EtikettVorlage;
 use App\Enums\TeilnahmeStatus;
 use App\Models\Bon;
+use App\Models\FeedbackFrage;
 use App\Models\Mailvorlage;
 use App\Models\Nachricht;
 use App\Models\Person;
@@ -193,10 +194,14 @@ it('speichert Feedback über den persönlichen Link', function () {
     $boerse = neueBoerse();
     $feedback = $boerse->feedback()->create(['rolle' => 'verkaeufer', 'token' => Str::random(40)]);
 
-    $this->get(route('feedback.show', $feedback->token))->assertOk();
-    $this->post(route('feedback.store', $feedback->token), ['bewertung' => 5, 'gut' => 'Alles prima'])->assertOk();
+    [$sterne, $gut] = FeedbackFrage::query()->sortiert()->limit(2)->pluck('id')->all();
 
-    expect($feedback->fresh()->bewertung)->toBe(5)->and($feedback->fresh()->beantwortet_at)->not->toBeNull();
+    $this->get(route('feedback.show', $feedback->token))->assertOk()->assertSee('Was hat dir gut gefallen?');
+    $this->post(route('feedback.store', $feedback->token), ['antworten' => [$sterne => 5, $gut => 'Alles prima']])->assertOk();
+
+    expect($feedback->antworten()->where('feedback_frage_id', $sterne)->value('zahl'))->toBe(5)
+        ->and($feedback->fresh()->beantwortet_at)->not->toBeNull()
+        ->and(FeedbackFrage::schnittFuer($boerse))->toBe(5.0);
 });
 
 it('kann Info-Mails per Link abbestellen', function () {

@@ -5,6 +5,7 @@ namespace App\Domain\Statistik;
 use App\Enums\EinteilungStatus;
 use App\Enums\TeilnahmeStatus;
 use App\Models\Boerse;
+use App\Models\FeedbackFrage;
 use App\Models\Kategorie;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -65,7 +66,7 @@ class BoersenStatistik
                 ->where('schichten.boerse_id', $boerse->id)->where('einteilungen.status', EinteilungStatus::Zugesagt->value)
                 ->distinct()->count('einteilungen.person_id'),
             'feedback_anzahl' => $boerse->feedback()->whereNotNull('beantwortet_at')->count(),
-            'feedback_schnitt' => $boerse->feedback()->whereNotNull('bewertung')->avg('bewertung'),
+            'feedback_schnitt' => FeedbackFrage::schnittFuer($boerse),
             'nach_stunde' => $nachStunde->all(),
             'nach_kategorie' => self::nachKategorie($boerse, clone $positionen),
             'nach_groesse' => self::nachGroesse(clone $positionen),

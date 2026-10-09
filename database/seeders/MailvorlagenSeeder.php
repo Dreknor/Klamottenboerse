@@ -272,7 +272,7 @@ Die Details findest du im [Verkäuferportal]({portal_link}).
 Viele Grüße
 dein Klamottenbörsen-Team
 TXT],
-        'feedback' => ['Feedback', 'Wie war die Klamottenbörse? 3 kurze Fragen', <<<'TXT'
+        'feedback' => ['Feedback', 'Wie war die Klamottenbörse? Ein paar kurze Fragen', <<<'TXT'
 Hallo {vorname},
 
 danke, dass du bei der Klamottenbörse am {datum} dabei warst! Hilf uns, noch besser zu werden – es dauert nur eine Minute:

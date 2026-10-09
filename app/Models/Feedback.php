@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Feedback extends Model
 {
@@ -24,5 +25,10 @@ class Feedback extends Model
     public function person(): BelongsTo
     {
         return $this->belongsTo(Person::class);
+    }
+
+    public function antworten(): HasMany
+    {
+        return $this->hasMany(FeedbackAntwort::class);
     }
 }

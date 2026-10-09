@@ -221,6 +221,11 @@ Route::middleware(['auth', 'orga'])->prefix('admin')->name('admin.')->group(func
     Route::put('/vermerk-arten/{art}', [VermerkController::class, 'artSpeichern'])->name('vermerk-arten.update');
     Route::put('/reputation/schwellen', [VermerkController::class, 'schwellen'])->name('reputation.schwellen');
 
+    Route::get('/feedback/fragen', [Admin\FeedbackFrageController::class, 'index'])->name('feedback.fragen.index');
+    Route::post('/feedback/fragen', [Admin\FeedbackFrageController::class, 'store'])->name('feedback.fragen.store');
+    Route::put('/feedback/fragen/{frage}', [Admin\FeedbackFrageController::class, 'update'])->name('feedback.fragen.update');
+    Route::delete('/feedback/fragen/{frage}', [Admin\FeedbackFrageController::class, 'destroy'])->name('feedback.fragen.destroy');
+
     Route::get('/kategorien', [Admin\KategorieController::class, 'index'])->name('kategorien.index');
     Route::post('/kategorien', [Admin\KategorieController::class, 'store'])->name('kategorien.store');
     Route::put('/kategorien/gruppen', [Admin\KategorieController::class, 'gruppen'])->name('kategorien.gruppen');

@@ -3,11 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\Checklistenvorlage;
+use App\Models\FeedbackFrage;
 use App\Models\Kategorie;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
-/** Rollen, Kategorien und die Standard-Checkliste. Kann gefahrlos mehrfach laufen. */
+/** Rollen, Kategorien, Feedback-Fragen und die Standard-Checkliste. Kann gefahrlos mehrfach laufen. */
 class GrunddatenSeeder extends Seeder
 {
     public const ROLLEN = [
@@ -34,6 +35,13 @@ class GrunddatenSeeder extends Seeder
         ['Ergebnis für Verkäufer freigeben', 'Abrechnung', 0],
         ['Spendenbetrag an den Förderverein melden', 'Nachbereitung', 7],
         ['Feedback auswerten und Nachbesprechung', 'Nachbereitung', 14],
+    ];
+
+    /** Standardfragen im Feedback nach der Börse: [Text, Typ] */
+    public const FEEDBACK_FRAGEN = [
+        ['Wie zufrieden warst du insgesamt?', 'sterne'],
+        ['Was hat dir gut gefallen?', 'text'],
+        ['Was können wir besser machen?', 'text'],
     ];
 
     /** Was Verkäufer überwiegend mitbringen: [Name, Gruppe, Größe von, Größe bis] – wie in V1. */
@@ -63,6 +71,12 @@ class GrunddatenSeeder extends Seeder
             Kategorie::firstOrCreate(['name' => $name], [
                 'gruppe' => $gruppe, 'groesse_von' => $von, 'groesse_bis' => $bis, 'sortierung' => ($i + 1) * 10,
             ]);
+        }
+
+        if (FeedbackFrage::query()->doesntExist()) {
+            foreach (self::FEEDBACK_FRAGEN as $i => [$text, $typ]) {
+                FeedbackFrage::create(['text' => $text, 'typ' => $typ, 'sortierung' => ($i + 1) * 10]);
+            }
         }
 
         if (Checklistenvorlage::query()->doesntExist()) {

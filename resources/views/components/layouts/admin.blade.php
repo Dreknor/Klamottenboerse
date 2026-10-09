@@ -2,7 +2,8 @@
 @php
     /*
      | Navigation: wenige Hauptpunkte. Zusammengehörige Seiten hängen als „Reiter“ an einem Punkt
-     | und werden oben auf der Seite umgeschaltet. Eintrag: [Text, Route, Routen-Muster, Reiter?, nurAdmin?]
+     | und werden oben auf der Seite umgeschaltet. Eintrag: [Text, Route, Routen-Muster, Reiter?, nurAdmin?],
+     | Reiter: [Text, Route, Routen-Muster, nurOrga?]
      */
     $navigation = [
         'Diese Börse' => [
@@ -18,7 +19,8 @@
             ]],
             ['Auswertung', 'admin.statistik.index', 'admin.statistik.*|admin.feedback.*', [
                 ['Statistik', 'admin.statistik.index', 'admin.statistik.*'],
-                ['Feedback', 'admin.feedback.index', 'admin.feedback.*'],
+                ['Feedback', 'admin.feedback.index', 'admin.feedback.index'],
+                ['Feedback-Fragen', 'admin.feedback.fragen.index', 'admin.feedback.fragen.*', true],
             ]],
         ],
         'Team' => [
@@ -158,6 +160,7 @@
             @if ($reiter)
                 <nav class="-mt-2 mb-6 flex gap-1 overflow-x-auto overflow-y-hidden border-b border-stone-200 text-sm" aria-label="Unterseiten">
                     @foreach ($reiter as [$text, $route, $muster])
+                        @continue(! $istOrga && ($reiter[$loop->index][3] ?? false))
                         @php $istAktiv = $aktiv($muster); @endphp
                         <a href="{{ route($route) }}" @if ($istAktiv) aria-current="page" @endif
                            class="-mb-px whitespace-nowrap border-b-2 px-3 py-2 no-underline {{ $istAktiv ? 'border-marke-600 font-medium text-marke-800' : 'border-transparent text-stone-600 hover:border-stone-300 hover:text-stone-900' }}">{{ $text }}</a>
