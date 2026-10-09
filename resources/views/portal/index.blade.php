@@ -1,4 +1,4 @@
-@php use App\Support\Geld; use App\Enums\TeilnahmeStatus; @endphp
+@php use App\Support\Geld; use App\Enums\EtikettVorlage; use App\Enums\TeilnahmeStatus; @endphp
 <x-layouts.oeffentlich titel="Mein Portal">
     <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1>Hallo {{ $person->vorname }}!</h1>
@@ -65,7 +65,7 @@
 
         {{-- Artikel und Etiketten --}}
         @if ($teilnahme->hatNummer())
-            <div class="mt-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-stone-200">
+            <div class="mt-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-stone-200" x-data="{ auswahl: [] }">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <h2>Artikel und Etiketten <span class="text-sm font-normal text-stone-500">(freiwillig)</span></h2>
@@ -73,9 +73,6 @@
                             @if ($b->max_teile) Maximal {{ $b->max_teile }} Teile. @endif</p>
                     </div>
                     <div class="flex flex-wrap gap-2">
-                        @if ($teilnahme->artikel->isNotEmpty())
-                            <x-ui.knopf art="sekundaer" :href="route('portal.etiketten')" target="_blank">Etiketten drucken (PDF)</x-ui.knopf>
-                        @endif
                         <x-ui.knopf art="sekundaer" :href="route('portal.kistenzettel')" target="_blank">Kistenzettel drucken</x-ui.knopf>
                     </div>
                 </div>
@@ -93,13 +90,29 @@
                 @endif
 
                 @if ($teilnahme->artikel->isNotEmpty())
+                    {{-- Etiketten drucken: ohne Auswahl alle, sonst nur die angehakten (Nachdruck) --}}
+                    <form id="etikettenDruck" method="get" action="{{ route('portal.etiketten') }}" target="_blank"
+                          class="mt-4 grid gap-3 rounded-xl bg-stone-50 p-4 sm:grid-cols-6 sm:items-end">
+                        <x-ui.auswahl name="vorlage" label="Etikettenbogen" class="sm:col-span-3" :optionen="EtikettVorlage::optionen()"
+                                      :wert="($person->etikett_vorlage ?? EtikettVorlage::STANDARD)->value" />
+                        <x-ui.feld name="start" label="Erstes freies Feld" typ="number" wert="1" min="1" max="40" />
+                        <div class="sm:col-span-2">
+                            <x-ui.knopf art="sekundaer" class="w-full"><span x-text="auswahl.length ? (auswahl.length === 1 ? '1 Etikett drucken' : auswahl.length + ' Etiketten drucken') : 'Alle Etiketten drucken'">Alle Etiketten drucken</span></x-ui.knopf>
+                        </div>
+                        <p class="text-xs text-stone-500 sm:col-span-6">Zum Nachdrucken einzelne Artikel unten anhaken. Bei einem angebrochenen Bogen das erste freie Feld angeben (zeilenweise von links oben gezählt).
+                            Jede Vorlage lässt sich auch auf Normalpapier drucken und ausschneiden.
+                            <button type="button" x-show="auswahl.length" x-cloak @click="auswahl = []" class="text-marke-700 hover:underline">Auswahl aufheben</button></p>
+                    </form>
+
                     @php $verkaufteNummern = $verkauft->pluck('artikelnummer')->flip(); @endphp
                     <div class="mt-4 overflow-x-auto">
                         <table class="tabelle">
-                            <thead><tr><th>Nr.</th><th>Artikel</th><th>Größe</th><th class="text-right">Preis</th><th></th></tr></thead>
+                            <thead><tr><th class="w-8"><span class="sr-only">Auswahl</span></th><th>Nr.</th><th>Artikel</th><th>Größe</th><th class="text-right">Preis</th><th></th></tr></thead>
                             <tbody>
                             @foreach ($teilnahme->artikel as $a)
                                 <tr>
+                                    <td><input type="checkbox" name="artikel[]" value="{{ $a->id }}" form="etikettenDruck" x-model="auswahl"
+                                               aria-label="Etikett {{ $teilnahme->nummer }}-{{ $a->laufnummer }} auswählen" class="rounded border-stone-300"></td>
                                     <td class="font-mono">{{ $teilnahme->nummer }}-{{ $a->laufnummer }}</td>
                                     <td>{{ $a->beschreibung }} <span class="text-xs text-stone-500">{{ $a->kategorie?->name }}</span></td>
                                     <td>{{ $a->groesse }}</td>
@@ -114,7 +127,7 @@
                                 </tr>
                             @endforeach
                             </tbody>
-                            <tfoot><tr><td colspan="3" class="font-medium">{{ $teilnahme->artikel->count() }} Artikel</td><td class="text-right font-medium">{{ Geld::format($teilnahme->artikel->sum('preis_cent')) }}</td><td></td></tr></tfoot>
+                            <tfoot><tr><td></td><td colspan="3" class="font-medium">{{ $teilnahme->artikel->count() }} Artikel</td><td class="text-right font-medium">{{ Geld::format($teilnahme->artikel->sum('preis_cent')) }}</td><td></td></tr></tfoot>
                         </table>
                     </div>
                 @endif

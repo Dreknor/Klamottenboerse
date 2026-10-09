@@ -2,6 +2,7 @@
 
 use App\Domain\Abrechnung\AbrechnungBerechnen;
 use App\Domain\Teilnahme\Actions\Anmelden;
+use App\Enums\EtikettVorlage;
 use App\Enums\TeilnahmeStatus;
 use App\Models\Bon;
 use App\Models\Mailvorlage;
@@ -115,6 +116,31 @@ it('erfasst Artikel im Portal und erzeugt Etiketten und Kistenzettel als PDF', f
     $this->get(route('portal.index'))->assertOk()->assertSee('Matschhose');
     $this->get(route('portal.etiketten'))->assertOk()->assertHeader('content-type', 'application/pdf');
     $this->get(route('portal.kistenzettel'))->assertOk()->assertHeader('content-type', 'application/pdf');
+});
+
+it('druckt Etiketten auf verschiedenen Bögen, merkt sich die Vorlage und druckt einzelne nach', function () {
+    $boerse = neueBoerse();
+    $person = Person::factory()->create();
+    $teilnahme = app(Anmelden::class)($boerse, $person, mailSenden: false);
+    $this->actingAs($person)->post(route('portal.artikel.store'), ['beschreibung' => 'Body', 'preis' => '2', 'anzahl' => 3]);
+    $zweiter = $teilnahme->artikel()->where('laufnummer', 2)->sole();
+
+    foreach (EtikettVorlage::cases() as $vorlage) {
+        expect($vorlage->positionen())->toHaveCount($vorlage->proBogen());
+        $this->get(route('portal.etiketten', ['vorlage' => $vorlage->value, 'start' => 5]))
+            ->assertOk()->assertHeader('content-type', 'application/pdf');
+    }
+    expect($person->fresh()->etikett_vorlage)->toBe(EtikettVorlage::cases()[count(EtikettVorlage::cases()) - 1]);
+
+    $this->get(route('portal.etiketten', ['vorlage' => '3657', 'artikel' => [$zweiter->id]]))->assertOk();
+    expect($person->fresh()->etikett_vorlage)->toBe(EtikettVorlage::Z3657);
+    $this->get(route('portal.index'))->assertSee('48,5 × 25,4 mm', false);
+
+    // Fremde Artikel lassen sich nicht drucken, unbekannte Vorlagen werden abgelehnt
+    $fremd = app(Anmelden::class)($boerse, Person::factory()->create(), mailSenden: false);
+    $fremderArtikel = $fremd->artikel()->create(['laufnummer' => 1, 'beschreibung' => 'X', 'preis_cent' => 100]);
+    $this->get(route('portal.etiketten', ['artikel' => [$fremderArtikel->id]]))->assertNotFound();
+    $this->get(route('portal.etiketten', ['vorlage' => 'gibtsnicht']))->assertSessionHasErrors('vorlage');
 });
 
 it('nimmt Kisten an und gibt Erlös am Tablet aus', function () {

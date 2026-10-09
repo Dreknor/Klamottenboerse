@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EtikettVorlage;
 use App\Enums\KinderhausBezug;
 use App\Enums\TeilnahmeStatus;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,6 +27,8 @@ class Person extends Authenticatable
 
     protected $hidden = ['password', 'remember_token'];
 
+    protected $attributes = ['etikett_vorlage' => null];
+
     protected function casts(): array
     {
         return [
@@ -36,6 +39,7 @@ class Person extends Authenticatable
             'loeschung_angefragt_at' => 'datetime',
             'inaktiv_angeschrieben_at' => 'datetime',
             'password' => 'hashed',
+            'etikett_vorlage' => EtikettVorlage::class,
         ];
     }
 
