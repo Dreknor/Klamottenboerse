@@ -8,14 +8,14 @@
     @if (\App\Support\Demo::aktiv())<meta name="robots" content="noindex, nofollow">@endif
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#FF6900">
-    <link rel="apple-touch-icon" href="/images/icon-192.png">
+    <link rel="apple-touch-icon" href="{{ \App\Support\Datei::url('images/icon-192.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $titel ? $titel.' – ' : '' }}{{ $verein }}</title>
     <meta name="description" content="{{ $beschreibung ?? 'Sortierter Kindersachenflohmarkt zugunsten des Ev. Kinderhauses Radebeul – organisiert von ehrenamtlichen Eltern.' }}">
     <meta property="og:title" content="{{ $titel ?? $verein }}">
-    <meta property="og:image" content="{{ asset('images/logo-640.png') }}">
-    <link rel="icon" href="/favicon.ico" sizes="48x48">
-    <link rel="icon" href="/images/favicon-64.png" type="image/png" sizes="64x64">
+    <meta property="og:image" content="{{ \App\Support\Datei::url('images/logo-640.png') }}">
+    <link rel="icon" href="{{ \App\Support\Datei::url('favicon.ico') }}" sizes="48x48">
+    <link rel="icon" href="{{ \App\Support\Datei::url('images/favicon-64.png') }}" type="image/png" sizes="64x64">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="oeffentlich flex min-h-screen flex-col">
@@ -24,7 +24,7 @@
 <header class="border-b border-stone-200 bg-white" x-data="{ menu: false }">
     <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
         <a href="{{ route('start') }}" class="shrink-0" aria-label="Zur Startseite">
-            <img src="{{ asset('images/logo-schriftzug.png') }}" alt="Klamottenbörse des Evangelischen Kinderhauses" class="h-14 w-auto sm:h-16" width="480" height="170">
+            <img src="{{ \App\Support\Datei::url('images/logo-schriftzug.png') }}" alt="Klamottenbörse des Evangelischen Kinderhauses" class="h-14 w-auto sm:h-16" width="480" height="170">
         </a>
         <button type="button" class="rounded-lg border border-stone-300 px-3 py-1.5 sm:hidden" @click="menu = !menu" :aria-expanded="menu" aria-label="Menü">☰</button>
         <nav class="hidden gap-5 text-sm font-medium sm:flex" aria-label="Hauptmenü">

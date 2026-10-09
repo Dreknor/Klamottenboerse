@@ -19,7 +19,7 @@
         </div>
         @if ($b['logo'])
             <div class="md:col-span-2">
-                <img src="{{ asset('images/logo-640.png') }}" alt="Zeichnung: Zwei Kinder hängen an einer Wäscheleine zwischen Kinderkleidung und einem Stoffhasen" class="mx-auto w-full max-w-sm" width="640" height="386">
+                <img src="{{ \App\Support\Datei::url('images/logo-640.png') }}" alt="Zeichnung: Zwei Kinder hängen an einer Wäscheleine zwischen Kinderkleidung und einem Stoffhasen" class="mx-auto w-full max-w-sm" width="640" height="386">
             </div>
         @endif
     </div>

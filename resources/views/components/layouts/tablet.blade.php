@@ -7,7 +7,8 @@
     @if (\App\Support\Demo::aktiv())<meta name="robots" content="noindex, nofollow">@endif
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#FF6900">
-    <link rel="apple-touch-icon" href="/images/icon-192.png">
+    <link rel="apple-touch-icon" href="{{ \App\Support\Datei::url('images/icon-192.png') }}">
+    <link rel="icon" href="{{ \App\Support\Datei::url('favicon.ico') }}" sizes="48x48">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $titel ?? 'Klamottenbörse' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])

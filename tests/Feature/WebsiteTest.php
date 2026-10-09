@@ -23,7 +23,7 @@ it('zeigt auf öffentlichen Seiten den Cookie-Hinweis und die Pflicht-Links', fu
         ->assertSee('Cookies auf dieser Website')
         ->assertSee(route('impressum'))
         ->assertSee(route('datenschutz'))
-        ->assertSee('images/logo-schriftzug.png');
+        ->assertSee('images/logo-schriftzug.png?v=');
 });
 
 it('lässt das Orga-Team die Seiten bearbeiten', function () {
